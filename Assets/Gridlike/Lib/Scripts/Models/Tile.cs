@@ -7,7 +7,7 @@ public class Tile {
 	public TileShape shape;
 
 	public int id;
-	public int subid;
+	public int subId;
 
 	public int state1;
 	public int state2;

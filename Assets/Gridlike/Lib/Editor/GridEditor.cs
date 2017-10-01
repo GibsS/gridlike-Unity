@@ -49,7 +49,6 @@ public class GridEditor : Editor {
 					GridEditorWindow window = GridEditorWindow.ShowWindow ();
 					grid.Set (x, y, window.shape, window.id, window.subid, window.state1, window.state2, window.state3);
 
-					Debug.Log ("Mouse up at x=" + x + " y=" + y);
 					Event.current.Use ();
 					break;
 				}
