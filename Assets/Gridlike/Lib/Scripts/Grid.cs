@@ -6,10 +6,15 @@ public class Grid : MonoBehaviour {
 
 	public const int REGION_SIZE = 50;
 
-	public int tileSize = 1;
+	int _tileSize = 1;
 
 	[SerializeField]
 	public InfiniteGrid tiles;
+
+	public int tileSize {
+		get { return _tileSize; }
+		set { if(value != _tileSize) SetTileSize (value); }
+	}
 
 	void Reset() {
 		tiles = new InfiniteGrid (REGION_SIZE);
@@ -25,6 +30,10 @@ public class Grid : MonoBehaviour {
 		}
 
 		tile.shape = shape;
+	}
+
+	public void SetTileSize(int tileSize) {
+		this._tileSize = tileSize;
 	}
 
 	public void WorldToGrid(Vector2 position, out int x, out int y) {
