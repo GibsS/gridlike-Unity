@@ -2,12 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[Serializable]
-public class InfiniteTileGrid : InfiniteGrid<Tile> { 
-	
-	public InfiniteTileGrid(int gridSize) : base(gridSize) { }
-}
-
 public class Grid : MonoBehaviour {
 
 	public const int REGION_SIZE = 50;
@@ -15,10 +9,10 @@ public class Grid : MonoBehaviour {
 	public int tileSize = 1;
 
 	[SerializeField]
-	public InfiniteTileGrid tiles;
+	public InfiniteGrid tiles;
 
 	void Reset() {
-		tiles = new InfiniteTileGrid (REGION_SIZE);
+		tiles = new InfiniteGrid (REGION_SIZE);
 	}
 
 	public void SetShape(int x, int y, TileShape shape) {

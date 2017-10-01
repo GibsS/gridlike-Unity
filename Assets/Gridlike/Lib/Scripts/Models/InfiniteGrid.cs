@@ -3,38 +3,33 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public class InfiniteGrid<X> where X : class, new() {
-
-	public class XFiniteGrid : FiniteGrid<X> { 
-
-		public XFiniteGrid(int x, int y, int size) : base(x, y, size) { }
-	}
+public class InfiniteGrid {
 
 	[SerializeField]
 	public int _regionSize;
 
 	[SerializeField]
-	public List<XFiniteGrid> regions;
+	public List<FiniteGrid> regions;
 
 	public InfiniteGrid(int gridSize) {
 		_regionSize = gridSize;
 
-		regions = new List<XFiniteGrid> ();
+		regions = new List<FiniteGrid> ();
 	}
 
-	public X Get(int x, int y) {
-		XFiniteGrid region = GetContainingRegion (x, y);
+	public Tile Get(int x, int y) {
+		FiniteGrid region = GetContainingRegion (x, y);
 
 		return region != null ? region.Get (x - region.x * _regionSize, y - region.y * _regionSize) : null;
 	}
-	public void Set(int x, int y, X value) {
-		XFiniteGrid region = GetContainingRegion (x, y);
+	public void Set(int x, int y, Tile value) {
+		FiniteGrid region = GetContainingRegion (x, y);
 
 		if (region == null) {
 			int X = Mathf.FloorToInt (((float) x) / _regionSize);
 			int Y = Mathf.FloorToInt (((float) y) / _regionSize);
 
-			region = new XFiniteGrid (X, Y, _regionSize);
+			region = new FiniteGrid (X, Y, _regionSize);
 
 			regions.Add(region);
 		}
@@ -42,32 +37,27 @@ public class InfiniteGrid<X> where X : class, new() {
 		region.Set (x - region.x * _regionSize, y - region.y * _regionSize, value);
 	}
 
-	public XFiniteGrid GetRegion(int X, int Y) {
-		foreach (XFiniteGrid region in regions) {
+	public FiniteGrid GetRegion(int X, int Y) {
+		foreach (FiniteGrid region in regions) {
 			if (region.x == X && region.y == Y) {
 				return region;
 			}
 		}
 		return null;
 	}
-	public XFiniteGrid GetContainingRegion(int x, int y) {
+	public FiniteGrid GetContainingRegion(int x, int y) {
 		x = Mathf.FloorToInt(((float) x) / _regionSize);
 		y = Mathf.FloorToInt (((float) y) / _regionSize);
 
 		return GetRegion (x, y);
 	}
-	public List<XFiniteGrid> GetRegions() {
+	public List<FiniteGrid> GetRegions() {
 		return regions;
 	}
 }
 
 [Serializable]
-public class FiniteGrid<X> where X : class, new() {
-
-	public class XArray : Array<X> {
-
-		public XArray(int size) : base(size) { }
-	}
+public class FiniteGrid {
 
 	// region space, not tile space
 	[SerializeField]
@@ -78,7 +68,7 @@ public class FiniteGrid<X> where X : class, new() {
 	int _size;
 
 	[SerializeField]
-	XArray[] grid;
+	Array[] grid;
 
 	public int size {
 		get { return _size; }
@@ -92,31 +82,31 @@ public class FiniteGrid<X> where X : class, new() {
 		_y = y;
 		_size = size;
 
-		grid = new XArray[size];
+		grid = new Array[size];
 		for (int i = 0; i < size; i++) {
-			grid [i] = new XArray(size);
+			grid [i] = new Array(size);
 		}
 	}
 
-	public X Get(int x, int y) {
+	public Tile Get(int x, int y) {
 		return grid [x] [y];
 	}
-	public void Set(int x, int y, X value) {
+	public void Set(int x, int y, Tile value) {
 		grid [x] [y] = value;
 	}
 }
 
 [Serializable]
-public class Array<X> {
+public class Array {
 
-	public X[] array;
+	public Tile[] array;
 
-	public X this[int i] {
+	public Tile this[int i] {
 		get { return array[i]; }
 		set { array[i] = value; }
 	}
 
 	public Array(int size) {
-		array = new X[size];	
+		array = new Tile[size];	
 	}
 }

@@ -12,14 +12,18 @@ public class GridEditor : Editor {
 		} else if (grid.tiles.GetRegions () == null) {
 			Debug.LogError ("regions are null");
 		} else {
-			foreach (FiniteGrid<Tile> region in grid.tiles.GetRegions()) {
+			foreach (FiniteGrid region in grid.tiles.GetRegions()) {
+				float bx = grid.transform.position.x + region.x * Grid.REGION_SIZE * grid.tileSize;
+				float by = grid.transform.position.y + region.y * Grid.REGION_SIZE * grid.tileSize;
+
 				for (int i = 0; i < Grid.REGION_SIZE; i++) {
 					for (int j = 0; j < Grid.REGION_SIZE; j++) {
 						Tile tile = region.Get (i, j);
 						if (tile != null && tile.shape == TileShape.FULL) {
+							//Debug.Log ("tile shape=" + tile.shape.ToString ());
 							Handles.DrawLine (
-								new Vector2 (grid.transform.position.x + i * grid.tileSize, grid.transform.position.y + j * grid.tileSize),
-								new Vector2 (grid.transform.position.x + (i + 1) * grid.tileSize, grid.transform.position.y + (j + 1) * grid.tileSize)
+								new Vector2 (bx + i * grid.tileSize, by + j * grid.tileSize),
+								new Vector2 (bx + (i + 1) * grid.tileSize, by + (j + 1) * grid.tileSize)
 							);
 						}
 					}
