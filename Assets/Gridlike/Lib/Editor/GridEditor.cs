@@ -9,6 +9,10 @@ public class GridEditor : Editor {
 
 		int tileSize = EditorGUILayout.IntField ("Tile size", grid.tileSize);
 		grid.tileSize = tileSize < 1 ? 1 : tileSize;
+
+		if (GUILayout.Button ("Open grid editor")) {
+			GridEditorWindow.ShowWindow ();
+		}
 	}
 
 	void OnSceneGUI() {
@@ -42,8 +46,10 @@ public class GridEditor : Editor {
 					int x, y;
 
 					grid.WorldToGrid(HandleUtility.GUIPointToWorldRay (Event.current.mousePosition).origin, out x, out y);
-					grid.SetShape (x, y, TileShape.FULL);
+					GridEditorWindow window = GridEditorWindow.ShowWindow ();
+					grid.Set (x, y, window.shape, window.id, window.subid, window.state1, window.state2, window.state3);
 
+					Debug.Log ("Mouse up at x=" + x + " y=" + y);
 					Event.current.Use ();
 					break;
 				}

@@ -20,7 +20,7 @@ public class Grid : MonoBehaviour {
 		tiles = new InfiniteGrid (REGION_SIZE);
 	}
 
-	public void SetShape(int x, int y, TileShape shape) {
+	Tile GetOrCreate(int x, int y) {
 		Tile tile = tiles.Get (x, y);
 
 		if (tile == null) {
@@ -29,7 +29,22 @@ public class Grid : MonoBehaviour {
 			tiles.Set (x, y, tile);
 		}
 
+		return tile;
+	}
+	public void SetShape(int x, int y, TileShape shape) {
+		GetOrCreate(x, y).shape = shape;
+	}
+	public void Set(int x, int y, TileShape shape, int id, int subid, int state1, int state2, int state3) {
+		Tile tile = GetOrCreate (x, y);
+
 		tile.shape = shape;
+
+		tile.id = id;
+		tile.subid = subid;
+
+		tile.state1 = state1;
+		tile.state2 = state2;
+		tile.state3 = state3;
 	}
 
 	public void SetTileSize(int tileSize) {
