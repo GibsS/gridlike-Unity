@@ -9,12 +9,12 @@ public class Grid : MonoBehaviour {
 
 	public const int REGION_SIZE = 50;
 
-	int _tileSize = 1;
+	float _tileSize = 1;
 
 	[SerializeField]
 	public InfiniteGrid tiles;
 
-	public int tileSize {
+	public float tileSize {
 		get { return _tileSize; }
 		set { if(value != _tileSize) SetTileSize (value); }
 	}
@@ -31,6 +31,8 @@ public class Grid : MonoBehaviour {
 		}
 	}
 	void Reset() {
+		tiles = null;
+
 		Init ();
 	}
 	void Awake() {
@@ -51,20 +53,20 @@ public class Grid : MonoBehaviour {
 	}
 
 	public Tile Get(int x, int y) {
-		return tiles.Get (x, y);
+		return tiles.Get (x, y) as Tile;
 	}
 	public TileShape GetShape(int x, int y) {
-		Tile tile = tiles.Get (x, y);
+		Tile tile = tiles.Get (x, y) as Tile;
 
 		return tile == null ? TileShape.EMPTY : tile.shape;
 	}
 	public int GetId(int x, int y) {
-		Tile tile = tiles.Get (x, y);
+		Tile tile = tiles.Get (x, y) as Tile;
 
 		return tile == null ? 0 : tile.id;
 	}
 	public int GetSubId(int x, int y) {
-		Tile tile = tiles.Get (x, y);
+		Tile tile = tiles.Get (x, y) as Tile;
 
 		return tile == null ? 0 : tile.subId;
 	}
@@ -82,21 +84,55 @@ public class Grid : MonoBehaviour {
 		tile.state3 = state3;
 
 		foreach (GridListener listener in gridListeners) {
-			listener.OnTileChange (x, y);
+			listener.OnSet (x, y, tile);
 		}
 	}
 	public void SetShape(int x, int y, TileShape shape) {
-		GetOrCreate (x, y).shape = shape;
+		Tile tile = GetOrCreate (x, y);
+		TileShape oldShape = tile.shape;
+		tile.shape = shape;
+
+		foreach (GridListener listener in gridListeners) {
+			listener.OnSetShape (x, y, tile, oldShape);
+		}
 	}
-	public void SetId(int x, int y, int id) {
-		GetOrCreate (x, y).id = id;
+	public void SetId(int x, int y, int id, int subId = int.MinValue) {
+		Tile tile = GetOrCreate (x, y);
+		int oldId = tile.id, oldSubId = tile.subId;
+
+		tile.id = id;
+		if (subId != int.MinValue) tile.subId = subId;
+
+		foreach (GridListener listener in gridListeners) {
+			listener.OnSetId (x, y, tile, oldId, oldSubId);
+		}
 	}
 	public void SetSubId(int x, int y, int subId) {
-		GetOrCreate (x, y).subId = subId;
+		Tile tile = GetOrCreate (x, y);
+		int oldId = tile.id, oldSubId = tile.subId;
+
+		tile.subId = subId;
+
+		foreach (GridListener listener in gridListeners) {
+			listener.OnSetId (x, y, tile, oldId, oldSubId);
+		}
+	}
+	public void SetState(int x, int y, float state1, float state2 = float.NegativeInfinity, float state3 = float.NegativeInfinity) {
+		Tile tile = GetOrCreate (x, y);
+
+		float oldState1 = tile.state1, oldState2 = tile.state2, oldState3 = tile.state3;
+
+		tile.state1 = state1;
+		if (state2 != float.NegativeInfinity) tile.state2 = state2;
+		if (state3 != float.NegativeInfinity) tile.state3 = state3;
+
+		foreach (GridListener listener in gridListeners) {
+			listener.OnSetState (x, y, tile, oldState1, oldState2, oldState3);
+		}
 	}
 		
 	Tile GetOrCreate(int x, int y) {
-		Tile tile = tiles.Get (x, y);
+		Tile tile = tiles.Get (x, y) as Tile;
 
 		if (tile == null) {
 			tile = new Tile ();
@@ -107,8 +143,12 @@ public class Grid : MonoBehaviour {
 		return tile;
 	}
 
-	public void SetTileSize(int tileSize) {
+	public void SetTileSize(float tileSize) {
 		this._tileSize = tileSize;
+
+		foreach (GridListener listeners in gridListeners) {
+			listeners.OnTileSizeChange ();
+		}
 	}
 
 	#region REFERENTIAL

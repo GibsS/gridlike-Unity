@@ -2,14 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IGridListener {
-
-	void OnTileChange(int x, int y);
-	void OnRegionChange(int regionX, int regionY);
-
-}
-
-public abstract class GridListener : MonoBehaviour, IGridListener {
+public abstract class GridListener : MonoBehaviour {
 	
 	public Grid grid;
 
@@ -41,6 +34,18 @@ public abstract class GridListener : MonoBehaviour, IGridListener {
 		}
 	}
 		
-	public abstract void OnTileChange(int x, int y);
+	public abstract void OnSet(int x, int y, Tile tile);
+	public virtual void OnSetState (int x, int y, Tile tile, float oldState1, float oldState2, float oldState3) {
+		OnSet (x, y, tile);
+	}
+	public virtual void OnSetId (int x, int y, Tile tile, int oldId, int oldSubId) {
+		OnSet (x, y, tile);
+	}
+	public virtual void OnSetShape (int x, int y, Tile tile, TileShape oldShape) {
+		OnSet (x, y, tile);
+	}
+
 	public abstract void OnRegionChange(int regionX, int regionY);
+
+	public abstract void OnTileSizeChange ();
 }

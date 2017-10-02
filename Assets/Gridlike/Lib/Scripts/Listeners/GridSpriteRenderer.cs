@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GridSpriteRenderer : GridListener {
 
+	[HideInInspector]
 	[SerializeField]
 	InfiniteComponentGrid components;
 
@@ -15,7 +16,7 @@ public class GridSpriteRenderer : GridListener {
 		}
 	}
 
-	public override void OnTileChange(int x, int y) {
+	public override void OnSet(int x, int y, Tile tile) {
 		SpriteRenderer renderer = components.Get (x, y) as SpriteRenderer;
 
 		if (renderer == null) {
@@ -26,11 +27,17 @@ public class GridSpriteRenderer : GridListener {
 
 			obj.transform.SetParent (transform);
 			obj.transform.localPosition = grid.TileCenterInTransform (x, y);
+			obj.transform.localScale = new Vector3 (grid.tileSize, grid.tileSize, 1);
 
 			components.Set (x, y, renderer);
 		} 
 	}
+
 	public override void OnRegionChange(int regionX, int regionY) {
+
+	}
+
+	public override void OnTileSizeChange () {
 
 	}
 }

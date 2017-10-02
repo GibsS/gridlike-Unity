@@ -7,8 +7,8 @@ public class GridEditor : Editor {
 	public override void OnInspectorGUI() {
 		Grid grid = target as Grid;
 
-		int tileSize = EditorGUILayout.IntField ("Tile size", grid.tileSize);
-		grid.tileSize = tileSize < 1 ? 1 : tileSize;
+		float tileSize = EditorGUILayout.FloatField ("Tile size", grid.tileSize);
+		grid.tileSize = tileSize < 0 ? 0 : tileSize;
 
 		if (GUILayout.Button ("Open grid editor")) {
 			GridEditorWindow.ShowWindow ();
@@ -24,7 +24,7 @@ public class GridEditor : Editor {
 
 			for (int i = 0; i < Grid.REGION_SIZE; i++) {
 				for (int j = 0; j < Grid.REGION_SIZE; j++) {
-					Tile tile = region.Get (i, j);
+					Tile tile = region.Get (i, j) as Tile;
 					if (tile != null && tile.shape == TileShape.FULL) {
 						//Debug.Log ("tile shape=" + tile.shape.ToString ());
 						Handles.DrawLine (
