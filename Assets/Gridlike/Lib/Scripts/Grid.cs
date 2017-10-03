@@ -159,6 +159,9 @@ public class Grid : MonoBehaviour {
 	public Vector2 TileCenterInTransform(int x, int y) {
 		return new Vector2 ((x + 0.5f) * _tileSize, (y + 0.5f) * _tileSize); 
 	}
+	public Vector2 TileSpaceToTransform(float x, float y) {
+		return new Vector2 (x * _tileSize, y * _tileSize);
+	}
 
 	public void WorldToGrid(Vector2 position, out int x, out int y) {
 		position = transform.InverseTransformPoint (position);
