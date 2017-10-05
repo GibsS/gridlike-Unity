@@ -6,6 +6,7 @@ public abstract class GridListener : MonoBehaviour {
 	
 	public Grid grid;
 
+	// TODO Reset not called when copying a gameobject, need to init the grid somewhere else?
 	void Reset() {
 		ResetGrid ();
 	}
