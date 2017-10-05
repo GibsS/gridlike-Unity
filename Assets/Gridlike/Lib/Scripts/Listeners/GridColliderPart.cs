@@ -21,7 +21,7 @@ public class GridColliderPart : MonoBehaviour {
 		part.width = w;
 		part.height = h;
 
-		part.transform.localPosition = grid.TileSpaceToTransform (x + w/2 + 0.5f, y + h/2 + 0.5f);
+		part.transform.localPosition = grid.TileSpaceToTransform (x + w/2f, y + h/2f);
 		part.box.size = new Vector2 (w, h);
 
 		return part;
