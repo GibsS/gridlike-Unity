@@ -12,6 +12,7 @@ public class GridColliderPart : MonoBehaviour {
 
 	public BoxCollider2D box;
 	public PolygonCollider2D triangle;
+	public EdgeCollider2D line;
 
 	public static GridColliderPart CreateColliderPart(GameObject parent, Grid grid, TileShape shape, int x, int y, int w, int h) {
 
@@ -23,6 +24,11 @@ public class GridColliderPart : MonoBehaviour {
 		case TileShape.UP_LEFT_TRIANGLE:
 		case TileShape.UP_RIGHT_TRIANGLE:
 			return TriangleGridColliderPart (parent, grid, shape, x, y, w, h);
+		case TileShape.DOWN_ONEWAY:
+		case TileShape.UP_ONEWAY:
+		case TileShape.LEFT_ONEWAY:
+		case TileShape.RIGHT_ONEWAY:
+			return LineGridColliderPart (parent, grid, shape, x, y, w, h);
 		default: return null;
 		}
 	}
@@ -52,6 +58,34 @@ public class GridColliderPart : MonoBehaviour {
 
 		GridColliderPart part = obj.AddComponent<GridColliderPart> ();
 		part.triangle = obj.AddComponent<PolygonCollider2D> ();
+
+		part.shape = shape;
+
+		part.bottomLeftX = x;
+		part.bottomLeftY = y;
+
+		part.transform.localPosition = grid.TileSpaceToTransform (x + w/2f, y + h/2f);
+
+		part.SetSize (w, h);
+
+		return part;
+	}
+
+	public static GridColliderPart LineGridColliderPart(GameObject parent, Grid grid, TileShape shape, int x, int y, int w, int h) {
+		GameObject obj = new GameObject ("line");
+		obj.transform.SetParent (parent.transform);
+
+		GridColliderPart part = obj.AddComponent<GridColliderPart> ();
+		part.line = obj.AddComponent<EdgeCollider2D> ();
+		part.line.usedByEffector = true;
+		/*switch (shape) {
+		case TileShape.DOWN_ONEWAY:
+			part.transform.Rotate (Vector3.forward); break;
+		case TileShape.LEFT_ONEWAY: part.line.offset = new Vector2 (-0.5f, 0); break;
+		case TileShape.RIGHT_ONEWAY: part.line.offset = new Vector2 (0.5f, 0); break;
+		}*/
+
+		part.gameObject.AddComponent<PlatformEffector2D> ();
 
 		part.shape = shape;
 
@@ -100,12 +134,16 @@ public class GridColliderPart : MonoBehaviour {
 			}
 		case TileShape.UP_RIGHT_TRIANGLE: {
 				triangle.points = new Vector2[] { 
-					new Vector2 (-w / 2f, -h / 2f),
+					new Vector2 (-w / 2f, h / 2f),
 					new Vector2 (w / 2f, h / 2f),
 					new Vector2 (w / 2f, -h / 2f)
 				};
 				break;
 			}
+		case TileShape.UP_ONEWAY: line.points = new Vector2[] { new Vector2 (-w / 2f, h / 2f), new Vector2 (w / 2f, h / 2f) }; break;
+		case TileShape.DOWN_ONEWAY: line.points = new Vector2[] { new Vector2 (-w / 2f, -h / 2f), new Vector2 (w / 2f, -h / 2f) }; break;
+		case TileShape.LEFT_ONEWAY: line.points = new Vector2[] { new Vector2 (-w / 2f, h / 2f), new Vector2 (-w / 2f, -h / 2f) }; break;
+		case TileShape.RIGHT_ONEWAY: line.points = new Vector2[] { new Vector2 (w / 2f, h / 2f), new Vector2 (w / 2f, -h / 2f) }; break;
 		}
 	}
 
