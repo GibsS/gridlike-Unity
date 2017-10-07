@@ -1,0 +1,174 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58f291cc963ceb94a8e5d54588854ef1, type: 3}
+  m_Name: GridTileAtlas
+  m_EditorClassIdentifier: 
+  atlas:
+  - id: 0
+    name: 
+    defaultShape: 0
+    idSpriteInfo:
+      full: {fileID: 0}
+      oneway: {fileID: 0}
+      triangle: []
+    subIdSpriteInfo: []
+  - id: 1
+    name: tile 1
+    defaultShape: 1
+    idSpriteInfo:
+      full: {fileID: 0}
+      oneway: {fileID: 0}
+      triangle: []
+    subIdSpriteInfo: []
+  - id: 2
+    name: tile 2
+    defaultShape: 1
+    idSpriteInfo:
+      full: {fileID: 0}
+      oneway: {fileID: 0}
+      triangle: []
+    subIdSpriteInfo: []
+  - id: 3
+    name: tile 3
+    defaultShape: 1
+    idSpriteInfo:
+      full: {fileID: 0}
+      oneway: {fileID: 0}
+      triangle: []
+    subIdSpriteInfo: []
+  - id: 4
+    name: tile 4
+    defaultShape: 1
+    idSpriteInfo:
+      full: {fileID: 0}
+      oneway: {fileID: 0}
+      triangle: []
+    subIdSpriteInfo: []
+  - id: 5
+    name: tile 5
+    defaultShape: 1
+    idSpriteInfo:
+      full: {fileID: 0}
+      oneway: {fileID: 0}
+      triangle: []
+    subIdSpriteInfo: []
+  - id: 6
+    name: tile 6
+    defaultShape: 1
+    idSpriteInfo:
+      full: {fileID: 0}
+      oneway: {fileID: 0}
+      triangle: []
+    subIdSpriteInfo: []
+  - id: 7
+    name: tile 7
+    defaultShape: 1
+    idSpriteInfo:
+      full: {fileID: 0}
+      oneway: {fileID: 0}
+      triangle: []
+    subIdSpriteInfo: []
+  - id: 8
+    name: tile 8
+    defaultShape: 1
+    idSpriteInfo:
+      full: {fileID: 0}
+      oneway: {fileID: 0}
+      triangle: []
+    subIdSpriteInfo: []
+  - id: 9
+    name: tile 9
+    defaultShape: 1
+    idSpriteInfo:
+      full: {fileID: 0}
+      oneway: {fileID: 0}
+      triangle: []
+    subIdSpriteInfo: []
+  - id: 10
+    name: tile 10
+    defaultShape: 1
+    idSpriteInfo:
+      full: {fileID: 0}
+      oneway: {fileID: 0}
+      triangle: []
+    subIdSpriteInfo: []
+  - id: 11
+    name: tile 11
+    defaultShape: 1
+    idSpriteInfo:
+      full: {fileID: 0}
+      oneway: {fileID: 0}
+      triangle: []
+    subIdSpriteInfo: []
+  - id: 12
+    name: tile 12
+    defaultShape: 1
+    idSpriteInfo:
+      full: {fileID: 0}
+      oneway: {fileID: 0}
+      triangle: []
+    subIdSpriteInfo: []
+  - id: 13
+    name: tile 13
+    defaultShape: 1
+    idSpriteInfo:
+      full: {fileID: 0}
+      oneway: {fileID: 0}
+      triangle: []
+    subIdSpriteInfo: []
+  - id: 14
+    name: tile 14
+    defaultShape: 1
+    idSpriteInfo:
+      full: {fileID: 0}
+      oneway: {fileID: 0}
+      triangle: []
+    subIdSpriteInfo: []
+  - id: 15
+    name: tile 15
+    defaultShape: 1
+    idSpriteInfo:
+      full: {fileID: 0}
+      oneway: {fileID: 0}
+      triangle: []
+    subIdSpriteInfo: []
+  - id: 0
+    name: 
+    defaultShape: 0
+    idSpriteInfo:
+      full: {fileID: 0}
+      oneway: {fileID: 0}
+      triangle: []
+    subIdSpriteInfo: []
+  - id: 0
+    name: 
+    defaultShape: 0
+    idSpriteInfo:
+      full: {fileID: 0}
+      oneway: {fileID: 0}
+      triangle: []
+    subIdSpriteInfo: []
+  - id: 0
+    name: 
+    defaultShape: 0
+    idSpriteInfo:
+      full: {fileID: 0}
+      oneway: {fileID: 0}
+      triangle: []
+    subIdSpriteInfo: []
+  - id: 0
+    name: 
+    defaultShape: 0
+    idSpriteInfo:
+      full: {fileID: 0}
+      oneway: {fileID: 0}
+      triangle: []
+    subIdSpriteInfo: []
