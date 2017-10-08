@@ -20,7 +20,7 @@ public class GridEditor : Editor {
 	void OnSceneGUI() {
 		Grid grid = target as Grid;
 
-		foreach (FiniteGrid region in grid.tiles.GetRegions()) {
+		foreach (FiniteGrid region in grid.GetRegions()) {
 			float bx = grid.transform.position.x + region.x * Grid.REGION_SIZE * grid.tileSize;
 			float by = grid.transform.position.y + region.y * Grid.REGION_SIZE * grid.tileSize;
 

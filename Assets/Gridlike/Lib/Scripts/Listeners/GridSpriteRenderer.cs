@@ -8,11 +8,24 @@ public class GridSpriteRenderer : GridListener {
 	[SerializeField]
 	InfiniteComponentGrid components;
 
+	[SerializeField]
+	GameObject containerGO;
+
+	public override void OnDestroy() {
+		base.OnDestroy ();
+
+		Destroy (containerGO);
+	}
+
 	public override void ResetGrid() {
 		base.ResetGrid ();
 
 		if (components == null) {
 			components = new InfiniteComponentGrid (Grid.REGION_SIZE);
+		}
+
+		if (containerGO == null) {
+			containerGO = new GameObject ("sprites");
 		}
 	}
 
@@ -178,7 +191,7 @@ public class GridSpriteRenderer : GridListener {
 				}
 
 				if (!expand) {
-					GridSpriteTriangle triangle = GridSpriteTriangle.CreateSpriteTriangle (gameObject, grid, x, y);
+					GridSpriteTriangle triangle = GridSpriteTriangle.CreateSpriteTriangle (containerGO, grid, x, y);
 
 					components.Set (x, y, triangle);
 
@@ -192,8 +205,12 @@ public class GridSpriteRenderer : GridListener {
 		}
 	}
 
-	public override void OnTileSizeChange () {
+	public override void OnHideRegion() {
+		Debug.Log ("[GridSpriteRenderer.OnHideRegion] NOT IMPLEMENTED");
+	}
 
+	public override void OnTileSizeChange () {
+		Debug.Log ("[GridSpriteRenderer.OnTileSizeChange] NOT IMPLEMENTED");
 	}
 
 	void ClearSprite(Component renderer, int x, int y) {
@@ -235,7 +252,7 @@ public class GridSpriteRenderer : GridListener {
 				triangle.spriteRenderer.sprite = grid.atlas.GetSprite(other.id, other.subId, other.shape, triangle.width);
 
 				if (endX != x) {
-					GridSpriteTriangle otherTriangle = GridSpriteTriangle.CreateSpriteTriangle(gameObject, grid, x + 1, y);
+					GridSpriteTriangle otherTriangle = GridSpriteTriangle.CreateSpriteTriangle(containerGO, grid, x + 1, y);
 					otherTriangle.transform.localPosition += new Vector3 ((endX - x - 1) / 2f, 0, 0);
 					otherTriangle.width = endX - x;
 					otherTriangle.spriteRenderer.sprite = grid.atlas.GetSprite (other.id, other.subId, other.shape, otherTriangle.width);
@@ -262,7 +279,7 @@ public class GridSpriteRenderer : GridListener {
 				triangle.spriteRenderer.sprite = grid.atlas.GetSprite(other.id, other.subId, other.shape, y - triangle.bottomLeftY);
 
 				if (endY != y) {
-					GridSpriteTriangle otherTriangle = GridSpriteTriangle.CreateSpriteTriangle(gameObject, grid, x, y + 1);
+					GridSpriteTriangle otherTriangle = GridSpriteTriangle.CreateSpriteTriangle(containerGO, grid, x, y + 1);
 					otherTriangle.transform.localPosition += new Vector3 (0, (endY - y - 1) / 2f, 0);
 					otherTriangle.height = endY - y;
 					otherTriangle.spriteRenderer.sprite = grid.atlas.GetSprite (other.id, other.subId, other.shape, otherTriangle.height);

@@ -5,7 +5,7 @@ using UnityEngine;
 public class TileInfo {
 
 	public int id;
-	public new string name;
+	public string name;
 	public TileShape shape;
 
 	public TileSpriteInfo idSpriteInfo;

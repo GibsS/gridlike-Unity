@@ -1,10 +1,12 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+[ExecuteInEditMode]
+[RequireComponent(typeof(Grid))]
 public abstract class GridListener : MonoBehaviour {
 	
-	public Grid grid;
+	[SerializeField] public Grid grid { get; private set; }
 
 	// TODO Reset not called when copying a gameobject, need to init the grid somewhere else?
 	void Reset() {
@@ -14,7 +16,7 @@ public abstract class GridListener : MonoBehaviour {
 		ResetGrid ();
 	}
 
-	void OnDestroy() {
+	public virtual void OnDestroy() {
 		if (this.grid != null) {
 			this.grid.RemoveListener (this);
 		}
@@ -43,9 +45,22 @@ public abstract class GridListener : MonoBehaviour {
 		OnSet (x, y, tile);
 	}
 
-	public virtual void OnRegionChange(int regionX, int regionY) {
-		// TODO : default is just calling onset on all tiles of the grid
+	public virtual void OnShowRegion(int regionX, int regionY) {
+		FiniteGrid region = grid.GetRegion (regionX, regionY);
+
+		int startX = regionX * Grid.REGION_SIZE;
+		int endX = (regionX + 1) * Grid.REGION_SIZE;
+		int startY = regionY * Grid.REGION_SIZE;
+		int endY = (regionY + 1) * Grid.REGION_SIZE;
+
+		for (int i = startX; i < endX; i++) {
+			for(int j = startY; j < endY; j++) {
+				OnSet(i, j, region.Get(i - startX, j - startY));
+			}
+		}
 	}
+
+	public abstract void OnHideRegion();
 
 	public abstract void OnTileSizeChange ();
 }

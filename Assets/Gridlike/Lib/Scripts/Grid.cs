@@ -2,15 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[ExecuteInEditMode]
 public class Grid : MonoBehaviour {
-
-	[SerializeField] List<GridListener> gridListeners;
 
 	public const int REGION_SIZE = 50;
 
-	float _tileSize = 1;
+	[SerializeField] List<GridListener> gridListeners;
 
-	[SerializeField] public InfiniteGrid tiles;
+	// TODO optimize
+	[SerializeField] List<Point> presentedRegions;
+	[SerializeField] InfiniteGrid tiles;
+
+	[SerializeField] float _tileSize = 1;
 
 	[HideInInspector] public TileAtlas atlas;
 
@@ -21,15 +24,19 @@ public class Grid : MonoBehaviour {
 
 	void Init() {
 		if (tiles == null) {
-			tiles = new InfiniteGrid (REGION_SIZE);
-
 			gridListeners = new List<GridListener> ();
+
+			presentedRegions = new List<Point> ();
+			tiles = new InfiniteGrid (REGION_SIZE);
 
 			foreach (GridListener listener in GetComponents<GridListener> ()) {
 				listener.ResetGrid ();
 			}
 		}
 	}
+
+	#region UNITY EVENTS
+
 	void Reset() {
 		tiles = null;
 
@@ -45,12 +52,104 @@ public class Grid : MonoBehaviour {
 		}
 	}
 
+	#endregion 
+
+	#region GRID LISTENERS
+
 	public void AddListener(GridListener listener) {
 		gridListeners.Add (listener);
+
+		Debug.Log ("[Add] Listener count=" + gridListeners.Count);
 	}
 	public void RemoveListener(GridListener listener) {
 		gridListeners.Remove (listener);
+
+		Debug.Log ("[Remove] Listener count=" + gridListeners.Count);
 	}
+
+	#endregion
+
+	#region REGION PRESENTING
+
+	public void PresentAllAgain() {
+		foreach (Point regionPosition in presentedRegions) {
+			HideRegion (regionPosition.x, regionPosition.y);
+		}
+
+		foreach (Point regionPosition in presentedRegions) {
+			PresentRegion (regionPosition.x, regionPosition.y);
+		}
+	}
+
+	public void PresentAll() {
+		foreach (FiniteGrid region in tiles.GetRegions()) {
+			PresentRegion (region.x, region.y);
+		}
+	}
+	public void HideAll() {
+		foreach (FiniteGrid region in tiles.GetRegions()) {
+			HideRegion (region.x, region.y);
+		}
+	}
+
+	public void PresentRegion(int X, int Y) {
+		Point p = new Point (X, Y);
+
+		if(!presentedRegions.Contains(p)) {
+			foreach (GridListener listener in gridListeners) {
+				listener.OnShowRegion (X, Y);
+			}
+
+			presentedRegions.Remove (p);
+		}
+	}
+	public void HideRegion(int X, int Y) {
+		Point p = new Point (X, Y);
+
+		if(presentedRegions.Contains(p)) {
+			foreach (GridListener listener in gridListeners) {
+				listener.OnShowRegion (X, Y);
+			}
+
+			presentedRegions.Add (p);
+		}
+	}
+
+	#endregion
+
+	#region REGION LOADING/UNLOADING
+
+	public void LoadRegion(int X, int Y) {
+		// TODO
+	}
+	public void UnloadRegion(int X, int Y) {
+		// TODO
+	}
+
+	#endregion
+
+	#region REGION SET/GET
+
+	public FiniteGrid GetRegion(int X, int Y) {
+		return tiles.GetRegion (X, Y);
+	}
+
+	public FiniteGrid GetContainingRegion(int x, int y) {
+		return tiles.GetContainingRegion (x, y);
+	}
+
+	public IEnumerable<FiniteGrid> GetRegions() {
+		return tiles.GetRegions ();
+	}
+
+	// requirement: width and height = REGION_SIZE
+	public void SetRegion(int X, int Y, TileInfo[,] tiles) {
+
+	}
+
+	#endregion
+
+	#region TILE SET/GET
 
 	public Tile Get(int x, int y) {
 		return tiles.Get (x, y) as Tile;
@@ -135,6 +234,10 @@ public class Grid : MonoBehaviour {
 		return tile;
 	}
 
+	#endregion
+
+	#region TILE SIZE
+
 	public void SetTileSize(float tileSize) {
 		this._tileSize = tileSize;
 
@@ -142,6 +245,8 @@ public class Grid : MonoBehaviour {
 			listeners.OnTileSizeChange ();
 		}
 	}
+
+	#endregion
 
 	#region REFERENTIAL
 
