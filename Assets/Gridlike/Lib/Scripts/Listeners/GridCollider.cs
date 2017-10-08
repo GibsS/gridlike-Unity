@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// TODO destroy leads to destroy colliders
 public class GridCollider : GridListener {
 
 	[HideInInspector]

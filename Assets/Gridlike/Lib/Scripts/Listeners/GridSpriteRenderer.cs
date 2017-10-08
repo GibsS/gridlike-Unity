@@ -8,13 +8,12 @@ public class GridSpriteRenderer : GridListener {
 	[SerializeField]
 	InfiniteComponentGrid components;
 
-	[SerializeField]
-	GameObject containerGO;
+	[SerializeField] GameObject containerGO;
 
 	public override void OnDestroy() {
 		base.OnDestroy ();
 
-		Destroy (containerGO);
+		DestroyImmediate (containerGO);
 	}
 
 	public override void ResetGrid() {
@@ -26,6 +25,7 @@ public class GridSpriteRenderer : GridListener {
 
 		if (containerGO == null) {
 			containerGO = new GameObject ("sprites");
+			containerGO.transform.SetParent (transform);
 		}
 	}
 
@@ -225,10 +225,10 @@ public class GridSpriteRenderer : GridListener {
 
 	SpriteRenderer CreateSprite(int x, int y) {
 		GameObject obj = new GameObject ("sprite x=" + x + " y=" + y);
+		obj.transform.SetParent (containerGO.transform);
 
 		SpriteRenderer renderer = obj.AddComponent<SpriteRenderer> ();
 
-		obj.transform.SetParent (transform);
 		obj.transform.localPosition = grid.TileCenterInTransform (x, y);
 		obj.transform.localScale = new Vector3 (grid.tileSize, grid.tileSize, 1);
 
