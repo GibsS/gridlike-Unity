@@ -8,7 +8,9 @@ public class GridSpriteRenderer : GridListener {
 	[SerializeField]
 	InfiniteComponentGrid components;
 
-	[SerializeField] GameObject containerGO;
+	[HideInInspector]
+	[SerializeField] 
+	GameObject containerGO;
 
 	public override void OnDestroy() {
 		base.OnDestroy ();
