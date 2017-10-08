@@ -62,60 +62,49 @@ public class GridSpriteRenderer : GridListener {
 
 				bool expand = false;
 				int size = 1;
-				int heigth = 1;
 
 				// up
 				Tile other = grid.Get (x, y + 1);
 
+				GridSpriteTriangle upTriangle = null;
 				if (other != null && tile.id == other.id && tile.subId == other.subId) {
-					GridSpriteTriangle otherTriangle = components.Get (x, y + 1) as GridSpriteTriangle;
+					upTriangle = components.Get (x, y + 1) as GridSpriteTriangle;
 
-					if (otherTriangle != null && otherTriangle.width == 1) {
-						components.Set (x, y, otherTriangle);
+					if (upTriangle != null && upTriangle.width == 1) {
+						components.Set (x, y, upTriangle);
 
 						expand = true;
 
-						renderer = otherTriangle.spriteRenderer;
+						renderer = upTriangle.spriteRenderer;
 
-						otherTriangle.transform.localPosition -= new Vector3 (0, 0.5f, 0);
-						otherTriangle.bottomLeftY -= 1;
-						otherTriangle.height += 1;
+						upTriangle.transform.localPosition -= new Vector3 (0, 0.5f, 0);
+						upTriangle.bottomLeftY -= 1;
+						upTriangle.height += 1;
 
-						size = otherTriangle.height;
-					}
-				}
-
-				// right
-				if (!expand) {
-					other = grid.Get (x + 1, y);
-
-					if (other != null && tile.id == other.id && tile.subId == other.subId) {
-						GridSpriteTriangle otherTriangle = components.Get (x + 1, y) as GridSpriteTriangle;
-
-						if (otherTriangle != null && otherTriangle.height == 1) {
-							components.Set (x, y, otherTriangle);
-
-							expand = true;
-
-							renderer = otherTriangle.spriteRenderer;
-
-							otherTriangle.transform.localPosition -= new Vector3 (0.5f, 0, 0);
-							otherTriangle.bottomLeftX -= 1;
-							otherTriangle.width += 1;
-
-							size = otherTriangle.width;
-						}
+						size = upTriangle.height;
 					}
 				}
 
 				// down
-				if (!expand) {
-					other = grid.Get (x, y - 1);
+				other = grid.Get (x, y - 1);
 
-					if (other != null && tile.id == other.id && tile.subId == other.subId) {
-						GridSpriteTriangle otherTriangle = components.Get (x, y - 1) as GridSpriteTriangle;
+				if (other != null && tile.id == other.id && tile.subId == other.subId) {
+					GridSpriteTriangle otherTriangle = components.Get (x, y - 1) as GridSpriteTriangle;
 
-						if (otherTriangle != null && otherTriangle.width == 1) {
+					if (otherTriangle != null && otherTriangle.width == 1) {
+						if (expand) {
+							for (int i = otherTriangle.bottomLeftY; i <= y; i++) {
+								components.Set (x, i, upTriangle);
+							}
+
+							upTriangle.bottomLeftY = otherTriangle.bottomLeftY;
+							upTriangle.height += otherTriangle.height;
+							upTriangle.transform.localPosition -= new Vector3(0, otherTriangle.height/2f, 0);
+
+							DestroyImmediate (otherTriangle.gameObject);
+
+							size = upTriangle.height;
+						} else {
 							components.Set (x, y, otherTriangle);
 
 							expand = true;
@@ -130,24 +119,60 @@ public class GridSpriteRenderer : GridListener {
 					}
 				}
 
-					// left
+				// right
 				if (!expand) {
+					other = grid.Get (x + 1, y);
+
+					GridSpriteTriangle rightTriangle = null;
+					if (other != null && tile.id == other.id && tile.subId == other.subId) {
+						rightTriangle = components.Get (x + 1, y) as GridSpriteTriangle;
+
+						if (rightTriangle != null && rightTriangle.height == 1) {
+							components.Set (x, y, rightTriangle);
+
+							expand = true;
+
+							renderer = rightTriangle.spriteRenderer;
+
+							rightTriangle.transform.localPosition -= new Vector3 (0.5f, 0, 0);
+							rightTriangle.bottomLeftX -= 1;
+							rightTriangle.width += 1;
+
+							size = rightTriangle.width;
+						}
+					}
+
+					// left
 					other = grid.Get (x - 1, y);
 
 					if (other != null && tile.id == other.id && tile.subId == other.subId) {
 						GridSpriteTriangle otherTriangle = components.Get (x - 1, y) as GridSpriteTriangle;
 
 						if (otherTriangle != null && otherTriangle.height == 1) {
-							components.Set (x, y, otherTriangle);
+							if (expand) {
+								for (int i = otherTriangle.bottomLeftX; i <= x; i++) {
+									components.Set (i, y, rightTriangle);
+								}
 
-							expand = true;
+								rightTriangle.bottomLeftX = otherTriangle.bottomLeftX;
+								rightTriangle.width += otherTriangle.width;
+								rightTriangle.transform.localPosition -= new Vector3(otherTriangle.width/2f, 0, 0);
 
-							renderer = otherTriangle.spriteRenderer;
+								DestroyImmediate (otherTriangle.gameObject);
 
-							otherTriangle.transform.localPosition += new Vector3 (0.5f, 0, 0);
-							otherTriangle.width += 1;
+								size = rightTriangle.width;
+							} else {
+								components.Set (x, y, otherTriangle);
 
-							size = otherTriangle.width;
+								expand = true;
+
+								renderer = otherTriangle.spriteRenderer;
+
+								otherTriangle.transform.localPosition += new Vector3 (0.5f, 0, 0);
+								otherTriangle.width += 1;
+
+								size = otherTriangle.width;
+							}
 						}
 					}
 				}
@@ -236,10 +261,10 @@ public class GridSpriteRenderer : GridListener {
 				triangle.transform.localPosition -= new Vector3 (0, (endY - y + 1)/2f, 0);
 				triangle.spriteRenderer.sprite = grid.atlas.GetSprite(other.id, other.subId, other.shape, y - triangle.bottomLeftY);
 
-				if (endY == y) {
+				if (endY != y) {
 					GridSpriteTriangle otherTriangle = GridSpriteTriangle.CreateSpriteTriangle(gameObject, grid, x, y + 1);
 					otherTriangle.transform.localPosition += new Vector3 (0, (endY - y - 1) / 2f, 0);
-					otherTriangle.width = endY - y;
+					otherTriangle.height = endY - y;
 					otherTriangle.spriteRenderer.sprite = grid.atlas.GetSprite (other.id, other.subId, other.shape, otherTriangle.height);
 
 					for (int i = y + 1; i <= endY; i++) {
