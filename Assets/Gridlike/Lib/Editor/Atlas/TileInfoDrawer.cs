@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿// TODO REMOVE
+/*using UnityEngine;
 using UnityEditor;
 
 [CustomPropertyDrawer(typeof(TileInfo))]
@@ -29,8 +30,8 @@ public class TileInfoDrawer : PropertyDrawer {
 		EditorGUI.PropertyField(nameRect, property.FindPropertyRelative("name"), GUIContent.none);
 
 		// Set indent back to what it was
-		EditorGUI.indentLevel = indent;*/
+		EditorGUI.indentLevel = indent;
 
 		EditorGUI.EndProperty();
 	}
-}
+}*/

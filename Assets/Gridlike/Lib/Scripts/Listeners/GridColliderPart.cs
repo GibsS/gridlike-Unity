@@ -155,4 +155,3 @@ public class GridColliderPart : MonoBehaviour {
 		return shape == tile.shape;
 	}
 }
-

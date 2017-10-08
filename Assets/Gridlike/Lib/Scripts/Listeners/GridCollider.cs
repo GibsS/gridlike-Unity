@@ -5,6 +5,7 @@ using UnityEngine;
 // TODO destroy leads to destroy colliders
 public class GridCollider : GridListener {
 
+	[HideInInspector]
 	[SerializeField]
 	InfiniteComponentGrid components;
 
@@ -159,9 +160,6 @@ public class GridCollider : GridListener {
 			// NO EXPANSE, CREATE NEW
 			components.Set (x, y, GridColliderPart.CreateColliderPart (gameObject, grid, tile.shape, x, y, 1, 1));
 		}
-	}
-	public override void OnRegionChange(int regionX, int regionY) {
-
 	}
 
 	public override void OnTileSizeChange() {

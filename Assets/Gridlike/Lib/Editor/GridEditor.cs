@@ -13,6 +13,8 @@ public class GridEditor : Editor {
 		if (GUILayout.Button ("Open grid editor")) {
 			GridEditorWindow.ShowWindow ();
 		}
+
+		grid.atlas = EditorGUILayout.ObjectField("Tile atlas", grid.atlas, typeof(ScriptableObject), false) as TileAtlas;
 	}
 
 	void OnSceneGUI() {
@@ -47,7 +49,7 @@ public class GridEditor : Editor {
 
 					grid.WorldToGrid(HandleUtility.GUIPointToWorldRay (Event.current.mousePosition).origin, out x, out y);
 					GridEditorWindow window = GridEditorWindow.ShowWindow ();
-					grid.Set (x, y, window.shape, window.id, window.subid, window.state1, window.state2, window.state3);
+					grid.Set (x, y, window.id, window.subid, window.state1, window.state2, window.state3);
 
 					Event.current.Use ();
 					break;

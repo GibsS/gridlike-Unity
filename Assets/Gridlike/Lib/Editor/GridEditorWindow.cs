@@ -4,8 +4,6 @@ using System.Collections;
 
 public class GridEditorWindow : EditorWindow {
 
-	public TileShape shape;
-
 	public int id;
 	public int subid;
 
@@ -19,8 +17,6 @@ public class GridEditorWindow : EditorWindow {
 	}
 
 	void OnGUI () {
-		shape = (TileShape)EditorGUILayout.EnumPopup ("Shapes", shape);
-
 		id = EditorGUILayout.IntField ("Tile id", id);
 		subid = EditorGUILayout.IntField ("Tile sub-id", subid);
 

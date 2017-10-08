@@ -13,162 +13,74 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   atlas:
   - id: 0
-    name: 
-    defaultShape: 0
+    name: default full
+    shape: 0
     idSpriteInfo:
-      full: {fileID: 0}
-      oneway: {fileID: 0}
-      triangle: []
+      sprite: {fileID: 21300000, guid: 9286b42288e05bc4194fcab810c26766, type: 3}
+      sprites: []
     subIdSpriteInfo: []
   - id: 1
-    name: tile 1
-    defaultShape: 1
+    name: default full
+    shape: 1
     idSpriteInfo:
-      full: {fileID: 0}
-      oneway: {fileID: 0}
-      triangle: []
+      sprite: {fileID: 21300000, guid: 9286b42288e05bc4194fcab810c26766, type: 3}
+      sprites: []
     subIdSpriteInfo: []
   - id: 2
-    name: tile 2
-    defaultShape: 1
+    name: default oneway up
+    shape: 2
     idSpriteInfo:
-      full: {fileID: 0}
-      oneway: {fileID: 0}
-      triangle: []
+      sprite: {fileID: 21300000, guid: 65d9e0a0a88a18d419ef3f77a219d7d4, type: 3}
+      sprites: []
     subIdSpriteInfo: []
   - id: 3
-    name: tile 3
-    defaultShape: 1
+    name: default oneway right
+    shape: 5
     idSpriteInfo:
-      full: {fileID: 0}
-      oneway: {fileID: 0}
-      triangle: []
+      sprite: {fileID: 21300000, guid: 98ca52b88716a6344a14b4a70698e038, type: 3}
+      sprites: []
     subIdSpriteInfo: []
   - id: 4
-    name: tile 4
-    defaultShape: 1
+    name: default oneway down
+    shape: 3
     idSpriteInfo:
-      full: {fileID: 0}
-      oneway: {fileID: 0}
-      triangle: []
+      sprite: {fileID: 21300000, guid: ab8a98fd7d6b7984b86d751b11c880c1, type: 3}
+      sprites: []
     subIdSpriteInfo: []
   - id: 5
-    name: tile 5
-    defaultShape: 1
+    name: default oneway left
+    shape: 4
     idSpriteInfo:
-      full: {fileID: 0}
-      oneway: {fileID: 0}
-      triangle: []
+      sprite: {fileID: 21300000, guid: d1887bcdb7d2de84eb0400ea2e6a9e38, type: 3}
+      sprites: []
     subIdSpriteInfo: []
   - id: 6
-    name: tile 6
-    defaultShape: 1
+    name: default down left triangle
+    shape: 8
     idSpriteInfo:
-      full: {fileID: 0}
-      oneway: {fileID: 0}
-      triangle: []
+      sprite: {fileID: 21300000, guid: a3354a48802511643aebee0f27dc1127, type: 3}
+      sprites:
+      - {fileID: 21300000, guid: a02fad3b796a79b408b11d396cab8561, type: 3}
+      - {fileID: 21300000, guid: ba908192b1dc4e843ad3974b4728ed37, type: 3}
     subIdSpriteInfo: []
   - id: 7
-    name: tile 7
-    defaultShape: 1
+    name: default down right triangle
+    shape: 9
     idSpriteInfo:
-      full: {fileID: 0}
-      oneway: {fileID: 0}
-      triangle: []
+      sprite: {fileID: 21300000, guid: d3fa2637ed0c89142921205f30d997b5, type: 3}
+      sprites: []
     subIdSpriteInfo: []
   - id: 8
-    name: tile 8
-    defaultShape: 1
+    name: default up left triangle
+    shape: 6
     idSpriteInfo:
-      full: {fileID: 0}
-      oneway: {fileID: 0}
-      triangle: []
+      sprite: {fileID: 21300000, guid: 9a69a18f3876cf54389d63efa1b8ac49, type: 3}
+      sprites: []
     subIdSpriteInfo: []
   - id: 9
-    name: tile 9
-    defaultShape: 1
+    name: default up right triangle
+    shape: 7
     idSpriteInfo:
-      full: {fileID: 0}
-      oneway: {fileID: 0}
-      triangle: []
-    subIdSpriteInfo: []
-  - id: 10
-    name: tile 10
-    defaultShape: 1
-    idSpriteInfo:
-      full: {fileID: 0}
-      oneway: {fileID: 0}
-      triangle: []
-    subIdSpriteInfo: []
-  - id: 11
-    name: tile 11
-    defaultShape: 1
-    idSpriteInfo:
-      full: {fileID: 0}
-      oneway: {fileID: 0}
-      triangle: []
-    subIdSpriteInfo: []
-  - id: 12
-    name: tile 12
-    defaultShape: 1
-    idSpriteInfo:
-      full: {fileID: 0}
-      oneway: {fileID: 0}
-      triangle: []
-    subIdSpriteInfo: []
-  - id: 13
-    name: tile 13
-    defaultShape: 1
-    idSpriteInfo:
-      full: {fileID: 0}
-      oneway: {fileID: 0}
-      triangle: []
-    subIdSpriteInfo: []
-  - id: 14
-    name: tile 14
-    defaultShape: 1
-    idSpriteInfo:
-      full: {fileID: 0}
-      oneway: {fileID: 0}
-      triangle: []
-    subIdSpriteInfo: []
-  - id: 15
-    name: tile 15
-    defaultShape: 1
-    idSpriteInfo:
-      full: {fileID: 0}
-      oneway: {fileID: 0}
-      triangle: []
-    subIdSpriteInfo: []
-  - id: 0
-    name: 
-    defaultShape: 0
-    idSpriteInfo:
-      full: {fileID: 0}
-      oneway: {fileID: 0}
-      triangle: []
-    subIdSpriteInfo: []
-  - id: 0
-    name: 
-    defaultShape: 0
-    idSpriteInfo:
-      full: {fileID: 0}
-      oneway: {fileID: 0}
-      triangle: []
-    subIdSpriteInfo: []
-  - id: 0
-    name: 
-    defaultShape: 0
-    idSpriteInfo:
-      full: {fileID: 0}
-      oneway: {fileID: 0}
-      triangle: []
-    subIdSpriteInfo: []
-  - id: 0
-    name: 
-    defaultShape: 0
-    idSpriteInfo:
-      full: {fileID: 0}
-      oneway: {fileID: 0}
-      triangle: []
+      sprite: {fileID: 21300000, guid: ad5ff125d3e1d124c82cbe73858b40b6, type: 3}
+      sprites: []
     subIdSpriteInfo: []

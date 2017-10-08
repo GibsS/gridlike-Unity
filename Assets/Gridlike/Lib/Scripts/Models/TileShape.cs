@@ -12,3 +12,14 @@
 	DOWN_LEFT_TRIANGLE,
 	DOWN_RIGHT_TRIANGLE
 }
+
+public static class TileShapeHelper {
+
+	public static bool IsTriangle(TileShape shape) {
+		return (int)shape >= 6;
+	}
+
+	public static bool IsOneway(TileShape shape) {
+		return (int)shape >= 2 && (int)shape < 6;
+	}
+}

@@ -66,12 +66,16 @@ public class TileAtlas : ScriptableObject {
 		}
 	}
 
+	public Sprite GetSprite(int id, int subId, TileShape shape, int size = 1) {
+		return atlas [id].GetSprite (subId, shape, size);
+	}
+
 	TileInfo CreateTileInfo(int id) {
 		TileInfo tile = new TileInfo();
 
 		tile.id = id;
 		tile.name = "tile " + id;
-		tile.defaultShape = TileShape.FULL;
+		tile.shape = TileShape.FULL;
 
 		tile.idSpriteInfo = null;
 		tile.subIdSpriteInfo = null;

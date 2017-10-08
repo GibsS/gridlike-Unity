@@ -42,11 +42,10 @@ public abstract class GridListener : MonoBehaviour {
 	public virtual void OnSetId (int x, int y, Tile tile, int oldId, int oldSubId) {
 		OnSet (x, y, tile);
 	}
-	public virtual void OnSetShape (int x, int y, Tile tile, TileShape oldShape) {
-		OnSet (x, y, tile);
-	}
 
-	public abstract void OnRegionChange(int regionX, int regionY);
+	public virtual void OnRegionChange(int regionX, int regionY) {
+		// TODO : default is just calling onset on all tiles of the grid
+	}
 
 	public abstract void OnTileSizeChange ();
 }

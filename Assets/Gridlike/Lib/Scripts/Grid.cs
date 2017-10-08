@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class Grid : MonoBehaviour {
 
-	[SerializeField]
-	List<GridListener> gridListeners;
+	[SerializeField] List<GridListener> gridListeners;
 
 	public const int REGION_SIZE = 50;
 
 	float _tileSize = 1;
 
-	[SerializeField]
-	public InfiniteGrid tiles;
+	[SerializeField] public InfiniteGrid tiles;
+
+	[HideInInspector] public TileAtlas atlas;
 
 	public float tileSize {
 		get { return _tileSize; }
@@ -71,10 +71,10 @@ public class Grid : MonoBehaviour {
 		return tile == null ? 0 : tile.subId;
 	}
 
-	public void Set(int x, int y, TileShape shape, int id, int subid, int state1, int state2, int state3) {
+	public void Set(int x, int y, int id, int subid, int state1, int state2, int state3) {
 		Tile tile = GetOrCreate (x, y);
 
-		tile.shape = shape;
+		tile.shape = atlas.GetTile(id).shape;
 
 		tile.id = id;
 		tile.subId = subid;
@@ -87,20 +87,12 @@ public class Grid : MonoBehaviour {
 			listener.OnSet (x, y, tile);
 		}
 	}
-	public void SetShape(int x, int y, TileShape shape) {
-		Tile tile = GetOrCreate (x, y);
-		TileShape oldShape = tile.shape;
-		tile.shape = shape;
-
-		foreach (GridListener listener in gridListeners) {
-			listener.OnSetShape (x, y, tile, oldShape);
-		}
-	}
 	public void SetId(int x, int y, int id, int subId = int.MinValue) {
 		Tile tile = GetOrCreate (x, y);
 		int oldId = tile.id, oldSubId = tile.subId;
 
 		tile.id = id;
+		tile.shape = atlas.GetTile(id).shape;
 		if (subId != int.MinValue) tile.subId = subId;
 
 		foreach (GridListener listener in gridListeners) {
