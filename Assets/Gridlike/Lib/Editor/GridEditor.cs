@@ -13,6 +13,12 @@ public class GridEditor : Editor {
 		if (GUILayout.Button ("Open grid editor")) {
 			GridEditorWindow.ShowWindow ();
 		}
+		if (GUILayout.Button ("Rebuild")) {
+			grid.PresentAllAgain ();
+		}
+		if (GUILayout.Button ("Hide all")) {
+			grid.HideAll ();
+		}
 
 		grid.atlas = EditorGUILayout.ObjectField("Tile atlas", grid.atlas, typeof(ScriptableObject), false) as TileAtlas;
 	}

@@ -207,8 +207,17 @@ public class GridSpriteRenderer : GridListener {
 		}
 	}
 
-	public override void OnHideRegion() {
-		Debug.Log ("[GridSpriteRenderer.OnHideRegion] NOT IMPLEMENTED");
+	public override void OnHideRegion(int X, int Y) {
+		int startX = X * Grid.REGION_SIZE;
+		int endX = (X + 1) * Grid.REGION_SIZE;
+		int startY = Y * Grid.REGION_SIZE;
+		int endY = (Y + 1) * Grid.REGION_SIZE;
+
+		for (int i = startX; i < endX; i++) {
+			for (int j = startY; j < endY; j++) {
+				ClearSprite (components.Get(i, j), i, j);
+			}
+		}
 	}
 
 	public override void OnTileSizeChange () {
@@ -216,13 +225,15 @@ public class GridSpriteRenderer : GridListener {
 	}
 
 	void ClearSprite(Component renderer, int x, int y) {
-		if (renderer is GridSpriteTriangle && ((renderer as GridSpriteTriangle).width != 1 || (renderer as GridSpriteTriangle).height != 1)) {
-			SplitTriangle (renderer as GridSpriteTriangle, x, y);
-		} else {
-			DestroyImmediate (renderer.gameObject);
-		}
+		if (renderer != null) {
+			if (renderer is GridSpriteTriangle && ((renderer as GridSpriteTriangle).width != 1 || (renderer as GridSpriteTriangle).height != 1)) {
+				SplitTriangle (renderer as GridSpriteTriangle, x, y);
+			} else {
+				DestroyImmediate (renderer.gameObject);
+			}
 
-		components.Set (x, y, null);
+			components.Set (x, y, null);
+		}
 	}
 
 	SpriteRenderer CreateSprite(int x, int y) {

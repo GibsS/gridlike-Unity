@@ -10,7 +10,6 @@ public class Grid : MonoBehaviour {
 	[SerializeField] List<GridListener> gridListeners;
 
 	// TODO optimize
-	[SerializeField] List<Point> presentedRegions;
 	[SerializeField] InfiniteGrid tiles;
 
 	[SerializeField] float _tileSize = 1;
@@ -26,7 +25,6 @@ public class Grid : MonoBehaviour {
 		if (tiles == null) {
 			gridListeners = new List<GridListener> ();
 
-			presentedRegions = new List<Point> ();
 			tiles = new InfiniteGrid (REGION_SIZE);
 
 			foreach (GridListener listener in GetComponents<GridListener> ()) {
@@ -72,11 +70,12 @@ public class Grid : MonoBehaviour {
 	#region REGION PRESENTING
 
 	public void PresentAllAgain() {
-		foreach (Point regionPosition in presentedRegions) {
+		List<FiniteGrid> regions = tiles.GetRegions ();
+		foreach (FiniteGrid regionPosition in regions) {
 			HideRegion (regionPosition.x, regionPosition.y);
 		}
 
-		foreach (Point regionPosition in presentedRegions) {
+		foreach (FiniteGrid regionPosition in regions) {
 			PresentRegion (regionPosition.x, regionPosition.y);
 		}
 	}
@@ -93,25 +92,25 @@ public class Grid : MonoBehaviour {
 	}
 
 	public void PresentRegion(int X, int Y) {
-		Point p = new Point (X, Y);
+		FiniteGrid grid = tiles.GetRegion (X, Y);
 
-		if(!presentedRegions.Contains(p)) {
+		if(!grid.presented) {
 			foreach (GridListener listener in gridListeners) {
 				listener.OnShowRegion (X, Y);
 			}
 
-			presentedRegions.Remove (p);
+			grid.presented = true;
 		}
 	}
 	public void HideRegion(int X, int Y) {
-		Point p = new Point (X, Y);
+		FiniteGrid grid = tiles.GetRegion (X, Y);
 
-		if(presentedRegions.Contains(p)) {
+		if(grid.presented) {
 			foreach (GridListener listener in gridListeners) {
-				listener.OnShowRegion (X, Y);
+				listener.OnHideRegion (X, Y);
 			}
 
-			presentedRegions.Add (p);
+			grid.presented = false;
 		}
 	}
 

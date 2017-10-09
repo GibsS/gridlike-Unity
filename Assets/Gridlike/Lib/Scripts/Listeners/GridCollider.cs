@@ -32,58 +32,8 @@ public class GridCollider : GridListener {
 	}
 
 	public override void OnSet(int x, int y, Tile tile) {
-		GridColliderPart wrapper = components.Get (x, y) as GridColliderPart;
-
 		// clear previous
-		if (wrapper != null) {
-			if (wrapper.width == 1) {
-				if (wrapper.height == 1) {
-					DestroyImmediate (wrapper.gameObject);
-				} else {
-					if (wrapper.bottomLeftY == y) {
-						wrapper.bottomLeftY += 1;
-
-						wrapper.SetSize(wrapper.width, wrapper.height - 1);
-						wrapper.transform.localPosition = new Vector2 (wrapper.transform.localPosition.x, wrapper.transform.localPosition.y + 0.5f);
-					} else {
-						int endY = wrapper.bottomLeftY + wrapper.height - 1;
-
-						wrapper.SetSize(wrapper.width, y - wrapper.bottomLeftY);
-						wrapper.transform.localPosition = new Vector2 (wrapper.transform.localPosition.x, wrapper.transform.localPosition.y - (endY - y + 1f)/2f);
-
-						if (endY != y) {
-							GridColliderPart part = GridColliderPart.CreateColliderPart (containerGO, grid, wrapper.shape, x, y + 1, 1, endY - y);
-
-							for (int i = y + 1; i <= endY; i++) {
-								components.Set (x, i, part);
-							}
-						}
-					}
-				}
-			} else {
-				if (wrapper.bottomLeftX == x) {
-					wrapper.bottomLeftX += 1;
-
-					wrapper.SetSize (wrapper.width - 1, wrapper.height);
-					wrapper.transform.localPosition = new Vector2 (wrapper.transform.localPosition.x + 0.5f, wrapper.transform.localPosition.y);
-				} else {
-					int endX = wrapper.bottomLeftX + wrapper.width - 1;
-
-					wrapper.SetSize (x - wrapper.bottomLeftX, wrapper.height);
-					wrapper.transform.localPosition = new Vector2 (wrapper.transform.localPosition.x - (endX - x + 1f)/2f, wrapper.transform.localPosition.y);
-
-					if (endX != x) {
-						GridColliderPart part = GridColliderPart.CreateColliderPart (containerGO, grid, wrapper.shape, x + 1, y, endX - x, 1);
-
-						for (int i = x + 1; i <= endX; i++) {
-							components.Set (i, y, part);
-						}
-					}
-				}
-			}
-		}
-
-		components.Set (x, y, null);
+		ClearTile(x, y);
 
 		// add new
 		if (tile.shape != TileShape.EMPTY) {
@@ -176,11 +126,74 @@ public class GridCollider : GridListener {
 		}
 	}
 
-	public override void OnHideRegion() {
-		Debug.Log ("[GridCollider.OnHideRegion] NOT IMPLEMENTED");
+	public override void OnHideRegion(int X, int Y) {
+		int startX = X * Grid.REGION_SIZE;
+		int endX = (X + 1) * Grid.REGION_SIZE;
+		int startY = Y * Grid.REGION_SIZE;
+		int endY = (Y + 1) * Grid.REGION_SIZE;
+
+		for (int i = startX; i < endX; i++) {
+			for (int j = startY; j < endY; j++) {
+				ClearTile (i, j);
+			}
+		}
 	}
 
 	public override void OnTileSizeChange() {
 		Debug.Log ("[GridCollider.OnTileSizeChange] NOT IMPLEMENTED");
+	}
+
+	void ClearTile(int x, int y) {
+		GridColliderPart wrapper = components.Get (x, y) as GridColliderPart;
+
+		if (wrapper != null) {
+			if (wrapper.width == 1) {
+				if (wrapper.height == 1) {
+					DestroyImmediate (wrapper.gameObject);
+				} else {
+					if (wrapper.bottomLeftY == y) {
+						wrapper.bottomLeftY += 1;
+
+						wrapper.SetSize(wrapper.width, wrapper.height - 1);
+						wrapper.transform.localPosition = new Vector2 (wrapper.transform.localPosition.x, wrapper.transform.localPosition.y + 0.5f);
+					} else {
+						int endY = wrapper.bottomLeftY + wrapper.height - 1;
+
+						wrapper.SetSize(wrapper.width, y - wrapper.bottomLeftY);
+						wrapper.transform.localPosition = new Vector2 (wrapper.transform.localPosition.x, wrapper.transform.localPosition.y - (endY - y + 1f)/2f);
+
+						if (endY != y) {
+							GridColliderPart part = GridColliderPart.CreateColliderPart (containerGO, grid, wrapper.shape, x, y + 1, 1, endY - y);
+
+							for (int i = y + 1; i <= endY; i++) {
+								components.Set (x, i, part);
+							}
+						}
+					}
+				}
+			} else {
+				if (wrapper.bottomLeftX == x) {
+					wrapper.bottomLeftX += 1;
+
+					wrapper.SetSize (wrapper.width - 1, wrapper.height);
+					wrapper.transform.localPosition = new Vector2 (wrapper.transform.localPosition.x + 0.5f, wrapper.transform.localPosition.y);
+				} else {
+					int endX = wrapper.bottomLeftX + wrapper.width - 1;
+
+					wrapper.SetSize (x - wrapper.bottomLeftX, wrapper.height);
+					wrapper.transform.localPosition = new Vector2 (wrapper.transform.localPosition.x - (endX - x + 1f)/2f, wrapper.transform.localPosition.y);
+
+					if (endX != x) {
+						GridColliderPart part = GridColliderPart.CreateColliderPart (containerGO, grid, wrapper.shape, x + 1, y, endX - x, 1);
+
+						for (int i = x + 1; i <= endX; i++) {
+							components.Set (i, y, part);
+						}
+					}
+				}
+			}
+		}
+
+		components.Set (x, y, null);
 	}
 }

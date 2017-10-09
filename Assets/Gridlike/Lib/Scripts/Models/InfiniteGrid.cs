@@ -22,19 +22,25 @@ public class InfiniteGrid {
 
 		return region != null ? region.Get (x - region.x * _regionSize, y - region.y * _regionSize) : null;
 	}
-	public void Set(int x, int y, Tile value) {
+	public FiniteGrid Set(int x, int y, Tile value) {
 		FiniteGrid region = GetContainingRegion (x, y);
 
 		if (region == null) {
-			int X = Mathf.FloorToInt (((float) x) / _regionSize);
-			int Y = Mathf.FloorToInt (((float) y) / _regionSize);
+			int X = Mathf.FloorToInt (((float)x) / _regionSize);
+			int Y = Mathf.FloorToInt (((float)y) / _regionSize);
 
 			region = new FiniteGrid (X, Y, _regionSize);
 
-			regions.Add(region);
-		}
+			regions.Add (region);
 
-		region.Set (x - region.x * _regionSize, y - region.y * _regionSize, value);
+			region.Set (x - region.x * _regionSize, y - region.y * _regionSize, value);
+
+			return region;
+		} else {
+			region.Set (x - region.x * _regionSize, y - region.y * _regionSize, value);
+
+			return null;
+		}
 	}
 
 	public FiniteGrid GetRegion(int X, int Y) {
@@ -69,6 +75,8 @@ public class FiniteGrid {
 
 	[SerializeField]
 	Array[] grid;
+
+	public bool presented = true;
 
 	public int size {
 		get { return _size; }

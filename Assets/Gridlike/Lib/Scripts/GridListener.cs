@@ -60,7 +60,7 @@ public abstract class GridListener : MonoBehaviour {
 		}
 	}
 
-	public abstract void OnHideRegion();
+	public abstract void OnHideRegion(int X, int Y);
 
 	public abstract void OnTileSizeChange ();
 }
