@@ -55,14 +55,14 @@ public class Grid : MonoBehaviour {
 	#region GRID LISTENERS
 
 	public void AddListener(GridListener listener) {
-		gridListeners.Add (listener);
-
-		Debug.Log ("[Add] Listener count=" + gridListeners.Count);
+		if (!gridListeners.Contains (listener)) {
+			gridListeners.Add (listener);
+		}
 	}
 	public void RemoveListener(GridListener listener) {
-		gridListeners.Remove (listener);
-
-		Debug.Log ("[Remove] Listener count=" + gridListeners.Count);
+		if (gridListeners.Contains (listener)) {
+			gridListeners.Remove (listener);
+		}
 	}
 
 	#endregion

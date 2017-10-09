@@ -22,7 +22,7 @@ public class InfiniteGrid {
 
 		return region != null ? region.Get (x - region.x * _regionSize, y - region.y * _regionSize) : null;
 	}
-	public FiniteGrid Set(int x, int y, Tile value) {
+	public void Set(int x, int y, Tile value) {
 		FiniteGrid region = GetContainingRegion (x, y);
 
 		if (region == null) {
@@ -32,15 +32,9 @@ public class InfiniteGrid {
 			region = new FiniteGrid (X, Y, _regionSize);
 
 			regions.Add (region);
+		} 
 
-			region.Set (x - region.x * _regionSize, y - region.y * _regionSize, value);
-
-			return region;
-		} else {
-			region.Set (x - region.x * _regionSize, y - region.y * _regionSize, value);
-
-			return null;
-		}
+		region.Set (x - region.x * _regionSize, y - region.y * _regionSize, value);
 	}
 
 	public FiniteGrid GetRegion(int X, int Y) {

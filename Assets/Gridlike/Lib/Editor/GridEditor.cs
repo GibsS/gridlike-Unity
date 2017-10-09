@@ -34,7 +34,6 @@ public class GridEditor : Editor {
 				for (int j = 0; j < Grid.REGION_SIZE; j++) {
 					Tile tile = region.Get (i, j) as Tile;
 					if (tile != null && tile.shape != TileShape.EMPTY) {
-						//Debug.Log ("tile shape=" + tile.shape.ToString ());
 						Handles.DrawLine (
 							new Vector2 (bx + i * grid.tileSize, by + j * grid.tileSize),
 							new Vector2 (bx + (i + 1) * grid.tileSize, by + (j + 1) * grid.tileSize)
