@@ -84,7 +84,8 @@ public class GridColliderPart : MonoBehaviour {
 		case TileShape.RIGHT_ONEWAY: part.transform.Rotate (-Vector3.forward * 90); break;
 		}
 
-		part.gameObject.AddComponent<PlatformEffector2D> ();
+		PlatformEffector2D effector = part.gameObject.AddComponent<PlatformEffector2D> ();
+		effector.surfaceArc = 5;
 
 		part.shape = shape;
 
