@@ -27,7 +27,7 @@ public class GridGenerator : GridDataDelegate {
 	public override void ResetDelegate() {
 		base.ResetDelegate ();
 
-		if (algorithm != null) {
+		if (algorithm == null) {
 			algorithm = GetComponent<GridGeneratorAlgorithm> ();
 		}
 	}
