@@ -7,6 +7,7 @@ public class Grid : MonoBehaviour {
 
 	public const int REGION_SIZE = 50;
 
+	[SerializeField] GridDataDelegate gridDelegate;
 	[SerializeField] List<GridListener> gridListeners;
 
 	// TODO optimize
@@ -28,8 +29,10 @@ public class Grid : MonoBehaviour {
 			tiles = new InfiniteGrid (REGION_SIZE);
 
 			foreach (GridListener listener in GetComponents<GridListener> ()) {
-				listener.ResetGrid ();
+				listener.ResetListener ();
 			}
+
+			gridDelegate = GetComponent<GridDataDelegate> ();
 		}
 	}
 
@@ -46,11 +49,19 @@ public class Grid : MonoBehaviour {
 
 	void OnDestroy() {
 		foreach (GridListener listener in GetComponents<GridListener> ()) {
-			listener.ResetGrid ();
+			listener.ResetListener ();
 		}
 	}
 
 	#endregion 
+
+	#region GRID DATA DELEGATE
+
+	public void SetDelegate(GridDataDelegate gridDelegate) {
+		this.gridDelegate = gridDelegate;
+	}
+
+	#endregion
 
 	#region GRID LISTENERS
 
@@ -119,10 +130,26 @@ public class Grid : MonoBehaviour {
 	#region REGION LOADING/UNLOADING
 
 	public void LoadRegion(int X, int Y) {
-		// TODO
+		if (gridDelegate != null) {
+			FiniteGrid region = tiles.GetRegion (X, Y);
+
+			Tile[,] subTiles = gridDelegate.LoadTiles (region != null, X, Y);
+
+			if (subTiles != null) {
+				tiles.SetRegion (X, Y, subTiles);
+			}
+		}
 	}
 	public void UnloadRegion(int X, int Y) {
-		// TODO
+		if (gridDelegate != null) {
+			FiniteGrid region = tiles.GetRegion (X, Y);
+
+			if (region != null) {
+				gridDelegate.SaveTiles (X, Y, region);
+			}
+		}
+
+		tiles.ClearRegion (X, Y);
 	}
 
 	#endregion

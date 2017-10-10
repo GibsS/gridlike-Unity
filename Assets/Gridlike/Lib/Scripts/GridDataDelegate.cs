@@ -2,15 +2,34 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GridDataDelegate : MonoBehaviour {
+[ExecuteInEditMode]
+[RequireComponent(typeof(Grid))]
+public abstract class GridDataDelegate : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-		
+	[SerializeField] public Grid grid { get; private set; }
+
+	void Reset() {
+		ResetDelegate ();
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+	void Awake() {
+		ResetDelegate ();
 	}
+
+	public virtual void ResetDelegate() {
+		if (this.grid == null) {
+			Grid grid = GetComponent<Grid> ();
+
+			if (grid == null) {
+				// TODO better warning (in inspector)
+				Debug.LogWarning ("No Grid on this game object");
+			} else {
+				this.grid = grid;
+
+				grid.SetDelegate (this);
+			}
+		}
+	}
+
+	public abstract Tile[,] LoadTiles (bool dataPresent, int regionX, int regionY);
+	public abstract void SaveTiles (int regionX, int regionY, FiniteGrid tiles);
 }

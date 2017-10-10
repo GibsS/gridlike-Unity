@@ -37,6 +37,24 @@ public class InfiniteGrid {
 		region.Set (x - region.x * _regionSize, y - region.y * _regionSize, value);
 	}
 
+	public void SetRegion(int X, int Y, Tile[,] tiles) {
+		FiniteGrid region = GetRegion (X, Y);
+
+		if (region == null) {
+			region = new FiniteGrid (X, Y, _regionSize);
+			regions.Add (region);
+		}
+
+		for (int i = 0; i < tiles.GetLength (0); i++) {
+			for (int j = 0; j < tiles.GetLength (1); j++) {
+				region.Set (i, j, tiles [i, j]);
+			}
+		}
+	}
+	public void ClearRegion(int X, int Y) {
+		regions.RemoveAll (e => e.x == X && e.y == Y);
+	}
+
 	public FiniteGrid GetRegion(int X, int Y) {
 		foreach (FiniteGrid region in regions) {
 			if (region.x == X && region.y == Y) {

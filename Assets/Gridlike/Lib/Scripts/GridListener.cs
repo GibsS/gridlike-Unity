@@ -8,12 +8,11 @@ public abstract class GridListener : MonoBehaviour {
 	
 	[SerializeField] public Grid grid { get; private set; }
 
-	// TODO Reset not called when copying a gameobject, need to init the grid somewhere else?
 	void Reset() {
-		ResetGrid ();
+		ResetListener ();
 	}
 	void Awake() {
-		ResetGrid ();
+		ResetListener ();
 	}
 
 	public virtual void OnDestroy() {
@@ -22,7 +21,7 @@ public abstract class GridListener : MonoBehaviour {
 		}
 	} 
 
-	public virtual void ResetGrid() {
+	public virtual void ResetListener() {
 		if (this.grid == null) {
 			Grid grid = GetComponent<Grid> ();
 

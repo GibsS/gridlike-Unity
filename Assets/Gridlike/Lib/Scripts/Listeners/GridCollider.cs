@@ -18,8 +18,8 @@ public class GridCollider : GridListener {
 		DestroyImmediate (containerGO);
 	}
 
-	public override void ResetGrid() {
-		base.ResetGrid ();
+	public override void ResetListener() {
+		base.ResetListener ();
 
 		if (components == null) {
 			components = new InfiniteComponentGrid (Grid.REGION_SIZE);
