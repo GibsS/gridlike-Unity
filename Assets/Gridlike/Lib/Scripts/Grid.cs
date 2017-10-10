@@ -136,8 +136,11 @@ public class Grid : MonoBehaviour {
 			Tile[,] subTiles = gridDelegate.LoadTiles (region != null, X, Y);
 
 			if (subTiles != null) {
-				tiles.SetRegion (X, Y, subTiles);
+				region = tiles.SetRegion (X, Y, subTiles);
 			}
+
+			HideRegion (X, Y);
+			PresentRegion (X, Y);
 		}
 	}
 	public void UnloadRegion(int X, int Y) {

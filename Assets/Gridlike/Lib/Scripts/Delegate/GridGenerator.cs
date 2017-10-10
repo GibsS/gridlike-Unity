@@ -39,17 +39,21 @@ public class GridGenerator : GridDataDelegate {
 		LargeRegion region = GetRegions (regionX, regionY);
 
 		if (region == null) {
-			int largeRegionX = Mathf.FloorToInt (regionX / (float)algorithm.generationRegionWidth);
-			int largeRegionY = Mathf.FloorToInt (regionY / (float)algorithm.generationRegionHeight);
+			int largeRegionX = Mathf.FloorToInt (regionX / (float)algorithm.generationRegionWidth) * algorithm.generationRegionWidth;
+			int largeRegionY = Mathf.FloorToInt (regionY / (float)algorithm.generationRegionHeight) * algorithm.generationRegionHeight;
+
+			Debug.Log ("Generate large region." + 
+					   "RegionX=" + largeRegionX + "->" + (largeRegionX + algorithm.generationRegionWidth) +
+					   "RegionY=" + largeRegionY + "->" + (largeRegionY + algorithm.generationRegionHeight));
 
 			region = new LargeRegion {
-				regionX = largeRegionX * algorithm.generationRegionWidth,
-				regionY = largeRegionY * algorithm.generationRegionHeight,
+				regionX = largeRegionX,
+				regionY = largeRegionY,
 				regionWidth = algorithm.generationRegionWidth,
 				regionHeight = algorithm.generationRegionHeight,
 				tiles = algorithm.GenerateTiles (
-					largeRegionX * algorithm.generationRegionWidth * Grid.REGION_SIZE, 
-					largeRegionY * algorithm.generationRegionHeight * Grid.REGION_SIZE, 
+					largeRegionX * Grid.REGION_SIZE, 
+					largeRegionY * Grid.REGION_SIZE, 
 					algorithm.generationRegionWidth * Grid.REGION_SIZE, 
 					algorithm.generationRegionHeight * Grid.REGION_SIZE
 				)
@@ -63,7 +67,7 @@ public class GridGenerator : GridDataDelegate {
 
 		for (int i = 0; i < Grid.REGION_SIZE; i++) {
 			for (int j = 0; j < Grid.REGION_SIZE; j++) {
-				tempTiles [i, j] = region.tiles [i - xOffset, j - yOffset];
+				tempTiles [i, j] = region.tiles [i + xOffset, j + yOffset];
 			}
 		}
 
