@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// TODO SPRITE REMAIN AFTER PLAY MODE IS STOPPED IN 
 public class GridSpriteRenderer : GridListener {
 
 	[HideInInspector]

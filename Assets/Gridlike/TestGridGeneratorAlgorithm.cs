@@ -9,6 +9,16 @@ public class TestGridGeneratorAlgorithm : GridGeneratorAlgorithm {
 	public override int generationRegionWidth { get { return width; } }
 	public override int generationRegionHeight { get { return height; } }
 
+	bool done = true;
+
+	void Update() {
+		if (done && Application.isPlaying) {
+			done = false;
+			Grid grid = GetComponent<Grid> ();
+			grid.LoadRegion (0, 0);
+		}
+	}
+
 	public override Tile[,] GenerateTiles (int x, int y, int width, int height) {
 		Tile[,] tiles = new Tile[width, height];
 

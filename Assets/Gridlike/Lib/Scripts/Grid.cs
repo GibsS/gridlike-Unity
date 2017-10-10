@@ -153,6 +153,8 @@ public class Grid : MonoBehaviour {
 		}
 
 		tiles.ClearRegion (X, Y);
+
+		HideRegion (X, Y);
 	}
 
 	#endregion
