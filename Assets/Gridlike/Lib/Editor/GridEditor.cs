@@ -27,8 +27,8 @@ public class GridEditor : Editor {
 		Grid grid = target as Grid;
 
 		foreach (FiniteGrid region in grid.GetRegions()) {
-			float bx = grid.transform.position.x + region.x * Grid.REGION_SIZE * grid.tileSize;
-			float by = grid.transform.position.y + region.y * Grid.REGION_SIZE * grid.tileSize;
+			float bx = grid.transform.position.x + region.regionX * Grid.REGION_SIZE * grid.tileSize;
+			float by = grid.transform.position.y + region.regionY * Grid.REGION_SIZE * grid.tileSize;
 
 			for (int i = 0; i < Grid.REGION_SIZE; i++) {
 				for (int j = 0; j < Grid.REGION_SIZE; j++) {

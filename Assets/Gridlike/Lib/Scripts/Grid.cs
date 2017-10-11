@@ -83,22 +83,22 @@ public class Grid : MonoBehaviour {
 	public void PresentAllAgain() {
 		List<FiniteGrid> regions = tiles.GetRegions ();
 		foreach (FiniteGrid regionPosition in regions) {
-			HideRegion (regionPosition.x, regionPosition.y);
+			HideRegion (regionPosition.regionX, regionPosition.regionY);
 		}
 
 		foreach (FiniteGrid regionPosition in regions) {
-			PresentRegion (regionPosition.x, regionPosition.y);
+			PresentRegion (regionPosition.regionX, regionPosition.regionY);
 		}
 	}
 
 	public void PresentAll() {
 		foreach (FiniteGrid region in tiles.GetRegions()) {
-			PresentRegion (region.x, region.y);
+			PresentRegion (region.regionX, region.regionY);
 		}
 	}
 	public void HideAll() {
 		foreach (FiniteGrid region in tiles.GetRegions()) {
-			HideRegion (region.x, region.y);
+			HideRegion (region.regionX, region.regionY);
 		}
 	}
 
