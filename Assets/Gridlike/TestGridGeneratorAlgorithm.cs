@@ -15,6 +15,7 @@ public class TestGridGeneratorAlgorithm : GridGeneratorAlgorithm {
 
 	void Update() {
 		if (Input.GetMouseButtonDown (0)) {
+
 			Vector2 mouseInWorld = Camera.main.ScreenToWorldPoint (Input.mousePosition);
 			Vector2 mouseInTransform = transform.InverseTransformPoint (mouseInWorld);
 
@@ -22,6 +23,7 @@ public class TestGridGeneratorAlgorithm : GridGeneratorAlgorithm {
 			int regionY = Mathf.FloorToInt(mouseInTransform.y / Grid.REGION_SIZE);
 
 			Grid grid = GetComponent<Grid> ();
+				
 			grid.LoadRegion (regionX, regionY);
 		}
 
@@ -33,7 +35,10 @@ public class TestGridGeneratorAlgorithm : GridGeneratorAlgorithm {
 			int y = Mathf.FloorToInt(mouseInTransform.y);
 
 			Grid grid = GetComponent<Grid> ();
-			grid.SetId (x, y, 0, -1);
+
+			Debug.Log (grid.Get (x, y).id);
+
+			//grid.SetId (x, y, 0, -1);
 		}
 	}
 
@@ -43,7 +48,7 @@ public class TestGridGeneratorAlgorithm : GridGeneratorAlgorithm {
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
 				tiles [i, j] = new Tile {
-					id = 1,
+					id = (j + y > i + x) ? 0 : 1,
 					subId = -1,
 					shape = TileShape.FULL
 				};

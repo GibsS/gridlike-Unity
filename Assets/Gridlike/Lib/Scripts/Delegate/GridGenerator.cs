@@ -15,13 +15,10 @@ public class GridGenerator : GridDataDelegate {
 
 	List<LargeRegion> largeRegions;
 
-	Tile[,] tempTiles;
-
 	[SerializeField] GridGeneratorAlgorithm algorithm;
 
 	void Start() {
 		largeRegions = new List<LargeRegion> ();
-		tempTiles = new Tile[Grid.REGION_SIZE, Grid.REGION_SIZE];
 	}
 
 	public override void ResetDelegate() {
@@ -35,10 +32,10 @@ public class GridGenerator : GridDataDelegate {
 		this.algorithm = algorithm;
 	}
 
-	public override Tile[,] LoadTiles (bool dataPresent, int regionX, int regionY) {
-		LargeRegion region = GetRegions (regionX, regionY);
+	public override FiniteGrid LoadTiles (bool dataPresent, int regionX, int regionY) {
+		LargeRegion largeRegion = GetRegions (regionX, regionY);
 
-		if (region == null) {
+		if (largeRegion == null) {
 			int largeRegionX = Mathf.FloorToInt (regionX / (float)algorithm.generationRegionWidth) * algorithm.generationRegionWidth;
 			int largeRegionY = Mathf.FloorToInt (regionY / (float)algorithm.generationRegionHeight) * algorithm.generationRegionHeight;
 
@@ -46,7 +43,7 @@ public class GridGenerator : GridDataDelegate {
 					   "RegionX=" + largeRegionX + "->" + (largeRegionX + algorithm.generationRegionWidth) +
 					   "RegionY=" + largeRegionY + "->" + (largeRegionY + algorithm.generationRegionHeight));
 
-			region = new LargeRegion {
+			largeRegion = new LargeRegion {
 				regionX = largeRegionX,
 				regionY = largeRegionY,
 				regionWidth = algorithm.generationRegionWidth,
@@ -59,19 +56,21 @@ public class GridGenerator : GridDataDelegate {
 				)
 			};
 
-			largeRegions.Add (region);
+			largeRegions.Add (largeRegion);
 		}
 
-		int xOffset = (regionX - region.regionX) * Grid.REGION_SIZE;
-		int yOffset = (regionY - region.regionY) * Grid.REGION_SIZE;
+		int xOffset = (regionX - largeRegion.regionX) * Grid.REGION_SIZE;
+		int yOffset = (regionY - largeRegion.regionY) * Grid.REGION_SIZE;
+
+		FiniteGrid region = new FiniteGrid(regionX, regionY, Grid.REGION_SIZE);
 
 		for (int i = 0; i < Grid.REGION_SIZE; i++) {
 			for (int j = 0; j < Grid.REGION_SIZE; j++) {
-				tempTiles [i, j] = region.tiles [i + xOffset, j + yOffset];
+				region.Set(i, j, largeRegion.tiles [i + xOffset, j + yOffset]);
 			}
 		}
 
-		return tempTiles;
+		return region;
 	}
 	public override void SaveTiles (int regionX, int regionY, FiniteGrid tiles) {
 

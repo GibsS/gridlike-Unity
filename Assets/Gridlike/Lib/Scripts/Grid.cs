@@ -134,10 +134,17 @@ public class Grid : MonoBehaviour {
 			Debug.Log ("Load region X=" + X + " Y=" + Y);
 			FiniteGrid region = tiles.GetRegion (X, Y);
 
-			Tile[,] subTiles = gridDelegate.LoadTiles (region != null, X, Y);
+			region = gridDelegate.LoadTiles (region != null, X, Y);
 
-			if (subTiles != null) {
-				region = tiles.SetRegion (X, Y, subTiles);
+			if (region != null) {
+				tiles.SetRegion (X, Y, region);
+			}
+
+			for (int i = 0; i < Grid.REGION_SIZE; i++) {
+				for (int j = 0; j < Grid.REGION_SIZE; j++) {
+					Tile tile = region.Get (i, j);
+					tile.shape = atlas.GetTile (tile.id).shape;
+				}
 			}
 
 			HideRegion (X, Y);
