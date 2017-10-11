@@ -131,6 +131,7 @@ public class Grid : MonoBehaviour {
 
 	public void LoadRegion(int X, int Y) {
 		if (gridDelegate != null) {
+			Debug.Log ("Load region X=" + X + " Y=" + Y);
 			FiniteGrid region = tiles.GetRegion (X, Y);
 
 			Tile[,] subTiles = gridDelegate.LoadTiles (region != null, X, Y);

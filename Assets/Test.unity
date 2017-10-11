@@ -332,10 +332,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1831652650}
   - component: {fileID: 1831652652}
-  - component: {fileID: 1831652654}
-  - component: {fileID: 1831652653}
   - component: {fileID: 1831652651}
   - component: {fileID: 1831652655}
+  - component: {fileID: 1831652654}
+  - component: {fileID: 1831652653}
   m_Layer: 12
   m_Name: Grid
   m_TagString: Untagged
@@ -2939,12 +2939,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gridDelegate: {fileID: 1831652654}
-  gridListeners: []
+  gridListeners:
+  - {fileID: 1831652655}
+  - {fileID: 1831652651}
   tiles:
     _regionSize: 50
     regions: []
   _tileSize: 1
-  atlas: {fileID: 0}
+  atlas: {fileID: 11400000, guid: 7ca98516685770642b3d2d85679860aa, type: 2}
 --- !u!114 &1831652653
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2956,8 +2958,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ee2f0a525c5f244ea8fac577cbc0265, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  width: 2
-  height: 2
+  width: 4
+  height: 4
 --- !u!114 &1831652654
 MonoBehaviour:
   m_ObjectHideFlags: 0
