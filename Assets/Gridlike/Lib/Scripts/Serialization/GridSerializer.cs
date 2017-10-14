@@ -1,4 +1,4 @@
-﻿﻿﻿using System.IO;
+﻿using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Collections.Generic;
 using System;
@@ -17,11 +17,13 @@ public class GridSaveManifest {
 
 public class GridSerializer {
 
-	GridSaveManifest manifest;
+	public GridSaveManifest manifest { get; private set; }
 
+	bool usePersistentPath;
 	string path;
 
-	public GridSerializer(string path) {
+	public GridSerializer(bool usePersistentPath, string path) {
+		this.usePersistentPath = usePersistentPath;
 		this.path = path;
 	}
 
@@ -33,16 +35,25 @@ public class GridSerializer {
 		return manifest.regionPositions.Contains (new Point (regionX, regionY));
 	}
 
-	string ManifestPath() {
-		return Application.persistentDataPath + "/" + path + "/manifest.data";
+	public string RootPath() {
+		if (usePersistentPath) {
+			return Application.persistentDataPath + "/" + path;
+		} else {
+			return path;
+		}
 	}
-	string RegionPath(int X, int Y) {
-		return Application.persistentDataPath + "/" + path + "/regionX=" + X + " Y=" + Y + ".data";
+	public string ManifestPath() {
+		return RootPath () + "/manifest.data";
+	}
+	public string RegionPath(int X, int Y) {
+		return RootPath () + "/regionX-" + X + "Y-" + Y + ".data";
 	}
 
 	void SaveManifest() {
 		BinaryFormatter bf = new BinaryFormatter();
-		FileStream file = File.Create(ManifestPath());
+		string p = ManifestPath ();
+		Directory.CreateDirectory (RootPath());
+		FileStream file = File.Create(p);
 		bf.Serialize(file, manifest);
 		file.Close();
 	}
@@ -65,11 +76,15 @@ public class GridSerializer {
 	}
 
 	void _SaveGrid(FiniteGrid tiles) {
-		manifest.regionPositions.Add (new Point (tiles.regionX, tiles.regionY));
+		Point point = new Point (tiles.regionX, tiles.regionY);
+		if (!manifest.regionPositions.Contains (point)) {
+			manifest.regionPositions.Add (point);
+		}
 
 		BinaryFormatter bf = new BinaryFormatter();
-		FileStream file = File.Create(RegionPath(tiles.regionX, tiles.regionY));
-		bf.Serialize(file, manifest);
+		Directory.CreateDirectory (RootPath());
+		FileStream file = File.Create(RegionPath (tiles.regionX, tiles.regionY));
+		bf.Serialize(file, tiles);
 		file.Close();
 	}
 
@@ -108,5 +123,7 @@ public class GridSerializer {
 		}
 		File.Delete (ManifestPath ());
 		manifest.regionPositions.Clear ();
+
+		Directory.Delete (RootPath ());
 	}
 }

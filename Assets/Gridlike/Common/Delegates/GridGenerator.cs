@@ -13,12 +13,58 @@ public class LargeRegion {
 
 public class GridGenerator : GridDataDelegate {
 
+	[SerializeField] bool _usePersistentPath;
+	[SerializeField] string _path;
+
+	public bool useSave;
+
+	GridSerializer gridSerializer;
+
 	List<LargeRegion> largeRegions;
 
 	[SerializeField] GridGeneratorAlgorithm algorithm;
 
+	public bool usePersistentPath {
+		get { return _usePersistentPath; }
+		set {
+			bool old = _usePersistentPath;
+			_usePersistentPath = value;
+
+			if (old != value) Initialize ();
+		}
+	}
+	public string path {
+		get { return _path; }
+		set {
+			string old = _path;
+			_path = value;
+
+			if (old != value) Initialize ();
+		}
+	}
+	public string rootPath { 
+		get { 
+			if (gridSerializer == null) Initialize ();
+
+			return gridSerializer.RootPath(); 
+		} 
+	}
+
+	public GridSaveManifest gridSaveManifest { 
+		get { 
+			if (gridSerializer == null) Initialize ();
+			return gridSerializer.manifest; 
+		} 
+	}
+
 	void Start() {
+		Initialize ();
+	}
+
+	void Initialize() {
 		largeRegions = new List<LargeRegion> ();
+
+		if(useSave) gridSerializer = new GridSerializer (usePersistentPath, path);
 	}
 
 	public override void ResetDelegate() {
@@ -36,6 +82,15 @@ public class GridGenerator : GridDataDelegate {
 		LargeRegion largeRegion = GetRegions (regionX, regionY);
 
 		if (largeRegion == null) {
+			if (useSave && gridSerializer.IsRegionSaved(regionX, regionY)) {
+				FiniteGrid grid = gridSerializer.LoadGrid (regionX, regionY);
+
+				if (grid != null) {
+					Debug.Log ("Load region from save. X=" + regionX + " Y=" + regionY);
+					return grid;
+				}
+			}
+
 			int largeRegionX = Mathf.FloorToInt (regionX / (float)algorithm.generationRegionWidth) * algorithm.generationRegionWidth;
 			int largeRegionY = Mathf.FloorToInt (regionY / (float)algorithm.generationRegionHeight) * algorithm.generationRegionHeight;
 
@@ -70,10 +125,16 @@ public class GridGenerator : GridDataDelegate {
 			}
 		}
 
+		Debug.Log ("Load region from generation. X=" + regionX + " Y=" + regionY);
+
 		return region;
 	}
 	public override void SaveTiles (int regionX, int regionY, FiniteGrid tiles) {
+		if (useSave) {
+			gridSerializer.SaveGrid (tiles);
 
+			Debug.Log ("Save region. X=" + regionX + " Y=" + regionY);
+		}
 	}
 
 	LargeRegion GetRegions(int regionX, int regionY) {
@@ -85,5 +146,11 @@ public class GridGenerator : GridDataDelegate {
 		}
 
 		return null;
+	}
+
+	public void ClearSave() {
+		if (gridSerializer == null) Initialize ();
+
+		gridSerializer.Clear ();
 	}
 }

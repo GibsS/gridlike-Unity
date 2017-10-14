@@ -11,11 +11,8 @@ public class TestGridGeneratorAlgorithm : GridGeneratorAlgorithm {
 	public override int generationRegionWidth { get { return width; } }
 	public override int generationRegionHeight { get { return height; } }
 
-	//bool done = true;
-
 	void Update() {
-		if (Input.GetMouseButtonDown (0)) {
-
+		if (Input.GetMouseButtonDown (0) || Input.GetMouseButtonDown (1)) {
 			Vector2 mouseInWorld = Camera.main.ScreenToWorldPoint (Input.mousePosition);
 			Vector2 mouseInTransform = transform.InverseTransformPoint (mouseInWorld);
 
@@ -24,21 +21,11 @@ public class TestGridGeneratorAlgorithm : GridGeneratorAlgorithm {
 
 			Grid grid = GetComponent<Grid> ();
 				
-			grid.LoadRegion (regionX, regionY);
-		}
-
-		if (Input.GetMouseButton (1)) {
-			Vector2 mouseInWorld = Camera.main.ScreenToWorldPoint (Input.mousePosition);
-			Vector2 mouseInTransform = transform.InverseTransformPoint (mouseInWorld);
-
-			int x = Mathf.FloorToInt(mouseInTransform.x);
-			int y = Mathf.FloorToInt(mouseInTransform.y);
-
-			Grid grid = GetComponent<Grid> ();
-
-			Debug.Log (grid.Get (x, y).id);
-
-			//grid.SetId (x, y, 0, -1);
+			if (Input.GetMouseButtonDown (0)) {
+				grid.LoadRegion (regionX, regionY);
+			} else {
+				grid.SaveRegion (regionX, regionY);
+			}
 		}
 	}
 

@@ -2,6 +2,38 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// TODO Add namespaces everywhere
+// TODO Put all classes in individual files
+// TODO Agree on final naming scheme
+// TODO Comment
+// TODO Remove any residual Debug.Log
+
+// TODO make grid factories (static in Grid)
+// TODO make sure grids can be created from code easily (define stories)
+
+// TODO In scene view, display info about loaded and presented regions
+// TODO In scene view, show information about hovered tile
+
+// BUG: doesn't show count of regions when not playing..
+// TODO Add test to see if the path given is valid
+// TODO Automatic loading policy + hysteresis around agents
+// TODO Define two modes: full load and progressive load
+// TODO Ensure uniqueness of grid data delegate
+
+// TODO Add singleton behaviour to handle accessing list of currently present grids
+
+// TODO empty region should not take any space
+// TODO GO pinning
+// TODO Add "missing" warning when atlas is not set
+// TODO Allow regular gizmos to be accessed even when the grid is selected
+// TODO Custom editor for every sample listener and data delegate (+ if modifying field is ignored, make them unmodifiable)
+// TODO Grid updater component
+// TODO Make sure sets on region that aren't presented don't call listeners
+// TODO Sprite renderer should pick sorting layer
+// TODO Add Gridlike component menu to pick your own grid components
+// TODO Add isSensor + layer on collider (defined in atlas)
+// TODO Add user data 
+// TODO Use kenney tiles for testing + samples 
 [ExecuteInEditMode]
 public class Grid : MonoBehaviour {
 
@@ -129,29 +161,29 @@ public class Grid : MonoBehaviour {
 
 	#region REGION LOADING/UNLOADING
 
+	// TODO if already loaded, don't load again!
 	public void LoadRegion(int X, int Y) {
 		if (gridDelegate != null) {
-			Debug.Log ("Load region X=" + X + " Y=" + Y);
 			FiniteGrid region = tiles.GetRegion (X, Y);
 
 			region = gridDelegate.LoadTiles (region != null, X, Y);
 
 			if (region != null) {
 				tiles.SetRegion (X, Y, region);
-			}
 
-			for (int i = 0; i < Grid.REGION_SIZE; i++) {
-				for (int j = 0; j < Grid.REGION_SIZE; j++) {
-					Tile tile = region.Get (i, j);
-					tile.shape = atlas.GetTile (tile.id).shape;
+				for (int i = 0; i < Grid.REGION_SIZE; i++) {
+					for (int j = 0; j < Grid.REGION_SIZE; j++) {
+						Tile tile = region.Get (i, j);
+						tile.shape = atlas.GetTile (tile.id).shape;
+					}
 				}
-			}
 
-			HideRegion (X, Y);
-			PresentRegion (X, Y);
+				HideRegion (X, Y);
+				PresentRegion (X, Y);
+			}
 		}
 	}
-	public void UnloadRegion(int X, int Y) {
+	public void SaveRegion(int X, int Y, bool unload = false) {
 		if (gridDelegate != null) {
 			FiniteGrid region = tiles.GetRegion (X, Y);
 
@@ -160,9 +192,11 @@ public class Grid : MonoBehaviour {
 			}
 		}
 
-		tiles.ClearRegion (X, Y);
+		if (unload) {
+			tiles.ClearRegion (X, Y);
 
-		HideRegion (X, Y);
+			HideRegion (X, Y);
+		}
 	}
 
 	#endregion
@@ -179,11 +213,6 @@ public class Grid : MonoBehaviour {
 
 	public IEnumerable<FiniteGrid> GetRegions() {
 		return tiles.GetRegions ();
-	}
-
-	// requirement: width and height = REGION_SIZE
-	public void SetRegion(int X, int Y, TileInfo[,] tiles) {
-
 	}
 
 	#endregion
