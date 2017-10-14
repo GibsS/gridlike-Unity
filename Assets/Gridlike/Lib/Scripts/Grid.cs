@@ -23,7 +23,6 @@ using UnityEngine;
 
 // TODO Add singleton behaviour to handle accessing list of currently present grids
 
-// TODO Empty region should not take any space
 // TODO GO pinning
 // TODO Add "missing" warning when atlas is not set
 // TODO Allow regular gizmos to be accessed even when the grid is selected
