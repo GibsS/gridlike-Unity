@@ -119,15 +119,24 @@ public class GridGenerator : GridDataDelegate {
 
 		FiniteGrid region = new FiniteGrid(regionX, regionY, Grid.REGION_SIZE);
 
+		bool empty = true;
 		for (int i = 0; i < Grid.REGION_SIZE; i++) {
 			for (int j = 0; j < Grid.REGION_SIZE; j++) {
-				region.Set(i, j, largeRegion.tiles [i + xOffset, j + yOffset]);
+				Tile tile = largeRegion.tiles [i + xOffset, j + yOffset];
+
+				if (tile.id > 0) empty = false;
+
+				region.Set(i, j, tile);
 			}
 		}
 
 		Debug.Log ("Load region from generation. X=" + regionX + " Y=" + regionY);
 
-		return region;
+		if (empty) {
+			return null;
+		} else {
+			return region;
+		}
 	}
 	public override void SaveTiles (int regionX, int regionY, FiniteGrid tiles) {
 		if (useSave) {

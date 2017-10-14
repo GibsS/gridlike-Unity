@@ -19,19 +19,23 @@ using UnityEngine;
 // TODO Automatic loading policy + hysteresis around agents
 // TODO Define two modes: full load and progressive load
 // TODO Ensure uniqueness of grid data delegate
+// TODO If progressive loading, make sure to "hide" every tile before play + when leaving editor
 
 // TODO Add singleton behaviour to handle accessing list of currently present grids
 
-// TODO empty region should not take any space
+// TODO Empty region should not take any space
 // TODO GO pinning
 // TODO Add "missing" warning when atlas is not set
 // TODO Allow regular gizmos to be accessed even when the grid is selected
-// TODO Custom editor for every sample listener and data delegate (+ if modifying field is ignored, make them unmodifiable)
+// TODO Custom editor for every common listener and data delegate (+ if modifying field is ignored, make them unmodifiable)
 // TODO Grid updater component
 // TODO Make sure sets on region that aren't presented don't call listeners
 // TODO Sprite renderer should pick sorting layer
 // TODO Add Gridlike component menu to pick your own grid components
+
+// TODO Add sprite sorting layer (defined in atlas)
 // TODO Add isSensor + layer on collider (defined in atlas)
+
 // TODO Add user data 
 // TODO Use kenney tiles for testing + samples 
 [ExecuteInEditMode]
