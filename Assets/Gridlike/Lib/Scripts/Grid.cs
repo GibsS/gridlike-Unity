@@ -11,13 +11,10 @@ using UnityEngine;
 // TODO make grid factories (static in Grid)
 // TODO make sure grids can be created from code easily (define stories)
 
-// TODO In scene view, display info about loaded and presented regions
 // TODO In scene view, show information about hovered tile
 
 // BUG: doesn't show count of regions when not playing..
 // TODO Add test to see if the path given is valid
-// TODO Define two modes: full load and progressive load
-// TODO Ensure uniqueness of grid data delegate
 // TODO If progressive loading, make sure to "hide" every tile before play + when leaving editor
 // TODO If inspector values should not change during play mode, hide?
 

@@ -11,6 +11,14 @@ public class GridGeneratorEditor : Editor {
 		EditorGUILayout.ObjectField("Script", MonoScript.FromMonoBehaviour((GridGenerator)target), typeof(GridGenerator), false);
 		GUI.enabled = true;
 
+		if (generator.algorithm == null) {
+			EditorGUILayout.HelpBox ("The grid generator requires a subclass of GridGeneratorAlgorithm", MessageType.Warning);
+		}
+		generator.algorithm = EditorGUILayout.ObjectField("Algorithm", (GridGeneratorAlgorithm)generator.algorithm, typeof(GridGeneratorAlgorithm), false) as GridGeneratorAlgorithm;
+
+		generator.generationRegionWidth = Mathf.Max(1, EditorGUILayout.IntField ("Generation region width", generator.generationRegionWidth));
+		generator.generationRegionHeight = Mathf.Max(1, EditorGUILayout.IntField ("Generation region height", generator.generationRegionHeight));
+
 		generator.useSave = EditorGUILayout.ToggleLeft ("Use saving", generator.useSave);
 
 		if (generator.useSave) {

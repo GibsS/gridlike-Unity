@@ -35,13 +35,13 @@ public class GridEditor : Editor {
 			Selection.activeObject = grid.atlas;
 		}
 
-		grid.useLoading = EditorGUILayout.Toggle ("Use loading", grid.useLoading);
+		grid.useLoading = EditorGUILayout.ToggleLeft ("Use loading", grid.useLoading);
 
 		if (grid.useLoading) {
-			grid.useAgentBasedLoading = EditorGUILayout.Toggle ("Use agent based loading", grid.useAgentBasedLoading);
+			grid.useAgentBasedLoading = EditorGUILayout.ToggleLeft ("Use agent based loading", grid.useAgentBasedLoading);
 		}
 
-		grid.saveOnClose = EditorGUILayout.Toggle ("Save grid on destroy", grid.saveOnClose);
+		grid.saveOnClose = EditorGUILayout.ToggleLeft ("Save grid on destroy", grid.saveOnClose);
 	}
 
 	void OnSceneGUI() {

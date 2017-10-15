@@ -17,8 +17,5 @@ public abstract class GridGeneratorAlgorithm : MonoBehaviour {
 		generator.SetAlgorithm (this);
 	}
 
-	public abstract int generationRegionWidth { get; }
-	public abstract int generationRegionHeight { get; }
-
 	public abstract Tile[,] GenerateTiles (int x, int y, int width, int height);
 }

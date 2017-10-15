@@ -13,6 +13,9 @@ public class LargeRegion {
 
 public class GridGenerator : GridDataDelegate {
 
+	public int generationRegionWidth;
+	public int generationRegionHeight;
+
 	[SerializeField] bool _usePersistentPath;
 	[SerializeField] string _path;
 
@@ -22,7 +25,7 @@ public class GridGenerator : GridDataDelegate {
 
 	List<LargeRegion> largeRegions;
 
-	[SerializeField] GridGeneratorAlgorithm algorithm;
+	public GridGeneratorAlgorithm algorithm;
 
 	public bool usePersistentPath {
 		get { return _usePersistentPath; }
@@ -70,7 +73,7 @@ public class GridGenerator : GridDataDelegate {
 	public override void ResetDelegate() {
 		base.ResetDelegate ();
 
-		if (algorithm == null) {
+		if (algorithm == null && !gettingDestroyed) {
 			algorithm = GetComponent<GridGeneratorAlgorithm> ();
 		}
 	}
@@ -91,23 +94,23 @@ public class GridGenerator : GridDataDelegate {
 
 		if (largeRegion == null) {
 
-			int largeRegionX = Mathf.FloorToInt (regionX / (float)algorithm.generationRegionWidth) * algorithm.generationRegionWidth;
-			int largeRegionY = Mathf.FloorToInt (regionY / (float)algorithm.generationRegionHeight) * algorithm.generationRegionHeight;
+			int largeRegionX = Mathf.FloorToInt (regionX / (float)generationRegionWidth) * generationRegionWidth;
+			int largeRegionY = Mathf.FloorToInt (regionY / (float)generationRegionHeight) * generationRegionHeight;
 
 			Debug.Log ("Generate large region." + 
-					   "RegionX=" + largeRegionX + "->" + (largeRegionX + algorithm.generationRegionWidth) +
-					   "RegionY=" + largeRegionY + "->" + (largeRegionY + algorithm.generationRegionHeight));
+					   "RegionX=" + largeRegionX + "->" + (largeRegionX + generationRegionWidth) +
+					   "RegionY=" + largeRegionY + "->" + (largeRegionY + generationRegionHeight));
 
 			largeRegion = new LargeRegion {
 				regionX = largeRegionX,
 				regionY = largeRegionY,
-				regionWidth = algorithm.generationRegionWidth,
-				regionHeight = algorithm.generationRegionHeight,
+				regionWidth = generationRegionWidth,
+				regionHeight = generationRegionHeight,
 				tiles = algorithm.GenerateTiles (
 					largeRegionX * Grid.REGION_SIZE, 
 					largeRegionY * Grid.REGION_SIZE, 
-					algorithm.generationRegionWidth * Grid.REGION_SIZE, 
-					algorithm.generationRegionHeight * Grid.REGION_SIZE
+					generationRegionWidth * Grid.REGION_SIZE, 
+					generationRegionHeight * Grid.REGION_SIZE
 				)
 			};
 
@@ -122,7 +125,7 @@ public class GridGenerator : GridDataDelegate {
 		bool empty = true;
 		for (int i = 0; i < Grid.REGION_SIZE; i++) {
 			for (int j = 0; j < Grid.REGION_SIZE; j++) {
-				Tile tile = largeRegion.tiles [i + xOffset, j + yOffset];
+				Tile tile = largeRegion.tiles [xOffset + i, yOffset + j];
 
 				if (tile.id > 0) empty = false;
 

@@ -8,6 +8,8 @@ public abstract class GridDataDelegate : MonoBehaviour {
 
 	[SerializeField] public Grid grid { get; private set; }
 
+	protected bool gettingDestroyed;
+
 	void Reset() {
 		ResetDelegate ();
 	}
@@ -16,6 +18,19 @@ public abstract class GridDataDelegate : MonoBehaviour {
 	}
 
 	public virtual void ResetDelegate() {
+		GridDataDelegate[] all = GetComponents<GridDataDelegate>();
+
+		if (all.Length > 1) {
+			Debug.LogError ("A Grid can only have one grid data delegate, destroying " + this.GetType ().Name);
+			if (Application.isEditor) {
+				DestroyImmediate (this);
+			} else {
+				Destroy (this);
+			}
+			gettingDestroyed = true;
+			return;
+		}
+			
 		if (this.grid == null) {
 			Grid grid = GetComponent<Grid> ();
 
