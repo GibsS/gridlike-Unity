@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[AddComponentMenu("Gridlike/Grid collider")]
 public class GridCollider : GridListener {
 
 	[HideInInspector]

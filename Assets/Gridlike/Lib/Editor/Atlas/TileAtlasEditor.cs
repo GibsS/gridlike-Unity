@@ -11,6 +11,8 @@ public class GridTileAtlasEditor : Editor {
 	public override void OnInspectorGUI() {
 		TileAtlas atlas = target as TileAtlas;
 
+
+
 		/*GUILayout.Label ("Tile count :" + atlas.Count);
 
 		SerializedObject o = new SerializedObject (atlas);
@@ -27,5 +29,9 @@ public class GridTileAtlasEditor : Editor {
 		}*/
 
 		DrawDefaultInspector ();
+	}
+
+	void TileInfoUI() {
+
 	}
 }

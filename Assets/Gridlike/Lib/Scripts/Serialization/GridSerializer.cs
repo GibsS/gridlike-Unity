@@ -76,13 +76,12 @@ public class GridSerializer {
 			try {
 				_manifest = bf.Deserialize (file) as GridSaveManifest;
 			} catch {
-				Debug.Log ("[GridSerializer] Failed to load manifest.");
+				Debug.LogError ("[Gridlike] Failed to load grid save manifest.");
 				_manifest = new GridSaveManifest ();
 			}
 
 			file.Close ();
 		} else {
-			Debug.Log ("[GridSerializer] No manifest found.");
 			_manifest = new GridSaveManifest ();
 		}
 	}
@@ -130,14 +129,10 @@ public class GridSerializer {
 	}
 
 	public void Clear() {
-		if (_manifest == null) LoadManifest ();
+		if (_manifest != null) _manifest.regionPositions.Clear ();
 
-		foreach (Point point in _manifest.regionPositions) {
-			File.Delete (RegionPath (point.x, point.y));
+		if(Directory.Exists(RootPath())) {
+			Directory.Delete (RootPath ());
 		}
-		File.Delete (ManifestPath ());
-		_manifest.regionPositions.Clear ();
-
-		Directory.Delete (RootPath ());
 	}
 }

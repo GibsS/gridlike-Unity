@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
+[AddComponentMenu("Gridlike/Grid saver")]
 public class GridSaver : GridDataDelegate {
 
 	[SerializeField] bool _usePersistentPath;

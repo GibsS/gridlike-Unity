@@ -32,6 +32,7 @@ using UnityEngine;
 // TODO Add user data 
 // TODO Use kenney tiles for testing + samples 
 [ExecuteInEditMode]
+[AddComponentMenu("Gridlike/Grid")]
 public class Grid : MonoBehaviour {
 
 	public const int REGION_SIZE = 50;

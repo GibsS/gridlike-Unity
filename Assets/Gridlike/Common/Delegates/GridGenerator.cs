@@ -11,6 +11,7 @@ public class LargeRegion {
 	public Tile[,] tiles;
 }
 
+[AddComponentMenu("Gridlike/Grid generator")]
 public class GridGenerator : GridDataDelegate {
 
 	public int generationRegionWidth;

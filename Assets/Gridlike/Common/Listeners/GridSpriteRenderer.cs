@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // TODO SPRITE REMAIN AFTER PLAY MODE IS STOPPED IN 
+[AddComponentMenu("Gridlike/Grid sprite renderer")]
 public class GridSpriteRenderer : GridListener {
 
 	[HideInInspector]
