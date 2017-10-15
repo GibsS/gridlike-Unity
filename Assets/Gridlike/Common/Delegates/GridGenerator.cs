@@ -79,19 +79,19 @@ public class GridGenerator : GridDataDelegate {
 	}
 
 	// TODO handle dataPresent
-	public override FiniteGrid LoadTiles (bool dataPresent, int regionX, int regionY) {
+	public override FiniteGrid LoadTiles (int regionX, int regionY) {
+		if (useSave && gridSerializer.IsRegionSaved(regionX, regionY)) {
+			FiniteGrid grid = gridSerializer.LoadGrid (regionX, regionY);
+
+			if (grid != null) {
+				Debug.Log ("Load region from save. X=" + regionX + " Y=" + regionY);
+				return grid;
+			}
+		}
+
 		LargeRegion largeRegion = GetRegions (regionX, regionY);
 
 		if (largeRegion == null) {
-			Debug.Log ("Try to load: useSave? " + useSave + " is region saved? " + gridSerializer.IsRegionSaved (regionX, regionY));
-			if (useSave && gridSerializer.IsRegionSaved(regionX, regionY)) {
-				FiniteGrid grid = gridSerializer.LoadGrid (regionX, regionY);
-
-				if (grid != null) {
-					Debug.Log ("Load region from save. X=" + regionX + " Y=" + regionY);
-					return grid;
-				}
-			}
 
 			int largeRegionX = Mathf.FloorToInt (regionX / (float)algorithm.generationRegionWidth) * algorithm.generationRegionWidth;
 			int largeRegionY = Mathf.FloorToInt (regionY / (float)algorithm.generationRegionHeight) * algorithm.generationRegionHeight;

@@ -178,28 +178,22 @@ public class Grid : MonoBehaviour {
 		}
 	}
 
-	// TODO if already loaded, don't load again!
 	public void LoadRegion(int X, int Y) {
 		if (gridDelegate != null) {
 			FiniteGrid region = tiles.GetRegion (X, Y);
 
-			bool presentRegion = region != null && region.presented;
+			if (region == null) {
+				region = gridDelegate.LoadTiles (X, Y);
 
-			region = gridDelegate.LoadTiles (region != null, X, Y);
+				if (region != null) {
+					tiles.SetRegion (X, Y, region);
 
-			if (region != null) {
-				tiles.SetRegion (X, Y, region);
-
-				for (int i = 0; i < Grid.REGION_SIZE; i++) {
-					for (int j = 0; j < Grid.REGION_SIZE; j++) {
-						Tile tile = region.Get (i, j);
-						tile.shape = atlas.GetTile (tile.id).shape;
+					for (int i = 0; i < Grid.REGION_SIZE; i++) {
+						for (int j = 0; j < Grid.REGION_SIZE; j++) {
+							Tile tile = region.Get (i, j);
+							tile.shape = atlas.GetTile (tile.id).shape;
+						}
 					}
-				}
-
-				if (presentRegion) {
-					_HideRegion (X, Y, region);
-					_PresentRegion (X, Y, region);
 				}
 			}
 		}

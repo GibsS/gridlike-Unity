@@ -30,6 +30,6 @@ public abstract class GridDataDelegate : MonoBehaviour {
 		}
 	}
 
-	public abstract FiniteGrid LoadTiles (bool dataPresent, int regionX, int regionY);
+	public abstract FiniteGrid LoadTiles (int regionX, int regionY);
 	public abstract void SaveTiles (int regionX, int regionY, FiniteGrid tiles);
 }

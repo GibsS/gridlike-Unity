@@ -50,7 +50,7 @@ public class GridSaver : GridDataDelegate {
 		gridSerializer = new GridSerializer (usePersistentPath, path);
 	}
 
-	public override FiniteGrid LoadTiles (bool dataPresent, int regionX, int regionY) {
+	public override FiniteGrid LoadTiles (int regionX, int regionY) {
 		if (gridSerializer.IsRegionSaved(regionX, regionY)) {
 			FiniteGrid grid = gridSerializer.LoadGrid (regionX, regionY);
 
