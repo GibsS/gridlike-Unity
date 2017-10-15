@@ -28,7 +28,7 @@ public class GridGeneratorEditor : Editor {
 
 			GridSaveManifest man = generator.gridSaveManifest;
 			// Bug: always shows 0 when in editor mode
-			EditorGUILayout.LabelField ("Number of Region saved: " + (man != null ? man.regionPositions.Count : 0).ToString());
+			EditorGUILayout.LabelField ("Number of Region saved: " + man.regionPositions.Count);
 
 			if (GUILayout.Button ("Clear save")) {
 				generator.ClearSave ();

@@ -56,6 +56,7 @@ public class GridGenerator : GridDataDelegate {
 	public GridSaveManifest gridSaveManifest { 
 		get { 
 			if (gridSerializer == null) Initialize ();
+
 			return gridSerializer.manifest; 
 		} 
 	}

@@ -17,7 +17,19 @@ public class GridSaveManifest {
 
 public class GridSerializer {
 
-	public GridSaveManifest manifest { get; private set; }
+	GridSaveManifest _manifest;
+
+	public GridSaveManifest manifest {
+		get {
+			if (_manifest == null) {
+				LoadManifest ();
+			}
+			return _manifest;
+		}
+		set {
+			_manifest = value;
+		}
+	}
 
 	bool usePersistentPath;
 	string path;
@@ -28,9 +40,9 @@ public class GridSerializer {
 	}
 
 	public bool IsRegionSaved(int regionX, int regionY) {
-		if (manifest == null) LoadManifest ();
+		if (_manifest == null) LoadManifest ();
 
-		return manifest.regionPositions.Contains (new Point (regionX, regionY));
+		return _manifest.regionPositions.Contains (new Point (regionX, regionY));
 	}
 
 	public string RootPath() {
@@ -52,7 +64,7 @@ public class GridSerializer {
 		string p = ManifestPath ();
 		Directory.CreateDirectory (RootPath());
 		FileStream file = File.Create(p);
-		bf.Serialize(file, manifest);
+		bf.Serialize(file, _manifest);
 		file.Close();
 	}
 
@@ -62,21 +74,21 @@ public class GridSerializer {
 			FileStream file = File.Open (ManifestPath (), FileMode.Open);
 
 			try {
-				manifest = bf.Deserialize (file) as GridSaveManifest;
+				_manifest = bf.Deserialize (file) as GridSaveManifest;
 			} catch {
 				Debug.Log ("[GridSerializer] Failed to load manifest.");
-				manifest = new GridSaveManifest ();
+				_manifest = new GridSaveManifest ();
 			}
 		} else {
 			Debug.Log ("[GridSerializer] No manifest found.");
-			manifest = new GridSaveManifest ();
+			_manifest = new GridSaveManifest ();
 		}
 	}
 
 	void _SaveGrid(FiniteGrid tiles) {
 		Point point = new Point (tiles.regionX, tiles.regionY);
-		if (!manifest.regionPositions.Contains (point)) {
-			manifest.regionPositions.Add (point);
+		if (!_manifest.regionPositions.Contains (point)) {
+			_manifest.regionPositions.Add (point);
 		}
 
 		BinaryFormatter bf = new BinaryFormatter();
@@ -116,13 +128,13 @@ public class GridSerializer {
 	}
 
 	public void Clear() {
-		if (manifest == null) LoadManifest ();
+		if (_manifest == null) LoadManifest ();
 
-		foreach (Point point in manifest.regionPositions) {
+		foreach (Point point in _manifest.regionPositions) {
 			File.Delete (RegionPath (point.x, point.y));
 		}
 		File.Delete (ManifestPath ());
-		manifest.regionPositions.Clear ();
+		_manifest.regionPositions.Clear ();
 
 		Directory.Delete (RootPath ());
 	}

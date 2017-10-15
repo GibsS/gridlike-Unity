@@ -13,8 +13,6 @@ using UnityEngine;
 
 // TODO In scene view, show information about hovered tile
 
-// BUG: doesn't show count of regions when not playing..
-// TODO Add test to see if the path given is valid
 // TODO If progressive loading, make sure to "hide" every tile before play + when leaving editor
 // TODO If inspector values should not change during play mode, hide?
 

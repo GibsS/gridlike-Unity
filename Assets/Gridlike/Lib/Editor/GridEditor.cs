@@ -54,10 +54,10 @@ public class GridEditor : Editor {
 
 			Handles.color = region.presented ? Color.green : Color.white;
 
-			Handles.DrawLine (new Vector2(bx + 1, by + 1), new Vector2(bx + size - 1, by + 1));
-			Handles.DrawLine (new Vector2(bx + size - 1, by + 1), new Vector2(bx + size - 1, by + size - 1));
-			Handles.DrawLine (new Vector2(bx + size - 1, by + size - 1), new Vector2(bx + 1, by + size - 1));
-			Handles.DrawLine (new Vector2(bx + 1, by + size - 1), new Vector2(bx + 1, by + 1));
+			Handles.DrawLine (new Vector2(bx + 0.2f, by + 0.2f), new Vector2(bx + size - 0.2f, by + 0.2f));
+			Handles.DrawLine (new Vector2(bx + size - 0.2f, by + 0.2f), new Vector2(bx + size - 0.2f, by + size - 0.2f));
+			Handles.DrawLine (new Vector2(bx + size - 0.2f, by + size - 0.2f), new Vector2(bx + 0.2f, by + size - 0.2f));
+			Handles.DrawLine (new Vector2(bx + 0.2f, by + size - 0.2f), new Vector2(bx + 0.2f, by + 0.2f));
 		}
 
 		if (Event.current.button == 0) {
