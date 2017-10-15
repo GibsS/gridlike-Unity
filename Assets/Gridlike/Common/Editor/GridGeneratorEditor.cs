@@ -11,10 +11,10 @@ public class GridGeneratorEditor : Editor {
 		EditorGUILayout.ObjectField("Script", MonoScript.FromMonoBehaviour((GridGenerator)target), typeof(GridGenerator), false);
 		GUI.enabled = true;
 
-		generator.useSave = EditorGUILayout.Toggle ("Use saving", generator.useSave);
+		generator.useSave = EditorGUILayout.ToggleLeft ("Use saving", generator.useSave);
 
 		if (generator.useSave) {
-			generator.usePersistentPath = EditorGUILayout.Toggle ("Persistent data path as root", generator.usePersistentPath);
+			generator.usePersistentPath = EditorGUILayout.ToggleLeft ("Persistent data path as root", generator.usePersistentPath);
 			generator.path = EditorGUILayout.TextField ("Path", generator.path);
 			EditorGUILayout.LabelField ("Saved at: " + generator.rootPath);
 

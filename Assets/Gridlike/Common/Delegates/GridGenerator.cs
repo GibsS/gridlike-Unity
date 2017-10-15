@@ -83,6 +83,7 @@ public class GridGenerator : GridDataDelegate {
 		LargeRegion largeRegion = GetRegions (regionX, regionY);
 
 		if (largeRegion == null) {
+			Debug.Log ("Try to load: useSave? " + useSave + " is region saved? " + gridSerializer.IsRegionSaved (regionX, regionY));
 			if (useSave && gridSerializer.IsRegionSaved(regionX, regionY)) {
 				FiniteGrid grid = gridSerializer.LoadGrid (regionX, regionY);
 

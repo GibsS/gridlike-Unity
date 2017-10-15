@@ -56,6 +56,8 @@ public class Grid : MonoBehaviour {
 	public bool useAgentBasedLoading;
 	GridAgentLoadPolicy loadPolicy;
 
+	public bool saveOnClose;
+
 	public float tileSize {
 		get { return _tileSize; }
 		set { if(value != _tileSize) SetTileSize (value); }
@@ -89,6 +91,10 @@ public class Grid : MonoBehaviour {
 	void OnDestroy() {
 		foreach (GridListener listener in GetComponents<GridListener> ()) {
 			listener.ResetListener ();
+		}
+
+		if (Application.isPlaying && saveOnClose) {
+			SaveAllRegion ();
 		}
 	}
 
@@ -196,6 +202,11 @@ public class Grid : MonoBehaviour {
 					_PresentRegion (X, Y, region);
 				}
 			}
+		}
+	}
+	public void SaveAllRegion() {
+		foreach (FiniteGrid region in GetRegions()) {
+			SaveRegion (region.regionX, region.regionY);
 		}
 	}
 	public void SaveRegion(int X, int Y, bool unload = false) {

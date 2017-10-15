@@ -7,6 +7,10 @@ public class GridEditor : Editor {
 	public override void OnInspectorGUI() {
 		Grid grid = target as Grid;
 
+		GUI.enabled = false;
+		EditorGUILayout.ObjectField("Script", MonoScript.FromMonoBehaviour((Grid)target), typeof(Grid), false);
+		GUI.enabled = true;
+
 		float tileSize = EditorGUILayout.FloatField ("Tile size", grid.tileSize);
 		grid.tileSize = tileSize < 0 ? 0 : tileSize;
 
@@ -36,27 +40,25 @@ public class GridEditor : Editor {
 		if (grid.useLoading) {
 			grid.useAgentBasedLoading = EditorGUILayout.Toggle ("Use agent based loading", grid.useAgentBasedLoading);
 		}
+
+		grid.saveOnClose = EditorGUILayout.Toggle ("Save grid on destroy", grid.saveOnClose);
 	}
 
 	void OnSceneGUI() {
 		Grid grid = target as Grid;
 
-		/*foreach (FiniteGrid region in grid.GetRegions()) {
-			float bx = grid.transform.position.x + region.regionX * Grid.REGION_SIZE * grid.tileSize;
-			float by = grid.transform.position.y + region.regionY * Grid.REGION_SIZE * grid.tileSize;
+		foreach (FiniteGrid region in grid.GetRegions()) {
+			float size = Grid.REGION_SIZE * grid.tileSize;
+			float bx = grid.transform.position.x + region.regionX * size;
+			float by = grid.transform.position.y + region.regionY * size;
 
-			for (int i = 0; i < Grid.REGION_SIZE; i++) {
-				for (int j = 0; j < Grid.REGION_SIZE; j++) {
-					Tile tile = region.Get (i, j) as Tile;
-					if (tile != null && tile.shape != TileShape.EMPTY) {
-						Handles.DrawLine (
-							new Vector2 (bx + i * grid.tileSize, by + j * grid.tileSize),
-							new Vector2 (bx + (i + 1) * grid.tileSize, by + (j + 1) * grid.tileSize)
-						);
-					}
-				}
-			}
-		}*/
+			Handles.color = region.presented ? Color.green : Color.white;
+
+			Handles.DrawLine (new Vector2(bx, by), new Vector2(bx + size, by));
+			Handles.DrawLine (new Vector2(bx + size, by), new Vector2(bx + size, by + size));
+			Handles.DrawLine (new Vector2(bx + size, by + size), new Vector2(bx, by + size));
+			Handles.DrawLine (new Vector2(bx, by + size), new Vector2(bx, by));
+		}
 
 		if (Event.current.button == 0) {
 			switch (Event.current.type) {

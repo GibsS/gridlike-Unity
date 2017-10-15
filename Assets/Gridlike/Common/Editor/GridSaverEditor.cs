@@ -11,7 +11,7 @@ public class GridSaverEditor : Editor {
 		EditorGUILayout.ObjectField("Script", MonoScript.FromMonoBehaviour((GridSaver)target), typeof(GridSaver), false);
 		GUI.enabled = true;
 
-		saver.usePersistentPath = EditorGUILayout.Toggle ("Persistent data path as root", saver.usePersistentPath);
+		saver.usePersistentPath = EditorGUILayout.ToggleLeft ("Persistent data path as root", saver.usePersistentPath);
 		saver.path = EditorGUILayout.TextField ("Path", saver.path);
 		EditorGUILayout.LabelField ("Save at: " + saver.rootPath);
 
