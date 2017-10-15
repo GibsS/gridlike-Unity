@@ -5,11 +5,9 @@ using UnityEngine;
 [Serializable]
 public class InfiniteGrid {
 
-	[SerializeField]
-	public int _regionSize;
+	[SerializeField] int _regionSize;
 
-	[SerializeField]
-	public List<FiniteGrid> regions;
+	[SerializeField] List<FiniteGrid> regions;
 
 	public InfiniteGrid(int gridSize) {
 		_regionSize = gridSize;

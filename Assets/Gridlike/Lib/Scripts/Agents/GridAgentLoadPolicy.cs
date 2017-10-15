@@ -25,7 +25,7 @@ public class GridAgentLoadPolicy {
 		}
 	}
 	void UpdateFromPosition(int X, int Y) {
-		Debug.LogWarning ("Update new position X=" + X + " Y=" + Y);
+		//Debug.LogWarning ("Update new position X=" + X + " Y=" + Y);
 		this.oldX = X;
 		this.oldY = Y;
 

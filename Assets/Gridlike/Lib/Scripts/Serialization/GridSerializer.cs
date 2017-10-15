@@ -79,6 +79,8 @@ public class GridSerializer {
 				Debug.Log ("[GridSerializer] Failed to load manifest.");
 				_manifest = new GridSaveManifest ();
 			}
+
+			file.Close ();
 		} else {
 			Debug.Log ("[GridSerializer] No manifest found.");
 			_manifest = new GridSaveManifest ();

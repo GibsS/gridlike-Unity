@@ -39,9 +39,8 @@ public class GridEditor : Editor {
 
 		if (grid.useLoading) {
 			grid.useAgentBasedLoading = EditorGUILayout.ToggleLeft ("Use agent based loading", grid.useAgentBasedLoading);
+			grid.saveOnClose = EditorGUILayout.ToggleLeft ("Save grid on destroy", grid.saveOnClose);
 		}
-
-		grid.saveOnClose = EditorGUILayout.ToggleLeft ("Save grid on destroy", grid.saveOnClose);
 	}
 
 	void OnSceneGUI() {

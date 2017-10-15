@@ -87,7 +87,7 @@ public class GridGenerator : GridDataDelegate {
 		if (useSave && gridSerializer.IsRegionSaved(regionX, regionY)) {
 			FiniteGrid grid = gridSerializer.LoadGrid (regionX, regionY);
 
-			Debug.Log ("Load region from save. X=" + regionX + " Y=" + regionY);
+			//Debug.Log ("Load region from save. X=" + regionX + " Y=" + regionY);
 			return grid;
 		}
 
@@ -98,9 +98,9 @@ public class GridGenerator : GridDataDelegate {
 			int largeRegionX = Mathf.FloorToInt (regionX / (float)generationRegionWidth) * generationRegionWidth;
 			int largeRegionY = Mathf.FloorToInt (regionY / (float)generationRegionHeight) * generationRegionHeight;
 
-			Debug.Log ("Generate large region." + 
-					   "RegionX=" + largeRegionX + "->" + (largeRegionX + generationRegionWidth) +
-					   "RegionY=" + largeRegionY + "->" + (largeRegionY + generationRegionHeight));
+			//Debug.Log ("Generate large region." + 
+			//		   "RegionX=" + largeRegionX + "->" + (largeRegionX + generationRegionWidth) +
+			//			   "RegionY=" + largeRegionY + "->" + (largeRegionY + generationRegionHeight));
 
 			largeRegion = new LargeRegion {
 				regionX = largeRegionX,
@@ -116,6 +116,9 @@ public class GridGenerator : GridDataDelegate {
 			};
 
 			largeRegions.Add (largeRegion);
+			if (largeRegions.Count > 15) {
+				largeRegions.RemoveRange (0, 7);
+			}
 		}
 
 		int xOffset = (regionX - largeRegion.regionX) * Grid.REGION_SIZE;
@@ -134,7 +137,7 @@ public class GridGenerator : GridDataDelegate {
 			}
 		}
 
-		Debug.Log ("Load region from generation. X=" + regionX + " Y=" + regionY);
+		//Debug.Log ("Load region from generation. X=" + regionX + " Y=" + regionY + (empty ? "(empty)" : ""));
 
 		if (empty) {
 			return null;
