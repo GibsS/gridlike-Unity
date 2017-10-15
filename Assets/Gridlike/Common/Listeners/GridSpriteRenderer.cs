@@ -208,6 +208,25 @@ public class GridSpriteRenderer : GridListener {
 		}
 	}
 
+	public override void OnShowRegion(int regionX, int regionY) {
+		IEnumerator showEnumerator = _OnShowRegion (regionX, regionY);
+		StartCoroutine (showEnumerator);
+	}
+	IEnumerator _OnShowRegion(int regionX, int regionY) {
+		FiniteGrid region = grid.GetRegion (regionX, regionY);
+
+		int startX = regionX * Grid.REGION_SIZE;
+		int endX = (regionX + 1) * Grid.REGION_SIZE;
+		int startY = regionY * Grid.REGION_SIZE;
+		int endY = (regionY + 1) * Grid.REGION_SIZE;
+
+		for (int i = startX; i < endX; i++) {
+			for(int j = startY; j < endY; j++) {
+				OnSet(i, j, region.Get(i - startX, j - startY));
+			}
+			if(i % 2 == 0) yield return null;
+		}
+	}
 	public override void OnHideRegion(int X, int Y) {
 		int startX = X * Grid.REGION_SIZE;
 		int endX = (X + 1) * Grid.REGION_SIZE;
