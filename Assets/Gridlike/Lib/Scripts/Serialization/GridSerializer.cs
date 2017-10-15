@@ -28,9 +28,7 @@ public class GridSerializer {
 	}
 
 	public bool IsRegionSaved(int regionX, int regionY) {
-		if (manifest == null) {
-			LoadManifest ();
-		}
+		if (manifest == null) LoadManifest ();
 
 		return manifest.regionPositions.Contains (new Point (regionX, regionY));
 	}

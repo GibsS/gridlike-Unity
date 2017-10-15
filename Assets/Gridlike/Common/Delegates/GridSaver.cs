@@ -54,10 +54,8 @@ public class GridSaver : GridDataDelegate {
 		if (gridSerializer.IsRegionSaved(regionX, regionY)) {
 			FiniteGrid grid = gridSerializer.LoadGrid (regionX, regionY);
 
-			if (grid != null) {
-				Debug.Log ("Load region from save. X=" + regionX + " Y=" + regionY);
-				return grid;
-			}
+			Debug.Log ("Load region from save. X=" + regionX + " Y=" + regionY);
+			return grid;
 		}
 
 		return null;

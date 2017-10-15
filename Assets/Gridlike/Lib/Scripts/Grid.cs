@@ -16,7 +16,6 @@ using UnityEngine;
 
 // BUG: doesn't show count of regions when not playing..
 // TODO Add test to see if the path given is valid
-// TODO Automatic loading policy + hysteresis around agents
 // TODO Define two modes: full load and progressive load
 // TODO Ensure uniqueness of grid data delegate
 // TODO If progressive loading, make sure to "hide" every tile before play + when leaving editor
@@ -134,7 +133,7 @@ public class Grid : MonoBehaviour {
 	#region REGION PRESENTING/LOADING
 
 	public void PresentAllAgain() {
-		List<FiniteGrid> regions = tiles.GetRegions ();
+		List<FiniteGrid> regions = tiles.GetRegions ().FindAll(r => r.presented);
 		foreach (FiniteGrid regionPosition in regions) {
 			HideRegion (regionPosition.regionX, regionPosition.regionY);
 		}
@@ -145,20 +144,18 @@ public class Grid : MonoBehaviour {
 	}
 
 	public void PresentAll() {
-		foreach (FiniteGrid region in tiles.GetRegions()) {
+		foreach (FiniteGrid region in tiles.GetRegions().FindAll(r => r.presented)) {
 			PresentRegion (region.regionX, region.regionY);
 		}
 	}
 	public void HideAll() {
-		foreach (FiniteGrid region in tiles.GetRegions()) {
+		foreach (FiniteGrid region in tiles.GetRegions().FindAll(r => r.presented)) {
 			HideRegion (region.regionX, region.regionY);
 		}
 	}
 
 	public void PresentRegion(int X, int Y) {
 		FiniteGrid grid = tiles.GetRegion (X, Y);
-
-		Debug.Log ("Present region X=" + X + " Y=" + Y);
 
 		if (grid == null) {
 			LoadRegion (X, Y);
@@ -186,14 +183,14 @@ public class Grid : MonoBehaviour {
 				region = gridDelegate.LoadTiles (X, Y);
 
 				if (region != null) {
-					tiles.SetRegion (X, Y, region);
-
 					for (int i = 0; i < Grid.REGION_SIZE; i++) {
 						for (int j = 0; j < Grid.REGION_SIZE; j++) {
 							Tile tile = region.Get (i, j);
 							tile.shape = atlas.GetTile (tile.id).shape;
 						}
 					}
+
+					tiles.SetRegion (X, Y, region);
 				}
 			}
 		}
