@@ -83,7 +83,7 @@ public class FiniteGrid {
 	[SerializeField]
 	Array[] grid;
 
-	public bool presented = true;
+	public bool presented;
 
 	public int size {
 		get { return _size; }

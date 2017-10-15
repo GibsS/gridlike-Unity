@@ -78,6 +78,7 @@ public class GridGenerator : GridDataDelegate {
 		this.algorithm = algorithm;
 	}
 
+	// TODO handle dataPresent
 	public override FiniteGrid LoadTiles (bool dataPresent, int regionX, int regionY) {
 		LargeRegion largeRegion = GetRegions (regionX, regionY);
 

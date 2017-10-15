@@ -118,6 +118,8 @@ public class GridSerializer {
 	}
 
 	public void Clear() {
+		if (manifest == null) LoadManifest ();
+
 		foreach (Point point in manifest.regionPositions) {
 			File.Delete (RegionPath (point.x, point.y));
 		}

@@ -30,12 +30,18 @@ public class GridEditor : Editor {
 
 			Selection.activeObject = grid.atlas;
 		}
+
+		grid.useLoading = EditorGUILayout.Toggle ("Use loading", grid.useLoading);
+
+		if (grid.useLoading) {
+			grid.useAgentBasedLoading = EditorGUILayout.Toggle ("Use agent based loading", grid.useAgentBasedLoading);
+		}
 	}
 
 	void OnSceneGUI() {
 		Grid grid = target as Grid;
 
-		foreach (FiniteGrid region in grid.GetRegions()) {
+		/*foreach (FiniteGrid region in grid.GetRegions()) {
 			float bx = grid.transform.position.x + region.regionX * Grid.REGION_SIZE * grid.tileSize;
 			float by = grid.transform.position.y + region.regionY * Grid.REGION_SIZE * grid.tileSize;
 
@@ -50,7 +56,7 @@ public class GridEditor : Editor {
 					}
 				}
 			}
-		}
+		}*/
 
 		if (Event.current.button == 0) {
 			switch (Event.current.type) {

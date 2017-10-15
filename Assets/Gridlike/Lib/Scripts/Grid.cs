@@ -20,6 +20,7 @@ using UnityEngine;
 // TODO Define two modes: full load and progressive load
 // TODO Ensure uniqueness of grid data delegate
 // TODO If progressive loading, make sure to "hide" every tile before play + when leaving editor
+// TODO If inspector values should not change during play mode, hide?
 
 // TODO Add singleton behaviour to handle accessing list of currently present grids
 
@@ -50,6 +51,10 @@ public class Grid : MonoBehaviour {
 	[SerializeField] float _tileSize = 1;
 
 	[HideInInspector] public TileAtlas atlas;
+
+	public bool useLoading;
+	public bool useAgentBasedLoading;
+	GridAgentLoadPolicy loadPolicy;
 
 	public float tileSize {
 		get { return _tileSize; }
@@ -87,6 +92,14 @@ public class Grid : MonoBehaviour {
 		}
 	}
 
+	void Update() {
+		if (useLoading && useAgentBasedLoading) {
+			if (loadPolicy == null) loadPolicy = new GridAgentLoadPolicy (this);
+
+			loadPolicy.Update();
+		}
+	}
+
 	#endregion 
 
 	#region GRID DATA DELEGATE
@@ -112,7 +125,7 @@ public class Grid : MonoBehaviour {
 
 	#endregion
 
-	#region REGION PRESENTING
+	#region REGION PRESENTING/LOADING
 
 	public void PresentAllAgain() {
 		List<FiniteGrid> regions = tiles.GetRegions ();
@@ -139,34 +152,32 @@ public class Grid : MonoBehaviour {
 	public void PresentRegion(int X, int Y) {
 		FiniteGrid grid = tiles.GetRegion (X, Y);
 
-		if(!grid.presented) {
-			foreach (GridListener listener in gridListeners) {
-				listener.OnShowRegion (X, Y);
-			}
+		Debug.Log ("Present region X=" + X + " Y=" + Y);
 
-			grid.presented = true;
+		if (grid == null) {
+			LoadRegion (X, Y);
+
+			grid = tiles.GetRegion (X, Y);
+		}
+
+		if(grid != null && !grid.presented) {
+			_PresentRegion (X, Y, grid);
 		}
 	}
 	public void HideRegion(int X, int Y) {
 		FiniteGrid grid = tiles.GetRegion (X, Y);
 
-		if(grid.presented) {
-			foreach (GridListener listener in gridListeners) {
-				listener.OnHideRegion (X, Y);
-			}
-
-			grid.presented = false;
+		if(grid != null && grid.presented) {
+			_HideRegion (X, Y, grid);
 		}
 	}
-
-	#endregion
-
-	#region REGION LOADING/UNLOADING
 
 	// TODO if already loaded, don't load again!
 	public void LoadRegion(int X, int Y) {
 		if (gridDelegate != null) {
 			FiniteGrid region = tiles.GetRegion (X, Y);
+
+			bool presentRegion = region != null && region.presented;
 
 			region = gridDelegate.LoadTiles (region != null, X, Y);
 
@@ -180,8 +191,10 @@ public class Grid : MonoBehaviour {
 					}
 				}
 
-				HideRegion (X, Y);
-				PresentRegion (X, Y);
+				if (presentRegion) {
+					_HideRegion (X, Y, region);
+					_PresentRegion (X, Y, region);
+				}
 			}
 		}
 	}
@@ -195,15 +208,37 @@ public class Grid : MonoBehaviour {
 		}
 
 		if (unload) {
-			tiles.ClearRegion (X, Y);
-
-			HideRegion (X, Y);
+			UnloadRegion (X, Y);
 		}
+	}
+	public void UnloadRegion(int X, int Y) {
+		FiniteGrid grid = GetRegion (X, Y);
+
+		if(grid != null) {
+			_HideRegion (X, Y, grid);
+
+			tiles.ClearRegion (X, Y);
+		}
+	}
+
+	void _PresentRegion(int X, int Y, FiniteGrid grid) {
+		foreach (GridListener listener in gridListeners) {
+			listener.OnShowRegion (X, Y);
+		}
+
+		grid.presented = true;
+	}
+	void _HideRegion(int X, int Y, FiniteGrid grid) {
+		foreach (GridListener listener in gridListeners) {
+			listener.OnHideRegion (X, Y);
+		}
+
+		grid.presented = false;
 	}
 
 	#endregion
 
-	#region REGION SET/GET
+	#region REGION GET/SET
 
 	public FiniteGrid GetRegion(int X, int Y) {
 		return tiles.GetRegion (X, Y);
@@ -219,7 +254,7 @@ public class Grid : MonoBehaviour {
 
 	#endregion
 
-	#region TILE SET/GET
+	#region TILE GET/SET
 
 	public Tile Get(int x, int y) {
 		return tiles.Get (x, y) as Tile;
