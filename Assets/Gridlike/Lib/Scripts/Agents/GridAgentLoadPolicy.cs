@@ -9,6 +9,8 @@ public class GridAgentLoadPolicy {
 	int oldX = 1000000000;
 	int oldY = 1000000000;
 
+	bool processing;
+
 	public GridAgentLoadPolicy(Grid grid) {
 		this.grid = grid;
 	}
@@ -19,15 +21,19 @@ public class GridAgentLoadPolicy {
 			int X = Mathf.FloorToInt(agent.transform.position.x / Grid.REGION_SIZE);
 			int Y = Mathf.FloorToInt(agent.transform.position.y / Grid.REGION_SIZE);
 
-			if (oldX != X || oldY != Y) {
+			if (oldX != X || oldY != Y && !processing) {
 				UpdateFromPosition (X, Y);
 			}
 		}
 	}
 	void UpdateFromPosition(int X, int Y) {
-		//Debug.LogWarning ("Update new position X=" + X + " Y=" + Y);
-		this.oldX = X;
-		this.oldY = Y;
+		grid.StartCoroutine (_UpdateFromPosition (X, Y));
+	}
+
+	IEnumerator _UpdateFromPosition(int X, int Y) {
+		processing = true;
+		oldX = X;
+		oldY = Y;
 
 		for (int i = -4; i <= 4; i++) {
 			for (int j = -4; j <= 4; j++) {
@@ -52,7 +58,15 @@ public class GridAgentLoadPolicy {
 						break;
 					}
 				}
+
+				yield return null;
+				yield return null;
+				yield return null;
+				yield return null;
+				yield return null;
 			}
 		}
+
+		processing = false;
 	}
 }
