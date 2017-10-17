@@ -290,29 +290,81 @@ public class Grid : MonoBehaviour {
 		return tile == null ? 0 : tile.subId;
 	}
 
+	public Component GetTileBehaviour(int x, int y, TileBehaviour otherBehaviour = null) {
+		if (otherBehaviour == null) {
+			Component c = tileGOs.Get (x, y);
+
+			if (c != null) return c;
+		} else {
+			bool[,] area = otherBehaviour.area;
+
+			for (int i = 0; i < area.GetLength (0); i++) {
+				for (int j = 0; j < area.GetLength (1); j++) {
+					if (area [i, j]) {
+						Component c = tileGOs.Get (otherBehaviour.areaBottomLeftXOffset + x + i, otherBehaviour.areaBottomLeftYOffset + y + j);
+
+						if (c != null) return c;
+					}
+				}
+			}
+
+			return null;
+		}
+	}
+		
 	public void Set(int x, int y, int id, int subid, int state1, int state2, int state3) {
+		Tile tile = GetOrCreate (x, y);
+
+		_Set (tile, x, y, id, subid, state1, state2, state3);
+
+		foreach (GridListener listener in gridListeners) {
+			listener.OnSet (x, y, tile);
+		}
+	}
+	public void SetId(int x, int y, int id, int subId = int.MinValue) {
+		Tile tile = GetOrCreate (x, y);
+
+		int oldId = tile.id;
+		int oldSubId = tile.subId;
+
+		_Set (tile, x, y, id, subId, tile.state1, tile.state2, tile.state3);
+
+		foreach (GridListener listener in gridListeners) {
+			listener.OnSetId (x, y, tile, oldId, oldSubId);
+		}
+	}
+	public void SetSubId(int x, int y, int subId) {
+		Tile tile = GetOrCreate (x, y);
+		int oldId = tile.id, oldSubId = tile.subId;
+
+		tile.subId = subId;
+
+		foreach (GridListener listener in gridListeners) {
+			listener.OnSetId (x, y, tile, oldId, oldSubId);
+		}
+	}
+	public void SetState(int x, int y, float state1, float state2 = float.NegativeInfinity, float state3 = float.NegativeInfinity) {
+		Tile tile = GetOrCreate (x, y);
+
+		float oldState1 = tile.state1, oldState2 = tile.state2, oldState3 = tile.state3;
+
+		tile.state1 = state1;
+		if (state2 != float.NegativeInfinity) tile.state2 = state2;
+		if (state3 != float.NegativeInfinity) tile.state3 = state3;
+
+		foreach (GridListener listener in gridListeners) {
+			listener.OnSetState (x, y, tile, oldState1, oldState2, oldState3);
+		}
+	}
+
+	void _Set(int x, int y, int id, int subid, int state1, int state2, int state3) {
 		Tile tile = GetOrCreate (x, y);
 		TileInfo info = atlas.GetTile (id);
 
 		/*// CHECK IF THERE IS AN OVERLAP WITH THE ARE OF ANOTHER MULTI SQUARE TILE
-		if (info.tileGO != null) {
-			TileBehaviour behaviour = info.tileGO.GetComponent<TileBehaviour> ();
-			bool[,] area = behaviour.area;
+		*/
 
-			for (int i = 0; i < area.GetLength (0); i++) {
-				for (int j = 0; j < area.GetLength (1); j++) {
-					Tile otherTile = Get (behaviour.areaBottomLeftXOffset + x + i, behaviour.areaBottomLeftYOffset + y + j);
-
-					if (otherTile != null && area[i, j] && otherTile.id == -1) {
-						Debug.LogError ("[Grid] The tile is already occupied by a multi square tile");
-						return;
-					}
-				}
-			}
-		} else if (id == -1) {
-			Debug.LogError ("[Grid] The tile is already occupied by a multi square tile");
-			return;
-		}*/
+		// REMOVE PREVIOUS TILE BEHAVIOUR
 
 		// CREATE TILE GO AND SET OTHER TILES
 		/*if (info.tileGO != null) {
@@ -345,52 +397,13 @@ public class Grid : MonoBehaviour {
 		tile.shape = info.shape;
 
 		tile.id = id;
-		tile.subId = subid;
+		if (subid != int.MinValue) tile.subId = subid;
 
 		tile.state1 = state1;
 		tile.state2 = state2;
 		tile.state3 = state3;
-
-		foreach (GridListener listener in gridListeners) {
-			listener.OnSet (x, y, tile);
-		}
 	}
-	public void SetId(int x, int y, int id, int subId = int.MinValue) {
-		Tile tile = GetOrCreate (x, y);
-		int oldId = tile.id, oldSubId = tile.subId;
 
-		tile.id = id;
-		tile.shape = atlas.GetTile(id).shape;
-		if (subId != int.MinValue) tile.subId = subId;
-
-		foreach (GridListener listener in gridListeners) {
-			listener.OnSetId (x, y, tile, oldId, oldSubId);
-		}
-	}
-	public void SetSubId(int x, int y, int subId) {
-		Tile tile = GetOrCreate (x, y);
-		int oldId = tile.id, oldSubId = tile.subId;
-
-		tile.subId = subId;
-
-		foreach (GridListener listener in gridListeners) {
-			listener.OnSetId (x, y, tile, oldId, oldSubId);
-		}
-	}
-	public void SetState(int x, int y, float state1, float state2 = float.NegativeInfinity, float state3 = float.NegativeInfinity) {
-		Tile tile = GetOrCreate (x, y);
-
-		float oldState1 = tile.state1, oldState2 = tile.state2, oldState3 = tile.state3;
-
-		tile.state1 = state1;
-		if (state2 != float.NegativeInfinity) tile.state2 = state2;
-		if (state3 != float.NegativeInfinity) tile.state3 = state3;
-
-		foreach (GridListener listener in gridListeners) {
-			listener.OnSetState (x, y, tile, oldState1, oldState2, oldState3);
-		}
-	}
-		
 	Tile GetOrCreate(int x, int y) {
 		Tile tile = tiles.Get (x, y) as Tile;
 
