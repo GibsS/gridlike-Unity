@@ -31,6 +31,6 @@ public class GridSpriteTriangle : MonoBehaviour {
 	}
 
 	public void UpdateSprite(Grid grid, Tile tile) {
-		spriteRenderer.sprite = grid.atlas.GetSprite (tile.id, tile.subId, tile.shape, 1);
+		spriteRenderer.sprite = grid.atlas.GetSprite (tile.id, tile.subId, 1);
 	}
 }

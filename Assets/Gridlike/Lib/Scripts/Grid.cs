@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// BUG when placing tiles in editor, region should be shown as shown, not just loaded
+
 // TODO Add namespaces everywhere
 // TODO Put all classes in individual files
 // TODO Agree on final naming scheme
@@ -14,7 +16,7 @@ using UnityEngine;
 // TODO In scene view, show information about hovered tile
 
 // TODO If progressive loading, make sure to "hide" every tile before play + when leaving editor
-// TODO If inspector values should not change during play mode, hide?
+// TODO If inspector values should not change during play mode, hide? [Use prefix label
 
 // TODO Add singleton behaviour to handle accessing list of currently present grids
 
@@ -23,7 +25,6 @@ using UnityEngine;
 // TODO Custom editor for every common listener and data delegate (+ if modifying field is ignored, make them unmodifiable)
 // TODO Grid updater component
 // TODO Make sure sets on region that aren't presented don't call listeners
-// TODO Add Gridlike component menu to pick your own grid components
 
 // TODO Sprite renderer should pick sorting layer
 // TODO Add sprite sorting layer (defined in atlas)
@@ -40,8 +41,10 @@ public class Grid : MonoBehaviour {
 	[SerializeField] GridDataDelegate gridDelegate;
 	[SerializeField] List<GridListener> gridListeners;
 
-	// TODO optimize
 	[SerializeField] InfiniteGrid tiles;
+
+	[SerializeField] InfiniteComponentGrid tileGOs;
+	[SerializeField] GameObject tileGOContainer;
 
 	[SerializeField] float _tileSize = 1;
 
@@ -64,6 +67,10 @@ public class Grid : MonoBehaviour {
 
 			tiles = new InfiniteGrid (REGION_SIZE);
 
+			tileGOs = new InfiniteComponentGrid (REGION_SIZE);
+			tileGOContainer = new GameObject ("tile container");
+			tileGOContainer.transform.SetParent (transform, false);
+
 			foreach (GridListener listener in GetComponents<GridListener> ()) {
 				listener.ResetListener ();
 			}
@@ -75,7 +82,17 @@ public class Grid : MonoBehaviour {
 	#region UNITY EVENTS
 
 	void Reset() {
+		if(tiles != null) HideAll ();
+
+		if (tileGOContainer != null) {
+			foreach (Transform t in tileGOContainer.transform) {
+				Destroy (t.gameObject);
+			}
+		}
+
 		tiles = null;
+
+		tileGOs = null;
 
 		Init ();
 	}
@@ -275,8 +292,57 @@ public class Grid : MonoBehaviour {
 
 	public void Set(int x, int y, int id, int subid, int state1, int state2, int state3) {
 		Tile tile = GetOrCreate (x, y);
+		TileInfo info = atlas.GetTile (id);
 
-		tile.shape = atlas.GetTile(id).shape;
+		/*// CHECK IF THERE IS AN OVERLAP WITH THE ARE OF ANOTHER MULTI SQUARE TILE
+		if (info.tileGO != null) {
+			TileBehaviour behaviour = info.tileGO.GetComponent<TileBehaviour> ();
+			bool[,] area = behaviour.area;
+
+			for (int i = 0; i < area.GetLength (0); i++) {
+				for (int j = 0; j < area.GetLength (1); j++) {
+					Tile otherTile = Get (behaviour.areaBottomLeftXOffset + x + i, behaviour.areaBottomLeftYOffset + y + j);
+
+					if (otherTile != null && area[i, j] && otherTile.id == -1) {
+						Debug.LogError ("[Grid] The tile is already occupied by a multi square tile");
+						return;
+					}
+				}
+			}
+		} else if (id == -1) {
+			Debug.LogError ("[Grid] The tile is already occupied by a multi square tile");
+			return;
+		}*/
+
+		// CREATE TILE GO AND SET OTHER TILES
+		/*if (info.tileGO != null) {
+			GameObject tileGO = Instantiate (info.tileGO);
+
+			tileGO.transform.SetParent (tileGOContainer.transform);
+			tileGO.transform.localPosition = new Vector2 (x + 0.5f, y + 0.5f);
+
+			TileBehaviour behaviour = tileGO.GetComponent<TileBehaviour> ();
+
+			if (behaviour == null) { 
+				tileGOs.Set (x, y, tileGO.transform);
+			} else {
+				tileGOs.Set (x, y, behaviour);
+			}
+
+			bool[,] area = behaviour.area;
+			for (int i = 0; i < area.GetLength (0); i++) {
+				for (int j = 0; j < area.GetLength (1); j++) {
+					if (i != behaviour.areaBottomLeftXOffset || j != behaviour.areaBottomLeftYOffset) {
+						Tile otherTile = GetOrCreate (behaviour.areaBottomLeftXOffset + x + i, behaviour.areaBottomLeftYOffset + y + j);
+
+						otherTile.id = -1;
+						otherTile.shape = TileShape.EMPTY;
+					}
+				}
+			}
+		}*/
+
+		tile.shape = info.shape;
 
 		tile.id = id;
 		tile.subId = subid;

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// TODO SPRITE REMAIN AFTER PLAY MODE IS STOPPED IN 
 [AddComponentMenu("Gridlike/Grid sprite renderer")]
 public class GridSpriteRenderer : GridListener {
 
@@ -29,7 +28,7 @@ public class GridSpriteRenderer : GridListener {
 
 		if (containerGO == null) {
 			containerGO = new GameObject ("sprites");
-			containerGO.transform.SetParent (transform);
+			containerGO.transform.SetParent (transform, false);
 		}
 	}
 
@@ -67,7 +66,7 @@ public class GridSpriteRenderer : GridListener {
 					}
 				}
 
-				(renderer as SpriteRenderer).sprite = grid.atlas.GetSprite(tile.id, tile.subId, tile.shape);
+				(renderer as SpriteRenderer).sprite = grid.atlas.GetSprite(tile.id, tile.subId);
 
 				break;
 			}
@@ -202,32 +201,13 @@ public class GridSpriteRenderer : GridListener {
 					renderer = triangle.spriteRenderer;
 				}
 
-				(renderer as SpriteRenderer).sprite = grid.atlas.GetSprite(tile.id, tile.subId, tile.shape, size);
+				(renderer as SpriteRenderer).sprite = grid.atlas.GetSprite(tile.id, tile.subId, size);
 
 				break;
 			}
 		}
 	}
 
-	public override void OnShowRegion(int regionX, int regionY) {
-		IEnumerator showEnumerator = _OnShowRegion (regionX, regionY);
-		StartCoroutine (showEnumerator);
-	}
-	IEnumerator _OnShowRegion(int regionX, int regionY) {
-		FiniteGrid region = grid.GetRegion (regionX, regionY);
-
-		int startX = regionX * Grid.REGION_SIZE;
-		int endX = (regionX + 1) * Grid.REGION_SIZE;
-		int startY = regionY * Grid.REGION_SIZE;
-		int endY = (regionY + 1) * Grid.REGION_SIZE;
-
-		for (int i = startX; i < endX; i++) {
-			for(int j = startY; j < endY; j++) {
-				OnSet(i, j, region.Get(i - startX, j - startY));
-			}
-			if(i % 2 == 0) yield return null;
-		}
-	}
 	public override void OnHideRegion(int X, int Y) {
 		int startX = X * Grid.REGION_SIZE;
 		int endX = (X + 1) * Grid.REGION_SIZE;
@@ -276,20 +256,20 @@ public class GridSpriteRenderer : GridListener {
 				triangle.width -= 1;
 				triangle.bottomLeftX += 1;
 				triangle.transform.localPosition += new Vector3 (0.5f, 0, 0);
-				triangle.spriteRenderer.sprite = grid.atlas.GetSprite(other.id, other.subId, other.shape, triangle.width);
+				triangle.spriteRenderer.sprite = grid.atlas.GetSprite(other.id, other.subId, triangle.width);
 			} else {
 				int endX = triangle.bottomLeftX + triangle.width - 1;
 				Tile other = grid.Get(triangle.bottomLeftX, y);
 
 				triangle.width = x - triangle.bottomLeftX;
 				triangle.transform.localPosition -= new Vector3 ((endX - x + 1)/2f, 0, 0);
-				triangle.spriteRenderer.sprite = grid.atlas.GetSprite(other.id, other.subId, other.shape, triangle.width);
+				triangle.spriteRenderer.sprite = grid.atlas.GetSprite(other.id, other.subId, triangle.width);
 
 				if (endX != x) {
 					GridSpriteTriangle otherTriangle = GridSpriteTriangle.CreateSpriteTriangle(containerGO, grid, x + 1, y);
 					otherTriangle.transform.localPosition += new Vector3 ((endX - x - 1) / 2f, 0, 0);
 					otherTriangle.width = endX - x;
-					otherTriangle.spriteRenderer.sprite = grid.atlas.GetSprite (other.id, other.subId, other.shape, otherTriangle.width);
+					otherTriangle.spriteRenderer.sprite = grid.atlas.GetSprite (other.id, other.subId, otherTriangle.width);
 
 					for (int i = x + 1; i <= endX; i++) {
 						components.Set (i, y, otherTriangle);
@@ -303,20 +283,20 @@ public class GridSpriteRenderer : GridListener {
 				triangle.height -= 1;
 				triangle.bottomLeftY += 1;
 				triangle.transform.localPosition += new Vector3 (0, 0.5f, 0);
-				triangle.spriteRenderer.sprite = grid.atlas.GetSprite(other.id, other.subId, other.shape, triangle.height);
+				triangle.spriteRenderer.sprite = grid.atlas.GetSprite(other.id, other.subId, triangle.height);
 			} else {
 				int endY = triangle.bottomLeftY + triangle.height - 1;
 				Tile other = grid.Get(x, triangle.bottomLeftY);
 
 				triangle.height = y - triangle.bottomLeftY;
 				triangle.transform.localPosition -= new Vector3 (0, (endY - y + 1)/2f, 0);
-				triangle.spriteRenderer.sprite = grid.atlas.GetSprite(other.id, other.subId, other.shape, y - triangle.bottomLeftY);
+				triangle.spriteRenderer.sprite = grid.atlas.GetSprite(other.id, other.subId, y - triangle.bottomLeftY);
 
 				if (endY != y) {
 					GridSpriteTriangle otherTriangle = GridSpriteTriangle.CreateSpriteTriangle(containerGO, grid, x, y + 1);
 					otherTriangle.transform.localPosition += new Vector3 (0, (endY - y - 1) / 2f, 0);
 					otherTriangle.height = endY - y;
-					otherTriangle.spriteRenderer.sprite = grid.atlas.GetSprite (other.id, other.subId, other.shape, otherTriangle.height);
+					otherTriangle.spriteRenderer.sprite = grid.atlas.GetSprite (other.id, other.subId, otherTriangle.height);
 
 					for (int i = y + 1; i <= endY; i++) {
 						components.Set (x, i, otherTriangle);

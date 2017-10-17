@@ -28,7 +28,7 @@ public class GridCollider : GridListener {
 
 		if (containerGO == null) {
 			containerGO = new GameObject ("colliders");
-			containerGO.transform.SetParent (transform);
+			containerGO.transform.SetParent (transform, false);
 		}
 	}
 

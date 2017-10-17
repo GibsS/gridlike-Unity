@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -45,6 +45,10 @@ public abstract class GridListener : MonoBehaviour {
 	}
 
 	public virtual void OnShowRegion(int regionX, int regionY) {
+		StartCoroutine(_OnShowRegion(regionX, regionY));
+	}
+
+	IEnumerator _OnShowRegion(int regionX, int regionY) {
 		FiniteGrid region = grid.GetRegion (regionX, regionY);
 
 		int startX = regionX * Grid.REGION_SIZE;
@@ -56,6 +60,8 @@ public abstract class GridListener : MonoBehaviour {
 			for(int j = startY; j < endY; j++) {
 				OnSet(i, j, region.Get(i - startX, j - startY));
 			}
+
+			if (i % 3 == 0) yield return null;
 		}
 	}
 

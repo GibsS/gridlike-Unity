@@ -23,6 +23,10 @@ public class TileAtlas : ScriptableObject {
 		// TODO increase size once tested
 		if (atlas == null) {
 			atlas = new TileInfo[5];
+
+			for (int i = 0; i < atlas.Length; i++) {
+				atlas [i] = new TileInfo ();
+			}
 		}
 	}
 
@@ -39,10 +43,15 @@ public class TileAtlas : ScriptableObject {
 	}
 
 	public int AddTile() {
+		for (int i = 0; i < atlas.Length; i++) {
+			if (atlas [i] == null) {
+				atlas [i] = new TileInfo ();
+			}
+		}
+
 		for (int i = 1; i < atlas.Length; i++) {
 			if (atlas [i].id == 0) {
-				TileInfo tile = CreateTileInfo (i);
-				atlas [i] = tile;
+				atlas [i] = CreateTileInfo (i);
 				return i;
 			}
 		}
@@ -53,7 +62,7 @@ public class TileAtlas : ScriptableObject {
 			newAtlas [i] = atlas [i];
 		}
 
-		int newPosition = atlas.Length;
+		int newPosition = Mathf.Max(1, atlas.Length);
 		newAtlas [newPosition] = CreateTileInfo (newPosition);
 
 		atlas = newAtlas;
@@ -66,8 +75,8 @@ public class TileAtlas : ScriptableObject {
 		}
 	}
 
-	public Sprite GetSprite(int id, int subId, TileShape shape, int size = 1) {
-		return atlas [id].GetSprite (subId, shape, size);
+	public Sprite GetSprite(int id, int subId, int size = 1) {
+		return atlas [id].GetSprite (subId, size);
 	}
 
 	TileInfo CreateTileInfo(int id) {

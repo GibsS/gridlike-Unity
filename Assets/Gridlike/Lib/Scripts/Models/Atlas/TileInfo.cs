@@ -6,12 +6,20 @@ public class TileInfo {
 
 	public int id;
 	public string name;
+
 	public TileShape shape;
+	public bool isSensor;
+	public int layer;
+
+	public bool isGODetached;
+	public GameObject tileGO;
+
+	public string sortingLayer;
 
 	public TileSpriteInfo idSpriteInfo;
 	public TileSpriteInfo[] subIdSpriteInfo;
 
-	public Sprite GetSprite(int subId, TileShape shape, int size = 1) {
+	public Sprite GetSprite(int subId, int size = 1) {
 		TileSpriteInfo info;
 
 		if (subId == -1) {

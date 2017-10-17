@@ -3,35 +3,88 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+public class TileEditorInfo {
+
+	public bool isRevealed;
+}
+
 [CustomEditor(typeof(TileAtlas))]
 public class GridTileAtlasEditor : Editor {
 
 	bool showPosition;
 
+	Dictionary<int, TileEditorInfo> tileEditorInfo;
+
 	public override void OnInspectorGUI() {
 		TileAtlas atlas = target as TileAtlas;
 
-
-
-		/*GUILayout.Label ("Tile count :" + atlas.Count);
-
-		SerializedObject o = new SerializedObject (atlas);
-		SerializedProperty array = o.FindProperty ("atlas");
-
 		for(int i = 0; i < atlas.atlas.Length; i++) {
-			if (atlas.atlas[i].id != 0) {
-				EditorGUILayout.PropertyField(array.GetArrayElementAtIndex(i));
+			if (atlas.atlas[i] != null && atlas.atlas[i].id != 0) {
+				TileInfoUI (atlas, atlas.atlas [i]);
 			}
 		}
 
 		if (GUILayout.Button ("Create new tile")) {
-			Debug.Log("[Inspector] create tile" + atlas.AddTile ());
-		}*/
-
-		DrawDefaultInspector ();
+			atlas.AddTile ();
+		}
 	}
 
-	void TileInfoUI() {
+	void TileInfoUI(TileAtlas atlas, TileInfo tile) {
+		GUILayout.BeginVertical("HelpBox");
 
+		EditorGUI.indentLevel++;
+
+		TileEditorInfo info = GetTileEditorInfo (tile.id);
+
+		EditorGUILayout.BeginHorizontal ();
+		
+		info.isRevealed = EditorGUILayout.Foldout (info.isRevealed, "ID:" + tile.id + " " + tile.name);
+
+		GUILayout.FlexibleSpace ();
+
+		if (tile.GetSprite (-1) != null) GUILayout.Label (tile.GetSprite (-1).texture);
+		
+		if (GUILayout.Button ("remove", GUILayout.MaxWidth(80))) {
+			atlas.RemoveTile (tile.id);
+		}
+		EditorGUILayout.EndHorizontal ();
+
+		if (info.isRevealed) {
+			tile.name = EditorGUILayout.TextField ("Name", tile.name);
+
+			tile.shape = (TileShape)EditorGUILayout.EnumPopup ("Shape", tile.shape);
+			tile.isSensor = EditorGUILayout.Toggle ("Is sensor?", tile.isSensor);
+			tile.layer = EditorGUILayout.LayerField ("Layer", tile.layer);
+
+			tile.tileGO = EditorGUILayout.ObjectField ("Tile GO", tile.tileGO, typeof(GameObject), false) as GameObject;
+			if (tile.tileGO != null) {
+				tile.isGODetached = EditorGUILayout.Toggle ("Tile GO is detached", tile.isGODetached);
+			}
+
+			if (TileShapeHelper.IsTriangle (tile.shape)) {
+
+			} else {
+				tile.idSpriteInfo.sprite = (Sprite)EditorGUILayout.ObjectField("Sprite", tile.idSpriteInfo.sprite, typeof(Sprite), false);
+			}
+			EditorGUILayout.BeginHorizontal ();
+
+			EditorGUILayout.EndHorizontal ();
+		}
+
+		EditorGUI.indentLevel--;
+
+		GUILayout.EndVertical ();
+	}
+
+	TileEditorInfo GetTileEditorInfo(int id) {
+		if (tileEditorInfo == null) tileEditorInfo = new Dictionary<int, TileEditorInfo> ();
+
+		TileEditorInfo info;
+
+		if (!tileEditorInfo.TryGetValue (id, out info)) {
+			info = new TileEditorInfo ();
+			tileEditorInfo [id] = info;
+		}
+		return info;
 	}
 }

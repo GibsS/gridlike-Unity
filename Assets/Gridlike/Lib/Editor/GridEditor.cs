@@ -46,6 +46,11 @@ public class GridEditor : Editor {
 	void OnSceneGUI() {
 		Grid grid = target as Grid;
 
+		int mouseX, mouseY;
+
+		grid.WorldToGrid(HandleUtility.GUIPointToWorldRay (Event.current.mousePosition).origin, out mouseX, out mouseY);
+
+		// REGIONS
 		foreach (FiniteGrid region in grid.GetRegions()) {
 			float size = Grid.REGION_SIZE * grid.tileSize;
 			float bx = grid.transform.position.x + region.regionX * size;
@@ -59,6 +64,22 @@ public class GridEditor : Editor {
 			Handles.DrawLine (new Vector2(bx + 0.2f, by + size - 0.2f), new Vector2(bx + 0.2f, by + 0.2f));
 		}
 
+		// TILE
+		Vector2 position = grid.transform.TransformPoint(new Vector2(mouseX * grid.tileSize, mouseY * grid.tileSize));
+
+		Handles.color = Color.white;
+
+
+		Handles.DrawLine (new Vector2(position.x + 0.1f, position.y + 0.1f), new Vector2(position.x + 0.9f, position.y + 0.1f));
+		Handles.DrawLine (new Vector2(position.x + 0.9f, position.y + 0.1f), new Vector2(position.x + 0.9f, position.y + 0.9f));
+		Handles.DrawLine (new Vector2(position.x + 0.9f, position.y + 0.9f), new Vector2(position.x + 0.1f, position.y + 0.9f));
+		Handles.DrawLine (new Vector2(position.x + 0.1f, position.y + 0.9f), new Vector2(position.x + 0.1f, position.y + 0.1f));
+
+		GUIStyle style = new GUIStyle();
+		style.normal.textColor = Color.white;
+		Handles.Label (new Vector2 (position.x + 1.1f, position.y + 1), "Hello", style);
+
+		// BRUSH
 		if (Event.current.button == 0) {
 			switch (Event.current.type) {
 				case EventType.mouseDown: {
@@ -66,11 +87,8 @@ public class GridEditor : Editor {
 					break;
 				}
 				case EventType.mouseUp: {
-					int x, y;
-
-					grid.WorldToGrid(HandleUtility.GUIPointToWorldRay (Event.current.mousePosition).origin, out x, out y);
 					GridEditorWindow window = GridEditorWindow.ShowWindow ();
-					grid.Set (x, y, window.id, window.subid, window.state1, window.state2, window.state3);
+					grid.Set (mouseX, mouseY, window.id, window.subid, window.state1, window.state2, window.state3);
 
 					Event.current.Use ();
 					break;
@@ -79,5 +97,7 @@ public class GridEditor : Editor {
 		}
 
 		HandleUtility.AddDefaultControl(GUIUtility.GetControlID(FocusType.Passive));
+
+		// SceneView.RepaintAll ();
 	}
 }

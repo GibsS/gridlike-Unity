@@ -132,7 +132,7 @@ public class GridSerializer {
 		if (_manifest != null) _manifest.regionPositions.Clear ();
 
 		if(Directory.Exists(RootPath())) {
-			Directory.Delete (RootPath ());
+			Directory.Delete (RootPath (), true);
 		}
 	}
 }
