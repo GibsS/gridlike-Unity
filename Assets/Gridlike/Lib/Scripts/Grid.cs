@@ -27,6 +27,7 @@ using UnityEngine;
 
 // 5: Create edition palette 2 day
 // TODO In scene view, show information about hovered tile
+// TODO Use the tilemap guys way of rendering a window
 
 // 6: Factories + Singleton 1 day
 // TODO make grid factories (static in Grid)
@@ -38,6 +39,7 @@ using UnityEngine;
 // TODO Grid updater component
 
 // 8: Finish optimizing sprite renderer 2 day
+// TODO Add the drag and drop if possible
 
 // TODO Add namespaces everywhere
 // TODO Put all classes in individual files
@@ -324,9 +326,9 @@ public class Grid : MonoBehaviour {
 					}
 				}
 			}
-
-			return null;
 		}
+
+		return null;
 	}
 		
 	public void Set(int x, int y, int id, int subid, int state1, int state2, int state3) {
@@ -377,8 +379,7 @@ public class Grid : MonoBehaviour {
 
 	}
 
-	void _Set(int x, int y, int id, int subid, int state1, int state2, int state3) {
-		Tile tile = GetOrCreate (x, y);
+	void _Set(Tile tile, int x, int y, int id, int subid, float state1, float state2, float state3) {
 		TileInfo info = atlas.GetTile (id);
 
 		/*// CHECK IF THERE IS AN OVERLAP WITH THE ARE OF ANOTHER MULTI SQUARE TILE
