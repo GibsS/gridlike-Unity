@@ -2,7 +2,42 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// 1: Small change on custom inspectors + BUG FIX 2-3 days 
+// TODO Custom editor for every common listener and data delegate (+ if modifying field is ignored, make them unmodifiable)
+
+// TODO If progressive loading, make sure to "hide" every tile before play + when leaving editor
+// TODO If inspector values should not change during play mode, hide? [Use prefix label
+
+// BUG Allow regular gizmos to be accessed even when the grid is selected
+
+// TODO Make sure sets on region that aren't presented don't call listeners
+// BUG Weird none showing regions when using agent based loading
+
 // BUG when placing tiles in editor, region should be shown as shown, not just loaded
+
+// 2: GO tile 2 days
+// TODO GO tile
+// TODO Add Clear function
+
+// 3: finalize physics 1 day
+// TODO Add isSensor + layer on collider (defined in atlas)
+
+// 4: Increased data storage + editing 1 day
+// TODO Add user data 
+
+// 5: Create edition palette 2 day
+// TODO In scene view, show information about hovered tile
+
+// 6: Factories + Singleton 1 day
+// TODO make grid factories (static in Grid)
+// TODO make sure grids can be created from code easily (define stories)
+
+// TODO Add singleton behaviour to handle accessing list of currently present grids
+
+// 7: Grid updater 1 day
+// TODO Grid updater component
+
+// 8: Finish optimizing sprite renderer 2 day
 
 // TODO Add namespaces everywhere
 // TODO Put all classes in individual files
@@ -10,28 +45,10 @@ using UnityEngine;
 // TODO Comment
 // TODO Remove any residual Debug.Log
 
-// TODO make grid factories (static in Grid)
-// TODO make sure grids can be created from code easily (define stories)
-
-// TODO In scene view, show information about hovered tile
-
-// TODO If progressive loading, make sure to "hide" every tile before play + when leaving editor
-// TODO If inspector values should not change during play mode, hide? [Use prefix label
-
-// TODO Add singleton behaviour to handle accessing list of currently present grids
-
-// TODO GO pinning
-// TODO Allow regular gizmos to be accessed even when the grid is selected
-// TODO Custom editor for every common listener and data delegate (+ if modifying field is ignored, make them unmodifiable)
-// TODO Grid updater component
-// TODO Make sure sets on region that aren't presented don't call listeners
-
-// TODO Sprite renderer should pick sorting layer
-// TODO Add sprite sorting layer (defined in atlas)
-// TODO Add isSensor + layer on collider (defined in atlas)
-
-// TODO Add user data 
 // TODO Use kenney tiles for testing + samples 
+// TODO Create samples + test
+
+
 [ExecuteInEditMode]
 [AddComponentMenu("Gridlike/Grid")]
 public class Grid : MonoBehaviour {
@@ -355,6 +372,9 @@ public class Grid : MonoBehaviour {
 		foreach (GridListener listener in gridListeners) {
 			listener.OnSetState (x, y, tile, oldState1, oldState2, oldState3);
 		}
+	}
+	public void Clear(int x, int y) {
+
 	}
 
 	void _Set(int x, int y, int id, int subid, int state1, int state2, int state3) {
