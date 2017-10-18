@@ -19,7 +19,6 @@ using UnityEngine;
 // TODO Add user data 
 
 // 5: Create edition palette 2 day
-// TODO In scene view, show information about hovered tile
 // TODO Use the tilemap guys way of rendering a window
 // TODO Show hide a specific region
 
