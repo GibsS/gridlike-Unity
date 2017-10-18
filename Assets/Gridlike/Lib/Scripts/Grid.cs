@@ -2,18 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// 1: Small change on custom inspectors + BUG FIX 2-3 days 
-// TODO Custom editor for every common listener and data delegate (+ if modifying field is ignored, make them unmodifiable)
-
-// TODO If progressive loading, make sure to "hide" every tile before play + when leaving editor
-// TODO If inspector values should not change during play mode, hide? [Use prefix label
+// 1: Small change on custom inspectors + BUG FIX 2-3 days
+// BUG when placing tiles in editor, region should be shown as shown, not just loaded
+// BUG Rebuild should update tile shape
+// BUG Make sure sets on region that aren't presented don't call listeners
 
 // BUG Allow regular gizmos to be accessed even when the grid is selected
-
-// TODO Make sure sets on region that aren't presented don't call listeners
 // BUG Weird none showing regions when using agent based loading
-
-// BUG when placing tiles in editor, region should be shown as shown, not just loaded
 
 // 2: GO tile 2 days
 // TODO GO tile
@@ -109,6 +104,8 @@ public class Grid : MonoBehaviour {
 			}
 		}
 
+		DestroyImmediate (tileGOContainer);
+
 		tiles = null;
 
 		tileGOs = null;
@@ -176,7 +173,7 @@ public class Grid : MonoBehaviour {
 	}
 
 	public void PresentAll() {
-		foreach (FiniteGrid region in tiles.GetRegions().FindAll(r => r.presented)) {
+		foreach (FiniteGrid region in tiles.GetRegions()) {
 			PresentRegion (region.regionX, region.regionY);
 		}
 	}
@@ -186,17 +183,27 @@ public class Grid : MonoBehaviour {
 		}
 	}
 
+	public void PresentContainingRegion(int x, int y) {
+		PresentRegion(Mathf.FloorToInt(x / (float) Grid.REGION_SIZE), Mathf.FloorToInt(y / (float) Grid.REGION_SIZE));
+	}
+	public void HideContainingRegion(int x, int y) {
+		HideRegion(Mathf.FloorToInt(x / (float) Grid.REGION_SIZE), Mathf.FloorToInt(y / (float) Grid.REGION_SIZE));
+	}
+
 	public void PresentRegion(int X, int Y) {
 		FiniteGrid grid = tiles.GetRegion (X, Y);
 
-		if (grid == null) {
-			LoadRegion (X, Y);
+		if (grid == null || !grid.presented) {
 
-			grid = tiles.GetRegion (X, Y);
-		}
+			if (grid == null) {
+				LoadRegion (X, Y);
 
-		if(grid != null && !grid.presented) {
-			_PresentRegion (X, Y, grid);
+				grid = tiles.GetRegion (X, Y);
+			}
+
+			if (grid != null) {
+				_PresentRegion (X, Y, grid);
+			}
 		}
 	}
 	public void HideRegion(int X, int Y) {
@@ -332,38 +339,48 @@ public class Grid : MonoBehaviour {
 	}
 		
 	public void Set(int x, int y, int id, int subid, int state1, int state2, int state3) {
-		Tile tile = GetOrCreate (x, y);
+		FiniteGrid region;
+		Tile tile = GetOrCreate (x, y, out region);
 
 		_Set (tile, x, y, id, subid, state1, state2, state3);
 
-		foreach (GridListener listener in gridListeners) {
-			listener.OnSet (x, y, tile);
+		if (region.presented) {
+			foreach (GridListener listener in gridListeners) {
+				listener.OnSet (x, y, tile);
+			}
 		}
 	}
 	public void SetId(int x, int y, int id, int subId = int.MinValue) {
-		Tile tile = GetOrCreate (x, y);
+		FiniteGrid region;
+		Tile tile = GetOrCreate (x, y, out region);
 
 		int oldId = tile.id;
 		int oldSubId = tile.subId;
 
 		_Set (tile, x, y, id, subId, tile.state1, tile.state2, tile.state3);
 
-		foreach (GridListener listener in gridListeners) {
-			listener.OnSetId (x, y, tile, oldId, oldSubId);
+		if (region.presented) {
+			foreach (GridListener listener in gridListeners) {
+				listener.OnSetId (x, y, tile, oldId, oldSubId);
+			}
 		}
 	}
 	public void SetSubId(int x, int y, int subId) {
-		Tile tile = GetOrCreate (x, y);
+		FiniteGrid region;
+		Tile tile = GetOrCreate (x, y, out region);
 		int oldId = tile.id, oldSubId = tile.subId;
 
 		tile.subId = subId;
 
-		foreach (GridListener listener in gridListeners) {
-			listener.OnSetId (x, y, tile, oldId, oldSubId);
+		if (region.presented) {
+			foreach (GridListener listener in gridListeners) {
+				listener.OnSetId (x, y, tile, oldId, oldSubId);
+			}
 		}
 	}
 	public void SetState(int x, int y, float state1, float state2 = float.NegativeInfinity, float state3 = float.NegativeInfinity) {
-		Tile tile = GetOrCreate (x, y);
+		FiniteGrid region;
+		Tile tile = GetOrCreate (x, y, out region);
 
 		float oldState1 = tile.state1, oldState2 = tile.state2, oldState3 = tile.state3;
 
@@ -371,8 +388,10 @@ public class Grid : MonoBehaviour {
 		if (state2 != float.NegativeInfinity) tile.state2 = state2;
 		if (state3 != float.NegativeInfinity) tile.state3 = state3;
 
-		foreach (GridListener listener in gridListeners) {
-			listener.OnSetState (x, y, tile, oldState1, oldState2, oldState3);
+		if (region.presented) {
+			foreach (GridListener listener in gridListeners) {
+				listener.OnSetState (x, y, tile, oldState1, oldState2, oldState3);
+			}
 		}
 	}
 	public void Clear(int x, int y) {
@@ -425,13 +444,13 @@ public class Grid : MonoBehaviour {
 		tile.state3 = state3;
 	}
 
-	Tile GetOrCreate(int x, int y) {
-		Tile tile = tiles.Get (x, y) as Tile;
+	Tile GetOrCreate(int x, int y, out FiniteGrid region) {
+		Tile tile = tiles.Get (x, y, out region) as Tile;
 
 		if (tile == null) {
 			tile = new Tile ();
 
-			tiles.Set (x, y, tile);
+			region = tiles.Set (x, y, tile);
 		}
 
 		return tile;

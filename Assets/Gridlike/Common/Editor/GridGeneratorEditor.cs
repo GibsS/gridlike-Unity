@@ -14,10 +14,13 @@ public class GridGeneratorEditor : Editor {
 		if (generator.algorithm == null) {
 			EditorGUILayout.HelpBox ("The grid generator requires a subclass of GridGeneratorAlgorithm", MessageType.Warning);
 		}
-		generator.algorithm = EditorGUILayout.ObjectField("Algorithm", (GridGeneratorAlgorithm)generator.algorithm, typeof(GridGeneratorAlgorithm), false) as GridGeneratorAlgorithm;
 
-		generator.generationRegionWidth = Mathf.Max(1, EditorGUILayout.IntField ("Generation region width", generator.generationRegionWidth));
-		generator.generationRegionHeight = Mathf.Max(1, EditorGUILayout.IntField ("Generation region height", generator.generationRegionHeight));
+		GUI.enabled = !Application.isPlaying;
+
+		generator.algorithm = EditorGUILayout.ObjectField ("Algorithm", (GridGeneratorAlgorithm)generator.algorithm, typeof(GridGeneratorAlgorithm), false) as GridGeneratorAlgorithm;
+
+		generator.generationRegionWidth = Mathf.Max (1, EditorGUILayout.IntField ("Generation region width", generator.generationRegionWidth));
+		generator.generationRegionHeight = Mathf.Max (1, EditorGUILayout.IntField ("Generation region height", generator.generationRegionHeight));
 
 		generator.useSave = EditorGUILayout.ToggleLeft ("Use saving", generator.useSave);
 
@@ -30,9 +33,12 @@ public class GridGeneratorEditor : Editor {
 			// Bug: always shows 0 when in editor mode
 			EditorGUILayout.LabelField ("Number of Region saved: " + man.regionPositions.Count);
 
+			GUI.enabled = true;
+
 			if (GUILayout.Button ("Clear save")) {
 				generator.ClearSave ();
 			}
 		}
+		GUI.enabled = true;
 	}
 }

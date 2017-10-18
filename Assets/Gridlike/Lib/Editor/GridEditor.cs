@@ -4,6 +4,20 @@ using UnityEngine;
 [CustomEditor(typeof(Grid))]
 public class GridEditor : Editor {
 
+	void OnChangePlayMode() {
+		Grid grid = target as Grid;
+
+		if (!Application.isPlaying && EditorApplication.isPlayingOrWillChangePlaymode && grid.useLoading && grid.useAgentBasedLoading) {
+
+			grid.HideAll ();
+		}
+	}
+
+	void OnEnable() {
+		//Debug.Log ("enable");
+		EditorApplication.playmodeStateChanged += OnChangePlayMode;
+	}
+
 	public override void OnInspectorGUI() {
 		Grid grid = target as Grid;
 
@@ -69,7 +83,6 @@ public class GridEditor : Editor {
 
 		Handles.color = Color.white;
 
-
 		Handles.DrawLine (new Vector2(position.x + 0.1f, position.y + 0.1f), new Vector2(position.x + 0.9f, position.y + 0.1f));
 		Handles.DrawLine (new Vector2(position.x + 0.9f, position.y + 0.1f), new Vector2(position.x + 0.9f, position.y + 0.9f));
 		Handles.DrawLine (new Vector2(position.x + 0.9f, position.y + 0.9f), new Vector2(position.x + 0.1f, position.y + 0.9f));
@@ -89,6 +102,10 @@ public class GridEditor : Editor {
 				case EventType.mouseUp: {
 					GridEditorWindow window = GridEditorWindow.ShowWindow ();
 					grid.Set (mouseX, mouseY, window.id, window.subid, window.state1, window.state2, window.state3);
+
+					Debug.Log(grid.Get (mouseX, mouseY).id);
+
+					grid.PresentContainingRegion (mouseX, mouseY);
 
 					Event.current.Use ();
 					break;

@@ -45,7 +45,27 @@ public abstract class GridListener : MonoBehaviour {
 	}
 
 	public virtual void OnShowRegion(int regionX, int regionY) {
-		StartCoroutine(_OnShowRegion(regionX, regionY));
+		Debug.Log ("show");
+		if (Application.isPlaying) {
+			StartCoroutine (_OnShowRegion (regionX, regionY));
+		} else {		
+			FiniteGrid region = grid.GetRegion (regionX, regionY);
+
+			int startX = regionX * Grid.REGION_SIZE;
+			int endX = (regionX + 1) * Grid.REGION_SIZE;
+			int startY = regionY * Grid.REGION_SIZE;
+			int endY = (regionY + 1) * Grid.REGION_SIZE;
+
+			Debug.Log ("startX=" + startX + " endX=" + endX + " startY=" + startY + " endY=" + endY);
+
+			for (int i = startX; i < endX; i++) {
+				for(int j = startY; j < endY; j++) {
+					Tile tile = region.Get (i - startX, j - startY);
+
+					if(tile != null) OnSet(i, j, tile);
+				}
+			}
+		}
 	}
 
 	IEnumerator _OnShowRegion(int regionX, int regionY) {
