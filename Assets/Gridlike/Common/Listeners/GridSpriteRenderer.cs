@@ -27,6 +27,10 @@ public class GridSpriteRenderer : GridListener {
 		if (containerGO == null) {
 			containerGO = new GameObject ("sprites");
 			containerGO.transform.SetParent (transform, false);
+		} else {
+			foreach (Transform t in containerGO.transform) {
+				DestroyImmediate (t.gameObject);
+			}
 		}
 
 		base.ResetListener ();
