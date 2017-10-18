@@ -20,8 +20,6 @@ public class GridSpriteRenderer : GridListener {
 	}
 
 	public override void ResetListener() {
-		base.ResetListener ();
-
 		if (components == null) {
 			components = new InfiniteComponentGrid (Grid.REGION_SIZE);
 		}
@@ -30,6 +28,8 @@ public class GridSpriteRenderer : GridListener {
 			containerGO = new GameObject ("sprites");
 			containerGO.transform.SetParent (transform, false);
 		}
+
+		base.ResetListener ();
 	}
 
 	public override void OnSet(int x, int y, Tile tile) {

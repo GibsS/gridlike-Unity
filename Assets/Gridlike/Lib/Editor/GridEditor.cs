@@ -79,6 +79,35 @@ public class GridEditor : Editor {
 		}
 
 		// TILE
+		// DrawTileInformation(grid, mouseX, mouseY);
+
+		// BRUSH
+		if (Event.current.button == 0) {
+			switch (Event.current.type) {
+				/*case EventType.mouseDown: {
+					Event.current.Use ();
+					break;
+				}*/
+				case EventType.mouseUp: {
+					GridEditorWindow window = GridEditorWindow.ShowWindow ();
+					grid.Set (mouseX, mouseY, window.id, window.subid, window.state1, window.state2, window.state3);
+
+					grid.PresentContainingRegion (mouseX, mouseY);
+
+					Event.current.Use ();
+					break;
+				}
+			}
+
+			if (Event.current.type == EventType.Layout) {
+				HandleUtility.AddDefaultControl(GUIUtility.GetControlID(FocusType.Passive));
+			}
+		}
+
+		// SceneView.RepaintAll ();
+	}
+
+	void DrawTileInformation(Grid grid, int mouseX, int mouseY) {
 		Vector2 position = grid.transform.TransformPoint(new Vector2(mouseX * grid.tileSize, mouseY * grid.tileSize));
 
 		Handles.color = Color.white;
@@ -91,30 +120,5 @@ public class GridEditor : Editor {
 		GUIStyle style = new GUIStyle();
 		style.normal.textColor = Color.white;
 		Handles.Label (new Vector2 (position.x + 1.1f, position.y + 1), "Hello", style);
-
-		// BRUSH
-		if (Event.current.button == 0) {
-			switch (Event.current.type) {
-				case EventType.mouseDown: {
-					Event.current.Use ();
-					break;
-				}
-				case EventType.mouseUp: {
-					GridEditorWindow window = GridEditorWindow.ShowWindow ();
-					grid.Set (mouseX, mouseY, window.id, window.subid, window.state1, window.state2, window.state3);
-
-					Debug.Log(grid.Get (mouseX, mouseY).id);
-
-					grid.PresentContainingRegion (mouseX, mouseY);
-
-					Event.current.Use ();
-					break;
-				}
-			}
-		}
-
-		HandleUtility.AddDefaultControl(GUIUtility.GetControlID(FocusType.Passive));
-
-		// SceneView.RepaintAll ();
 	}
 }

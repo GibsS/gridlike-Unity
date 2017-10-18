@@ -20,8 +20,6 @@ public class GridCollider : GridListener {
 	}
 
 	public override void ResetListener() {
-		base.ResetListener ();
-
 		if (components == null) {
 			components = new InfiniteComponentGrid (Grid.REGION_SIZE);
 		}
@@ -30,6 +28,8 @@ public class GridCollider : GridListener {
 			containerGO = new GameObject ("colliders");
 			containerGO.transform.SetParent (transform, false);
 		}
+
+		base.ResetListener ();
 	}
 
 	public override void OnSet(int x, int y, Tile tile) {

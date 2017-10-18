@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // 1: Small change on custom inspectors + BUG FIX 2-3 days
-// BUG Rebuild should update tile shape
+// BUG Reset on grid doesn't clear colliders
 
 // BUG Allow regular gizmos to be accessed even when the grid is selected
 // BUG Weird none showing regions when using agent based loading
@@ -21,6 +21,7 @@ using UnityEngine;
 // 5: Create edition palette 2 day
 // TODO In scene view, show information about hovered tile
 // TODO Use the tilemap guys way of rendering a window
+// TODO Show hide a specific region
 
 // 6: Factories + Singleton 1 day
 // TODO make grid factories (static in Grid)
@@ -102,6 +103,12 @@ public class Grid : MonoBehaviour {
 			}
 		}
 
+		foreach (Transform t in gameObject.transform) {
+			if (t.gameObject.name == "tile container") {
+				DestroyImmediate (t.gameObject);
+			}
+		}
+
 		DestroyImmediate (tileGOContainer);
 
 		tiles = null;
@@ -147,6 +154,12 @@ public class Grid : MonoBehaviour {
 	public void AddListener(GridListener listener) {
 		if (!gridListeners.Contains (listener)) {
 			gridListeners.Add (listener);
+
+			foreach (FiniteGrid region in tiles.GetRegions()) {
+				if (region.presented) {
+					listener.OnShowRegion (region.regionX, region.regionY);
+				}
+			}
 		}
 	}
 	public void RemoveListener(GridListener listener) {
