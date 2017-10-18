@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // 1: Small change on custom inspectors + BUG FIX 2-3 days
-// BUG when placing tiles in editor, region should be shown as shown, not just loaded
 // BUG Rebuild should update tile shape
-// BUG Make sure sets on region that aren't presented don't call listeners
 
 // BUG Allow regular gizmos to be accessed even when the grid is selected
 // BUG Weird none showing regions when using agent based loading
@@ -225,7 +223,6 @@ public class Grid : MonoBehaviour {
 					for (int i = 0; i < Grid.REGION_SIZE; i++) {
 						for (int j = 0; j < Grid.REGION_SIZE; j++) {
 							Tile tile = region.Get (i, j);
-							tile.shape = atlas.GetTile (tile.id).shape;
 						}
 					}
 
@@ -303,7 +300,7 @@ public class Grid : MonoBehaviour {
 	public TileShape GetShape(int x, int y) {
 		Tile tile = tiles.Get (x, y) as Tile;
 
-		return tile == null ? TileShape.EMPTY : tile.shape;
+		return tile == null ? TileShape.EMPTY : atlas.atlas[tile.id].shape;
 	}
 	public int GetId(int x, int y) {
 		Tile tile = tiles.Get (x, y) as Tile;
@@ -433,8 +430,6 @@ public class Grid : MonoBehaviour {
 				}
 			}
 		}*/
-
-		tile.shape = info.shape;
 
 		tile.id = id;
 		if (subid != int.MinValue) tile.subId = subid;

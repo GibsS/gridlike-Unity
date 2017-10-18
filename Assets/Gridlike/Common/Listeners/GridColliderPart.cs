@@ -152,7 +152,7 @@ public class GridColliderPart : MonoBehaviour {
 			&& (bottomLeftX != other.bottomLeftX && height == 1 && other.height == 1 
 				|| bottomLeftY != other.bottomLeftY && width == 1 && other.width == 1);
 	}
-	public bool Compatible(Tile tile) {
-		return shape == tile.shape;
+	public bool Compatible(TileInfo info) {
+		return shape == info.shape;
 	}
 }

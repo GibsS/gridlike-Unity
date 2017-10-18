@@ -36,14 +36,16 @@ public class GridCollider : GridListener {
 		// clear previous
 		ClearTile(x, y);
 
+		TileInfo info = grid.atlas.atlas [tile.id];
+
 		// add new
-		if (tile.shape != TileShape.EMPTY) {
+		if (info.shape != TileShape.EMPTY) {
 			// HORIZONTAL GROWTH
-			if (tile.shape != TileShape.LEFT_ONEWAY && tile.shape != TileShape.RIGHT_ONEWAY) {
+			if (info.shape != TileShape.LEFT_ONEWAY && info.shape != TileShape.RIGHT_ONEWAY) {
 				bool expanded = false;
 
 				GridColliderPart left = components.Get (x - 1, y) as GridColliderPart;
-				if (left != null && left.height == 1 && left.Compatible (tile)) {
+				if (left != null && left.height == 1 && left.Compatible (info)) {
 					left.transform.localPosition = new Vector2 (left.transform.localPosition.x + 0.5f, left.transform.localPosition.y);
 					left.SetSize (left.width + 1, 1);
 
@@ -53,7 +55,7 @@ public class GridCollider : GridListener {
 				}
 				
 				GridColliderPart right = components.Get (x + 1, y) as GridColliderPart;
-				if (right != null && right.height == 1 && right.Compatible (tile)) {
+				if (right != null && right.height == 1 && right.Compatible (info)) {
 					if (!expanded) {
 						right.bottomLeftX -= 1;
 
@@ -81,11 +83,11 @@ public class GridCollider : GridListener {
 			}
 
 			// VERTICAL GROWTH
-			if (tile.shape != TileShape.FULL && tile.shape != TileShape.UP_ONEWAY && tile.shape != TileShape.DOWN_ONEWAY) {
+			if (info.shape != TileShape.FULL && info.shape != TileShape.UP_ONEWAY && info.shape != TileShape.DOWN_ONEWAY) {
 				bool expanded = false;
 
 				GridColliderPart down = components.Get (x, y - 1) as GridColliderPart;
-				if (down != null && down.width == 1 && down.Compatible (tile)) {
+				if (down != null && down.width == 1 && down.Compatible (info)) {
 					down.transform.localPosition = new Vector2 (down.transform.localPosition.x, down.transform.localPosition.y + 0.5f);
 					down.SetSize (1, down.height + 1);
 
@@ -95,7 +97,7 @@ public class GridCollider : GridListener {
 				}
 
 				GridColliderPart up = components.Get (x, y + 1) as GridColliderPart;
-				if (up != null && up.width == 1 && up.Compatible (tile)) {
+				if (up != null && up.width == 1 && up.Compatible (info)) {
 					if (!expanded) {
 						up.bottomLeftY -= 1;
 
@@ -123,7 +125,7 @@ public class GridCollider : GridListener {
 			}
 
 			// NO EXPANSE, CREATE NEW
-			components.Set (x, y, GridColliderPart.CreateColliderPart (containerGO, grid, tile.shape, x, y, 1, 1));
+			components.Set (x, y, GridColliderPart.CreateColliderPart (containerGO, grid, info.shape, x, y, 1, 1));
 		}
 	}
 
