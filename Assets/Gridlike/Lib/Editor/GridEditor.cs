@@ -14,7 +14,6 @@ public class GridEditor : Editor {
 	}
 
 	void OnEnable() {
-		//Debug.Log ("enable");
 		EditorApplication.playmodeStateChanged += OnChangePlayMode;
 	}
 

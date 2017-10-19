@@ -14,6 +14,13 @@ public abstract class GridGeneratorAlgorithm : MonoBehaviour {
 
 	public virtual void ResetAlgorithm() {
 		GridGenerator generator = GetComponent<GridGenerator> ();
+
+		if (generator == null) {
+			Debug.LogError ("Generation algorithm requires a GridGenerator");
+			DestroyImmediate (this);
+			return;
+		}
+
 		generator.SetAlgorithm (this);
 	}
 

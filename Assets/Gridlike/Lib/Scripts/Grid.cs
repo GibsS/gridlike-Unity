@@ -2,12 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// 1: Small change on custom inspectors + BUG FIX 2-3 days
-// BUG Reset on grid doesn't clear colliders
-
-// BUG Allow regular gizmos to be accessed even when the grid is selected
-// BUG Weird none showing regions when using agent based loading
-
 // 2: GO tile 2 days
 // TODO GO tile
 // TODO Add Clear function
@@ -43,6 +37,7 @@ using UnityEngine;
 // TODO Use kenney tiles for testing + samples 
 // TODO Create samples + test
 
+// BUG Allow regular gizmos to be accessed even when the grid is selected
 
 [ExecuteInEditMode]
 [AddComponentMenu("Gridlike/Grid")]

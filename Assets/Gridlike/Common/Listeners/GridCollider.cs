@@ -27,10 +27,6 @@ public class GridCollider : GridListener {
 		if (containerGO == null) {
 			containerGO = new GameObject ("colliders");
 			containerGO.transform.SetParent (transform, false);
-		} else {
-			foreach (Transform t in containerGO.transform) {
-				DestroyImmediate (t.gameObject);
-			}
 		}
 
 		base.ResetListener ();
