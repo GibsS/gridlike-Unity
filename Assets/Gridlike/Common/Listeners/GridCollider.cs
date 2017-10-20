@@ -125,7 +125,7 @@ public class GridCollider : GridListener {
 			}
 
 			// NO EXPANSE, CREATE NEW
-			components.Set (x, y, GridColliderPart.CreateColliderPart (containerGO, grid, info.shape, x, y, 1, 1));
+			components.Set (x, y, GridColliderPart.CreateColliderPart (containerGO, grid, info, x, y, 1, 1));
 		}
 	}
 
@@ -166,7 +166,7 @@ public class GridCollider : GridListener {
 						wrapper.transform.localPosition = new Vector2 (wrapper.transform.localPosition.x, wrapper.transform.localPosition.y - (endY - y + 1f)/2f);
 
 						if (endY != y) {
-							GridColliderPart part = GridColliderPart.CreateColliderPart (containerGO, grid, wrapper.shape, x, y + 1, 1, endY - y);
+							GridColliderPart part = GridColliderPart.CreateColliderPart (containerGO, grid, grid.atlas.atlas[wrapper.id], x, y + 1, 1, endY - y);
 
 							for (int i = y + 1; i <= endY; i++) {
 								components.Set (x, i, part);
@@ -187,7 +187,7 @@ public class GridCollider : GridListener {
 					wrapper.transform.localPosition = new Vector2 (wrapper.transform.localPosition.x - (endX - x + 1f)/2f, wrapper.transform.localPosition.y);
 
 					if (endX != x) {
-						GridColliderPart part = GridColliderPart.CreateColliderPart (containerGO, grid, wrapper.shape, x + 1, y, endX - x, 1);
+						GridColliderPart part = GridColliderPart.CreateColliderPart (containerGO, grid, grid.atlas.atlas[wrapper.id], x + 1, y, endX - x, 1);
 
 						for (int i = x + 1; i <= endX; i++) {
 							components.Set (i, y, part);

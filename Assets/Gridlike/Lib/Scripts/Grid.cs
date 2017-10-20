@@ -6,9 +6,6 @@ using UnityEngine;
 // TODO GO tile
 // TODO Add Clear function
 
-// 3: finalize physics 1 day
-// TODO Add isSensor + layer on collider (defined in atlas)
-
 // 4: Increased data storage + editing 1 day
 // TODO Add user data 
 

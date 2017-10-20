@@ -85,8 +85,9 @@ public class TileAtlas : ScriptableObject {
 		tile.id = id;
 		tile.name = "tile " + id;
 		tile.shape = TileShape.FULL;
+		tile.tag = "Untagged";
 
-		tile.idSpriteInfo = null;
+		tile.idSpriteInfo = new TileSpriteInfo();
 		tile.subIdSpriteInfo = null;
 
 		return tile;

@@ -4,6 +4,7 @@ using System.Collections;
 public class GridColliderPart : MonoBehaviour {
 
 	public TileShape shape;
+	public int id;
 
 	public int bottomLeftX;
 	public int bottomLeftY;
@@ -14,33 +15,38 @@ public class GridColliderPart : MonoBehaviour {
 	public PolygonCollider2D triangle;
 	public EdgeCollider2D line;
 
-	public static GridColliderPart CreateColliderPart(GameObject parent, Grid grid, TileShape shape, int x, int y, int w, int h) {
+	public static GridColliderPart CreateColliderPart(GameObject parent, Grid grid, TileInfo info, int x, int y, int w, int h) {
 
-		switch (shape) {
+		switch (info.shape) {
 		case TileShape.FULL:
-			return BoxGridColliderPart (parent, grid, x, y, w, h);
+			return BoxGridColliderPart (parent, grid, info, x, y, w, h);
 		case TileShape.DOWN_LEFT_TRIANGLE:
 		case TileShape.DOWN_RIGHT_TRIANGLE:
 		case TileShape.UP_LEFT_TRIANGLE:
 		case TileShape.UP_RIGHT_TRIANGLE:
-			return TriangleGridColliderPart (parent, grid, shape, x, y, w, h);
+			return TriangleGridColliderPart (parent, grid, info, x, y, w, h);
 		case TileShape.DOWN_ONEWAY:
 		case TileShape.UP_ONEWAY:
 		case TileShape.LEFT_ONEWAY:
 		case TileShape.RIGHT_ONEWAY:
-			return LineGridColliderPart (parent, grid, shape, x, y, w, h);
+			return LineGridColliderPart (parent, grid, info, x, y, w, h);
 		default: return null;
 		}
 	}
 
-	public static GridColliderPart BoxGridColliderPart(GameObject parent, Grid grid, int x, int y, int w, int h) {
+	public static GridColliderPart BoxGridColliderPart(GameObject parent, Grid grid, TileInfo tile, int x, int y, int w, int h) {
 		GameObject obj = new GameObject ("box");
 		obj.transform.SetParent (parent.transform);
+
+		obj.tag = tile.tag;
+		obj.layer = tile.layer;
 
 		GridColliderPart part = obj.AddComponent<GridColliderPart> ();
 		part.box = obj.AddComponent<BoxCollider2D> ();
 
 		part.shape = TileShape.FULL;
+		part.id = tile.id;
+		part.box.isTrigger = tile.isSensor;
 
 		part.bottomLeftX = x;
 		part.bottomLeftY = y;
@@ -52,14 +58,19 @@ public class GridColliderPart : MonoBehaviour {
 		return part;
 	}
 
-	public static GridColliderPart TriangleGridColliderPart(GameObject parent, Grid grid, TileShape shape, int x, int y, int w, int h) {
+	public static GridColliderPart TriangleGridColliderPart(GameObject parent, Grid grid, TileInfo tile, int x, int y, int w, int h) {
 		GameObject obj = new GameObject ("triangle");
 		obj.transform.SetParent (parent.transform);
+
+		obj.tag = tile.tag;
+		obj.layer = tile.layer;
 
 		GridColliderPart part = obj.AddComponent<GridColliderPart> ();
 		part.triangle = obj.AddComponent<PolygonCollider2D> ();
 
-		part.shape = shape;
+		part.shape = tile.shape;
+		part.id = tile.id;
+		part.triangle.isTrigger = tile.isSensor;
 
 		part.bottomLeftX = x;
 		part.bottomLeftY = y;
@@ -71,14 +82,17 @@ public class GridColliderPart : MonoBehaviour {
 		return part;
 	}
 
-	public static GridColliderPart LineGridColliderPart(GameObject parent, Grid grid, TileShape shape, int x, int y, int w, int h) {
+	public static GridColliderPart LineGridColliderPart(GameObject parent, Grid grid, TileInfo tile, int x, int y, int w, int h) {
 		GameObject obj = new GameObject ("line");
 		obj.transform.SetParent (parent.transform);
+
+		obj.tag = tile.tag;
+		obj.layer = tile.layer;
 
 		GridColliderPart part = obj.AddComponent<GridColliderPart> ();
 		part.line = obj.AddComponent<EdgeCollider2D> ();
 		part.line.usedByEffector = true;
-		switch (shape) {
+		switch (tile.shape) {
 		case TileShape.DOWN_ONEWAY: part.transform.Rotate (Vector3.forward * 180); break;
 		case TileShape.LEFT_ONEWAY: part.transform.Rotate (Vector3.forward * 90); break;
 		case TileShape.RIGHT_ONEWAY: part.transform.Rotate (-Vector3.forward * 90); break;
@@ -87,7 +101,9 @@ public class GridColliderPart : MonoBehaviour {
 		PlatformEffector2D effector = part.gameObject.AddComponent<PlatformEffector2D> ();
 		effector.surfaceArc = 5;
 
-		part.shape = shape;
+		part.shape = tile.shape;
+		part.id = tile.id;
+		part.line.isTrigger = tile.isSensor;
 
 		part.bottomLeftX = x;
 		part.bottomLeftY = y;
@@ -153,6 +169,7 @@ public class GridColliderPart : MonoBehaviour {
 				|| bottomLeftY != other.bottomLeftY && width == 1 && other.width == 1);
 	}
 	public bool Compatible(TileInfo info) {
-		return shape == info.shape;
+		Collider2D collider = (box == null ? (triangle == null ? (line as Collider2D) : (triangle as Collider2D)) : (box as Collider2D));
+		return shape == info.shape && gameObject.tag == info.tag && gameObject.layer == info.layer && collider.isTrigger == info.isSensor;
 	}
 }

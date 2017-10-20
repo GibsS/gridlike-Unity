@@ -55,6 +55,7 @@ public class GridTileAtlasEditor : Editor {
 			tile.shape = (TileShape)EditorGUILayout.EnumPopup ("Shape", tile.shape);
 			tile.isSensor = EditorGUILayout.Toggle ("Is sensor?", tile.isSensor);
 			tile.layer = EditorGUILayout.LayerField ("Layer", tile.layer);
+			tile.tag = EditorGUILayout.TagField ("Tag", tile.tag);
 
 			tile.tileGO = EditorGUILayout.ObjectField ("Tile GO", tile.tileGO, typeof(GameObject), false) as GameObject;
 			if (tile.tileGO != null) {

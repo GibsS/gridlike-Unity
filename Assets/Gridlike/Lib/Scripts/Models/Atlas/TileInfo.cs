@@ -10,11 +10,10 @@ public class TileInfo {
 	public TileShape shape;
 	public bool isSensor;
 	public int layer;
+	public string tag;
 
 	public bool isGODetached;
 	public GameObject tileGO;
-
-	public string sortingLayer;
 
 	public TileSpriteInfo idSpriteInfo;
 	public TileSpriteInfo[] subIdSpriteInfo;
