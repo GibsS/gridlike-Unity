@@ -6,6 +6,8 @@ using UnityEngine;
 // TODO GO tile
 // TODO Add Clear function
 
+// TODO In grid editor add show all option with a warning when too many regions are shown
+
 // 4: Increased data storage + editing 1 day
 // TODO Add user data 
 
@@ -16,6 +18,7 @@ using UnityEngine;
 // 6: Factories + Singleton 1 day
 // TODO make grid factories (static in Grid)
 // TODO make sure grids can be created from code easily (define stories)
+// TODO make it possible to create a grid directly out of a small two dimensional array of tiles
 
 // TODO Add singleton behaviour to handle accessing list of currently present grids
 
