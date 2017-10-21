@@ -72,7 +72,7 @@ public class Grid : MonoBehaviour {
 
 			tiles = new InfiniteGrid (REGION_SIZE);
 
-			tileGOs = new InfiniteComponentGrid (REGION_SIZE);
+			tileGOs = new InfiniteTileGOGrid (gameObject, REGION_SIZE);
 
 			foreach (GridListener listener in GetComponents<GridListener> ()) {
 				listener.ResetListener ();
@@ -215,6 +215,7 @@ public class Grid : MonoBehaviour {
 						}
 					}
 
+					// CHANGE OF TILE INFO (TODO go through a pipeline)
 					tiles.SetRegion (X, Y, region);
 				}
 			}
@@ -302,7 +303,7 @@ public class Grid : MonoBehaviour {
 		return tile == null ? 0 : tile.subId;
 	}
 
-	public Component GetTileBehaviour(int x, int y, TileBehaviour otherBehaviour = null) {
+	/*public Component GetTileBehaviour(int x, int y, TileBehaviour otherBehaviour = null) {
 		if (otherBehaviour == null) {
 			Component c = tileGOs.Get (x, y);
 
@@ -322,7 +323,7 @@ public class Grid : MonoBehaviour {
 		}
 
 		return null;
-	}
+	}*/
 		
 	public void Set(int x, int y, int id, int subid, int state1, int state2, int state3) {
 		FiniteGrid region;
