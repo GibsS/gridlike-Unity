@@ -49,9 +49,7 @@ public class Grid : MonoBehaviour {
 	[SerializeField] List<GridListener> gridListeners;
 
 	[SerializeField] InfiniteGrid tiles;
-
-	[SerializeField] InfiniteComponentGrid tileGOs;
-	[SerializeField] GameObject tileGOContainer;
+	[SerializeField] InfiniteTileGOGrid tileGOs;
 
 	[SerializeField] float _tileSize = 1;
 
@@ -75,8 +73,6 @@ public class Grid : MonoBehaviour {
 			tiles = new InfiniteGrid (REGION_SIZE);
 
 			tileGOs = new InfiniteComponentGrid (REGION_SIZE);
-			tileGOContainer = new GameObject ("tile container");
-			tileGOContainer.transform.SetParent (transform, false);
 
 			foreach (GridListener listener in GetComponents<GridListener> ()) {
 				listener.ResetListener ();
@@ -90,20 +86,6 @@ public class Grid : MonoBehaviour {
 
 	void Reset() {
 		if(tiles != null) HideAll ();
-
-		if (tileGOContainer != null) {
-			foreach (Transform t in tileGOContainer.transform) {
-				Destroy (t.gameObject);
-			}
-		}
-
-		foreach (Transform t in gameObject.transform) {
-			if (t.gameObject.name == "tile container") {
-				DestroyImmediate (t.gameObject);
-			}
-		}
-
-		DestroyImmediate (tileGOContainer);
 
 		tiles = null;
 

@@ -1,12 +1,12 @@
 ﻿using UnityEngine;
 
 [System.Serializable]
-public class InfiniteTileBehaviourGrid {
+public class InfiniteTileGOGrid {
 
 	[SerializeField] InfiniteComponentGrid componentGrid;
 	[SerializeField] GameObject container;
 
-	public InfiniteTileBehaviourGrid(GameObject parent, int regionSize) {
+	public InfiniteTileGOGrid(GameObject parent, int regionSize) {
 		componentGrid = new InfiniteComponentGrid (regionSize);
 
 		foreach (Transform t in parent.transform) {
