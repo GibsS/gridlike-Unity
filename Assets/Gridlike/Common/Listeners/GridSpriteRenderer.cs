@@ -35,7 +35,7 @@ public class GridSpriteRenderer : GridListener {
 	public override void OnSet(int x, int y, Tile tile) {
 		Component renderer = components.Get (x, y);
 
-		switch (grid.atlas.atlas[tile.id].shape) {
+		switch (grid.atlas[tile.id].shape) {
 		case TileShape.EMPTY: {
 				if (renderer != null) ClearSprite (renderer, x, y);
 

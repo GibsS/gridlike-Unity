@@ -18,10 +18,8 @@ public class GridTileAtlasEditor : Editor {
 	public override void OnInspectorGUI() {
 		TileAtlas atlas = target as TileAtlas;
 
-		for(int i = 0; i < atlas.atlas.Length; i++) {
-			if (atlas.atlas[i] != null && atlas.atlas[i].id != 0) {
-				TileInfoUI (atlas, atlas.atlas [i]);
-			}
+		foreach(TileInfo info in atlas.GetTileInfos()) {
+			TileInfoUI (atlas, info);
 		}
 
 		if (GUILayout.Button ("Create new tile")) {

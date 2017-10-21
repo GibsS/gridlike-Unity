@@ -20,9 +20,8 @@ public class TileAtlas : ScriptableObject {
 	}
 
 	void OnEnable() {
-		// TODO increase size once tested
 		if (atlas == null) {
-			atlas = new TileInfo[5];
+			atlas = new TileInfo[30];
 
 			for (int i = 0; i < atlas.Length; i++) {
 				atlas [i] = new TileInfo ();
@@ -30,9 +29,9 @@ public class TileAtlas : ScriptableObject {
 		}
 	}
 
-	public IEnumerable<TileInfo> GetTilesInfo() {
+	public IEnumerable<TileInfo> GetTileInfos() {
 		for (int i = 0; i < atlas.Length; i++) {
-			if (atlas [i] != null) {
+			if (atlas [i] != null && atlas[i].id != 0) {
 				yield return atlas [i];
 			}
 		}
@@ -40,6 +39,11 @@ public class TileAtlas : ScriptableObject {
 
 	public TileInfo GetTile(int id) {
 		return atlas [id];
+	}
+
+	public TileInfo this[int i] {
+		get { return atlas[i]; }
+		set { atlas[i] = value; }
 	}
 
 	public int AddTile() {
