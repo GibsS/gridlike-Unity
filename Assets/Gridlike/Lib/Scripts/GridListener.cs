@@ -40,7 +40,7 @@ public abstract class GridListener : MonoBehaviour {
 	public virtual void OnSetState (int x, int y, Tile tile, float oldState1, float oldState2, float oldState3) {
 		OnSet (x, y, tile);
 	}
-	public virtual void OnSetId (int x, int y, Tile tile, int oldId, int oldSubId) {
+	public virtual void OnSetSubId (int x, int y, Tile tile, int oldSubId) {
 		OnSet (x, y, tile);
 	}
 

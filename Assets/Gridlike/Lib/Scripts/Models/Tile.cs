@@ -4,6 +4,8 @@ using UnityEngine;
 [Serializable]
 public class Tile {
 
+	public bool tileGOCenter;
+
 	public int id;
 	public int subId;
 

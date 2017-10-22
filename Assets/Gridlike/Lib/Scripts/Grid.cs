@@ -38,6 +38,7 @@ using UnityEngine;
 // TODO Create samples + test
 
 // BUG Allow regular gizmos to be accessed even when the grid is selected
+// TODO Handle subids
 
 [ExecuteInEditMode]
 [AddComponentMenu("Gridlike/Grid")]
@@ -51,7 +52,7 @@ public class Grid : MonoBehaviour {
 	[SerializeField] InfiniteGrid tiles;
 	[SerializeField] InfiniteTileGOGrid tileGOs;
 
-	[SerializeField] float _tileSize = 1;
+	[SerializeField] float _tileSize;
 
 	[HideInInspector] public TileAtlas atlas;
 
@@ -68,17 +69,17 @@ public class Grid : MonoBehaviour {
 
 	void Init() {
 		if (tiles == null) {
+			gridDelegate = GetComponent<GridDataDelegate> ();
 			gridListeners = new List<GridListener> ();
 
 			tiles = new InfiniteGrid (REGION_SIZE);
-
 			tileGOs = new InfiniteTileGOGrid (gameObject, REGION_SIZE);
+
+			_tileSize = 1;
 
 			foreach (GridListener listener in GetComponents<GridListener> ()) {
 				listener.ResetListener ();
 			}
-
-			gridDelegate = GetComponent<GridDataDelegate> ();
 		}
 	}
 
@@ -88,8 +89,6 @@ public class Grid : MonoBehaviour {
 		if(tiles != null) HideAll ();
 
 		tiles = null;
-
-		tileGOs = null;
 
 		Init ();
 	}
@@ -215,7 +214,6 @@ public class Grid : MonoBehaviour {
 						}
 					}
 
-					// CHANGE OF TILE INFO (TODO go through a pipeline)
 					tiles.SetRegion (X, Y, region);
 				}
 			}
@@ -243,7 +241,9 @@ public class Grid : MonoBehaviour {
 		FiniteGrid grid = GetRegion (X, Y);
 
 		if(grid != null) {
-			_HideRegion (X, Y, grid);
+			if (grid.presented) {
+				_HideRegion (X, Y, grid);
+			}
 
 			tiles.ClearRegion (X, Y);
 		}
@@ -290,7 +290,7 @@ public class Grid : MonoBehaviour {
 	public TileShape GetShape(int x, int y) {
 		Tile tile = tiles.Get (x, y) as Tile;
 
-		return tile == null ? TileShape.EMPTY : atlas.atlas[tile.id].shape;
+		return tile == null ? TileShape.EMPTY : atlas[tile.id].shape;
 	}
 	public int GetId(int x, int y) {
 		Tile tile = tiles.Get (x, y) as Tile;
@@ -303,65 +303,45 @@ public class Grid : MonoBehaviour {
 		return tile == null ? 0 : tile.subId;
 	}
 
-	/*public Component GetTileBehaviour(int x, int y, TileBehaviour otherBehaviour = null) {
-		if (otherBehaviour == null) {
-			Component c = tileGOs.Get (x, y);
+	public bool CanSet(int x, int y, int id) {
+		TileInfo info = atlas [id];
+		Tile tile = tiles.Get (x, y);
 
-			if (c != null) return c;
+		if (info.tileGO == null) {
+			return tile.tileGOCenter || tileGOs.GetTileGO (x, y) == null;
 		} else {
-			bool[,] area = otherBehaviour.area;
+			TileBehaviour behaviour = info.tileGO.GetComponent<TileBehaviour> ();
 
-			for (int i = 0; i < area.GetLength (0); i++) {
-				for (int j = 0; j < area.GetLength (1); j++) {
-					if (area [i, j]) {
-						Component c = tileGOs.Get (otherBehaviour.areaBottomLeftXOffset + x + i, otherBehaviour.areaBottomLeftYOffset + y + j);
-
-						if (c != null) return c;
-					}
-				}
+			if (behaviour == null) {
+				return tile.tileGOCenter || tileGOs.GetTileGO (x, y) == null;
+			} else {
+				return !tileGOs.HasOverlap (x, y, behaviour);
 			}
 		}
-
-		return null;
-	}*/
+	}
 		
 	public void Set(int x, int y, int id, int subid, int state1, int state2, int state3) {
 		FiniteGrid region;
 		Tile tile = GetOrCreate (x, y, out region);
 
-		_Set (tile, x, y, id, subid, state1, state2, state3);
-
-		if (region.presented) {
-			foreach (GridListener listener in gridListeners) {
-				listener.OnSet (x, y, tile);
-			}
-		}
+		_Set (tile, x, y, id, subid, state1, state2, state3, region.presented);
 	}
-	public void SetId(int x, int y, int id, int subId = int.MinValue) {
+	public void SetId(int x, int y, int id, int subId = -1) {
 		FiniteGrid region;
 		Tile tile = GetOrCreate (x, y, out region);
 
-		int oldId = tile.id;
-		int oldSubId = tile.subId;
-
-		_Set (tile, x, y, id, subId, tile.state1, tile.state2, tile.state3);
-
-		if (region.presented) {
-			foreach (GridListener listener in gridListeners) {
-				listener.OnSetId (x, y, tile, oldId, oldSubId);
-			}
-		}
+		_Set (tile, x, y, id, subId, tile.state1, tile.state2, tile.state3, region.presented);
 	}
 	public void SetSubId(int x, int y, int subId) {
 		FiniteGrid region;
 		Tile tile = GetOrCreate (x, y, out region);
-		int oldId = tile.id, oldSubId = tile.subId;
+		int oldSubId = tile.subId;
 
 		tile.subId = subId;
 
 		if (region.presented) {
 			foreach (GridListener listener in gridListeners) {
-				listener.OnSetId (x, y, tile, oldId, oldSubId);
+				listener.OnSetSubId (x, y, tile, oldSubId);
 			}
 		}
 	}
@@ -382,47 +362,91 @@ public class Grid : MonoBehaviour {
 		}
 	}
 	public void Clear(int x, int y) {
+		Tile tile = tiles.Get (x, y);
 
+		if (tile != null) {
+			_Clear (tile, x, y);
+		}
 	}
 
-	void _Set(Tile tile, int x, int y, int id, int subid, float state1, float state2, float state3) {
+	void _Clear(Tile tile, int x, int y) {
+		Component component = tileGOs.GetComponent (x, y);
+
+		if (component == null) {
+			tile.id = 0;
+			tile.subId = -1;
+
+			// POTENTIAL BUG : make sure it can be called even if we don't check it's presented
+			foreach (GridListener listener in gridListeners) {
+				listener.OnSet (x, y, tile);
+			}
+		} else {
+			if (tile.tileGOCenter) {
+				tileGOs.DestroyTileGO (x, y, (xx, yy) => {
+					Tile other = tiles.Get(xx, yy);
+
+					if(other != null) {
+						other.id = 0;
+						other.subId = -1;
+
+						// POTENTIAL BUG : make sure it can be called even if we don't check it's presented
+						foreach (GridListener listener in gridListeners) {
+							listener.OnSet (xx, yy, other);
+						}
+					}
+				});
+
+				tile.tileGOCenter = false;
+			} else {
+				Debug.LogError ("[Grid] Impossible to clear here: not center!");
+			}
+		}
+	}
+
+	void _Set(Tile tile, int x, int y, int id, int subid, float state1, float state2, float state3, bool show) {
 		TileInfo info = atlas.GetTile (id);
 
-		/*// CHECK IF THERE IS AN OVERLAP WITH THE ARE OF ANOTHER MULTI SQUARE TILE
-		*/
+		if (tile.tileGOCenter) {
+			_Clear (tile, x, y);
+		} else if (tileGOs.GetTileGO (x, y) != null) {
+			Debug.LogError ("[Grid] Impossible to place a tile here: a tile GO occupies this tile");
+			return;
+		}
 
-		// REMOVE PREVIOUS TILE BEHAVIOUR
+		if (show) {
+			if (info.tileGO != null) {
+				if (!tileGOs.TryCreateTileGO (info, x, y, (xx, yy) => {
+					Tile otherTile = tiles.Get (xx, yy);
 
-		// CREATE TILE GO AND SET OTHER TILES
-		/*if (info.tileGO != null) {
-			GameObject tileGO = Instantiate (info.tileGO);
+					if (otherTile != null) {
+						otherTile.id = 0;
+						otherTile.subId = -1;
 
-			tileGO.transform.SetParent (tileGOContainer.transform);
-			tileGO.transform.localPosition = new Vector2 (x + 0.5f, y + 0.5f);
-
-			TileBehaviour behaviour = tileGO.GetComponent<TileBehaviour> ();
-
-			if (behaviour == null) { 
-				tileGOs.Set (x, y, tileGO.transform);
-			} else {
-				tileGOs.Set (x, y, behaviour);
-			}
-
-			bool[,] area = behaviour.area;
-			for (int i = 0; i < area.GetLength (0); i++) {
-				for (int j = 0; j < area.GetLength (1); j++) {
-					if (i != behaviour.areaBottomLeftXOffset || j != behaviour.areaBottomLeftYOffset) {
-						Tile otherTile = GetOrCreate (behaviour.areaBottomLeftXOffset + x + i, behaviour.areaBottomLeftYOffset + y + j);
-
-						otherTile.id = -1;
-						otherTile.shape = TileShape.EMPTY;
+						foreach (GridListener listener in gridListeners) {
+							listener.OnSet (xx, yy, otherTile);
+						}
 					}
+				})) {
+					Debug.LogError ("[Grid] Impossible to place a tile GO here: a tile GO already occupies these tiles");
+					return;
+				}
+
+				tile.id = id;
+				tile.subId = subid;
+
+				tile.tileGOCenter = true;
+			} else {
+				tile.id = id;
+				tile.subId = subid;
+
+				foreach (GridListener listener in gridListeners) {
+					listener.OnSet (x, y, tile);
 				}
 			}
-		}*/
+		}
 
 		tile.id = id;
-		if (subid != int.MinValue) tile.subId = subid;
+		tile.subId = subid;
 
 		tile.state1 = state1;
 		tile.state2 = state2;
