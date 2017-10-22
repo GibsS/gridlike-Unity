@@ -122,7 +122,8 @@ public class GridEditor : Editor {
 
 		if(tile != null) {
 			Handles.Label (new Vector2 (position.x + 1.1f, position.y + 1), "id=" + tile.id, style);
-			Handles.Label (new Vector2 (position.x + 1.1f, position.y + 0.8f), "has component=" + (grid.GetTileComponent(mouseX, mouseY) != null), style);
+			Handles.Label (new Vector2 (position.x + 1.1f, position.y + 0.8f), "is tile go center=" + tile.tileGOCenter, style);
+			Handles.Label (new Vector2 (position.x + 1.1f, position.y + 0.6f), "has component=" + (grid.GetTileComponent(mouseX, mouseY) != null), style);
 		}
 	}
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 // 2: GO tile 2 days
 // TODO GO tile
 // TODO Add Clear function
-// TODO Remove sprite rendering on tile gos
+// TODO Remove sprite rendering on tile gos + collider
 
 // TODO In grid editor add show all option with a warning when too many regions are shown
 
@@ -255,11 +255,38 @@ public class Grid : MonoBehaviour {
 			listener.OnShowRegion (X, Y);
 		}
 
+		int bx = X * REGION_SIZE, by = Y * REGION_SIZE;
+
+		for (int i = 0; i < REGION_SIZE; i++) {
+			for (int j = 0; j < REGION_SIZE; j++) {
+				Tile tile = grid.Get (i, j);
+
+				if (tile != null && tile.tileGOCenter) {
+					if (!tileGOs.TryCreateTileGO (atlas [tile.id], bx + i, by + j, (xx, yy) => { })) {
+						tile.tileGOCenter = false;
+						tile.id = 0;
+					}
+				}
+			}
+		}
+
 		grid.presented = true;
 	}
 	void _HideRegion(int X, int Y, FiniteGrid grid) {
 		foreach (GridListener listener in gridListeners) {
 			listener.OnHideRegion (X, Y);
+		}
+
+		int bx = X * REGION_SIZE, by = Y * REGION_SIZE;
+
+		for (int i = 0; i < REGION_SIZE; i++) {
+			for (int j = 0; j < REGION_SIZE; j++) {
+				Tile tile = grid.Get (i, j);
+
+				if (tile != null && tile.tileGOCenter) {
+					tileGOs.DestroyTileGO (bx + i, by + j, (xx, yy) => { });
+				}
+			}
 		}
 
 		grid.presented = false;
@@ -450,6 +477,7 @@ public class Grid : MonoBehaviour {
 		}
 
 		tile.id = id;
+		tile.tileGOCenter = info.tileGO != null;
 		tile.subId = subid;
 
 		tile.state1 = state1;
