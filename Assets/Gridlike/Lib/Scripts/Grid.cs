@@ -2,16 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// TODO Remove sprite rendering on tile gos + collider
-
-// TODO In grid editor add show all option with a warning when too many regions are shown
-
+// LATER
 // 4: Increased data storage + editing 1 day
 // TODO Add user data 
+// 7: Grid updater 1 day
+// TODO Grid updater component
+
 
 // 5: Create edition palette 2 day
 // TODO Use the tilemap guys way of rendering a window
-// TODO Show hide a specific region
+// TODO [Tool] Show hide a specific region
+// TODO [Tool] Simple place new tile (can keep button down to place continuously)
+// TODO [Tool] Copy or drag an area from some place to another, event between grids
+// TODO [Tool] Show/Hide region
+// TODO [Tool] Remove/Add region (with a warning?)
+// TODO [Tool] Rebuild
+// TODO [Tool] Erase area
+
+// TODO In grid editor add show all option with a warning when too many regions are shown
 
 // 6: Factories + Singleton 1 day
 // TODO make grid factories (static in Grid)
@@ -19,9 +27,6 @@ using UnityEngine;
 // TODO make it possible to create a grid directly out of a small two dimensional array of tiles
 
 // TODO Add singleton behaviour to handle accessing list of currently present grids
-
-// 7: Grid updater 1 day
-// TODO Grid updater component
 
 // 8: Finish optimizing sprite renderer 2 day
 // TODO Add the drag and drop if possible
