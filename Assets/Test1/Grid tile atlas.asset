@@ -17,7 +17,9 @@ MonoBehaviour:
     shape: 0
     isSensor: 0
     layer: 0
-    sortingLayer: 
+    tag: 
+    isGODetached: 0
+    tileGO: {fileID: 0}
     idSpriteInfo:
       sprite: {fileID: 0}
       sprites: []
@@ -27,7 +29,9 @@ MonoBehaviour:
     shape: 1
     isSensor: 0
     layer: 0
-    sortingLayer: 
+    tag: 
+    isGODetached: 0
+    tileGO: {fileID: 0}
     idSpriteInfo:
       sprite: {fileID: 21300000, guid: 9286b42288e05bc4194fcab810c26766, type: 3}
       sprites: []
@@ -37,7 +41,9 @@ MonoBehaviour:
     shape: 2
     isSensor: 0
     layer: 0
-    sortingLayer: 
+    tag: 
+    isGODetached: 0
+    tileGO: {fileID: 0}
     idSpriteInfo:
       sprite: {fileID: 21300000, guid: 65d9e0a0a88a18d419ef3f77a219d7d4, type: 3}
       sprites: []
@@ -47,7 +53,9 @@ MonoBehaviour:
     shape: 4
     isSensor: 0
     layer: 0
-    sortingLayer: 
+    tag: 
+    isGODetached: 0
+    tileGO: {fileID: 0}
     idSpriteInfo:
       sprite: {fileID: 21300000, guid: d1887bcdb7d2de84eb0400ea2e6a9e38, type: 3}
       sprites: []
@@ -57,7 +65,9 @@ MonoBehaviour:
     shape: 5
     isSensor: 0
     layer: 0
-    sortingLayer: 
+    tag: 
+    isGODetached: 0
+    tileGO: {fileID: 0}
     idSpriteInfo:
       sprite: {fileID: 21300000, guid: 98ca52b88716a6344a14b4a70698e038, type: 3}
       sprites: []
@@ -67,7 +77,9 @@ MonoBehaviour:
     shape: 3
     isSensor: 0
     layer: 0
-    sortingLayer: 
+    tag: 
+    isGODetached: 0
+    tileGO: {fileID: 0}
     idSpriteInfo:
       sprite: {fileID: 21300000, guid: ab8a98fd7d6b7984b86d751b11c880c1, type: 3}
       sprites: []
@@ -77,7 +89,9 @@ MonoBehaviour:
     shape: 0
     isSensor: 0
     layer: 0
-    sortingLayer: 
+    tag: 
+    isGODetached: 0
+    tileGO: {fileID: 0}
     idSpriteInfo:
       sprite: {fileID: 0}
       sprites: []
@@ -87,7 +101,9 @@ MonoBehaviour:
     shape: 0
     isSensor: 0
     layer: 0
-    sortingLayer: 
+    tag: 
+    isGODetached: 0
+    tileGO: {fileID: 0}
     idSpriteInfo:
       sprite: {fileID: 0}
       sprites: []
@@ -97,7 +113,9 @@ MonoBehaviour:
     shape: 0
     isSensor: 0
     layer: 0
-    sortingLayer: 
+    tag: 
+    isGODetached: 0
+    tileGO: {fileID: 0}
     idSpriteInfo:
       sprite: {fileID: 0}
       sprites: []
@@ -107,7 +125,9 @@ MonoBehaviour:
     shape: 0
     isSensor: 0
     layer: 0
-    sortingLayer: 
+    tag: 
+    isGODetached: 0
+    tileGO: {fileID: 0}
     idSpriteInfo:
       sprite: {fileID: 0}
       sprites: []

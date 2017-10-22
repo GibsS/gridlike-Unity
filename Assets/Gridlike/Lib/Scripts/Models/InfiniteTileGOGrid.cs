@@ -146,9 +146,11 @@ public class InfiniteTileGOGrid {
 						}
 					}
 				}
+				componentGrid.Set ((component as TileBehaviour)._x, (component as TileBehaviour)._y, null);
+			} else {
+				componentGrid.Set (x, y, null);
 			}
 
-			componentGrid.Set ((component as TileBehaviour)._x, (component as TileBehaviour)._y, null);
 			Object.DestroyImmediate (component.gameObject);
 		}
 	}

@@ -78,7 +78,7 @@ public class GridEditor : Editor {
 		}
 
 		// TILE
-		// DrawTileInformation(grid, mouseX, mouseY);
+		DrawTileInformation(grid, mouseX, mouseY);
 
 		// BRUSH
 		if (Event.current.button == 0) {
@@ -103,7 +103,7 @@ public class GridEditor : Editor {
 			}
 		}
 
-		// SceneView.RepaintAll ();
+		SceneView.RepaintAll ();
 	}
 
 	void DrawTileInformation(Grid grid, int mouseX, int mouseY) {
@@ -118,6 +118,11 @@ public class GridEditor : Editor {
 
 		GUIStyle style = new GUIStyle();
 		style.normal.textColor = Color.white;
-		Handles.Label (new Vector2 (position.x + 1.1f, position.y + 1), "Hello", style);
+		Tile tile = grid.Get (mouseX, mouseY);
+
+		if(tile != null) {
+			Handles.Label (new Vector2 (position.x + 1.1f, position.y + 1), "id=" + tile.id, style);
+			Handles.Label (new Vector2 (position.x + 1.1f, position.y + 0.8f), "has component=" + (grid.GetTileComponent(mouseX, mouseY) != null), style);
+		}
 	}
 }

@@ -5,6 +5,7 @@ using UnityEngine;
 // 2: GO tile 2 days
 // TODO GO tile
 // TODO Add Clear function
+// TODO Remove sprite rendering on tile gos
 
 // TODO In grid editor add show all option with a warning when too many regions are shown
 
@@ -301,6 +302,9 @@ public class Grid : MonoBehaviour {
 		Tile tile = tiles.Get (x, y) as Tile;
 
 		return tile == null ? 0 : tile.subId;
+	}
+	public Component GetTileComponent(int x, int y) {
+		return tileGOs.GetComponent (x, y);
 	}
 
 	public bool CanSet(int x, int y, int id) {
