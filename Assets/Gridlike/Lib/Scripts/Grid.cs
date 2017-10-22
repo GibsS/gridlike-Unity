@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // LATER
-// 4: Increased data storage + editing 1 day
-// TODO Add user data 
 // 7: Grid updater 1 day
 // TODO Grid updater component
 
@@ -18,6 +16,8 @@ using UnityEngine;
 // TODO [Tool] Remove/Add region (with a warning?)
 // TODO [Tool] Rebuild
 // TODO [Tool] Erase area
+// TODO [Tool] Inspector
+// TODO [Tool] Modifier of dictionary fields (maybe in inspector?)  
 
 // TODO In grid editor add show all option with a warning when too many regions are shown
 
