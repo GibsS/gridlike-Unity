@@ -50,10 +50,14 @@ public class GridTileAtlasEditor : Editor {
 		if (info.isRevealed) {
 			tile.name = EditorGUILayout.TextField ("Name", tile.name);
 
-			tile.shape = (TileShape)EditorGUILayout.EnumPopup ("Shape", tile.shape);
-			tile.isSensor = EditorGUILayout.Toggle ("Is sensor?", tile.isSensor);
-			tile.layer = EditorGUILayout.LayerField ("Layer", tile.layer);
-			tile.tag = EditorGUILayout.TagField ("Tag", tile.tag);
+			if (tile.tileGO == null) {
+				tile.shape = (TileShape)EditorGUILayout.EnumPopup ("Shape", tile.shape);
+				tile.isSensor = EditorGUILayout.Toggle ("Is sensor?", tile.isSensor);
+				tile.layer = EditorGUILayout.LayerField ("Layer", tile.layer);
+				tile.tag = EditorGUILayout.TagField ("Tag", tile.tag);
+			} else {
+				tile.shape = TileShape.EMPTY;
+			}
 
 			tile.tileGO = EditorGUILayout.ObjectField ("Tile GO", tile.tileGO, typeof(GameObject), false) as GameObject;
 			if (tile.tileGO != null) {
@@ -61,7 +65,7 @@ public class GridTileAtlasEditor : Editor {
 			}
 
 			if (TileShapeHelper.IsTriangle (tile.shape)) {
-
+				// TODO
 			} else {
 				tile.idSpriteInfo.sprite = (Sprite)EditorGUILayout.ObjectField("Sprite", tile.idSpriteInfo.sprite, typeof(Sprite), false);
 			}

@@ -2,9 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// 2: GO tile 2 days
-// TODO GO tile
-// TODO Add Clear function
 // TODO Remove sprite rendering on tile gos + collider
 
 // TODO In grid editor add show all option with a warning when too many regions are shown
