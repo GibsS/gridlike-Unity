@@ -1,19 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ShowRegionTool : MonoBehaviour
-{
+public class ShowRegionTool : GridTool {
 
-	// Use this for initialization
-	void Start ()
-	{
-	
+	public override bool UseWindow () {
+		return false;
 	}
-	
-	// Update is called once per frame
-	void Update ()
-	{
-	
+	public override string Name() {
+		return "show region";
+	}
+
+	public override void OnMouse (){
+		grid.PresentContainingRegion (mouseX, mouseY);
 	}
 }
-

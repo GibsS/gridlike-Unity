@@ -2,17 +2,12 @@
 using System.Collections;
 
 // TODO [Tool] Copy or drag an area from some place to another, event between grids
-public class AreaTool : MonoBehaviour {
+public class AreaTool : GridTool {
 
-	// Use this for initialization
-	void Start ()
-	{
-	
+	public override bool UseWindow () {
+		return true;
 	}
-	
-	// Update is called once per frame
-	void Update ()
-	{
-	
+	public override string Name() {
+		return "select";
 	}
 }

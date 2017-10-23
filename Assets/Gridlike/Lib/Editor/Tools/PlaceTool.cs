@@ -2,11 +2,17 @@
 using System.Collections;
 using UnityEditor;
 
-// TODO Add area setting
 public class PlaceTool : GridTool {
 
 	int radius = 1;
 	int id = 1;
+
+	public override bool UseWindow() {
+		return true;
+	}
+	public override string Name() {
+		return "place";
+	}
 
 	public override void Window() {
 		GUILayout.BeginArea(new Rect(20, 60, 300, 60));
@@ -29,13 +35,6 @@ public class PlaceTool : GridTool {
 		EditorGUILayout.EndVertical ();
 
 		GUILayout.EndArea();
-	}
-
-	public override bool UseWindow() {
-		return true;
-	}
-	public override string Name() {
-		return "place";
 	}
 
 	public override void OnMouse() {

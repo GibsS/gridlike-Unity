@@ -1,19 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class EraseRegionTool : MonoBehaviour
-{
+// TODO
+public class EraseRegionTool : GridTool {
 
-	// Use this for initialization
-	void Start ()
-	{
-	
+	public override bool UseWindow () {
+		return true;
 	}
-	
-	// Update is called once per frame
-	void Update ()
-	{
-	
+	public override string Name() {
+		return "erase region";
 	}
 }
-
