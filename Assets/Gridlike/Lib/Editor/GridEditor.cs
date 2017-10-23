@@ -141,33 +141,10 @@ public class GridEditor : Editor {
 		GUILayout.EndArea();
 
 		// TOOL WINDOW
-		if (tool.UseWindow ()) {
-			tool.Window ();
-		}
+		if (tool.UseWindow ()) tool.Window ();
 
 		Handles.EndGUI();
 
 		SceneView.RepaintAll ();
-	}
-
-	void DrawTileInformation(Grid grid, int mouseX, int mouseY) {
-		Vector2 position = grid.transform.TransformPoint(new Vector2(mouseX * grid.tileSize, mouseY * grid.tileSize));
-
-		Handles.color = Color.white;
-
-		Handles.DrawLine (new Vector2(position.x + 0.1f, position.y + 0.1f), new Vector2(position.x + 0.9f, position.y + 0.1f));
-		Handles.DrawLine (new Vector2(position.x + 0.9f, position.y + 0.1f), new Vector2(position.x + 0.9f, position.y + 0.9f));
-		Handles.DrawLine (new Vector2(position.x + 0.9f, position.y + 0.9f), new Vector2(position.x + 0.1f, position.y + 0.9f));
-		Handles.DrawLine (new Vector2(position.x + 0.1f, position.y + 0.9f), new Vector2(position.x + 0.1f, position.y + 0.1f));
-
-		GUIStyle style = new GUIStyle();
-		style.normal.textColor = Color.white;
-		Tile tile = grid.Get (mouseX, mouseY);
-
-		if(tile != null) {
-			Handles.Label (new Vector2 (position.x + 1.1f, position.y + 1), "id=" + tile.id, style);
-			Handles.Label (new Vector2 (position.x + 1.1f, position.y + 0.8f), "is tile go center=" + tile.tileGOCenter, style);
-			Handles.Label (new Vector2 (position.x + 1.1f, position.y + 0.6f), "has component=" + (grid.GetTileComponent(mouseX, mouseY) != null), style);
-		}
 	}
 }

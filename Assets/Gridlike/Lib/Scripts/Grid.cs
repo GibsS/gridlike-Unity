@@ -7,7 +7,6 @@ using UnityEngine;
 // TODO Grid updater component
 
 // 5: Create edition palette 2 day
-
 // TODO In grid editor add show all option with a warning when too many regions are shown
 
 // 6: Factories + Singleton 1 day
