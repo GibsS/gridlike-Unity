@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System;
 
 // TODO
 // TODO [Tool] Modifier of dictionary fields (maybe in inspector?)  
+[Serializable]
 public class InspectorTool : GridTool {
 
 	public override bool UseWindow () {

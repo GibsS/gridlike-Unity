@@ -229,6 +229,9 @@ public class Grid : MonoBehaviour {
 			UnloadRegion (X, Y);
 		}
 	}
+	public void UnloadContainingRegion(int x, int y) {
+		UnloadRegion(Mathf.FloorToInt(x / (float) Grid.REGION_SIZE), Mathf.FloorToInt(y / (float) Grid.REGION_SIZE));
+	}
 	public void UnloadRegion(int X, int Y) {
 		FiniteGrid grid = GetRegion (X, Y);
 

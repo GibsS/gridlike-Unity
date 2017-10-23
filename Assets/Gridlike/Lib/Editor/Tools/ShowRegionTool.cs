@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System;
 
+[Serializable]
 public class ShowRegionTool : GridTool {
 
 	public override bool UseWindow () {

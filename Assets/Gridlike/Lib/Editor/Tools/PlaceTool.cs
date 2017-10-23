@@ -1,11 +1,12 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System;
 using UnityEditor;
 
+[Serializable]
 public class PlaceTool : GridTool {
 
-	int radius = 1;
-	int id = 1;
+	[SerializeField] int radius = 1;
+	[SerializeField] int id = 1;
 
 	public override bool UseWindow() {
 		return true;

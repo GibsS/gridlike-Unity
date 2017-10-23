@@ -1,20 +1,14 @@
 ﻿using UnityEditor;
 using UnityEngine;
+using System;
 
 [CustomEditor(typeof(Grid))]
+// TODO manage to serialize
 public class GridEditor : Editor {
 
-	public int currentTool = 0;
+	[SerializeField] public int currentTool = 0;
 
-	public GridTool[] tools =  {
-		new PlaceTool(),
-		new EraseTool(),
-		new DragTool(),
-		new InspectorTool(),
-		new ShowRegionTool(),
-		new HideRegionTool(),
-		new EraseRegionTool()
-	};
+	[SerializeField] public GridTool[] tools;
 
 	void OnChangePlayMode() {
 		Grid grid = target as Grid;
@@ -27,6 +21,19 @@ public class GridEditor : Editor {
 
 	void OnEnable() {
 		EditorApplication.playmodeStateChanged += OnChangePlayMode;
+
+		if(tools == null) {
+			Debug.Log ("reset");
+			tools = new GridTool[] {
+				new PlaceTool(),
+				new EraseTool(),
+				new DragTool(),
+				new InspectorTool(),
+				new ShowRegionTool(),
+				new HideRegionTool(),
+				new EraseRegionTool()
+			};
+		}
 	}
 
 	public override void OnInspectorGUI() {

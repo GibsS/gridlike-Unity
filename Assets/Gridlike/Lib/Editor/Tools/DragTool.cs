@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System;
 
 // TODO
+[Serializable]
 public class DragTool : GridTool {
 
 	public override bool UseWindow () {

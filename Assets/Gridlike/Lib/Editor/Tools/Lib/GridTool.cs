@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using UnityEditor;
-using System.Collections;
+using System;
 
-public abstract class GridTool {
+[Serializable]
+public class GridTool {
 
 	public Grid _grid;
 
@@ -27,8 +28,8 @@ public abstract class GridTool {
 		}
 	}
 
-	public abstract bool UseWindow ();
-	public abstract string Name();
+	public virtual bool UseWindow () { return false; }
+	public virtual string Name() { return "change"; }
 
 	public virtual void Window () { }
 

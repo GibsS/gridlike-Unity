@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using UnityEditor;
-using System.Collections;
+using System;
 
+[Serializable]
 public class EraseTool : GridTool {
 
-	int radius;
+	[SerializeField] int radius;
 
 	public override bool UseWindow() {
 		return true;
