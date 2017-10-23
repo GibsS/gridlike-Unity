@@ -73,8 +73,6 @@ public class Grid : MonoBehaviour {
 				listener.ResetListener ();
 			}
 		}
-
-		Debug.Log ("tile GOs:" + tileGOs);
 	}
 
 	#region UNITY EVENTS

@@ -114,17 +114,14 @@ public class GridEditor : Editor {
 		Handles.BeginGUI();
 
 		// TOOL LIST
-		GUILayout.BeginArea(new Rect(20, 20, 10 + 70 * tools.Length, 80));
+		GUILayout.BeginArea(new Rect(20, 20, 10 + 80 * tools.Length, 80));
 
 		var rect = EditorGUILayout.BeginHorizontal ();
-
-		GUI.color = Color.white;
-		GUI.Box(rect, GUIContent.none);
 
 		for (int i = 0; i < tools.Length; i++) {
 			GridTool optionTool = tools[i];
 
-			if (GUILayout.Button (optionTool.Name ())) {
+			if (GUI.Button (new Rect(60 * i, 0, 50, 20), optionTool.Name ())) {
 				currentTool = i;
 			}
 		}
