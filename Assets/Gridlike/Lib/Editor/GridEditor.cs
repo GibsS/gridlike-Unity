@@ -4,6 +4,15 @@ using UnityEngine;
 [CustomEditor(typeof(Grid))]
 public class GridEditor : Editor {
 
+	public int currentTool = 0;
+
+	public GridTool[] tools =  {
+		new PlaceTool(),
+		new EraseTool(),
+		//new DragTool(),
+		//new InspectorTool(),
+	};
+
 	void OnChangePlayMode() {
 		Grid grid = target as Grid;
 
@@ -59,10 +68,6 @@ public class GridEditor : Editor {
 	void OnSceneGUI() {
 		Grid grid = target as Grid;
 
-		int mouseX, mouseY;
-
-		grid.WorldToGrid(HandleUtility.GUIPointToWorldRay (Event.current.mousePosition).origin, out mouseX, out mouseY);
-
 		// REGIONS
 		foreach (FiniteGrid region in grid.GetRegions()) {
 			float size = Grid.REGION_SIZE * grid.tileSize;
@@ -78,22 +83,24 @@ public class GridEditor : Editor {
 		}
 
 		// TILE
-		DrawTileInformation(grid, mouseX, mouseY);
+		//DrawTileInformation(grid, mouseX, mouseY);
 
-		// BRUSH
+		GridTool tool = tools [currentTool];
+		tool._grid = grid;
+
+		// TOOL INPUT
 		if (Event.current.button == 0) {
 			switch (Event.current.type) {
-				/*case EventType.mouseDown: {
-					Event.current.Use ();
+				case EventType.mouseDown: {
+					tool.OnMouseDown ();
 					break;
-				}*/
+				}
+				case EventType.mouseDrag: {
+					tool.OnMouse ();
+					break;
+				}
 				case EventType.mouseUp: {
-					GridEditorWindow window = GridEditorWindow.ShowWindow ();
-					grid.Set (mouseX, mouseY, window.id, window.subid, window.state1, window.state2, window.state3);
-
-					grid.PresentContainingRegion (mouseX, mouseY);
-
-					Event.current.Use ();
+					tool.OnMouseUp ();
 					break;
 				}
 			}
@@ -102,6 +109,36 @@ public class GridEditor : Editor {
 				HandleUtility.AddDefaultControl(GUIUtility.GetControlID(FocusType.Passive));
 			}
 		}
+
+
+		Handles.BeginGUI();
+
+		// TOOL LIST
+		GUILayout.BeginArea(new Rect(20, 20, 10 + 70 * tools.Length, 80));
+
+		var rect = EditorGUILayout.BeginHorizontal ();
+
+		GUI.color = Color.white;
+		GUI.Box(rect, GUIContent.none);
+
+		for (int i = 0; i < tools.Length; i++) {
+			GridTool optionTool = tools[i];
+
+			if (GUILayout.Button (optionTool.Name ())) {
+				currentTool = i;
+			}
+		}
+
+		GUILayout.EndHorizontal ();
+
+		GUILayout.EndArea();
+
+		// TOOL WINDOW
+		if (tool.UseWindow ()) {
+			tool.Window ();
+		}
+
+		Handles.EndGUI();
 
 		SceneView.RepaintAll ();
 	}

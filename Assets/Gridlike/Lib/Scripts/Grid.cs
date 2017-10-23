@@ -6,18 +6,7 @@ using UnityEngine;
 // 7: Grid updater 1 day
 // TODO Grid updater component
 
-
 // 5: Create edition palette 2 day
-// TODO Use the tilemap guys way of rendering a window
-// TODO [Tool] Show hide a specific region
-// TODO [Tool] Simple place new tile (can keep button down to place continuously)
-// TODO [Tool] Copy or drag an area from some place to another, event between grids
-// TODO [Tool] Show/Hide region
-// TODO [Tool] Remove/Add region (with a warning?)
-// TODO [Tool] Rebuild
-// TODO [Tool] Erase area
-// TODO [Tool] Inspector
-// TODO [Tool] Modifier of dictionary fields (maybe in inspector?)  
 
 // TODO In grid editor add show all option with a warning when too many regions are shown
 
@@ -84,6 +73,8 @@ public class Grid : MonoBehaviour {
 				listener.ResetListener ();
 			}
 		}
+
+		Debug.Log ("tile GOs:" + tileGOs);
 	}
 
 	#region UNITY EVENTS
@@ -340,6 +331,8 @@ public class Grid : MonoBehaviour {
 		TileInfo info = atlas [id];
 		Tile tile = tiles.Get (x, y);
 
+		if (tile == null) return true;
+
 		if (info.tileGO == null) {
 			return tile.tileGOCenter || tileGOs.GetTileGO (x, y) == null;
 		} else {
@@ -414,24 +407,29 @@ public class Grid : MonoBehaviour {
 				listener.OnSet (x, y, tile);
 			}
 		} else {
-			if (tile.tileGOCenter) {
-				tileGOs.DestroyTileGO (x, y, (xx, yy) => {
-					Tile other = tiles.Get(xx, yy);
+			if (component is TileBehaviour) {
+				x = (component as TileBehaviour).x;
+				y = (component as TileBehaviour).y; 
+			}
 
-					if(other != null) {
-						other.id = 0;
-						other.subId = -1;
+			tileGOs.DestroyTileGO (x, y, (xx, yy) => {
+				Tile other = tiles.Get(xx, yy);
 
-						// POTENTIAL BUG : make sure it can be called even if we don't check it's presented
-						foreach (GridListener listener in gridListeners) {
-							listener.OnSet (xx, yy, other);
-						}
+				if(other != null) {
+					other.id = 0;
+					other.subId = -1;
+
+					// POTENTIAL BUG : make sure it can be called even if we don't check it's presented
+					foreach (GridListener listener in gridListeners) {
+						listener.OnSet (xx, yy, other);
 					}
-				});
+				}
+			});
 
+			if (tile.tileGOCenter) {
 				tile.tileGOCenter = false;
 			} else {
-				Debug.LogError ("[Grid] Impossible to clear here: not center!");
+				Get (x, y).tileGOCenter = false;
 			}
 		}
 	}
