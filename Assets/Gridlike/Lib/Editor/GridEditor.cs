@@ -27,7 +27,6 @@ public class GridEditor : Editor {
 			tools = new GridTool[] {
 				new PlaceTool(),
 				new EraseTool(),
-				new DragTool(),
 				new InspectorTool(),
 				new ShowRegionTool(),
 				new HideRegionTool(),
@@ -109,9 +108,11 @@ public class GridEditor : Editor {
 		for (int i = 0; i < tools.Length; i++) {
 			GridTool optionTool = tools[i];
 
+			GUI.color = i == currentTool ? Color.cyan : Color.white;
 			if (GUI.Button (new Rect(85 * i, 0, 80, 20), optionTool.Name ())) {
 				currentTool = i;
 			}
+			GUI.color = Color.white;
 		}
 
 		GUILayout.EndHorizontal ();
@@ -120,7 +121,7 @@ public class GridEditor : Editor {
 
 		// TOOL WINDOW
 		if (tool.UseWindow ()) {
-			GUILayout.BeginArea(new Rect(20, 60, 300, tool.WindowHeight()));
+			GUILayout.BeginArea(new Rect(20, 60, 450, tool.WindowHeight()));
 
 			var rect1 = EditorGUILayout.BeginVertical ();
 
@@ -129,7 +130,7 @@ public class GridEditor : Editor {
 
 			tool.Window ();
 
-			sendInput = !rect.Contains (Event.current.mousePosition);
+			//sendInput = !rect.Contains (Event.current.mousePosition);
 
 			EditorGUILayout.EndVertical ();
 

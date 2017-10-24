@@ -18,7 +18,17 @@ public class EraseTool : GridTool {
 		radius = Mathf.Max(1, EditorGUILayout.IntField ("radius", radius));
 	}
 
+	public override void OnMouseDown() {
+		Erase ();
+	}
+	public override void OnMouseUp() {
+		Erase ();
+	}
 	public override void OnMouse() {
+		Erase ();
+	}
+
+	void Erase() {
 		int x = mouseX, y = mouseY;
 		int r = radius - 1;
 

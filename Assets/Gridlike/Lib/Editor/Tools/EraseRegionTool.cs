@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System;
 
-// TODO
 [Serializable]
 public class EraseRegionTool : GridTool {
 

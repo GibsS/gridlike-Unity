@@ -28,7 +28,17 @@ public class PlaceTool : GridTool {
 		}
 	}
 
+	public override void OnMouseDown() {
+		Place ();
+	}
+	public override void OnMouseUp() {
+		Place ();
+	}
 	public override void OnMouse() {
+		Place ();
+	}
+
+	void Place() {
 		int x = mouseX, y = mouseY;
 
 		bool hasPlaced = false;

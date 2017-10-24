@@ -17,6 +17,10 @@ public class TileDictionary {
 		this.values = new List<string>(values);
 	}
 
+	public int Count { get { return values.Count; } }
+	public int KeyCount { get { return keys.Count; } }
+	public int ValueCount { get { return values.Count; } }
+
 	public void Remove(string key) {
 		for (int i = 0, len = keys.Count; i < len; i++) {
 			if (keys [i] == key) {
@@ -29,8 +33,10 @@ public class TileDictionary {
 	public void Add(string key, string value) {
 		int ind = _Get (key);
 
-		if (ind == -1) values.Add (value);
-		else values [ind] = value;
+		if (ind == -1) {
+			keys.Add (key);
+			values.Add (value);
+		} else values [ind] = value;
 	}
 	public string Get(string key) {
 		int ind = _Get (key);
@@ -46,6 +52,19 @@ public class TileDictionary {
 		}
 
 		return -1;
+	}
+
+	public string GetKey(int i) {
+		return keys [i];
+	}
+	public string GetValue(int i) {
+		return values [i];
+	}
+	public void SetKey(int i, string key) {
+		keys [i] = key;
+	}
+	public void SetValue(int i, string key) {
+		values [i] = key;
 	}
 
 	public TileDictionary Clone() {

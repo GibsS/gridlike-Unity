@@ -398,6 +398,8 @@ public class Grid : MonoBehaviour {
 	void _Clear(Tile tile, int x, int y) {
 		Component component = tileGOs.GetComponent (x, y);
 
+		tile.dictionary = null;
+
 		if (component == null) {
 			tile.id = 0;
 			tile.subId = -1;
