@@ -23,7 +23,6 @@ public class GridEditor : Editor {
 		EditorApplication.playmodeStateChanged += OnChangePlayMode;
 
 		if(tools == null) {
-			Debug.Log ("reset");
 			tools = new GridTool[] {
 				new PlaceTool(),
 				new EraseTool(),

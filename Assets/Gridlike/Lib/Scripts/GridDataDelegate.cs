@@ -35,7 +35,6 @@ public abstract class GridDataDelegate : MonoBehaviour {
 			Grid grid = GetComponent<Grid> ();
 
 			if (grid == null) {
-				// TODO better warning (in inspector)
 				Debug.LogWarning ("No Grid on this game object");
 			} else {
 				this.grid = grid;

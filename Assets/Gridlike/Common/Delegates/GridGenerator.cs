@@ -83,7 +83,6 @@ public class GridGenerator : GridDataDelegate {
 		this.algorithm = algorithm;
 	}
 
-	// TODO handle dataPresent
 	public override FiniteGrid LoadTiles (int regionX, int regionY) {
 		if (useSave && gridSerializer.IsRegionSaved(regionX, regionY)) {
 			FiniteGrid grid = gridSerializer.LoadGrid (regionX, regionY);
