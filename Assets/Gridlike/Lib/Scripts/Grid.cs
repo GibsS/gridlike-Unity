@@ -6,9 +6,6 @@ using UnityEngine;
 // 7: Grid updater 1 day
 // TODO Grid updater component
 
-// 5: Create edition palette 2 day
-// TODO In grid editor add show all option with a warning when too many regions are shown
-
 // 6: Factories + Singleton 1 day
 // TODO make grid factories (static in Grid)
 // TODO make sure grids can be created from code easily (define stories)
@@ -30,6 +27,9 @@ using UnityEngine;
 
 // BUG Allow regular gizmos to be accessed even when the grid is selected
 // TODO Handle subids
+
+// BUG Deactivate events mouse events when mouse is over scene GUI elements
+// TWEEK make grid tool window look better than it does (copy grid tile map guy)
 
 [ExecuteInEditMode]
 [AddComponentMenu("Gridlike/Grid")]
