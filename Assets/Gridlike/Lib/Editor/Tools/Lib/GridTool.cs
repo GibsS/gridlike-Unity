@@ -3,7 +3,7 @@ using UnityEditor;
 using System;
 
 [Serializable]
-public class GridTool {
+public abstract class GridTool {
 
 	public Grid _grid;
 
@@ -48,10 +48,13 @@ public class GridTool {
 		}
 	}
 
+	public virtual int WindowHeight() { return 300; }
 	public virtual bool UseWindow () { return false; }
 	public virtual string Name() { return "change"; }
 
 	public virtual void Window () { }
+
+	public virtual void Update() { }
 
 	public virtual void OnMouseDown() { }
 	public virtual void OnMouse() { }

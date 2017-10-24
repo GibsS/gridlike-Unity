@@ -346,7 +346,7 @@ public class Grid : MonoBehaviour {
 		}
 	}
 		
-	public void Set(int x, int y, int id, int subid, int state1, int state2, int state3) {
+	public void Set(int x, int y, int id, int subid, float state1, float state2, float state3) {
 		FiniteGrid region;
 		Tile tile = GetOrCreate (x, y, out region);
 

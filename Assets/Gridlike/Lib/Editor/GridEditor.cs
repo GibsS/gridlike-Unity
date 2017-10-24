@@ -31,7 +31,8 @@ public class GridEditor : Editor {
 				new InspectorTool(),
 				new ShowRegionTool(),
 				new HideRegionTool(),
-				new EraseRegionTool()
+				new EraseRegionTool(),
+				new AreaTool()
 			};
 		}
 	}
@@ -92,36 +93,13 @@ public class GridEditor : Editor {
 			Handles.DrawLine (new Vector2(bx + 0.2f, by + size - 0.2f), new Vector2(bx + 0.2f, by + 0.2f));
 		}
 
-		// TILE
-		//DrawTileInformation(grid, mouseX, mouseY);
+		Handles.BeginGUI();
 
+		// TOOL
 		GridTool tool = tools [currentTool];
 		tool._grid = grid;
 
-		// TOOL INPUT
-		if (Event.current.button == 0) {
-			switch (Event.current.type) {
-				case EventType.mouseDown: {
-					tool.OnMouseDown ();
-					break;
-				}
-				case EventType.mouseDrag: {
-					tool.OnMouse ();
-					break;
-				}
-				case EventType.mouseUp: {
-					tool.OnMouseUp ();
-					break;
-				}
-			}
-
-			if (Event.current.type == EventType.Layout) {
-				HandleUtility.AddDefaultControl(GUIUtility.GetControlID(FocusType.Passive));
-			}
-		}
-
-
-		Handles.BeginGUI();
+		bool sendInput = true;
 
 		// TOOL LIST
 		GUILayout.BeginArea(new Rect(20, 20, 10 + 95 * tools.Length, 80));
@@ -141,9 +119,53 @@ public class GridEditor : Editor {
 		GUILayout.EndArea();
 
 		// TOOL WINDOW
-		if (tool.UseWindow ()) tool.Window ();
+		if (tool.UseWindow ()) {
+			GUILayout.BeginArea(new Rect(20, 60, 300, tool.WindowHeight()));
+
+			var rect1 = EditorGUILayout.BeginVertical ();
+
+			GUI.color = Color.white;
+			GUI.Box(rect1, GUIContent.none);
+
+			tool.Window ();
+
+			sendInput = !rect.Contains (Event.current.mousePosition);
+
+			EditorGUILayout.EndVertical ();
+
+			GUILayout.EndArea();
+		}
 
 		Handles.EndGUI();
+
+		tool.Update ();
+
+		// TOOL INPUT
+		if (Event.current.button == 0) {
+			if (sendInput) {
+				switch (Event.current.type) {
+				case EventType.mouseDown:
+					{
+						tool.OnMouseDown ();
+						break;
+					}
+				case EventType.mouseDrag:
+					{
+						tool.OnMouse ();
+						break;
+					}
+				case EventType.mouseUp:
+					{
+						tool.OnMouseUp ();
+						break;
+					}
+				}
+			}
+
+			if (Event.current.type == EventType.Layout) {
+				HandleUtility.AddDefaultControl(GUIUtility.GetControlID(FocusType.Passive));
+			}
+		}
 
 		SceneView.RepaintAll ();
 	}

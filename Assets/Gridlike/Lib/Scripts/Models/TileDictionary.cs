@@ -12,6 +12,10 @@ public class TileDictionary {
 		keys = new List<string> ();
 		values = new List<string> ();
 	}
+	public TileDictionary(List<string> keys, List<string> values) {
+		this.keys = new List<string>(keys);
+		this.values = new List<string>(values);
+	}
 
 	public void Remove(string key) {
 		for (int i = 0, len = keys.Count; i < len; i++) {
@@ -42,6 +46,10 @@ public class TileDictionary {
 		}
 
 		return -1;
+	}
+
+	public TileDictionary Clone() {
+		return new TileDictionary (keys, values);
 	}
 }
 

@@ -15,18 +15,7 @@ public class EraseTool : GridTool {
 	}
 
 	public override void Window() {
-		GUILayout.BeginArea(new Rect(20, 60, 300, 60));
-
-		var rect = EditorGUILayout.BeginVertical ();
-
-		GUI.color = Color.white;
-		GUI.Box(rect, GUIContent.none);
-
 		radius = Mathf.Max(1, EditorGUILayout.IntField ("radius", radius));
-
-		EditorGUILayout.EndVertical ();
-
-		GUILayout.EndArea();
 	}
 
 	public override void OnMouse() {
