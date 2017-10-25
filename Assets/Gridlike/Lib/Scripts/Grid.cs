@@ -29,13 +29,16 @@ using UnityEngine;
 // TODO Handle subids
 
 // BUG Deactivate events mouse events when mouse is over scene GUI elements
-// TWEEK make grid tool window look better than it does (copy grid tile map guy)
+// TWEAK make grid tool window look better than it does (copy grid tile map guy)
+// TWEAK Deactivate a listener with enable/disable of the component or a field
 
 [ExecuteInEditMode]
 [AddComponentMenu("Gridlike/Grid")]
 public class Grid : MonoBehaviour {
 
 	public const int REGION_SIZE = 50;
+
+	static List<Grid> grids;
 
 	[SerializeField] GridDataDelegate gridDelegate;
 	[SerializeField] List<GridListener> gridListeners;
@@ -84,6 +87,9 @@ public class Grid : MonoBehaviour {
 		Init ();
 	}
 	void Awake() {
+		if (grids == null) grids = new List<Grid> ();
+		grids.Add (this);
+
 		Init ();
 	}
 
@@ -95,6 +101,8 @@ public class Grid : MonoBehaviour {
 		if (Application.isPlaying && saveOnClose) {
 			SaveAllRegion ();
 		}
+
+		if (grids != null) grids.Remove (this);
 	}
 
 	void Update() {
@@ -534,6 +542,50 @@ public class Grid : MonoBehaviour {
 	public void TransformToGrid(Vector2 position, out int x, out int y) {
 		x = Mathf.FloorToInt(((float)position.x) / tileSize);
 		y = Mathf.FloorToInt(((float)position.y) / tileSize);
+	}
+
+	#endregion
+
+	#region GRID FACTORIES
+
+	public static Grid CreateGrid(Vector2 position, TileAtlas atlas, bool useRenderer = true, bool useCollider = true) {
+
+	}
+	public static Grid CreateGrid(Vector2 position, TileAtlas atlas, Tile[,] tiles, bool useRenderer = true, bool useCollider = true) {
+
+	}
+
+	public static Grid CreateSaveGrid(Vector2 position, TileAtlas atlas, string path, bool usePersistentPath = true, bool useRenderer = true, bool useCollider = true) {
+
+	}
+	public static Grid CreateSaveGrid(Vector2 position, TileAtlas atlas, Tile[,] tiles, string path, bool usePersistentPath = true, bool useRenderer = true, bool useCollider = true) {
+
+	}
+
+	public static Grid CreateProceduralGrid<A>(Vector2 position, TileAtlas atlas, string path, bool usePersistentPath = true, bool useRenderer = true, bool useCollider = true) where A : GridGeneratorAlgorithm {
+
+	}
+	public static Grid CreateProceduralGrid<A>(Vector2 position, TileAtlas atlas, Tile[,] tiles, string path, bool usePersistentPath = true, bool useRenderer = true, bool useCollider = true) where A : GridGeneratorAlgorithm {
+
+	}
+
+	#endregion
+
+	#region GRID QUERY
+
+	public static List<Grid> GetAllGrids() {
+		return grids;
+	}
+
+	public static List<Grid> QueryRect(Rect rect) {
+
+	}
+
+	public static Grid QueryPoint(Vector2 point, out int x, out int y) {
+
+	}
+	public static Grid QueryClosestPoint(Vector2 point, out int x, out int y) {
+
 	}
 
 	#endregion
