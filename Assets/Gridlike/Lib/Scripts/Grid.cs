@@ -309,6 +309,22 @@ public class Grid : MonoBehaviour {
 		return tiles.GetRegions ();
 	}
 
+	public void SetRegion(int X, int Y, FiniteGrid region, bool present = true) {
+		FiniteGrid oldRegion = tiles.GetRegion(X, Y);
+
+		if (oldRegion != null && oldRegion.presented) {
+			_HideRegion (X, Y, oldRegion);
+		}
+
+		tiles.SetRegion (X, Y, region);
+		region.__X = X;
+		region.__Y = Y;
+
+		if (present) {
+			_PresentRegion (X, Y, region);
+		}
+	}
+
 	#endregion
 
 	#region TILE GET/SET
@@ -549,24 +565,88 @@ public class Grid : MonoBehaviour {
 	#region GRID FACTORIES
 
 	public static Grid CreateGrid(Vector2 position, TileAtlas atlas, bool useRenderer = true, bool useCollider = true) {
+		Grid grid = _CreateGrid (position, atlas, useRenderer, useCollider);
 
+		return grid;
 	}
-	public static Grid CreateGrid(Vector2 position, TileAtlas atlas, Tile[,] tiles, bool useRenderer = true, bool useCollider = true) {
+	public static Grid CreateGrid(Vector2 position, TileAtlas atlas, Tile[,] tiles, bool useRenderer = true, bool useCollider = true) {		
+		Grid grid = _CreateGrid (position, atlas, useRenderer, useCollider);
 
+		grid._SetTiles (tiles);
+
+		return grid;
 	}
 
 	public static Grid CreateSaveGrid(Vector2 position, TileAtlas atlas, string path, bool usePersistentPath = true, bool useRenderer = true, bool useCollider = true) {
+		Grid grid = _CreateGrid (position, atlas, useRenderer, useCollider);
 
+		GridSaver saver = grid.gameObject.AddComponent<GridSaver> ();
+		saver.path = path;
+		saver.usePersistentPath = usePersistentPath;
+
+		return grid;
 	}
 	public static Grid CreateSaveGrid(Vector2 position, TileAtlas atlas, Tile[,] tiles, string path, bool usePersistentPath = true, bool useRenderer = true, bool useCollider = true) {
+		Grid grid = _CreateGrid (position, atlas, useRenderer, useCollider);
 
+		GridSaver saver = grid.gameObject.AddComponent<GridSaver> ();
+		saver.path = path;
+		saver.usePersistentPath = usePersistentPath;
+
+		grid._SetTiles (tiles);
+
+		return grid;
 	}
 
 	public static Grid CreateProceduralGrid<A>(Vector2 position, TileAtlas atlas, string path, bool usePersistentPath = true, bool useRenderer = true, bool useCollider = true) where A : GridGeneratorAlgorithm {
+		Grid grid = _CreateGrid (position, atlas, useRenderer, useCollider);
 
+		GridGenerator generator = grid.gameObject.AddComponent<GridGenerator> ();
+		generator.path = path;
+		generator.usePersistentPath = usePersistentPath;
+
+		grid.gameObject.AddComponent<A> ();
+
+		return grid;
 	}
 	public static Grid CreateProceduralGrid<A>(Vector2 position, TileAtlas atlas, Tile[,] tiles, string path, bool usePersistentPath = true, bool useRenderer = true, bool useCollider = true) where A : GridGeneratorAlgorithm {
+		Grid grid = _CreateGrid (position, atlas, useRenderer, useCollider);
 
+		GridGenerator generator = grid.gameObject.AddComponent<GridGenerator> ();
+		generator.path = path;
+		generator.usePersistentPath = usePersistentPath;
+
+		grid.gameObject.AddComponent<A> ();
+
+		grid._SetTiles (tiles);
+
+		return grid;
+	}
+
+	static Grid _CreateGrid(Vector2 position, TileAtlas atlas, bool useRenderer, bool useCollider) {
+		GameObject obj = new GameObject ("grid");
+		obj.transform.position = position;
+
+		Grid grid = obj.AddComponent<Grid> ();
+		grid.atlas = atlas;
+
+		if(useRenderer) obj.AddComponent<GridSpriteRenderer> ();
+		if(useCollider) obj.AddComponent<GridCollider> ();
+
+		return grid;
+	}
+
+	void _SetTiles(Tile[,] tiles) {
+		int w = Mathf.CeilToInt(tiles.GetLength (0) / ((float)REGION_SIZE));
+		int h = Mathf.CeilToInt(tiles.GetLength (1) / ((float)REGION_SIZE));
+
+		for (int i = 0; i < w; i++) {
+			for (int j = 0; j < h; j++) {
+				FiniteGrid region = new FiniteGrid(i, j, REGION_SIZE, tiles, i * REGION_SIZE, j * REGION_SIZE);
+
+				SetRegion (i, j, region);
+			}
+		}
 	}
 
 	#endregion
@@ -575,17 +655,6 @@ public class Grid : MonoBehaviour {
 
 	public static List<Grid> GetAllGrids() {
 		return grids;
-	}
-
-	public static List<Grid> QueryRect(Rect rect) {
-
-	}
-
-	public static Grid QueryPoint(Vector2 point, out int x, out int y) {
-
-	}
-	public static Grid QueryClosestPoint(Vector2 point, out int x, out int y) {
-
 	}
 
 	#endregion

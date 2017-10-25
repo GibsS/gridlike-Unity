@@ -74,7 +74,9 @@ public abstract class GridListener : MonoBehaviour {
 
 		for (int i = startX; i < endX; i++) {
 			for(int j = startY; j < endY; j++) {
-				OnSet(i, j, region.Get(i - startX, j - startY));
+				Tile tile = region.Get (i - startX, j - startY);
+
+				if(tile != null) OnSet(i, j, tile);
 			}
 
 			if (i % 3 == 0) yield return null;

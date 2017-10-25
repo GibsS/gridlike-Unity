@@ -97,7 +97,26 @@ public class FiniteGrid {
 	public int regionX { get { return _x; } }
 	public int regionY { get { return _y; } }
 
+	public int __X { set { _x = value; } }
+	public int __Y { set { _y = value; } }
+
 	public FiniteGrid(int x, int y, int size) {
+		_FiniteGrid (x, y, size);
+	}
+	public FiniteGrid(int x, int y, int size, Tile[,] tiles, int xoffset, int yoffset) {
+		_FiniteGrid (x, y, size);
+
+		int width = Mathf.Min (xoffset + size, tiles.GetLength (0));
+		int height = Mathf.Min (yoffset + size, tiles.GetLength (1));
+
+		for (int i = xoffset; i < width; i++) {
+			for (int j = yoffset; j < height; j++) {
+				grid [i - xoffset] [j - yoffset] = tiles [i, j];
+			}
+		}
+	}
+
+	void _FiniteGrid(int x, int y, int size) {
 		_x = x;
 		_y = y;
 		_size = size;
