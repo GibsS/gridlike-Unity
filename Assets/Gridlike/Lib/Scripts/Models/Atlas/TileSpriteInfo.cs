@@ -6,4 +6,7 @@ public class TileSpriteInfo {
 
 	public Sprite sprite;
 	public Sprite[] sprites;
+
+	public Sprite importedSprite;
+	public Sprite[] importedSprites;
 }

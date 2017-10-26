@@ -78,7 +78,7 @@ public class GridTileAtlasEditor : Editor {
 			if (TileShapeHelper.IsTriangle (tile.shape)) {
 				// TODO
 			} else {
-				tile.idSpriteInfo.sprite = (Sprite)EditorGUILayout.ObjectField("Sprite", tile.idSpriteInfo.sprite, typeof(Sprite), false);
+				tile.idSpriteInfo.importedSprite = (Sprite)EditorGUILayout.ObjectField("Sprite", tile.idSpriteInfo.importedSprite, typeof(Sprite), false);
 			}
 			EditorGUILayout.BeginHorizontal ();
 
@@ -114,7 +114,8 @@ public class GridTileAtlasEditor : Editor {
 
 		for (int i = 0; i < 2; i++) {
 			for (int j = 0; j < 2; j++) {
-				texture.SetPixels (i * size, j * size, size, size, atlas.GetSprite (1, -1).texture.GetPixels ());
+				Sprite importedSprite = atlas.GetTile (1).idSpriteInfo.importedSprite;
+				if(i != 1 && j != 1) texture.SetPixels (i * size, j * size, size, size, importedSprite.texture.GetPixels ());
 			}
 		}
 
@@ -166,5 +167,9 @@ public class GridTileAtlasEditor : Editor {
 
 		AssetDatabase.ImportAsset(assetPath);
 		AssetDatabase.Refresh();
+
+		foreach (Object obj in AssetDatabase.LoadAllAssetsAtPath (assetPath)) {
+			Debug.Log (obj);
+		}
 	}
 }
