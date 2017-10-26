@@ -14,12 +14,12 @@ public class GridCreator : MonoBehaviour {
 
 			grid = Grid.CreateGrid (new Vector2 (10, 10), atlas, true, false); 
 		}
-		if (GUI.Button (new Rect (10, 50, 200, 40), "Create grid with tiles")) {
+		if (GUI.Button (new Rect (10, 50, 200, 40), "Create grid with tiles (without sprites)")) {
 			Clear ();
 
 			Tile[,] tiles = CreateTiles ();
 
-			grid = Grid.CreateGrid (new Vector2 (-10, -10), atlas, tiles, true, false); 
+			grid = Grid.CreateGrid (new Vector2 (-10, -10), atlas, tiles, false, true); 
 		}
 
 		/*

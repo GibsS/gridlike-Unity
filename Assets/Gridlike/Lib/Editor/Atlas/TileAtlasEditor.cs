@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEditor;
 
@@ -17,6 +18,16 @@ public class GridTileAtlasEditor : Editor {
 
 	public override void OnInspectorGUI() {
 		TileAtlas atlas = target as TileAtlas;
+
+		GUI.enabled = false;
+		EditorGUILayout.ObjectField("Sprite sheet", atlas.spriteSheet, typeof(Texture2D), false);
+		GUI.enabled = true;
+
+		atlas.tilePixelSize = EditorGUILayout.IntField ("Tile pixel size", atlas.tilePixelSize);
+
+		if (GUILayout.Button ("Generate sprite sheet")) {
+			GenerateSpriteSheet ();
+		}
 
 		foreach(TileInfo info in atlas.GetTileInfos()) {
 			TileInfoUI (atlas, info);
@@ -89,5 +100,71 @@ public class GridTileAtlasEditor : Editor {
 			tileEditorInfo [id] = info;
 		}
 		return info;
+	}
+
+	void GenerateSpriteSheet() {
+		TileAtlas atlas = target as TileAtlas;
+
+		int size = atlas.tilePixelSize;
+		int tilePerRow = Mathf.FloorToInt(TileAtlas.PIXEL_PER_ROW / size);
+
+		Texture2D texture = new Texture2D (32, 32);
+
+		SpriteMetaData[] sprites = new SpriteMetaData[4];
+
+		for (int i = 0; i < 2; i++) {
+			for (int j = 0; j < 2; j++) {
+				texture.SetPixels (i * size, j * size, size, size, atlas.GetSprite (1, -1).texture.GetPixels ());
+			}
+		}
+
+		texture.Apply ();
+
+		var bytes = texture.EncodeToPNG ();
+
+		Directory.CreateDirectory(Application.dataPath + "/Resources");
+		File.WriteAllBytes (Application.dataPath + "/Resources/ok.png", bytes);
+
+		AssetDatabase.Refresh (ImportAssetOptions.ForceUpdate);
+
+		texture = (Texture2D) Resources.Load("ok");
+
+		atlas.spriteSheet = texture;
+
+		// UPDATE IMPORT SETTINGS
+		string assetPath = AssetDatabase.GetAssetPath(texture);
+		TextureImporter importer = AssetImporter.GetAtPath(assetPath) as TextureImporter;
+
+		importer.textureType = TextureImporterType.Sprite;
+
+		importer.isReadable = true;
+		importer.filterMode = FilterMode.Point;
+		importer.textureType = TextureImporterType.Sprite;
+		importer.spriteImportMode = SpriteImportMode.Multiple;
+		importer.mipmapEnabled = false;
+		importer.isReadable = true;
+		importer.spritePixelsPerUnit = size;
+
+		importer.spritesheet = new SpriteMetaData[] {
+			new SpriteMetaData {
+				name = "sprite1",
+				rect = new Rect(0, 0, 16, 16)
+			},
+			new SpriteMetaData {
+				name = "sprite2",
+				rect = new Rect(16, 16, 16, 16)
+			},
+			new SpriteMetaData {
+				name = "sprite3",
+				rect = new Rect(16, 0, 16, 16)
+			},
+			new SpriteMetaData {
+				name = "sprite4",
+				rect = new Rect(0, 16, 16, 16)
+			}
+		};
+
+		AssetDatabase.ImportAsset(assetPath);
+		AssetDatabase.Refresh();
 	}
 }
