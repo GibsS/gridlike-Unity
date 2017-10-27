@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.IO;
 using UnityEngine;
 using UnityEditor;
@@ -37,6 +38,21 @@ public class GridTileAtlasEditor : Editor {
 			atlas.AddTile ();
 		}
 	}
+	void DrawOnGUISprite(Sprite aSprite) {
+		Rect c = aSprite.rect;
+		float spriteW = c.width;
+		float spriteH = c.height;
+		Rect rect = GUILayoutUtility.GetRect(spriteW, spriteH);
+		if (Event.current.type == EventType.Repaint)
+		{
+			var tex = aSprite.texture;
+			c.xMin /= tex.width;
+			c.xMax /= tex.width;
+			c.yMin /= tex.height;
+			c.yMax /= tex.height;
+			GUI.DrawTextureWithTexCoords(rect, tex, c);
+		}
+	}
 
 	void TileInfoUI(TileAtlas atlas, TileInfo tile) {
 		GUILayout.BeginVertical("HelpBox");
@@ -51,7 +67,7 @@ public class GridTileAtlasEditor : Editor {
 
 		GUILayout.FlexibleSpace ();
 
-		if (tile.GetSprite (-1) != null) GUILayout.Label (tile.GetSprite (-1).texture);
+		if (tile.GetSprite (-1) != null) DrawOnGUISprite(tile.GetSprite(-1));
 		
 		if (GUILayout.Button ("remove", GUILayout.MaxWidth(80))) {
 			atlas.RemoveTile (tile.id);
@@ -76,9 +92,42 @@ public class GridTileAtlasEditor : Editor {
 			}
 
 			if (TileShapeHelper.IsTriangle (tile.shape)) {
-				// TODO
+				//tile.idSpriteInfo
 			} else {
-				tile.idSpriteInfo.importedSprite = (Sprite)EditorGUILayout.ObjectField("Sprite", tile.idSpriteInfo.importedSprite, typeof(Sprite), false);
+				tile.idSpriteInfo.importedSprite = (Sprite) EditorGUILayout.ObjectField("Main sprite", tile.idSpriteInfo.importedSprite, typeof(Sprite), false);
+
+				if (tile.subIdSpriteInfo != null) {
+					for (int i = 0; i < tile.subIdSpriteInfo.Length; i++) {
+						if (tile.subIdSpriteInfo [i] != null) {
+							tile.subIdSpriteInfo [i].importedSprite = (Sprite)EditorGUILayout.ObjectField ("Sub sprite " + i, tile.subIdSpriteInfo [i].importedSprite, typeof(Sprite), false);
+						}
+					}
+				}
+
+				if (GUILayout.Button ("Add sub id sprite")) {
+					if (tile.subIdSpriteInfo == null) {
+						tile.subIdSpriteInfo = new TileSpriteInfo[1];
+					} else {
+						int length = tile.subIdSpriteInfo.Length;
+
+						TileSpriteInfo[] newSprites = new TileSpriteInfo[length + 1];
+						for (int i = 0; i < length; i++) newSprites [i] = tile.subIdSpriteInfo [i];
+						tile.subIdSpriteInfo = newSprites;
+					}
+				}
+				if (GUILayout.Button ("Remove sub id sprite")) {
+					if (tile.subIdSpriteInfo != null) {
+						if (tile.subIdSpriteInfo.Length == 1) {
+							tile.subIdSpriteInfo = null; 
+						} else {
+							int length = tile.subIdSpriteInfo.Length;
+
+							TileSpriteInfo[] newSprites = new TileSpriteInfo[length - 1];
+							for (int i = 0; i < length - 1; i++) newSprites [i] = tile.subIdSpriteInfo [i];
+							tile.subIdSpriteInfo = newSprites;
+						}
+					}
+				}
 			}
 			EditorGUILayout.BeginHorizontal ();
 
@@ -102,6 +151,7 @@ public class GridTileAtlasEditor : Editor {
 		return info;
 	}
 
+	// TODO SHRINK TO FIT EXACTLY
 	void GenerateSpriteSheet() {
 		TileAtlas atlas = target as TileAtlas;
 
@@ -110,7 +160,8 @@ public class GridTileAtlasEditor : Editor {
 
 		Texture2D texture = new Texture2D (TileAtlas.PIXEL_PER_ROW, 256);
 
-		SpriteMetaData[] sprites = new SpriteMetaData[atlas.Count];
+		// TODO allow for more space
+		SpriteMetaData[] sprites = new SpriteMetaData[atlas.Count * 4];
 
 		int tileX = 0;
 		int tileY = 0;
@@ -119,48 +170,15 @@ public class GridTileAtlasEditor : Editor {
 
 		foreach (TileInfo tile in atlas.GetTileInfos()) {
 			if (tile.idSpriteInfo != null) {
-				if (tile.idSpriteInfo.importedSprite != null) {
-					Sprite sprite = tile.idSpriteInfo.importedSprite;
-
-					texture.SetPixels (
-						tileX * size, 
-						tileY * size, 
-						size, 
-						size,
-						sprite.texture.GetPixels (
-							(int) sprite.textureRect.x,
-							(int) sprite.textureRect.y,
-							size,
-							size
-						)
-					);
-
-					sprites [spriteInd] = new SpriteMetaData {
-						name = "sprite" + spriteInd,
-						rect = new Rect (tileX * size, tileY * size, size, size)
-					};
-
-					spriteInd += 1;
-					tileX += 1;
-
-					if (tileX >= tilePerRow) {
-						tileX = 0;
-						tileY += 1;
-					}
-				}
-
-				if (tile.idSpriteInfo.importedSprites != null) {
-					for (int i = 0; i < tile.idSpriteInfo.importedSprites.Length; i++) {
-						if (tile.idSpriteInfo.importedSprites [i] != null) {
-
-						}
-					}
-				}
+				PackHorizontalSpriteInfo (tilePerRow, size, tile.idSpriteInfo, tile.id, -1, ref tileX, ref tileY, ref spriteInd, ref sprites, ref texture);
 			}
 
 			if (tile.subIdSpriteInfo != null) {
 				for (int i = 0; i < tile.subIdSpriteInfo.Length; i++) {
-
+					if (tile.subIdSpriteInfo [i] != null) {
+						Debug.Log ("Sub id!");
+						PackHorizontalSpriteInfo (tilePerRow, size, tile.subIdSpriteInfo [i], tile.id, i, ref tileX, ref tileY, ref spriteInd, ref sprites, ref texture);
+					}
 				}
 			}
 		}
@@ -191,18 +209,84 @@ public class GridTileAtlasEditor : Editor {
 		importer.mipmapEnabled = false;
 		importer.isReadable = true;
 		importer.spritePixelsPerUnit = size;
-
 		importer.spritesheet = sprites;
 
 		AssetDatabase.ImportAsset(assetPath);
 		AssetDatabase.Refresh();
 
+		string pattern = @"sprite_(.*)_(.*)_(.*)";
+		Regex rgx = new Regex(pattern);
+
 		foreach (Object obj in AssetDatabase.LoadAllAssetsAtPath (assetPath)) {
-			Debug.Log (obj);
+			if (!string.IsNullOrEmpty (obj.name) && obj.name [0] == 's') {
+				Sprite sprite = obj as Sprite;
+
+				string[] values = sprite.name.Split ('_');
+
+				int id = int.Parse (values [1]);
+				int subId = int.Parse (values [2]);
+				int tileSize = int.Parse (values [3]);
+
+				Debug.Log ("id=" + id + " subId=" + subId + " tileSize=" + tileSize);
+
+				TileSpriteInfo spriteInfo;
+
+				if (subId == -1) {
+					spriteInfo = atlas [id].idSpriteInfo;
+				} else {
+					spriteInfo = atlas [id].subIdSpriteInfo [subId];
+				}
+
+				if (tileSize == 1) {
+					spriteInfo.sprite = sprite;
+				} else {
+					spriteInfo.sprites [tileSize - 2] = sprite;
+				}
+			}
 		}
 	}
 
-	void PackSpriteInfo(TileSpriteInfo tileSpriteInfo, ref int spriteInd, ref SpriteMetaData[] sprites) {
+	void PackHorizontalSpriteInfo(int tilePerRow, int tileSize, TileSpriteInfo tileSpriteInfo, int id, int subId, ref int tileX, ref int tileY, ref int spriteInd, ref SpriteMetaData[] sprites, ref Texture2D texture) {
+		if (tileSpriteInfo.importedSprite != null) {
+			Debug.Log ("sub id=" + subId);
+			PackHorizontalSprite (tilePerRow, tileSize, tileSpriteInfo.importedSprite, id, subId, 1, ref tileX, ref tileY, ref spriteInd, ref sprites, ref texture);
+		}
 
+		if (tileSpriteInfo.importedSprites != null) {
+			for (int i = 0; i < tileSpriteInfo.importedSprites.Length; i++) {
+				if (tileSpriteInfo.importedSprites [i] != null) {
+					PackHorizontalSprite (tilePerRow, tileSize, tileSpriteInfo.importedSprites[i], id, subId, i+2, ref tileX, ref tileY, ref spriteInd, ref sprites, ref texture);
+				}
+			}
+		}
+	}
+
+	void PackHorizontalSprite(int tilePerRow, int tileSize, Sprite sprite, int id, int subId, int tileWidth, ref int tileX, ref int tileY, ref int spriteInd, ref SpriteMetaData[] sprites, ref Texture2D texture) {
+		texture.SetPixels (
+			tileX * tileSize, 
+			tileY * tileSize, 
+			tileSize * tileWidth, 
+			tileSize,
+			sprite.texture.GetPixels (
+				(int) sprite.textureRect.x,
+				(int) sprite.textureRect.y,
+				tileSize * tileWidth,
+				tileSize
+			)
+		);
+
+		sprites [spriteInd] = new SpriteMetaData {
+			name = "sprite_" + id + "_" + subId + "_" + tileWidth,
+			rect = new Rect (tileX * tileSize, tileY * tileSize, tileSize, tileSize)
+		};
+
+		spriteInd += 1;
+		tileX += tileWidth;
+
+		// TODO allow for tile longer then 4
+		if (tileX >= tilePerRow-4) {
+			tileX = 0;
+			tileY += 1;
+		}
 	}
 }
