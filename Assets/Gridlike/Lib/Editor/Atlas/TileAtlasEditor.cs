@@ -151,6 +151,7 @@ public class GridTileAtlasEditor : Editor {
 		return info;
 	}
 
+	// TODO HANDLE LONG TRIANGLES
 	// TODO SHRINK TO FIT EXACTLY
 	void GenerateSpriteSheet() {
 		TileAtlas atlas = target as TileAtlas;
@@ -176,7 +177,6 @@ public class GridTileAtlasEditor : Editor {
 			if (tile.subIdSpriteInfo != null) {
 				for (int i = 0; i < tile.subIdSpriteInfo.Length; i++) {
 					if (tile.subIdSpriteInfo [i] != null) {
-						Debug.Log ("Sub id!");
 						PackHorizontalSpriteInfo (tilePerRow, size, tile.subIdSpriteInfo [i], tile.id, i, ref tileX, ref tileY, ref spriteInd, ref sprites, ref texture);
 					}
 				}
@@ -187,6 +187,8 @@ public class GridTileAtlasEditor : Editor {
 
 		var bytes = texture.EncodeToPNG ();
 
+		// TODO allow custom location
+		// TODO default to a random name in a resource folder
 		Directory.CreateDirectory(Application.dataPath + "/Resources");
 		File.WriteAllBytes (Application.dataPath + "/Resources/ok.png", bytes);
 
@@ -227,8 +229,6 @@ public class GridTileAtlasEditor : Editor {
 				int subId = int.Parse (values [2]);
 				int tileSize = int.Parse (values [3]);
 
-				Debug.Log ("id=" + id + " subId=" + subId + " tileSize=" + tileSize);
-
 				TileSpriteInfo spriteInfo;
 
 				if (subId == -1) {
@@ -262,6 +262,11 @@ public class GridTileAtlasEditor : Editor {
 	}
 
 	void PackHorizontalSprite(int tilePerRow, int tileSize, Sprite sprite, int id, int subId, int tileWidth, ref int tileX, ref int tileY, ref int spriteInd, ref SpriteMetaData[] sprites, ref Texture2D texture) {
+		if (tileX + tileWidth >= tilePerRow) {
+			tileX = 0;
+			tileY += 1;
+		}
+
 		texture.SetPixels (
 			tileX * tileSize, 
 			tileY * tileSize, 
@@ -282,11 +287,5 @@ public class GridTileAtlasEditor : Editor {
 
 		spriteInd += 1;
 		tileX += tileWidth;
-
-		// TODO allow for tile longer then 4
-		if (tileX >= tilePerRow-4) {
-			tileX = 0;
-			tileY += 1;
-		}
 	}
 }
