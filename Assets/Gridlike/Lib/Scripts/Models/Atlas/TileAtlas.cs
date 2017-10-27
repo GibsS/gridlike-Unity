@@ -5,7 +5,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName="GridTileAtlas", menuName="Gridlike/Grid tile atlas", order=1)]
 public class TileAtlas : ScriptableObject {
 
-	public const int PIXEL_PER_ROW = 1024;
+	public const int PIXEL_PER_ROW = 256;
 
 	public int tilePixelSize;
 	public Texture2D spriteSheet;

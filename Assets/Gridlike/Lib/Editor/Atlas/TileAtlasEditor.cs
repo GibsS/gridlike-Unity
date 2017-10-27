@@ -108,14 +108,60 @@ public class GridTileAtlasEditor : Editor {
 		int size = atlas.tilePixelSize;
 		int tilePerRow = Mathf.FloorToInt(TileAtlas.PIXEL_PER_ROW / size);
 
-		Texture2D texture = new Texture2D (32, 32);
+		Texture2D texture = new Texture2D (TileAtlas.PIXEL_PER_ROW, 256);
 
-		SpriteMetaData[] sprites = new SpriteMetaData[4];
+		SpriteMetaData[] sprites = new SpriteMetaData[atlas.Count];
 
-		for (int i = 0; i < 2; i++) {
-			for (int j = 0; j < 2; j++) {
-				Sprite importedSprite = atlas.GetTile (1).idSpriteInfo.importedSprite;
-				if(i != 1 && j != 1) texture.SetPixels (i * size, j * size, size, size, importedSprite.texture.GetPixels ());
+		int tileX = 0;
+		int tileY = 0;
+
+		int spriteInd = 0;
+
+		foreach (TileInfo tile in atlas.GetTileInfos()) {
+			if (tile.idSpriteInfo != null) {
+				if (tile.idSpriteInfo.importedSprite != null) {
+					Sprite sprite = tile.idSpriteInfo.importedSprite;
+
+					texture.SetPixels (
+						tileX * size, 
+						tileY * size, 
+						size, 
+						size,
+						sprite.texture.GetPixels (
+							(int) sprite.textureRect.x,
+							(int) sprite.textureRect.y,
+							size,
+							size
+						)
+					);
+
+					sprites [spriteInd] = new SpriteMetaData {
+						name = "sprite" + spriteInd,
+						rect = new Rect (tileX * size, tileY * size, size, size)
+					};
+
+					spriteInd += 1;
+					tileX += 1;
+
+					if (tileX >= tilePerRow) {
+						tileX = 0;
+						tileY += 1;
+					}
+				}
+
+				if (tile.idSpriteInfo.importedSprites != null) {
+					for (int i = 0; i < tile.idSpriteInfo.importedSprites.Length; i++) {
+						if (tile.idSpriteInfo.importedSprites [i] != null) {
+
+						}
+					}
+				}
+			}
+
+			if (tile.subIdSpriteInfo != null) {
+				for (int i = 0; i < tile.subIdSpriteInfo.Length; i++) {
+
+				}
 			}
 		}
 
@@ -146,24 +192,7 @@ public class GridTileAtlasEditor : Editor {
 		importer.isReadable = true;
 		importer.spritePixelsPerUnit = size;
 
-		importer.spritesheet = new SpriteMetaData[] {
-			new SpriteMetaData {
-				name = "sprite1",
-				rect = new Rect(0, 0, 16, 16)
-			},
-			new SpriteMetaData {
-				name = "sprite2",
-				rect = new Rect(16, 16, 16, 16)
-			},
-			new SpriteMetaData {
-				name = "sprite3",
-				rect = new Rect(16, 0, 16, 16)
-			},
-			new SpriteMetaData {
-				name = "sprite4",
-				rect = new Rect(0, 16, 16, 16)
-			}
-		};
+		importer.spritesheet = sprites;
 
 		AssetDatabase.ImportAsset(assetPath);
 		AssetDatabase.Refresh();
@@ -171,5 +200,9 @@ public class GridTileAtlasEditor : Editor {
 		foreach (Object obj in AssetDatabase.LoadAllAssetsAtPath (assetPath)) {
 			Debug.Log (obj);
 		}
+	}
+
+	void PackSpriteInfo(TileSpriteInfo tileSpriteInfo, ref int spriteInd, ref SpriteMetaData[] sprites) {
+
 	}
 }

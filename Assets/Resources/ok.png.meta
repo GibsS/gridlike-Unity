@@ -1,13 +1,11 @@
 fileFormatVersion: 2
 guid: c40939919747a77418128afa6533cf80
-timeCreated: 1509056039
+timeCreated: 1509134210
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: sprite1
-    21300002: sprite2
-    21300004: sprite3
-    21300006: sprite4
+    21300000: sprite0
+    21300002: sprite1
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -66,35 +64,22 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
+      name: sprite0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
       name: sprite1
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: -1
-    - serializedVersion: 2
-      name: sprite2
-      rect:
-        serializedVersion: 2
-        x: 16
-        y: 16
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      tessellationDetail: -1
-    - serializedVersion: 2
-      name: sprite3
-      rect:
-        serializedVersion: 2
         x: 16
         y: 0
         width: 16
@@ -105,13 +90,13 @@ TextureImporter:
       outline: []
       tessellationDetail: -1
     - serializedVersion: 2
-      name: sprite4
+      name: 
       rect:
         serializedVersion: 2
         x: 0
-        y: 16
-        width: 16
-        height: 16
+        y: 0
+        width: 0
+        height: 0
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
