@@ -174,6 +174,12 @@ public class GridTileAtlasEditor : Editor {
 
 		int spriteInd = 0;
 
+		// THE EMPTY SPRITE
+		Color[] clearColors = new Color[size * size];
+		for (int i = 0; i < clearColors.Length; i++) clearColors [i] = Color.clear;
+		PackHorizontalSprite (tilePerRow, size, clearColors, -1, -1, 1, ref tileX, ref tileY, ref spriteInd, ref sprites, ref texture);
+
+		// ALL OTHER SPRITES
 		foreach (TileInfo tile in atlas.GetTileInfos()) {
 			if (tile.idSpriteInfo != null) {
 				PackHorizontalSpriteInfo (tilePerRow, size, tile.idSpriteInfo, tile.id, -1, ref tileX, ref tileY, ref spriteInd, ref sprites, ref texture);
@@ -234,18 +240,22 @@ public class GridTileAtlasEditor : Editor {
 				int subId = int.Parse (values [2]);
 				int tileSize = int.Parse (values [3]);
 
-				TileSpriteInfo spriteInfo;
-
-				if (subId == -1) {
-					spriteInfo = atlas [id].idSpriteInfo;
+				if(id == -1) {
+					atlas.emptySprite = sprite;
 				} else {
-					spriteInfo = atlas [id].subIdSpriteInfo [subId];
-				}
+					TileSpriteInfo spriteInfo;
 
-				if (tileSize == 1) {
-					spriteInfo.sprite = sprite;
-				} else {
-					spriteInfo.sprites [tileSize - 2] = sprite;
+					if (subId == -1) {
+						spriteInfo = atlas [id].idSpriteInfo;
+					} else {
+						spriteInfo = atlas [id].subIdSpriteInfo [subId];
+					}
+
+					if (tileSize == 1) {
+						spriteInfo.sprite = sprite;
+					} else {
+						spriteInfo.sprites [tileSize - 2] = sprite;
+					}
 				}
 			}
 		}
@@ -253,7 +263,6 @@ public class GridTileAtlasEditor : Editor {
 
 	void PackHorizontalSpriteInfo(int tilePerRow, int tileSize, TileSpriteInfo tileSpriteInfo, int id, int subId, ref int tileX, ref int tileY, ref int spriteInd, ref SpriteMetaData[] sprites, ref Texture2D texture) {
 		if (tileSpriteInfo.importedSprite != null) {
-			Debug.Log ("sub id=" + subId);
 			PackHorizontalSprite (tilePerRow, tileSize, tileSpriteInfo.importedSprite, id, subId, 1, ref tileX, ref tileY, ref spriteInd, ref sprites, ref texture);
 		}
 
@@ -267,6 +276,27 @@ public class GridTileAtlasEditor : Editor {
 	}
 
 	void PackHorizontalSprite(int tilePerRow, int tileSize, Sprite sprite, int id, int subId, int tileWidth, ref int tileX, ref int tileY, ref int spriteInd, ref SpriteMetaData[] sprites, ref Texture2D texture) {
+		PackHorizontalSprite (
+			tilePerRow, 
+			tileSize, 
+			sprite.texture.GetPixels (
+				(int) sprite.textureRect.x,
+				(int) sprite.textureRect.y,
+				tileSize * tileWidth,
+				tileSize
+			),
+			id,
+			subId,
+			tileWidth,
+			ref tileX,
+			ref tileY,
+			ref spriteInd,
+			ref sprites,
+			ref texture
+		);
+	}
+
+	void PackHorizontalSprite(int tilePerRow, int tileSize, Color[] colors, int id, int subId, int tileWidth, ref int tileX, ref int tileY, ref int spriteInd, ref SpriteMetaData[] sprites, ref Texture2D texture) {
 		if (tileX + tileWidth >= tilePerRow) {
 			tileX = 0;
 			tileY += 1;
@@ -277,12 +307,7 @@ public class GridTileAtlasEditor : Editor {
 			tileY * tileSize, 
 			tileSize * tileWidth, 
 			tileSize,
-			sprite.texture.GetPixels (
-				(int) sprite.textureRect.x,
-				(int) sprite.textureRect.y,
-				tileSize * tileWidth,
-				tileSize
-			)
+			colors
 		);
 
 		sprites [spriteInd] = new SpriteMetaData {

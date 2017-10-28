@@ -9,6 +9,7 @@ public class TileAtlas : ScriptableObject {
 
 	public int tilePixelSize;
 	public Texture2D spriteSheet;
+	public Sprite emptySprite;
 
 	public TileInfo[] atlas;
 

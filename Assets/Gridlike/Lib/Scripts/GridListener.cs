@@ -11,7 +11,7 @@ public abstract class GridListener : MonoBehaviour {
 	void Reset() {
 		ResetListener ();
 	}
-	void Awake() {
+	public virtual void Awake() {
 		ResetListener ();
 	}
 
