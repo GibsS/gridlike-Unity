@@ -37,4 +37,11 @@ public class ComponentPool<X> where X : Component {
 		x.gameObject.SetActive (false);
 		components.Add (x);
 	}
+
+	public void Clear() {
+		foreach (X x in components) {
+			UnityEngine.Object.DestroyImmediate (x.gameObject);
+		}
+		components.Clear ();
+	}
 }

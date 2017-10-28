@@ -28,6 +28,8 @@ using UnityEngine;
 // BUG Allow regular gizmos to be accessed even when the grid is selected
 // TODO Handle subids
 
+// TODO Optimization: Set multitiles at once instead of just one
+
 // BUG Deactivate events mouse events when mouse is over scene GUI elements
 // TWEAK make grid tool window look better than it does (copy grid tile map guy)
 // TWEAK Deactivate a listener with enable/disable of the component or a field

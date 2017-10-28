@@ -41,6 +41,10 @@ public class RegionMeshRenderer : MonoBehaviour {
 		GenerateMesh ();
 	}
 
+	public void Destroy() {
+		DestroyImmediate (gameObject);
+	}
+
 	void GenerateMesh() {
 
 		var tileSize = 1;

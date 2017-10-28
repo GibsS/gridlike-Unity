@@ -27,11 +27,15 @@ public class GridRenderer : GridListener {
 		base.OnDestroy ();
 
 		DestroyImmediate (containerGO);
+
+		if(meshes != null) meshes.Clear ();
 	}
 	public override void Awake() {
 		base.Awake ();
 
-		meshes = new ComponentPool<RegionMeshRenderer> (16, CreateRegionRenderer);
+		if (Application.isPlaying) {
+			meshes = new ComponentPool<RegionMeshRenderer> (16, CreateRegionRenderer);
+		}
 	}
 
 	public override void ResetListener() {
@@ -85,12 +89,10 @@ public class GridRenderer : GridListener {
 		var rend = components.Find (e => e.regionX == regionX && e.regionY == regionY);
 
 		if (rend != null) {
-			Debug.Log ("Clear region=" + regionX + " " + regionY);
 			if (Application.isPlaying) {
 				meshes.Free (rend.mesh);
 			} else {
-				// TODO put destroy function on the script itself
-				DestroyImmediate (rend.mesh.gameObject);
+				rend.mesh.Destroy();
 			}
 
 			components.Remove (rend);
