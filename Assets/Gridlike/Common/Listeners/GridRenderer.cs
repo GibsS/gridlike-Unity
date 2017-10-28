@@ -1,7 +1,8 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Serializable]
 public class PositionRegionRenderer {
 
 	public int regionX;
@@ -84,10 +85,12 @@ public class GridRenderer : GridListener {
 		var rend = components.Find (e => e.regionX == regionX && e.regionY == regionY);
 
 		if (rend != null) {
+			Debug.Log ("Clear region=" + regionX + " " + regionY);
 			if (Application.isPlaying) {
 				meshes.Free (rend.mesh);
 			} else {
-				DestroyImmediate (rend.mesh);
+				// TODO put destroy function on the script itself
+				DestroyImmediate (rend.mesh.gameObject);
 			}
 
 			components.Remove (rend);
@@ -132,10 +135,15 @@ public class GridRenderer : GridListener {
 		PositionRegionRenderer renderer = GetRegionRenderer (regionX, regionY);
 
 		renderer.mesh.PrepareUV ();
+
 		for (int i = 0; i < Grid.REGION_SIZE; i++) {
 			for (int j = 0; j < Grid.REGION_SIZE; j++) {
 				Tile tile = region.Get (i, j);
-				renderer.mesh.SetTile (i, j, grid.atlas.GetSprite (tile.id, tile.subId));
+				if (tile != null && tile.id != 0) {
+					renderer.mesh.SetTile (i, j, grid.atlas.GetSprite (tile.id, -1));
+				} else {
+					renderer.mesh.SetTile (i, j, grid.atlas.emptySprite);
+				}
 			}
 		}
 		renderer.mesh.ApplyUV ();
