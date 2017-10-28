@@ -160,6 +160,11 @@ public class GridTileAtlasEditor : Editor {
 		int tilePerRow = Mathf.FloorToInt(TileAtlas.PIXEL_PER_ROW / size);
 
 		Texture2D texture = new Texture2D (TileAtlas.PIXEL_PER_ROW, 256);
+		Color[] colors = texture.GetPixels();
+		for (int i = 0; i < colors.Length; i++) {
+				colors [i] = Color.clear;
+		}
+		texture.SetPixels (colors);
 
 		// TODO allow for more space
 		SpriteMetaData[] sprites = new SpriteMetaData[atlas.Count * 4];

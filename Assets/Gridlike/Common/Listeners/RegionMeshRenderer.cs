@@ -87,29 +87,6 @@ public class RegionMeshRenderer : MonoBehaviour {
 		meshFilter.mesh = mesh;
 	}
 
-	bool toggle;
-	public void TEST_SetTiles() {
-		var uv = meshFilter.sharedMesh.uv;
-
-		for (int i = 1; i < tilePerSide - 1; i++) {
-			for (int j = 1; j < tilePerSide - 1; j++) {
-				OptimizedSetTile (uv, i, j);
-			}
-		}
-		toggle = !toggle;
-
-		meshFilter.sharedMesh.uv = uv;
-	}
-	public void TEST2_SetTiles() {
-		for (int i = 1; i < tilePerSide - 1; i++) {
-			for (int j = 1; j < tilePerSide - 1; j++) {
-				var uv = meshFilter.sharedMesh.uv;
-				OptimizedSetTile (uv, i, j);
-				meshFilter.sharedMesh.uv = uv;
-			}
-		}
-	}
-
 	public void SetTile(int x, int y, bool color)
 	{
 		int quadIndex = (y * tilePerSide) + x;
@@ -152,6 +129,29 @@ public class RegionMeshRenderer : MonoBehaviour {
 			uv [quadIndex + 1] = new Vector2 (s, 0);
 			uv [quadIndex + 2] = new Vector2 (0, s);
 			uv [quadIndex + 3] = new Vector2 (s, s);
+		}
+	}
+
+	bool toggle;
+	public void TEST_SetTiles() {
+		var uv = meshFilter.sharedMesh.uv;
+
+		for (int i = 1; i < tilePerSide - 1; i++) {
+			for (int j = 1; j < tilePerSide - 1; j++) {
+				OptimizedSetTile (uv, i, j);
+			}
+		}
+		toggle = !toggle;
+
+		meshFilter.sharedMesh.uv = uv;
+	}
+	public void TEST2_SetTiles() {
+		for (int i = 1; i < tilePerSide - 1; i++) {
+			for (int j = 1; j < tilePerSide - 1; j++) {
+				var uv = meshFilter.sharedMesh.uv;
+				OptimizedSetTile (uv, i, j);
+				meshFilter.sharedMesh.uv = uv;
+			}
 		}
 	}
 }

@@ -17,7 +17,7 @@ public class TestRegionMeshRenderer : MonoBehaviour {
 			regionRenderer.TEST_SetTiles ();
 		}
 		if (GUI.Button (new Rect (10, 40, 100, 30), "Set tiles (unoptimized)")) {
-			regionRenderer.TEST_SetTiles ();
+			regionRenderer.TEST2_SetTiles ();
 		}
 	}
 }
