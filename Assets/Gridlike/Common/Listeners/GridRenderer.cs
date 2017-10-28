@@ -64,6 +64,8 @@ public class GridRenderer : GridListener {
 		if (rend == null) {
 			RegionMeshRenderer regionRenderer;
 			if (Application.isPlaying) {
+				if(meshes == null) meshes = new ComponentPool<RegionMeshRenderer> (16, CreateRegionRenderer);
+
 				regionRenderer = meshes.Get ();
 			} else {
 				regionRenderer = CreateRegionRenderer ();
@@ -145,8 +147,9 @@ public class GridRenderer : GridListener {
 		for (int i = 0; i < Grid.REGION_SIZE; i++) {
 			for (int j = 0; j < Grid.REGION_SIZE; j++) {
 				Tile tile = region.Get (i, j);
+
 				if (tile != null && tile.id != 0) {
-					renderer.mesh.SetTile (i, j, grid.atlas.GetSprite (tile.id, -1));
+					renderer.mesh.SetTile (i, j, grid.atlas.GetSprite (tile.id, tile.subId));
 				} else {
 					renderer.mesh.SetTile (i, j, grid.atlas.emptySprite);
 				}
