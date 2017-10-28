@@ -104,7 +104,9 @@ public class GridRenderer : GridListener {
 		case TileShape.EMPTY: {
 				PositionRegionRenderer renderer = GetContainingRegionRenderer (x, y);
 
+				renderer.mesh.PrepareUV ();
 				renderer.mesh.SetTile (x - renderer.regionX * Grid.REGION_SIZE, y - renderer.regionY * Grid.REGION_SIZE, grid.atlas.emptySprite);
+				renderer.mesh.ApplyUV ();
 				break;
 			}
 		case TileShape.UP_ONEWAY:
@@ -113,6 +115,8 @@ public class GridRenderer : GridListener {
 		case TileShape.LEFT_ONEWAY:
 		case TileShape.FULL: {
 				PositionRegionRenderer renderer = GetContainingRegionRenderer (x, y);
+
+				SplitTriangle (x, y);
 
 				renderer.mesh.PrepareUV ();
 				renderer.mesh.SetTile (x - renderer.regionX * Grid.REGION_SIZE, y - renderer.regionY * Grid.REGION_SIZE, grid.atlas.GetSprite(tile.id, tile.subId));
@@ -153,5 +157,9 @@ public class GridRenderer : GridListener {
 
 	public override void OnTileSizeChange () {
 		Debug.Log ("[GridSpriteRenderer.OnTileSizeChange] NOT IMPLEMENTED");
+	}
+
+	void SplitTriangle(int x, int y) {
+
 	}
 }
