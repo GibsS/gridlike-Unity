@@ -169,13 +169,13 @@ public class GridTileAtlasEditor : Editor {
 	}
 
 	// TODO HANDLE LONG TRIANGLES
-	// TODO SHRINK TO FIT EXACTLY
 	void GenerateSpriteSheet() {
 		TileAtlas atlas = target as TileAtlas;
 
 		int size = atlas.tilePixelSize;
 		int tilePerRow = Mathf.FloorToInt(TileAtlas.PIXEL_PER_ROW / size);
 
+		// TODO shrink to fit
 		Texture2D texture = new Texture2D (TileAtlas.PIXEL_PER_ROW, 256);
 		Color[] colors = texture.GetPixels();
 		for (int i = 0; i < colors.Length; i++) {
@@ -215,14 +215,12 @@ public class GridTileAtlasEditor : Editor {
 
 		var bytes = texture.EncodeToPNG ();
 
-		// TODO allow custom location
-		// TODO default to a random name in a resource folder
-		// Directory.CreateDirectory(Application.dataPath + "/" h);
+		var directory = Path.GetDirectoryName(Application.dataPath + "/" + atlas.spriteSheetPath);
+		Directory.CreateDirectory(directory);
 		File.WriteAllBytes (Application.dataPath + "/" + atlas.spriteSheetPath, bytes);
 
 		AssetDatabase.Refresh (ImportAssetOptions.ForceUpdate);
 
-		//texture = (Texture2D) Resources.Load("ok");
 		texture = (Texture2D) AssetDatabase.LoadAssetAtPath("Assets/" + atlas.spriteSheetPath, typeof(Texture2D));
 
 		atlas.spriteSheet = texture;
