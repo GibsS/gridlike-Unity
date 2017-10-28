@@ -108,50 +108,62 @@ public class GridTileAtlasEditor : Editor {
 				tile.isGODetached = EditorGUILayout.Toggle ("Tile GO is detached", tile.isGODetached);
 			}
 
-			if (TileShapeHelper.IsTriangle (tile.shape)) {
-				//tile.idSpriteInfo
+			bool isTriangle = TileShapeHelper.IsTriangle (tile.shape);
+
+			if (isTriangle) {
+				TriangleSpriteChooser (tile, tile.idSpriteInfo, -1);
+
+				if (tile.subIdSpriteInfo != null) {
+					for (int i = 0; i < tile.subIdSpriteInfo.Length; i++) {
+						TriangleSpriteChooser (tile, tile.subIdSpriteInfo [i], i);
+					}
+				}
 			} else {
 				tile.idSpriteInfo.importedSprite = (Sprite) EditorGUILayout.ObjectField("Main sprite", tile.idSpriteInfo.importedSprite, typeof(Sprite), false);
 
 				if (tile.subIdSpriteInfo != null) {
 					for (int i = 0; i < tile.subIdSpriteInfo.Length; i++) {
 						if (tile.subIdSpriteInfo [i] != null) {
-							tile.subIdSpriteInfo [i].importedSprite = (Sprite)EditorGUILayout.ObjectField ("Sub sprite " + i, tile.subIdSpriteInfo [i].importedSprite, typeof(Sprite), false);
-						}
-					}
-				}
-
-				if (GUILayout.Button ("Add sub id sprite")) {
-					if (tile.subIdSpriteInfo == null) {
-						tile.subIdSpriteInfo = new TileSpriteInfo[1];
-					} else {
-						int length = tile.subIdSpriteInfo.Length;
-
-						TileSpriteInfo[] newSprites = new TileSpriteInfo[length + 1];
-						for (int i = 0; i < length; i++) newSprites [i] = tile.subIdSpriteInfo [i];
-						tile.subIdSpriteInfo = newSprites;
-					}
-				}
-				if (GUILayout.Button ("Remove sub id sprite")) {
-					if (tile.subIdSpriteInfo != null) {
-						if (tile.subIdSpriteInfo.Length == 1) {
-							tile.subIdSpriteInfo = null; 
-						} else {
-							int length = tile.subIdSpriteInfo.Length;
-
-							TileSpriteInfo[] newSprites = new TileSpriteInfo[length - 1];
-							for (int i = 0; i < length - 1; i++) newSprites [i] = tile.subIdSpriteInfo [i];
-							tile.subIdSpriteInfo = newSprites;
+							tile.subIdSpriteInfo [i].importedSprite = (Sprite)EditorGUILayout.ObjectField ("Sub id sprite " + i, tile.subIdSpriteInfo [i].importedSprite, typeof(Sprite), false);
 						}
 					}
 				}
 			}
+
+			if (GUILayout.Button ("Add sub id sprite")) {
+				tile.AddSubId ();
+			}
+			if (GUILayout.Button ("Remove sub id sprite")) {
+				tile.RemoveSubId ();
+			}
+
 			EditorGUILayout.BeginHorizontal ();
 
 			EditorGUILayout.EndHorizontal ();
 		}
 
 		EditorGUI.indentLevel--;
+
+		GUILayout.EndVertical ();
+	}
+
+	void TriangleSpriteChooser(TileInfo tile, TileSpriteInfo spriteInfo, int subId) {
+		GUILayout.BeginVertical("HelpBox");
+
+		spriteInfo.importedSprite = (Sprite) EditorGUILayout.ObjectField("Main sprite size=1", spriteInfo.importedSprite, typeof(Sprite), false);
+
+		if (spriteInfo.importedSprites != null) {
+			for (int i = 0; i < spriteInfo.importedSprites.Length; i++) {
+				spriteInfo.importedSprites [i] = (Sprite)EditorGUILayout.ObjectField ("Main sprite size=" + (i + 2), spriteInfo.importedSprites [i], typeof(Sprite), false);
+			}
+		}
+
+		if (GUILayout.Button ("Add sprite size")) {
+			tile.AddSpriteSize (subId);
+		}
+		if (GUILayout.Button ("Remove sprite size")) {
+			tile.RemoveSpriteSize (subId);
+		}
 
 		GUILayout.EndVertical ();
 	}
