@@ -191,12 +191,11 @@ public class GridTileAtlasEditor : Editor {
 		Texture2D texture = new Texture2D (TileAtlas.PIXEL_PER_ROW, 256);
 		Color[] colors = texture.GetPixels();
 		for (int i = 0; i < colors.Length; i++) {
-				colors [i] = Color.clear;
+			colors [i] = Color.clear;
 		}
 		texture.SetPixels (colors);
 
-		// TODO allow for more space
-		SpriteMetaData[] sprites = new SpriteMetaData[atlas.Count * 4];
+		SpriteMetaData[] sprites = new SpriteMetaData[atlas.SpriteCount+1];
 
 		int tileX = 0;
 		int tileY = 0;
@@ -282,6 +281,7 @@ public class GridTileAtlasEditor : Editor {
 					if (tileSize == 1) {
 						spriteInfo.sprite = sprite;
 					} else {
+						spriteInfo.sprites = new Sprite[spriteInfo.importedSprites.Length];
 						spriteInfo.sprites [tileSize - 2] = sprite;
 					}
 				}

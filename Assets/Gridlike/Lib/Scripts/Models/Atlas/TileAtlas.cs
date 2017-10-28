@@ -28,7 +28,7 @@ public class TileAtlas : ScriptableObject {
 		}
 	}
 
-	public int TileTextureCount {
+	public int TotalSpriteTileCount {
 		get {
 			int count = 0;
 
@@ -57,6 +57,38 @@ public class TileAtlas : ScriptableObject {
 				for (int i = 0; i < info.importedSprites.Length; i++) {
 					count += i + 2;
 				}
+			}
+		}
+
+		return count;
+	}
+	public int SpriteCount {
+		get {
+			int count = 0;
+
+			foreach (TileInfo info in GetTileInfos()) {
+				count += TileSpriteCountInTileSpriteInfo (info.idSpriteInfo);
+
+				if (info.subIdSpriteInfo != null) {
+					for (int i = 0; i < info.subIdSpriteInfo.Length; i++) {
+						count += TileSpriteCountInTileSpriteInfo (info.subIdSpriteInfo [i]);
+					}
+				}
+			}
+
+			return count;
+		}
+	}
+	int TileSpriteCountInTileSpriteInfo(TileSpriteInfo info) {
+		int count = 0;
+
+		if (info != null) {
+			if (info.importedSprite != null) {
+				count++;
+			}
+
+			if (info.importedSprites != null) {
+				count += info.importedSprites.Length;
 			}
 		}
 
