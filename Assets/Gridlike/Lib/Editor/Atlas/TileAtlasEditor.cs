@@ -94,6 +94,8 @@ public class GridTileAtlasEditor : Editor {
 				if (TileShapeHelper.IsTriangle (tile.shape)) {
 					tile.isVertical = EditorGUILayout.Toggle ("Triangle can stretch vertically", tile.isVertical);
 					tile.isVertical = !EditorGUILayout.Toggle ("Triangle can stretch horizontally", !tile.isVertical);
+				} else {
+					tile.isVertical = false;
 				}
 
 				tile.isSensor = EditorGUILayout.Toggle ("Is sensor?", tile.isSensor);
@@ -180,15 +182,16 @@ public class GridTileAtlasEditor : Editor {
 		return info;
 	}
 
-	// TODO HANDLE LONG TRIANGLES
 	void GenerateSpriteSheet() {
 		TileAtlas atlas = target as TileAtlas;
 
-		int size = atlas.tilePixelSize;
-		int tilePerRow = Mathf.FloorToInt(TileAtlas.PIXEL_PER_ROW / size);
+		int tilePixelSize = atlas.tilePixelSize;
 
-		// TODO shrink to fit
-		Texture2D texture = new Texture2D (TileAtlas.PIXEL_PER_ROW, 256);
+		int tileCount = atlas.TotalSpriteTileCount;
+		int tilePerRow = Mathf.Min(Mathf.FloorToInt(Mathf.Sqrt(tileCount * 4)), TileAtlas.MAX_SPRITE_SHEET_SIZE / tilePixelSize);
+		int tilePerColumn = tilePerRow;
+
+		Texture2D texture = new Texture2D (tilePerRow * tilePixelSize, tilePerColumn * tilePixelSize);
 		Color[] colors = texture.GetPixels();
 		for (int i = 0; i < colors.Length; i++) {
 			colors [i] = Color.clear;
@@ -203,20 +206,42 @@ public class GridTileAtlasEditor : Editor {
 		int spriteInd = 0;
 
 		// THE EMPTY SPRITE
-		Color[] clearColors = new Color[size * size];
+		Color[] clearColors = new Color[tilePixelSize * tilePixelSize];
 		for (int i = 0; i < clearColors.Length; i++) clearColors [i] = Color.clear;
-		PackHorizontalSprite (tilePerRow, size, clearColors, -1, -1, 1, ref tileX, ref tileY, ref spriteInd, ref sprites, ref texture);
+		PackHorizontalSprite (tilePerRow, tilePixelSize, clearColors, -1, -1, 1, ref tileX, ref tileY, ref spriteInd, ref sprites, ref texture);
 
-		// ALL OTHER SPRITES
+		// ALL HORIZONTAL SPRITES
 		foreach (TileInfo tile in atlas.GetTileInfos()) {
 			if (tile.idSpriteInfo != null) {
-				PackHorizontalSpriteInfo (tilePerRow, size, tile.idSpriteInfo, tile.id, -1, ref tileX, ref tileY, ref spriteInd, ref sprites, ref texture);
+				PackHorizontalSpriteInfo (tilePerRow, tilePixelSize, tile.idSpriteInfo, tile.isVertical, tile.id, -1, ref tileX, ref tileY, ref spriteInd, ref sprites, ref texture);
 			}
 
 			if (tile.subIdSpriteInfo != null) {
 				for (int i = 0; i < tile.subIdSpriteInfo.Length; i++) {
 					if (tile.subIdSpriteInfo [i] != null) {
-						PackHorizontalSpriteInfo (tilePerRow, size, tile.subIdSpriteInfo [i], tile.id, i, ref tileX, ref tileY, ref spriteInd, ref sprites, ref texture);
+						PackHorizontalSpriteInfo (tilePerRow, tilePixelSize, tile.subIdSpriteInfo [i], tile.isVertical, tile.id, i, ref tileX, ref tileY, ref spriteInd, ref sprites, ref texture);
+					}
+				}
+			}
+		}
+
+		tileX = 0;
+		tileY += 1;
+
+		int minTileY = tileY;
+
+		// ALL VERTICAL SPRITES
+		foreach (TileInfo tile in atlas.GetTileInfos()) {
+			if (tile.isVertical) {
+				if (tile.idSpriteInfo != null) {
+					PackVerticalSpriteInfo (tilePerRow, minTileY, tilePixelSize, tile.idSpriteInfo, tile.id, -1, ref tileX, ref tileY, ref spriteInd, ref sprites, ref texture);
+				}
+
+				if (tile.subIdSpriteInfo != null) {
+					for (int i = 0; i < tile.subIdSpriteInfo.Length; i++) {
+						if (tile.subIdSpriteInfo [i] != null) {
+							PackVerticalSpriteInfo (tilePerRow, minTileY, tilePixelSize, tile.subIdSpriteInfo [i], tile.id, i, ref tileX, ref tileY, ref spriteInd, ref sprites, ref texture);
+						}
 					}
 				}
 			}
@@ -248,7 +273,7 @@ public class GridTileAtlasEditor : Editor {
 		importer.spriteImportMode = SpriteImportMode.Multiple;
 		importer.mipmapEnabled = false;
 		importer.isReadable = true;
-		importer.spritePixelsPerUnit = size;
+		importer.spritePixelsPerUnit = tilePixelSize;
 		importer.spritesheet = sprites;
 
 		AssetDatabase.ImportAsset(assetPath);
@@ -289,15 +314,24 @@ public class GridTileAtlasEditor : Editor {
 		}
 	}
 
-	void PackHorizontalSpriteInfo(int tilePerRow, int tileSize, TileSpriteInfo tileSpriteInfo, int id, int subId, ref int tileX, ref int tileY, ref int spriteInd, ref SpriteMetaData[] sprites, ref Texture2D texture) {
+	void PackHorizontalSpriteInfo(int tilePerRow, int tileSize, TileSpriteInfo tileSpriteInfo, bool isVertical, int id, int subId, ref int tileX, ref int tileY, ref int spriteInd, ref SpriteMetaData[] sprites, ref Texture2D texture) {
 		if (tileSpriteInfo.importedSprite != null) {
 			PackHorizontalSprite (tilePerRow, tileSize, tileSpriteInfo.importedSprite, id, subId, 1, ref tileX, ref tileY, ref spriteInd, ref sprites, ref texture);
 		}
 
-		if (tileSpriteInfo.importedSprites != null) {
+		if (!isVertical && tileSpriteInfo.importedSprites != null) {
 			for (int i = 0; i < tileSpriteInfo.importedSprites.Length; i++) {
 				if (tileSpriteInfo.importedSprites [i] != null) {
 					PackHorizontalSprite (tilePerRow, tileSize, tileSpriteInfo.importedSprites[i], id, subId, i+2, ref tileX, ref tileY, ref spriteInd, ref sprites, ref texture);
+				}
+			}
+		}
+	}
+	void PackVerticalSpriteInfo(int tilePerColumn, int minTileY, int tileSize, TileSpriteInfo tileSpriteInfo, int id, int subId, ref int tileX, ref int tileY, ref int spriteInd, ref SpriteMetaData[] sprites, ref Texture2D texture) {
+		if (tileSpriteInfo.importedSprites != null) {
+			for (int i = 0; i < tileSpriteInfo.importedSprites.Length; i++) {
+				if (tileSpriteInfo.importedSprites [i] != null) {
+					PackVerticalSprite (tilePerColumn, minTileY, tileSize, tileSpriteInfo.importedSprites [i], id, subId, i + 2, ref tileX, ref tileY, ref spriteInd, ref sprites, ref texture);
 				}
 			}
 		}
@@ -340,10 +374,38 @@ public class GridTileAtlasEditor : Editor {
 
 		sprites [spriteInd] = new SpriteMetaData {
 			name = "sprite_" + id + "_" + subId + "_" + tileWidth,
-			rect = new Rect (tileX * tileSize, tileY * tileSize, tileSize, tileSize)
+			rect = new Rect (tileX * tileSize, tileY * tileSize, tileSize * tileWidth, tileSize)
 		};
 
 		spriteInd += 1;
 		tileX += tileWidth;
+	}
+
+	void PackVerticalSprite(int tilePerColumn, int minTileY, int tileSize, Sprite sprite, int id, int subId, int tileHeight, ref int tileX, ref int tileY, ref int spriteInd, ref SpriteMetaData[] sprites, ref Texture2D texture) {
+		if (tileY + tileHeight >= tilePerColumn) {
+			tileX += 1;
+			tileY = minTileY;
+		}
+
+		texture.SetPixels (
+			tileX * tileSize, 
+			tileY * tileSize, 
+			tileSize, 
+			tileSize * tileHeight,
+			sprite.texture.GetPixels (
+				(int) sprite.textureRect.x,
+				(int) sprite.textureRect.y,
+				tileSize,
+				tileSize * tileHeight
+			)
+		);
+
+		sprites [spriteInd] = new SpriteMetaData {
+			name = "sprite_" + id + "_" + subId + "_" + tileHeight,
+			rect = new Rect (tileX * tileSize, tileY * tileSize, tileSize, tileSize * tileHeight)
+		};
+
+		spriteInd += 1;
+		tileY += tileHeight;
 	}
 }
