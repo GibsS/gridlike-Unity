@@ -5,9 +5,12 @@ using UnityEngine;
 [CreateAssetMenu(fileName="GridTileAtlas", menuName="Gridlike/Grid tile atlas", order=1)]
 public class TileAtlas : ScriptableObject {
 
+	public const int MAX_PIXEL_PER_ROW = 1024;
 	public const int PIXEL_PER_ROW = 256;
 
 	public int tilePixelSize;
+	public string spriteSheetPath;
+
 	public Texture2D spriteSheet;
 	public Sprite emptySprite;
 
@@ -23,6 +26,41 @@ public class TileAtlas : ScriptableObject {
 
 			return count;
 		}
+	}
+
+	public int TileTextureCount {
+		get {
+			int count = 0;
+
+			foreach (TileInfo info in GetTileInfos()) {
+				count += TileTextureCountInTileSpriteInfo (info.idSpriteInfo);
+
+				if (info.subIdSpriteInfo != null) {
+					for (int i = 0; i < info.subIdSpriteInfo.Length; i++) {
+						count += TileTextureCountInTileSpriteInfo (info.subIdSpriteInfo [i]);
+					}
+				}
+			}
+
+			return count;
+		}
+	}
+	int TileTextureCountInTileSpriteInfo(TileSpriteInfo info) {
+		int count = 0;
+
+		if (info != null) {
+			if (info.importedSprite != null) {
+				count++;
+			}
+
+			if (info.importedSprites != null) {
+				for (int i = 0; i < info.importedSprites.Length; i++) {
+					count += i + 2;
+				}
+			}
+		}
+
+		return count;
 	}
 
 	void OnEnable() {

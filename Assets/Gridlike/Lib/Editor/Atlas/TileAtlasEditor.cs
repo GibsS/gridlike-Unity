@@ -24,6 +24,17 @@ public class GridTileAtlasEditor : Editor {
 		EditorGUILayout.ObjectField("Sprite sheet", atlas.spriteSheet, typeof(Texture2D), false);
 		GUI.enabled = true;
 
+		// SPRITE SHEET PATH
+		atlas.spriteSheetPath = EditorGUILayout.TextField ("Sprite sheet path", atlas.spriteSheetPath);
+		if (string.IsNullOrEmpty (atlas.spriteSheetPath)) {
+			atlas.spriteSheetPath = "Resources/sprite_sheet.png";
+		} else {
+			if (!atlas.spriteSheetPath.EndsWith (".png")) {
+				atlas.spriteSheetPath += ".png";
+			}
+		}
+
+		// TILE PIXEL SIZE
 		atlas.tilePixelSize = EditorGUILayout.IntField ("Tile pixel size", atlas.tilePixelSize);
 
 		if (GUILayout.Button ("Generate sprite sheet")) {
@@ -79,6 +90,12 @@ public class GridTileAtlasEditor : Editor {
 
 			if (tile.tileGO == null) {
 				tile.shape = (TileShape)EditorGUILayout.EnumPopup ("Shape", tile.shape);
+
+				if (TileShapeHelper.IsTriangle (tile.shape)) {
+					tile.isVertical = EditorGUILayout.Toggle ("Triangle can stretch vertically", tile.isVertical);
+					tile.isVertical = !EditorGUILayout.Toggle ("Triangle can stretch horizontally", !tile.isVertical);
+				}
+
 				tile.isSensor = EditorGUILayout.Toggle ("Is sensor?", tile.isSensor);
 				tile.layer = EditorGUILayout.LayerField ("Layer", tile.layer);
 				tile.tag = EditorGUILayout.TagField ("Tag", tile.tag);
@@ -200,12 +217,13 @@ public class GridTileAtlasEditor : Editor {
 
 		// TODO allow custom location
 		// TODO default to a random name in a resource folder
-		Directory.CreateDirectory(Application.dataPath + "/Resources");
-		File.WriteAllBytes (Application.dataPath + "/Resources/ok.png", bytes);
+		// Directory.CreateDirectory(Application.dataPath + "/" h);
+		File.WriteAllBytes (Application.dataPath + "/" + atlas.spriteSheetPath, bytes);
 
 		AssetDatabase.Refresh (ImportAssetOptions.ForceUpdate);
 
-		texture = (Texture2D) Resources.Load("ok");
+		//texture = (Texture2D) Resources.Load("ok");
+		texture = (Texture2D) AssetDatabase.LoadAssetAtPath("Assets/" + atlas.spriteSheetPath, typeof(Texture2D));
 
 		atlas.spriteSheet = texture;
 

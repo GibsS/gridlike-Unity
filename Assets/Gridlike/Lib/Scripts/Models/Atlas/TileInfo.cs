@@ -8,6 +8,8 @@ public class TileInfo {
 	public string name;
 
 	public TileShape shape;
+	public bool isVertical;
+
 	public bool isSensor;
 	public int layer;
 	public string tag;
