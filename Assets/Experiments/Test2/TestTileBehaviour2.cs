@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using Gridlike;
+
 public class TestTileBehaviour2 : TileBehaviour {
 
 	static bool[,] _area = { { true, true }, { true, true } };

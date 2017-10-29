@@ -6,7 +6,6 @@ public class RegionMeshRenderer : MonoBehaviour {
 	
 	[HideInInspector] [SerializeField] int tilePerSide;
 
-	[HideInInspector] [SerializeField] Texture2D texture;
 	[HideInInspector] [SerializeField] int textureWidth;
 	[HideInInspector] [SerializeField] int textureHeight;
 
@@ -28,7 +27,6 @@ public class RegionMeshRenderer : MonoBehaviour {
 		meshRenderer = gameObject.AddComponent<MeshRenderer> ();
 
 		this.tilePerSide = tilePerCount;
-		this.texture = texture;
 
 		textureWidth = texture.width;
 		textureHeight = texture.height;

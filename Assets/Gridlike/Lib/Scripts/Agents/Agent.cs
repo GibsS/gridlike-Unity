@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Agent : MonoBehaviour {
+namespace Gridlike {
+	
+	public class Agent : MonoBehaviour {
 
-	public static List<Agent> agents { get; private set; }
+		public static List<Agent> agents { get; private set; }
 
-	void Start() {
-		if (agents == null) agents = new List<Agent> ();
+		void Start() {
+			if (agents == null) agents = new List<Agent> ();
 
-		agents.Add (this);
+			agents.Add (this);
+		}
 	}
 }

@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+using Gridlike;
+
 public class TestGridGeneratorAlgorithm : GridGeneratorAlgorithm {
 
 	public override Tile[,] GenerateTiles (int x, int y, int width, int height) {

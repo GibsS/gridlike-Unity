@@ -3,174 +3,177 @@ using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName="GridTileAtlas", menuName="Gridlike/Grid tile atlas", order=1)]
-public class TileAtlas : ScriptableObject {
+namespace Gridlike {
 
-	public const int MAX_SPRITE_SHEET_SIZE = 2048;
+	[CreateAssetMenu(fileName="GridTileAtlas", menuName="Gridlike/Grid tile atlas", order=1)]
+	public class TileAtlas : ScriptableObject {
 
-	public int tilePixelSize;
-	public bool useRelativePath = false;
-	public string spriteSheetPath;
+		public const int MAX_SPRITE_SHEET_SIZE = 2048;
 
-	public Texture2D spriteSheet;
-	public Sprite emptySprite;
+		public int tilePixelSize;
+		public bool useRelativePath = false;
+		public string spriteSheetPath;
 
-	public TileInfo[] atlas;
+		public Texture2D spriteSheet;
+		public Sprite emptySprite;
 
-	public int Count { 
-		get {
-			int count = 0;
+		public TileInfo[] atlas;
 
-			for (int i = 0; i < atlas.Length; i++) {
-				if (atlas [i].id != 0) count++;
+		public int Count { 
+			get {
+				int count = 0;
+
+				for (int i = 0; i < atlas.Length; i++) {
+					if (atlas [i].id != 0) count++;
+				}
+
+				return count;
 			}
-
-			return count;
 		}
-	}
 
-	public int TotalSpriteTileCount {
-		get {
+		public int TotalSpriteTileCount {
+			get {
+				int count = 0;
+
+				foreach (TileInfo info in GetTileInfos()) {
+					count += TileTextureCountInTileSpriteInfo (info.idSpriteInfo);
+
+					if (info.subIdSpriteInfo != null) {
+						for (int i = 0; i < info.subIdSpriteInfo.Length; i++) {
+							count += TileTextureCountInTileSpriteInfo (info.subIdSpriteInfo [i]);
+						}
+					}
+				}
+
+				return count;
+			}
+		}
+		int TileTextureCountInTileSpriteInfo(TileSpriteInfo info) {
 			int count = 0;
 
-			foreach (TileInfo info in GetTileInfos()) {
-				count += TileTextureCountInTileSpriteInfo (info.idSpriteInfo);
+			if (info != null) {
+				if (info.importedSprite != null) {
+					count++;
+				}
 
-				if (info.subIdSpriteInfo != null) {
-					for (int i = 0; i < info.subIdSpriteInfo.Length; i++) {
-						count += TileTextureCountInTileSpriteInfo (info.subIdSpriteInfo [i]);
+				if (info.importedSprites != null) {
+					for (int i = 0; i < info.importedSprites.Length; i++) {
+						count += i + 2;
 					}
 				}
 			}
 
 			return count;
 		}
-	}
-	int TileTextureCountInTileSpriteInfo(TileSpriteInfo info) {
-		int count = 0;
+		public int SpriteCount {
+			get {
+				int count = 0;
 
-		if (info != null) {
-			if (info.importedSprite != null) {
-				count++;
-			}
+				foreach (TileInfo info in GetTileInfos()) {
+					count += TileSpriteCountInTileSpriteInfo (info.idSpriteInfo);
 
-			if (info.importedSprites != null) {
-				for (int i = 0; i < info.importedSprites.Length; i++) {
-					count += i + 2;
+					if (info.subIdSpriteInfo != null) {
+						for (int i = 0; i < info.subIdSpriteInfo.Length; i++) {
+							count += TileSpriteCountInTileSpriteInfo (info.subIdSpriteInfo [i]);
+						}
+					}
 				}
+
+				return count;
 			}
 		}
-
-		return count;
-	}
-	public int SpriteCount {
-		get {
+		int TileSpriteCountInTileSpriteInfo(TileSpriteInfo info) {
 			int count = 0;
 
-			foreach (TileInfo info in GetTileInfos()) {
-				count += TileSpriteCountInTileSpriteInfo (info.idSpriteInfo);
+			if (info != null) {
+				if (info.importedSprite != null) {
+					count++;
+				}
 
-				if (info.subIdSpriteInfo != null) {
-					for (int i = 0; i < info.subIdSpriteInfo.Length; i++) {
-						count += TileSpriteCountInTileSpriteInfo (info.subIdSpriteInfo [i]);
-					}
+				if (info.importedSprites != null) {
+					count += info.importedSprites.Length;
 				}
 			}
 
 			return count;
 		}
-	}
-	int TileSpriteCountInTileSpriteInfo(TileSpriteInfo info) {
-		int count = 0;
 
-		if (info != null) {
-			if (info.importedSprite != null) {
-				count++;
-			}
+		void OnEnable() {
+			if (atlas == null) {
+				atlas = new TileInfo[30];
 
-			if (info.importedSprites != null) {
-				count += info.importedSprites.Length;
+				for (int i = 0; i < atlas.Length; i++) {
+					atlas [i] = new TileInfo ();
+				}
 			}
 		}
 
-		return count;
-	}
-
-	void OnEnable() {
-		if (atlas == null) {
-			atlas = new TileInfo[30];
-
+		public IEnumerable<TileInfo> GetTileInfos() {
 			for (int i = 0; i < atlas.Length; i++) {
-				atlas [i] = new TileInfo ();
-			}
-		}
-	}
-
-	public IEnumerable<TileInfo> GetTileInfos() {
-		for (int i = 0; i < atlas.Length; i++) {
-			if (atlas [i] != null && atlas[i].id != 0) {
-				yield return atlas [i];
-			}
-		}
-	}
-
-	public TileInfo GetTile(int id) {
-		return atlas [id];
-	}
-
-	public TileInfo this[int i] {
-		get { return atlas[i]; }
-		set { atlas[i] = value; }
-	}
-
-	public int AddTile() {
-		for (int i = 0; i < atlas.Length; i++) {
-			if (atlas [i] == null) {
-				atlas [i] = new TileInfo ();
+				if (atlas [i] != null && atlas[i].id != 0) {
+					yield return atlas [i];
+				}
 			}
 		}
 
-		for (int i = 1; i < atlas.Length; i++) {
-			if (atlas [i].id == 0) {
-				atlas [i] = CreateTileInfo (i);
-				return i;
+		public TileInfo GetTile(int id) {
+			return atlas [id];
+		}
+
+		public TileInfo this[int i] {
+			get { return atlas[i]; }
+			set { atlas[i] = value; }
+		}
+
+		public int AddTile() {
+			for (int i = 0; i < atlas.Length; i++) {
+				if (atlas [i] == null) {
+					atlas [i] = new TileInfo ();
+				}
+			}
+
+			for (int i = 1; i < atlas.Length; i++) {
+				if (atlas [i].id == 0) {
+					atlas [i] = CreateTileInfo (i);
+					return i;
+				}
+			}
+
+			// if full, expand and add tile info at the end
+			TileInfo[] newAtlas = new TileInfo[atlas.Length + 10];
+			for (int i = 1; i < atlas.Length; i++) {
+				newAtlas [i] = atlas [i];
+			}
+
+			int newPosition = Mathf.Max(1, atlas.Length);
+			newAtlas [newPosition] = CreateTileInfo (newPosition);
+
+			atlas = newAtlas;
+
+			return newPosition;
+		}
+		public void RemoveTile(int tile) {
+			if (tile < atlas.Length && tile >= 0) {
+				atlas [tile] = null;
 			}
 		}
 
-		// if full, expand and add tile info at the end
-		TileInfo[] newAtlas = new TileInfo[atlas.Length + 10];
-		for (int i = 1; i < atlas.Length; i++) {
-			newAtlas [i] = atlas [i];
+		public Sprite GetSprite(int id, int subId, int size = 1) {
+			return atlas [id].GetSprite (subId, size);
 		}
 
-		int newPosition = Mathf.Max(1, atlas.Length);
-		newAtlas [newPosition] = CreateTileInfo (newPosition);
+		TileInfo CreateTileInfo(int id) {
+			TileInfo tile = new TileInfo();
 
-		atlas = newAtlas;
+			tile.id = id;
+			tile.name = "tile " + id;
+			tile.shape = TileShape.FULL;
+			tile.tag = "Untagged";
 
-		return newPosition;
-	}
-	public void RemoveTile(int tile) {
-		if (tile < atlas.Length && tile >= 0) {
-			atlas [tile] = null;
+			tile.idSpriteInfo = new TileSpriteInfo();
+			tile.subIdSpriteInfo = null;
+
+			return tile;
 		}
-	}
-
-	public Sprite GetSprite(int id, int subId, int size = 1) {
-		return atlas [id].GetSprite (subId, size);
-	}
-
-	TileInfo CreateTileInfo(int id) {
-		TileInfo tile = new TileInfo();
-
-		tile.id = id;
-		tile.name = "tile " + id;
-		tile.shape = TileShape.FULL;
-		tile.tag = "Untagged";
-
-		tile.idSpriteInfo = new TileSpriteInfo();
-		tile.subIdSpriteInfo = null;
-
-		return tile;
 	}
 }

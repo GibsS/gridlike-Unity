@@ -1,25 +1,28 @@
-﻿public enum TileShape {
-	EMPTY, 
-	FULL, 
+﻿namespace Gridlike {
 
-	UP_ONEWAY, 
-	DOWN_ONEWAY, 
-	LEFT_ONEWAY,
-	RIGHT_ONEWAY,
+	public enum TileShape {
+		EMPTY, 
+		FULL, 
 
-	UP_LEFT_TRIANGLE,
-	UP_RIGHT_TRIANGLE,
-	DOWN_LEFT_TRIANGLE,
-	DOWN_RIGHT_TRIANGLE
-}
+		UP_ONEWAY, 
+		DOWN_ONEWAY, 
+		LEFT_ONEWAY,
+		RIGHT_ONEWAY,
 
-public static class TileShapeHelper {
-
-	public static bool IsTriangle(TileShape shape) {
-		return (int)shape >= 6;
+		UP_LEFT_TRIANGLE,
+		UP_RIGHT_TRIANGLE,
+		DOWN_LEFT_TRIANGLE,
+		DOWN_RIGHT_TRIANGLE
 	}
 
-	public static bool IsOneway(TileShape shape) {
-		return (int)shape >= 2 && (int)shape < 6;
+	public static class TileShapeHelper {
+
+		public static bool IsTriangle(TileShape shape) {
+			return (int)shape >= 6;
+		}
+
+		public static bool IsOneway(TileShape shape) {
+			return (int)shape >= 2 && (int)shape < 6;
+		}
 	}
 }

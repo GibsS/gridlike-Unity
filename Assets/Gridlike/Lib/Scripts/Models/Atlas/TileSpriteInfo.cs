@@ -1,12 +1,15 @@
 ﻿using System;
 using UnityEngine;
 
-[Serializable]
-public class TileSpriteInfo {
+namespace Gridlike {
+	
+	[Serializable]
+	public class TileSpriteInfo {
 
-	public Sprite sprite;
-	public Sprite[] sprites;
+		public Sprite sprite;
+		public Sprite[] sprites;
 
-	public Sprite importedSprite;
-	public Sprite[] importedSprites;
+		public Sprite importedSprite;
+		public Sprite[] importedSprites;
+	}
 }

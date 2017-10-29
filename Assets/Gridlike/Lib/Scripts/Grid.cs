@@ -53,7 +53,7 @@ using UnityEngine;
 // Fix bug with procedural generation and the new renderer
 // Add bool to decide if set creates region or not (in play mode)  
 
-//namespace Gridlike {
+namespace Gridlike {
 
 	[ExecuteInEditMode]
 	[AddComponentMenu("Gridlike/Grid")]
@@ -223,12 +223,6 @@ using UnityEngine;
 					region = gridDelegate.LoadTiles (X, Y);
 
 					if (region != null) {
-						for (int i = 0; i < Grid.REGION_SIZE; i++) {
-							for (int j = 0; j < Grid.REGION_SIZE; j++) {
-								Tile tile = region.Get (i, j);
-							}
-						}
-
 						tiles.SetRegion (X, Y, region);
 					}
 				}
@@ -671,4 +665,4 @@ using UnityEngine;
 
 		#endregion
 	}
-//}
+}

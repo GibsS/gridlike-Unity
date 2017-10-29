@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using Gridlike;
+
 public class GridCreator : MonoBehaviour {
 
 	public TileAtlas atlas;

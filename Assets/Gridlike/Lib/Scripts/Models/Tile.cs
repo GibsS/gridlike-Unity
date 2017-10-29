@@ -1,32 +1,35 @@
 ﻿using System;
 using UnityEngine;
 
-[Serializable]
-public class Tile {
+namespace Gridlike {
 
-	public TileDictionary dictionary;
+	[Serializable]
+	public class Tile {
 
-	public bool tileGOCenter;
+		public TileDictionary dictionary;
 
-	public int id;
-	public int subId;
+		public bool tileGOCenter;
 
-	public float state1;
-	public float state2;
-	public float state3;
+		public int id;
+		public int subId;
 
-	public Tile Clone() {
-		return new Tile {
-			dictionary = dictionary.Clone (),
+		public float state1;
+		public float state2;
+		public float state3;
 
-			tileGOCenter = tileGOCenter,
+		public Tile Clone() {
+			return new Tile {
+				dictionary = dictionary.Clone (),
 
-			id = id,
-			subId = subId,
+				tileGOCenter = tileGOCenter,
 
-			state1 = state1,
-			state2 = state2,
-			state3 = state3
-		};
+				id = id,
+				subId = subId,
+
+				state1 = state1,
+				state2 = state2,
+				state3 = state3
+			};
+		}
 	}
 }
