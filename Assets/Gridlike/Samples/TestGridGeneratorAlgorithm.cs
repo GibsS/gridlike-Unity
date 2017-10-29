@@ -9,8 +9,7 @@ public class TestGridGeneratorAlgorithm : GridGeneratorAlgorithm {
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
 				tiles [i, j] = new Tile {
-					id = 1, //(j + y > i + x) ? 0 : 1,
-					subId = -1
+					id = 1
 				};
 			}
 		}

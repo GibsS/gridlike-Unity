@@ -20,14 +20,14 @@ public class TileInfo {
 	public TileSpriteInfo idSpriteInfo;
 	public TileSpriteInfo[] subIdSpriteInfo;
 
-	public Sprite GetSprite(int subId, int size = 1) {
+	public Sprite GetSprite(int subId = 0, int size = 1) {
 		TileSpriteInfo info;
 
-		if (subId == -1) {
+		if (subId == 0) {
 			info = idSpriteInfo;
 		} else {
-			if (subIdSpriteInfo [subId] != null) {
-				info = subIdSpriteInfo [subId];
+			if (subIdSpriteInfo [subId - 1] != null) {
+				info = subIdSpriteInfo [subId - 1];
 			} else {
 				info = idSpriteInfo;
 			}
@@ -68,15 +68,15 @@ public class TileInfo {
 	public void AddSpriteSize(int subId) {
 		TileSpriteInfo spriteInfo;
 
-		if (subId == -1) {
+		if (subId == 0) {
 			if (idSpriteInfo == null) {
 				idSpriteInfo = new TileSpriteInfo ();
 			}
 
 			spriteInfo = idSpriteInfo;
 		} else {
-			if (subIdSpriteInfo != null && subId < subIdSpriteInfo.Length) {
-				spriteInfo = subIdSpriteInfo [subId];
+			if (subIdSpriteInfo != null && (subId - 1) < subIdSpriteInfo.Length) {
+				spriteInfo = subIdSpriteInfo [subId - 1];
 			} else {
 				return;
 			}
@@ -97,15 +97,15 @@ public class TileInfo {
 	public void RemoveSpriteSize(int subId) {
 		TileSpriteInfo spriteInfo = null;
 
-		if (subId == -1) {
+		if (subId == 0) {
 			if (idSpriteInfo != null) {
 				spriteInfo = idSpriteInfo;
 			} else {
 				return;
 			}
 		} else {
-			if (subIdSpriteInfo != null && subId < subIdSpriteInfo.Length) {
-				spriteInfo = subIdSpriteInfo [subId];
+			if (subIdSpriteInfo != null && (subId - 1) < subIdSpriteInfo.Length) {
+				spriteInfo = subIdSpriteInfo [subId - 1];
 			} else {
 				return;
 			}

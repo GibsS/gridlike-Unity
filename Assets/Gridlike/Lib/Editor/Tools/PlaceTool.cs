@@ -49,7 +49,7 @@ public class PlaceTool : GridTool {
 			for (int j = -r; j <= r; j++) {
 				if (grid.CanSet (x, y, id)) {
 					hasPlaced = true;
-					grid.Set (x + i, y + j, id, -1, 0, 0, 0);
+					grid.Set (x + i, y + j, id, 0, 0, 0, 0);
 				}
 			}
 		}

@@ -78,7 +78,7 @@ public class GridTileAtlasEditor : Editor {
 
 		GUILayout.FlexibleSpace ();
 
-		if (tile.GetSprite (-1) != null) DrawOnGUISprite(tile.GetSprite(-1));
+		if (tile.GetSprite () != null) DrawOnGUISprite(tile.GetSprite());
 		
 		if (GUILayout.Button ("remove", GUILayout.MaxWidth(80))) {
 			atlas.RemoveTile (tile.id);
@@ -113,7 +113,7 @@ public class GridTileAtlasEditor : Editor {
 			bool isTriangle = TileShapeHelper.IsTriangle (tile.shape);
 
 			if (isTriangle) {
-				TriangleSpriteChooser (tile, tile.idSpriteInfo, -1);
+				TriangleSpriteChooser (tile, tile.idSpriteInfo, 0);
 
 				if (tile.subIdSpriteInfo != null) {
 					for (int i = 0; i < tile.subIdSpriteInfo.Length; i++) {
@@ -210,18 +210,18 @@ public class GridTileAtlasEditor : Editor {
 		// THE EMPTY SPRITE
 		Color[] clearColors = new Color[tilePixelSize * tilePixelSize];
 		for (int i = 0; i < clearColors.Length; i++) clearColors [i] = Color.clear;
-		PackHorizontalSprite (tilePerRow, tilePixelSize, clearColors, -1, -1, 1, ref tileX, ref tileY, ref spriteInd, ref sprites, ref texture);
+		PackHorizontalSprite (tilePerRow, tilePixelSize, clearColors, -1, 0, 1, ref tileX, ref tileY, ref spriteInd, ref sprites, ref texture);
 
 		// ALL HORIZONTAL SPRITES
 		foreach (TileInfo tile in atlas.GetTileInfos()) {
 			if (tile.idSpriteInfo != null) {
-				PackHorizontalSpriteInfo (tilePerRow, tilePixelSize, tile.idSpriteInfo, tile.isVertical, tile.id, -1, ref tileX, ref tileY, ref spriteInd, ref sprites, ref texture);
+				PackHorizontalSpriteInfo (tilePerRow, tilePixelSize, tile.idSpriteInfo, tile.isVertical, tile.id, 0, ref tileX, ref tileY, ref spriteInd, ref sprites, ref texture);
 			}
 
 			if (tile.subIdSpriteInfo != null) {
 				for (int i = 0; i < tile.subIdSpriteInfo.Length; i++) {
 					if (tile.subIdSpriteInfo [i] != null) {
-						PackHorizontalSpriteInfo (tilePerRow, tilePixelSize, tile.subIdSpriteInfo [i], tile.isVertical, tile.id, i, ref tileX, ref tileY, ref spriteInd, ref sprites, ref texture);
+						PackHorizontalSpriteInfo (tilePerRow, tilePixelSize, tile.subIdSpriteInfo [i], tile.isVertical, tile.id, i + 1, ref tileX, ref tileY, ref spriteInd, ref sprites, ref texture);
 					}
 				}
 			}
@@ -236,13 +236,13 @@ public class GridTileAtlasEditor : Editor {
 		foreach (TileInfo tile in atlas.GetTileInfos()) {
 			if (tile.isVertical) {
 				if (tile.idSpriteInfo != null) {
-					PackVerticalSpriteInfo (tilePerRow, minTileY, tilePixelSize, tile.idSpriteInfo, tile.id, -1, ref tileX, ref tileY, ref spriteInd, ref sprites, ref texture);
+					PackVerticalSpriteInfo (tilePerRow, minTileY, tilePixelSize, tile.idSpriteInfo, tile.id, 0, ref tileX, ref tileY, ref spriteInd, ref sprites, ref texture);
 				}
 
 				if (tile.subIdSpriteInfo != null) {
 					for (int i = 0; i < tile.subIdSpriteInfo.Length; i++) {
 						if (tile.subIdSpriteInfo [i] != null) {
-							PackVerticalSpriteInfo (tilePerRow, minTileY, tilePixelSize, tile.subIdSpriteInfo [i], tile.id, i, ref tileX, ref tileY, ref spriteInd, ref sprites, ref texture);
+							PackVerticalSpriteInfo (tilePerRow, minTileY, tilePixelSize, tile.subIdSpriteInfo [i], tile.id, i + 1, ref tileX, ref tileY, ref spriteInd, ref sprites, ref texture);
 						}
 					}
 				}
@@ -299,10 +299,10 @@ public class GridTileAtlasEditor : Editor {
 				} else {
 					TileSpriteInfo spriteInfo;
 
-					if (subId == -1) {
+					if (subId == 0) {
 						spriteInfo = atlas [id].idSpriteInfo;
 					} else {
-						spriteInfo = atlas [id].subIdSpriteInfo [subId];
+						spriteInfo = atlas [id].subIdSpriteInfo [subId - 1];
 					}
 
 					if (tileSize == 1) {

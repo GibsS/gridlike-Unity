@@ -64,8 +64,7 @@ public class GridCreator : MonoBehaviour {
 		for (int i = 0; i < 60; i++) {
 			for (int j = 0; j < 60; j++) {
 				tiles [i, j] = new Tile {
-					id = 1,
-					subId = -1
+					id = 1
 				};
 			}
 		}

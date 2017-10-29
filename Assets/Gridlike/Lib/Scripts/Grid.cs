@@ -2,15 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// POTENTIAL IMPROVEMENTS
+// #### POTENTIAL IMPROVEMENTS ##
 // Grid updater component: iterates through tiles and updates there information (potentially through compute shader?)
-// Add the drag and drop if possible to the tile atlas (maybe into a window dedicated to it)
-// Allow the procedural generator to not use saving
 
 // OPTIMIZATION
 // New function: Set multiple tiles at once instead of just one
 
-// TWEAK make grid tool window look better than it does (copy grid tile map guy)
+// TOOLS
+// Make grid tool window look better than it does (copy grid tile map guy)
+// Show grid
+// Show outline of place and erase tool at all time
+// Show outline of copy tool at all time (also sort out the weird design choices of differentiating drag and copy)
+
+// TILE ATLAS
+// Add the drag and drop if possible to the tile atlas (maybe into a window dedicated to it)
+// Have sprite size verification with error boxes in tile atlas
+
+// TILE GO
+// Add concept of tile GO name (+ lookup)
 
 // BUGS
 // Allow regular gizmos to be accessed even when the grid is selected
@@ -380,7 +389,7 @@ public class Grid : MonoBehaviour {
 
 		_Set (tile, x, y, id, subid, state1, state2, state3, region.presented);
 	}
-	public void SetId(int x, int y, int id, int subId = -1) {
+	public void SetId(int x, int y, int id, int subId = 0) {
 		FiniteGrid region;
 		Tile tile = GetOrCreate (x, y, out region);
 
@@ -436,7 +445,7 @@ public class Grid : MonoBehaviour {
 
 		if (component == null) {
 			tile.id = 0;
-			tile.subId = -1;
+			tile.subId = 0;
 
 			// POTENTIAL BUG : make sure it can be called even if we don't check it's presented
 			foreach (GridListener listener in gridListeners) {
@@ -453,7 +462,7 @@ public class Grid : MonoBehaviour {
 
 				if(other != null) {
 					other.id = 0;
-					other.subId = -1;
+					other.subId = 0;
 
 					// POTENTIAL BUG : make sure it can be called even if we don't check it's presented
 					foreach (GridListener listener in gridListeners) {
@@ -487,7 +496,7 @@ public class Grid : MonoBehaviour {
 
 					if (otherTile != null) {
 						otherTile.id = 0;
-						otherTile.subId = -1;
+						otherTile.subId = 0;
 
 						foreach (GridListener listener in gridListeners) {
 							listener.OnSet (xx, yy, otherTile);
