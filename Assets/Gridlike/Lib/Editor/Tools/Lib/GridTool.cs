@@ -52,11 +52,11 @@ public abstract class GridTool {
 	public virtual bool UseWindow () { return false; }
 	public virtual string Name() { return "change"; }
 
-	public virtual void Window () { }
+	public virtual bool Window () { return false; }
 
-	public virtual void Update() { }
+	public virtual bool Update() { return false; }
 
-	public virtual void OnMouseDown() { }
-	public virtual void OnMouse() { }
-	public virtual void OnMouseUp() { }
+	public virtual bool OnMouseDown() { return false; }
+	public virtual bool OnMouse() { return false; }
+	public virtual bool OnMouseUp() { return false; }
 }

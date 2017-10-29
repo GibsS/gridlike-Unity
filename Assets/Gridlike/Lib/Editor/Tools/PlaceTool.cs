@@ -15,7 +15,7 @@ public class PlaceTool : GridTool {
 		return "place";
 	}
 
-	public override void Window() {
+	public override bool Window() {
 
 		id = EditorGUILayout.IntField ("id", id);
 		if (grid.atlas == null || id <= 0 || id >= grid.atlas.atlas.Length) id = 0;
@@ -26,16 +26,20 @@ public class PlaceTool : GridTool {
 		} else {
 			radius = 1;
 		}
+		return false;
 	}
 
-	public override void OnMouseDown() {
+	public override bool OnMouseDown() {
 		Place ();
+		return true;
 	}
-	public override void OnMouseUp() {
+	public override bool OnMouseUp() {
 		Place ();
+		return true;
 	}
-	public override void OnMouse() {
+	public override bool OnMouse() {
 		Place ();
+		return true;
 	}
 
 	void Place() {

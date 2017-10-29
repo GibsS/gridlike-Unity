@@ -1,5 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
+using UnityEditor.SceneManagement;
+using UnityEngine.SceneManagement;
 using System;
 
 [CustomEditor(typeof(Grid))]
@@ -69,7 +71,8 @@ public class GridEditor : Editor {
 			grid.saveOnClose = EditorGUILayout.ToggleLeft ("Save grid on destroy", grid.saveOnClose);
 		}
 
-		EditorUtility.SetDirty (target);
+		if (GUI.changed)
+			EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
 	}
 
 	void OnSceneGUI() {
@@ -116,6 +119,8 @@ public class GridEditor : Editor {
 
 		GUILayout.EndArea();
 
+		bool didSomething = false;
+
 		// TOOL WINDOW
 		if (tool.UseWindow ()) {
 			GUILayout.BeginArea(new Rect(20, 60, 450, tool.WindowHeight()));
@@ -125,7 +130,7 @@ public class GridEditor : Editor {
 			GUI.color = Color.white;
 			GUI.Box(rect1, GUIContent.none);
 
-			tool.Window ();
+			didSomething = tool.Window () || didSomething;
 
 			//sendInput = !rect.Contains (Event.current.mousePosition);
 
@@ -136,7 +141,8 @@ public class GridEditor : Editor {
 
 		Handles.EndGUI();
 
-		tool.Update ();
+
+		didSomething = tool.Update () || didSomething;
 
 		// TOOL INPUT
 		if (Event.current.button == 0) {
@@ -144,17 +150,17 @@ public class GridEditor : Editor {
 				switch (Event.current.type) {
 				case EventType.mouseDown:
 					{
-						tool.OnMouseDown ();
+						didSomething = tool.OnMouseDown () || didSomething;
 						break;
 					}
 				case EventType.mouseDrag:
 					{
-						tool.OnMouse ();
+						didSomething = tool.OnMouse () || didSomething;
 						break;
 					}
 				case EventType.mouseUp:
 					{
-						tool.OnMouseUp ();
+						didSomething = tool.OnMouseUp () || didSomething;
 						break;
 					}
 				}
@@ -167,6 +173,7 @@ public class GridEditor : Editor {
 
 		SceneView.RepaintAll ();
 
-		EditorUtility.SetDirty (target);
+		if (didSomething)
+			EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
 	}
 }

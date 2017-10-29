@@ -11,13 +11,16 @@ public class EraseRegionTool : GridTool {
 		return "erase region";
 	}
 
-	public override void OnMouseDown () {
+	public override bool OnMouseDown () {
 		grid.UnloadContainingRegion (mouseX, mouseY);
+		return true;
 	}
-	public override void OnMouseUp () {
+	public override bool OnMouseUp () {
 		grid.UnloadContainingRegion (mouseX, mouseY);
+		return true;
 	}
-	public override void OnMouse () {
+	public override bool OnMouse () {
 		grid.UnloadContainingRegion (mouseX, mouseY);
+		return true;
 	}
 }

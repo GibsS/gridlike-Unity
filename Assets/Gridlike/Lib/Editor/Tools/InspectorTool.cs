@@ -16,7 +16,7 @@ public class InspectorTool : GridTool {
 	int selectedX;
 	int selectedY;
 
-	public override void Window () {
+	public override bool Window () {
 		Tile tile = grid.Get (selectedX, selectedY);
 
 		if (tile != null) {
@@ -60,23 +60,27 @@ public class InspectorTool : GridTool {
 		} else {
 			EditorGUILayout.LabelField ("No tile under the cursor");
 		}
+		return false;
 	}
 
-	public override void Update() {
+	public override bool Update() {
 		int x = selectedX, y = selectedY;
 		Tile tile = grid.Get (x, y);
 
 		DrawTileInformation (x, y, Color.magenta, tile == null ? null : new string[] { "id=" + tile.id });
+		return false;
 	}
-	public override void OnMouseDown() {
+	public override bool OnMouseDown() {
 		selectedX = mouseX;
 		selectedY = mouseY;
+		return false;
 	}
 
-	public override void OnMouse () {
+	public override bool OnMouse () {
 		int x = mouseX, y = mouseY;
 		Tile tile = grid.Get (x, y);
 
 		DrawTileInformation (x, y, Color.magenta, tile == null ? null : new string[] { "id=" + tile.id });
+		return false;
 	}
 }

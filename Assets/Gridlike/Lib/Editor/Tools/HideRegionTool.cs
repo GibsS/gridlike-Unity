@@ -11,13 +11,16 @@ public class HideRegionTool : GridTool {
 		return "hide region";
 	}
 
-	public override void OnMouseDown () {
+	public override bool OnMouseDown () {
 		grid.HideContainingRegion (mouseX, mouseY);
+		return true;
 	}
-	public override void OnMouseUp () {
+	public override bool OnMouseUp () {
 		grid.HideContainingRegion (mouseX, mouseY);
+		return true;
 	}
-	public override void OnMouse (){
+	public override bool OnMouse (){
 		grid.HideContainingRegion (mouseX, mouseY);
+		return true;
 	}
 }

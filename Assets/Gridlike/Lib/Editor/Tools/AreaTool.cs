@@ -33,7 +33,7 @@ public class AreaTool : GridTool {
 		return "select";
 	}
 
-	public override void Window () {
+	public override bool Window () {
 		copy = EditorGUILayout.Toggle ("copy", copy);
 		copy = !EditorGUILayout.Toggle ("drag", !copy);
 		copyEmpty = EditorGUILayout.Toggle ("copy empty tiles", copyEmpty);
@@ -41,9 +41,11 @@ public class AreaTool : GridTool {
 		if (GUILayout.Button ("cancel selection")) {
 			toolState = AreaToolState.NONE;
 		}
+
+		return false;
 	}
 
-	public override void Update() {
+	public override bool Update() {
 		switch (toolState) {
 		case AreaToolState.SELECTION:
 			DrawSelection ();
@@ -58,15 +60,19 @@ public class AreaTool : GridTool {
 			DrawSelection ();
 			break;
 		}
+
+		return false;
 	}
 
-	public override void OnMouseDown() { 
+	public override bool OnMouseDown() { 
 		switch (toolState) {
 		case AreaToolState.SELECTION:
 			int x = mouseX;
 			int y = mouseY;
 			if (copy) {
 				CopyCurrentTo (x, y);
+
+				return true;
 			} else {
 				if (IsMouseInSelection (x, y)) {
 					mouseInSelectionX = x - selectMinX;
@@ -88,8 +94,9 @@ public class AreaTool : GridTool {
 		case AreaToolState.SELECTING:
 			break;
 		}
+		return false;
 	}
-	public override void OnMouse() { 
+	public override bool OnMouse() { 
 		switch (toolState) {
 		case AreaToolState.SELECTING:
 			CalculateSelectionBound (mouseX, mouseY);
@@ -99,14 +106,15 @@ public class AreaTool : GridTool {
 		case AreaToolState.NONE:
 			break;
 		}
+		return false;
 	}
-	public override void OnMouseUp() { 
+	public override bool OnMouseUp() { 
 		switch (toolState) {
 		case AreaToolState.DRAG:
 			CopyCurrentTo (mouseX - mouseInSelectionX, mouseY - mouseInSelectionY);
 
 			toolState = AreaToolState.SELECTION;
-			break;
+			return true;
 		case AreaToolState.SELECTING:
 			CalculateSelectionBound (mouseX, mouseY);
 
@@ -116,6 +124,7 @@ public class AreaTool : GridTool {
 		case AreaToolState.NONE:
 			break;
 		}
+		return false;
 	}
 
 	void DrawSelection() {

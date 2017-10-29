@@ -11,13 +11,16 @@ public class ShowRegionTool : GridTool {
 		return "show region";
 	}
 
-	public override void OnMouseUp () {
+	public override bool OnMouseUp () {
 		grid.PresentContainingRegion (mouseX, mouseY);
+		return true;
 	}
-	public override void OnMouseDown () {
+	public override bool OnMouseDown () {
 		grid.PresentContainingRegion (mouseX, mouseY);
+		return true;
 	}
-	public override void OnMouse () {
+	public override bool OnMouse () {
 		grid.PresentContainingRegion (mouseX, mouseY);
+		return true;
 	}
 }

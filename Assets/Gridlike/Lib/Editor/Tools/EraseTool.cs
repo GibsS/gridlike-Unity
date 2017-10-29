@@ -14,18 +14,22 @@ public class EraseTool : GridTool {
 		return "erase";
 	}
 
-	public override void Window() {
+	public override bool Window() {
 		radius = Mathf.Max(1, EditorGUILayout.IntField ("radius", radius));
+		return false;
 	}
 
-	public override void OnMouseDown() {
+	public override bool OnMouseDown() {
 		Erase ();
+		return true;
 	}
-	public override void OnMouseUp() {
+	public override bool OnMouseUp() {
 		Erase ();
+		return true;
 	}
-	public override void OnMouse() {
+	public override bool OnMouse() {
 		Erase ();
+		return true;
 	}
 
 	void Erase() {
