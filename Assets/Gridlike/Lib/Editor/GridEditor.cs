@@ -44,9 +44,6 @@ public class GridEditor : Editor {
 		float tileSize = EditorGUILayout.FloatField ("Tile size", grid.tileSize);
 		grid.tileSize = tileSize < 0 ? 0 : tileSize;
 
-		if (GUILayout.Button ("Open grid editor")) {
-			GridEditorWindow.ShowWindow ();
-		}
 		if (GUILayout.Button ("Rebuild")) {
 			grid.PresentAllAgain ();
 		}
