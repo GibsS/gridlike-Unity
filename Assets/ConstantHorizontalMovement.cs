@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ConstantHorizontalMovement : MonoBehaviour {
 
-	[Range(1, 100)]
+	[Range(-100, 100)]
 	public float speed;
 
 	void Update () {

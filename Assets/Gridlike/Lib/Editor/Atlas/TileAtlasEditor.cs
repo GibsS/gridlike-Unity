@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using System.IO;
 using UnityEngine;
 using UnityEditor;
@@ -17,6 +16,26 @@ public class GridTileAtlasEditor : Editor {
 
 	Dictionary<int, TileEditorInfo> tileEditorInfo;
 
+
+	public string spriteSheetPath { 
+		get { 
+			return Application.dataPath + "/" + spriteSheetProjectPath;
+		} 
+	}
+	// PATH AFTER ASSETS example: for sprite sheet to be place at c:/a folder/Unity project/Assets/test/sprite_sheet.png, 
+	// will return test/sprite_sheet.png
+	public string spriteSheetProjectPath {
+		get { 
+			TileAtlas atlas = target as TileAtlas;
+
+			if (atlas.useRelativePath) {
+				return Path.GetDirectoryName (AssetDatabase.GetAssetPath (target)).Substring(7) + "/" +  atlas.spriteSheetPath;
+			} else {
+				return atlas.spriteSheetPath;
+			}
+		}
+	}
+
 	public override void OnInspectorGUI() {
 		TileAtlas atlas = target as TileAtlas;
 
@@ -25,9 +44,11 @@ public class GridTileAtlasEditor : Editor {
 		GUI.enabled = true;
 
 		// SPRITE SHEET PATH
+		atlas.useRelativePath = EditorGUILayout.Toggle("Sprite sheet path is relative", atlas.useRelativePath);
+
 		atlas.spriteSheetPath = EditorGUILayout.TextField ("Sprite sheet path", atlas.spriteSheetPath);
 		if (string.IsNullOrEmpty (atlas.spriteSheetPath)) {
-			atlas.spriteSheetPath = "Resources/sprite_sheet.png";
+			atlas.spriteSheetPath = "sprite_sheet.png";
 		} else {
 			if (!atlas.spriteSheetPath.EndsWith (".png")) {
 				atlas.spriteSheetPath += ".png";
@@ -80,7 +101,8 @@ public class GridTileAtlasEditor : Editor {
 
 		GUILayout.FlexibleSpace ();
 
-		if (tile.GetSprite () != null) DrawOnGUISprite(tile.GetSprite());
+		Sprite mainSprite = tile.GetSprite ();
+		if (mainSprite != null) DrawOnGUISprite(mainSprite);
 		
 		if (GUILayout.Button ("remove", GUILayout.MaxWidth(80))) {
 			atlas.RemoveTile (tile.id);
@@ -195,7 +217,7 @@ public class GridTileAtlasEditor : Editor {
 		int tilePixelSize = atlas.tilePixelSize;
 
 		int tileCount = atlas.TotalSpriteTileCount;
-		int tilePerRow = Mathf.Min(Mathf.FloorToInt(Mathf.Sqrt(tileCount * 4)), TileAtlas.MAX_SPRITE_SHEET_SIZE / tilePixelSize);
+		int tilePerRow = Mathf.Max(2, Mathf.Min(Mathf.FloorToInt(Mathf.Sqrt(tileCount * 4)), TileAtlas.MAX_SPRITE_SHEET_SIZE / tilePixelSize));
 		int tilePerColumn = tilePerRow;
 
 		Texture2D texture = new Texture2D (tilePerRow * tilePixelSize, tilePerColumn * tilePixelSize);
@@ -258,13 +280,13 @@ public class GridTileAtlasEditor : Editor {
 
 		var bytes = texture.EncodeToPNG ();
 
-		var directory = Path.GetDirectoryName(Application.dataPath + "/" + atlas.spriteSheetPath);
+		var directory = Path.GetDirectoryName(spriteSheetPath);
 		Directory.CreateDirectory(directory);
-		File.WriteAllBytes (Application.dataPath + "/" + atlas.spriteSheetPath, bytes);
+		File.WriteAllBytes (spriteSheetPath, bytes);
 
 		AssetDatabase.Refresh (ImportAssetOptions.ForceUpdate);
 
-		texture = (Texture2D) AssetDatabase.LoadAssetAtPath("Assets/" + atlas.spriteSheetPath, typeof(Texture2D));
+		texture = (Texture2D) AssetDatabase.LoadAssetAtPath("Assets/" + spriteSheetProjectPath, typeof(Texture2D));
 
 		atlas.spriteSheet = texture;
 
@@ -285,9 +307,6 @@ public class GridTileAtlasEditor : Editor {
 
 		AssetDatabase.ImportAsset(assetPath);
 		AssetDatabase.Refresh();
-
-		string pattern = @"sprite_(.*)_(.*)_(.*)";
-		Regex rgx = new Regex(pattern);
 
 		foreach (Object obj in AssetDatabase.LoadAllAssetsAtPath (assetPath)) {
 			if (!string.IsNullOrEmpty (obj.name) && obj.name [0] == 's' && obj.name != "sprite_sheet") {

@@ -103,7 +103,7 @@ public class GridEditor : Editor {
 		// TOOL LIST
 		GUILayout.BeginArea(new Rect(20, 20, 10 + 95 * tools.Length, 80));
 
-		var rect = EditorGUILayout.BeginHorizontal ();
+		EditorGUILayout.BeginHorizontal ();
 
 		for (int i = 0; i < tools.Length; i++) {
 			GridTool optionTool = tools[i];

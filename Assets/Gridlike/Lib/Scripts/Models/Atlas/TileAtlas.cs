@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,6 +9,7 @@ public class TileAtlas : ScriptableObject {
 	public const int MAX_SPRITE_SHEET_SIZE = 2048;
 
 	public int tilePixelSize;
+	public bool useRelativePath = false;
 	public string spriteSheetPath;
 
 	public Texture2D spriteSheet;
