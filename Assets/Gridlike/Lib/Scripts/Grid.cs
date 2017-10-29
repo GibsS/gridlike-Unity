@@ -7,6 +7,7 @@ using UnityEngine;
 
 // OPTIMIZATION
 // New function: Set multiple tiles at once instead of just one
+// Grid hash: Replace list of regions by actual hash table and see performance differences
 
 // TOOLS
 // Make grid tool window look better than it does (copy grid tile map guy)
@@ -25,11 +26,12 @@ using UnityEngine;
 // BUGS
 // Allow regular gizmos to be accessed even when the grid is selected
 // Deactivate events mouse events when mouse is over scene GUI elements
-// Vertical oneways can't be stretched because only triangle can be stretched vertically (isVertical set to false for oneways..)
 
 // TEST SCENARIOS
 // Handle subids, see their limit, define contract and preconditions..
 // Make sure if an id is said to be placeable at a given place, it is actually placeable there
+
+
 
 // CLEAN UP
 // Remove as many public field as possible (once tests are defined)
@@ -45,6 +47,11 @@ using UnityEngine;
 // TODO Create samples + test
 
 // TODO Handle long triangles
+// TODO Handle vertically stretching one ways
+// Vertical oneways can't be stretched because only triangle can be stretched vertically (isVertical set to false for oneways..)
+
+// Fix bug with procedural generation and the new renderer
+// Add bool to decide if set creates region or not (in play mode)  
 
 [ExecuteInEditMode]
 [AddComponentMenu("Gridlike/Grid")]

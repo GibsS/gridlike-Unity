@@ -71,6 +71,8 @@ public class GridEditor : Editor {
 			grid.useAgentBasedLoading = EditorGUILayout.ToggleLeft ("Use agent based loading", grid.useAgentBasedLoading);
 			grid.saveOnClose = EditorGUILayout.ToggleLeft ("Save grid on destroy", grid.saveOnClose);
 		}
+
+		EditorUtility.SetDirty (target);
 	}
 
 	void OnSceneGUI() {
@@ -167,5 +169,7 @@ public class GridEditor : Editor {
 		}
 
 		SceneView.RepaintAll ();
+
+		EditorUtility.SetDirty (target);
 	}
 }

@@ -11,10 +11,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58f291cc963ceb94a8e5d54588854ef1, type: 3}
   m_Name: GridTileAtlas2
   m_EditorClassIdentifier: 
+  tilePixelSize: 16
+  spriteSheetPath: sprite_sheet.png
+  spriteSheet: {fileID: 2800000, guid: 2f0617858b70369408b31568e87ec7b8, type: 3}
+  emptySprite: {fileID: 21300010, guid: 2f0617858b70369408b31568e87ec7b8, type: 3}
   atlas:
   - id: 0
     name: 
     shape: 0
+    isVertical: 0
     isSensor: 0
     layer: 0
     tag: 
@@ -23,22 +28,28 @@ MonoBehaviour:
     idSpriteInfo:
       sprite: {fileID: 0}
       sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
     subIdSpriteInfo: []
   - id: 1
     name: sprite
     shape: 1
+    isVertical: 0
     isSensor: 0
     layer: 0
     tag: Untagged
     isGODetached: 0
     tileGO: {fileID: 0}
     idSpriteInfo:
-      sprite: {fileID: 21300000, guid: 9286b42288e05bc4194fcab810c26766, type: 3}
+      sprite: {fileID: 21300012, guid: 2f0617858b70369408b31568e87ec7b8, type: 3}
       sprites: []
+      importedSprite: {fileID: 21300000, guid: 9a69a18f3876cf54389d63efa1b8ac49, type: 3}
+      importedSprites: []
     subIdSpriteInfo: []
   - id: 2
     name: prefab
     shape: 1
+    isVertical: 0
     isSensor: 0
     layer: 0
     tag: Untagged
@@ -47,10 +58,13 @@ MonoBehaviour:
     idSpriteInfo:
       sprite: {fileID: 0}
       sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
     subIdSpriteInfo: []
   - id: 0
     name: 
     shape: 0
+    isVertical: 0
     isSensor: 0
     layer: 0
     tag: 
@@ -59,10 +73,13 @@ MonoBehaviour:
     idSpriteInfo:
       sprite: {fileID: 0}
       sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
     subIdSpriteInfo: []
   - id: 0
     name: 
     shape: 0
+    isVertical: 0
     isSensor: 0
     layer: 0
     tag: 
@@ -71,10 +88,13 @@ MonoBehaviour:
     idSpriteInfo:
       sprite: {fileID: 0}
       sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
     subIdSpriteInfo: []
   - id: 0
     name: 
     shape: 0
+    isVertical: 0
     isSensor: 0
     layer: 0
     tag: 
@@ -83,10 +103,13 @@ MonoBehaviour:
     idSpriteInfo:
       sprite: {fileID: 0}
       sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
     subIdSpriteInfo: []
   - id: 0
     name: 
     shape: 0
+    isVertical: 0
     isSensor: 0
     layer: 0
     tag: 
@@ -95,10 +118,13 @@ MonoBehaviour:
     idSpriteInfo:
       sprite: {fileID: 0}
       sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
     subIdSpriteInfo: []
   - id: 0
     name: 
     shape: 0
+    isVertical: 0
     isSensor: 0
     layer: 0
     tag: 
@@ -107,10 +133,13 @@ MonoBehaviour:
     idSpriteInfo:
       sprite: {fileID: 0}
       sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
     subIdSpriteInfo: []
   - id: 0
     name: 
     shape: 0
+    isVertical: 0
     isSensor: 0
     layer: 0
     tag: 
@@ -119,10 +148,13 @@ MonoBehaviour:
     idSpriteInfo:
       sprite: {fileID: 0}
       sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
     subIdSpriteInfo: []
   - id: 0
     name: 
     shape: 0
+    isVertical: 0
     isSensor: 0
     layer: 0
     tag: 
@@ -131,10 +163,13 @@ MonoBehaviour:
     idSpriteInfo:
       sprite: {fileID: 0}
       sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
     subIdSpriteInfo: []
   - id: 0
     name: 
     shape: 0
+    isVertical: 0
     isSensor: 0
     layer: 0
     tag: 
@@ -143,10 +178,13 @@ MonoBehaviour:
     idSpriteInfo:
       sprite: {fileID: 0}
       sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
     subIdSpriteInfo: []
   - id: 0
     name: 
     shape: 0
+    isVertical: 0
     isSensor: 0
     layer: 0
     tag: 
@@ -155,10 +193,13 @@ MonoBehaviour:
     idSpriteInfo:
       sprite: {fileID: 0}
       sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
     subIdSpriteInfo: []
   - id: 0
     name: 
     shape: 0
+    isVertical: 0
     isSensor: 0
     layer: 0
     tag: 
@@ -167,10 +208,13 @@ MonoBehaviour:
     idSpriteInfo:
       sprite: {fileID: 0}
       sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
     subIdSpriteInfo: []
   - id: 0
     name: 
     shape: 0
+    isVertical: 0
     isSensor: 0
     layer: 0
     tag: 
@@ -179,10 +223,13 @@ MonoBehaviour:
     idSpriteInfo:
       sprite: {fileID: 0}
       sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
     subIdSpriteInfo: []
   - id: 0
     name: 
     shape: 0
+    isVertical: 0
     isSensor: 0
     layer: 0
     tag: 
@@ -191,10 +238,13 @@ MonoBehaviour:
     idSpriteInfo:
       sprite: {fileID: 0}
       sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
     subIdSpriteInfo: []
   - id: 0
     name: 
     shape: 0
+    isVertical: 0
     isSensor: 0
     layer: 0
     tag: 
@@ -203,10 +253,13 @@ MonoBehaviour:
     idSpriteInfo:
       sprite: {fileID: 0}
       sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
     subIdSpriteInfo: []
   - id: 0
     name: 
     shape: 0
+    isVertical: 0
     isSensor: 0
     layer: 0
     tag: 
@@ -215,10 +268,13 @@ MonoBehaviour:
     idSpriteInfo:
       sprite: {fileID: 0}
       sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
     subIdSpriteInfo: []
   - id: 0
     name: 
     shape: 0
+    isVertical: 0
     isSensor: 0
     layer: 0
     tag: 
@@ -227,10 +283,13 @@ MonoBehaviour:
     idSpriteInfo:
       sprite: {fileID: 0}
       sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
     subIdSpriteInfo: []
   - id: 0
     name: 
     shape: 0
+    isVertical: 0
     isSensor: 0
     layer: 0
     tag: 
@@ -239,10 +298,13 @@ MonoBehaviour:
     idSpriteInfo:
       sprite: {fileID: 0}
       sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
     subIdSpriteInfo: []
   - id: 0
     name: 
     shape: 0
+    isVertical: 0
     isSensor: 0
     layer: 0
     tag: 
@@ -251,10 +313,13 @@ MonoBehaviour:
     idSpriteInfo:
       sprite: {fileID: 0}
       sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
     subIdSpriteInfo: []
   - id: 0
     name: 
     shape: 0
+    isVertical: 0
     isSensor: 0
     layer: 0
     tag: 
@@ -263,10 +328,13 @@ MonoBehaviour:
     idSpriteInfo:
       sprite: {fileID: 0}
       sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
     subIdSpriteInfo: []
   - id: 0
     name: 
     shape: 0
+    isVertical: 0
     isSensor: 0
     layer: 0
     tag: 
@@ -275,10 +343,13 @@ MonoBehaviour:
     idSpriteInfo:
       sprite: {fileID: 0}
       sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
     subIdSpriteInfo: []
   - id: 0
     name: 
     shape: 0
+    isVertical: 0
     isSensor: 0
     layer: 0
     tag: 
@@ -287,10 +358,13 @@ MonoBehaviour:
     idSpriteInfo:
       sprite: {fileID: 0}
       sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
     subIdSpriteInfo: []
   - id: 0
     name: 
     shape: 0
+    isVertical: 0
     isSensor: 0
     layer: 0
     tag: 
@@ -299,10 +373,13 @@ MonoBehaviour:
     idSpriteInfo:
       sprite: {fileID: 0}
       sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
     subIdSpriteInfo: []
   - id: 0
     name: 
     shape: 0
+    isVertical: 0
     isSensor: 0
     layer: 0
     tag: 
@@ -311,10 +388,13 @@ MonoBehaviour:
     idSpriteInfo:
       sprite: {fileID: 0}
       sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
     subIdSpriteInfo: []
   - id: 0
     name: 
     shape: 0
+    isVertical: 0
     isSensor: 0
     layer: 0
     tag: 
@@ -323,10 +403,13 @@ MonoBehaviour:
     idSpriteInfo:
       sprite: {fileID: 0}
       sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
     subIdSpriteInfo: []
   - id: 0
     name: 
     shape: 0
+    isVertical: 0
     isSensor: 0
     layer: 0
     tag: 
@@ -335,10 +418,13 @@ MonoBehaviour:
     idSpriteInfo:
       sprite: {fileID: 0}
       sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
     subIdSpriteInfo: []
   - id: 0
     name: 
     shape: 0
+    isVertical: 0
     isSensor: 0
     layer: 0
     tag: 
@@ -347,10 +433,13 @@ MonoBehaviour:
     idSpriteInfo:
       sprite: {fileID: 0}
       sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
     subIdSpriteInfo: []
   - id: 0
     name: 
     shape: 0
+    isVertical: 0
     isSensor: 0
     layer: 0
     tag: 
@@ -359,10 +448,13 @@ MonoBehaviour:
     idSpriteInfo:
       sprite: {fileID: 0}
       sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
     subIdSpriteInfo: []
   - id: 0
     name: 
     shape: 0
+    isVertical: 0
     isSensor: 0
     layer: 0
     tag: 
@@ -371,4 +463,6 @@ MonoBehaviour:
     idSpriteInfo:
       sprite: {fileID: 0}
       sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
     subIdSpriteInfo: []

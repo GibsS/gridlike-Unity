@@ -47,7 +47,9 @@ public class GridTileAtlasEditor : Editor {
 
 		if (GUILayout.Button ("Create new tile")) {
 			atlas.AddTile ();
-		}
+		} 
+		if (GUI.changed)
+			EditorUtility.SetDirty (target);
 	}
 	void DrawOnGUISprite(Sprite aSprite) {
 		Rect c = aSprite.rect;
@@ -147,6 +149,9 @@ public class GridTileAtlasEditor : Editor {
 		EditorGUI.indentLevel--;
 
 		GUILayout.EndVertical ();
+
+		if (GUI.changed)
+			EditorUtility.SetDirty (target);
 	}
 
 	void TriangleSpriteChooser(TileInfo tile, TileSpriteInfo spriteInfo, int subId) {
