@@ -6,13 +6,6 @@ using UnityEngine;
 // 7: Grid updater 1 day
 // TODO Grid updater component
 
-// 6: Factories + Singleton 1 day
-// TODO make grid factories (static in Grid)
-// TODO make sure grids can be created from code easily (define stories)
-// TODO make it possible to create a grid directly out of a small two dimensional array of tiles
-
-// TODO Add singleton behaviour to handle accessing list of currently present grids
-
 // 8: Finish optimizing sprite renderer 2 day
 // TODO Add the drag and drop if possible
 
@@ -28,7 +21,7 @@ using UnityEngine;
 // BUG Allow regular gizmos to be accessed even when the grid is selected
 // TODO Handle subids
 
-// TODO Optimization: Set multiple tiles at once instead of just one
+// OPTIMIZATION b Set multiple tiles at once instead of just one
 
 // BUG Deactivate events mouse events when mouse is over scene GUI elements
 // TWEAK make grid tool window look better than it does (copy grid tile map guy)

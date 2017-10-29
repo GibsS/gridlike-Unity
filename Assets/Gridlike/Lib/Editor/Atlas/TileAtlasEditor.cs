@@ -283,7 +283,7 @@ public class GridTileAtlasEditor : Editor {
 		Regex rgx = new Regex(pattern);
 
 		foreach (Object obj in AssetDatabase.LoadAllAssetsAtPath (assetPath)) {
-			if (!string.IsNullOrEmpty (obj.name) && obj.name [0] == 's') {
+			if (!string.IsNullOrEmpty (obj.name) && obj.name [0] == 's' && obj.name != "sprite_sheet") {
 				Sprite sprite = obj as Sprite;
 
 				string[] values = sprite.name.Split ('_');

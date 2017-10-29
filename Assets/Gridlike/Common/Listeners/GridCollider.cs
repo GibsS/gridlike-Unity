@@ -45,7 +45,7 @@ public class GridCollider : GridListener {
 				bool expanded = false;
 
 				GridColliderPart left = components.Get (x - 1, y) as GridColliderPart;
-				if (left != null && left.height == 1 && left.Compatible (info)) {
+				if (left != null && left.Compatible (info) && !left.isVertical && !info.isVertical) {
 					left.transform.localPosition = new Vector2 (left.transform.localPosition.x + 0.5f, left.transform.localPosition.y);
 					left.SetSize (left.width + 1, 1);
 
@@ -55,7 +55,7 @@ public class GridCollider : GridListener {
 				}
 				
 				GridColliderPart right = components.Get (x + 1, y) as GridColliderPart;
-				if (right != null && right.height == 1 && right.Compatible (info)) {
+				if (right != null && right.Compatible (info) && !right.isVertical && !info.isVertical) {
 					if (!expanded) {
 						right.bottomLeftX -= 1;
 
@@ -87,7 +87,7 @@ public class GridCollider : GridListener {
 				bool expanded = false;
 
 				GridColliderPart down = components.Get (x, y - 1) as GridColliderPart;
-				if (down != null && down.width == 1 && down.Compatible (info)) {
+				if (down != null && down.Compatible (info) && down.isVertical && info.isVertical) {
 					down.transform.localPosition = new Vector2 (down.transform.localPosition.x, down.transform.localPosition.y + 0.5f);
 					down.SetSize (1, down.height + 1);
 
@@ -97,7 +97,7 @@ public class GridCollider : GridListener {
 				}
 
 				GridColliderPart up = components.Get (x, y + 1) as GridColliderPart;
-				if (up != null && up.width == 1 && up.Compatible (info)) {
+				if (up != null && up.Compatible (info) && up.isVertical && info.isVertical) {
 					if (!expanded) {
 						up.bottomLeftY -= 1;
 

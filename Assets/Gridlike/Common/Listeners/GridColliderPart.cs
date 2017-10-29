@@ -5,6 +5,7 @@ public class GridColliderPart : MonoBehaviour {
 
 	public TileShape shape;
 	public int id;
+	public bool isVertical;
 
 	public int bottomLeftX;
 	public int bottomLeftY;
@@ -69,6 +70,8 @@ public class GridColliderPart : MonoBehaviour {
 		part.triangle = obj.AddComponent<PolygonCollider2D> ();
 
 		part.shape = tile.shape;
+		part.isVertical = tile.isVertical;
+
 		part.id = tile.id;
 		part.triangle.isTrigger = tile.isSensor;
 

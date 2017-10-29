@@ -107,13 +107,16 @@ public class RegionMeshRenderer : MonoBehaviour {
 	}
 
 	public void SetTile(int x, int y, Sprite sprite) {
-		int quadIndex = ((y * tilePerSide) + x) * 4;
+		// TODO if sprite is null, render the empty sprite
+		if (sprite != null) {
+			int quadIndex = ((y * tilePerSide) + x) * 4;
 
-		Rect rect = sprite.textureRect;
+			Rect rect = sprite.textureRect;
 
-		uv [quadIndex] 	   = new Vector2 (rect.xMin / textureWidth, rect.yMin / textureHeight);
-		uv [quadIndex + 1] = new Vector2 (rect.xMax / textureWidth, rect.yMin / textureHeight);
-		uv [quadIndex + 2] = new Vector2 (rect.xMin / textureWidth, rect.yMax / textureHeight);
-		uv [quadIndex + 3] = new Vector2 (rect.xMax / textureWidth, rect.yMax / textureHeight);
+			uv [quadIndex] = new Vector2 (rect.xMin / textureWidth, rect.yMin / textureHeight);
+			uv [quadIndex + 1] = new Vector2 (rect.xMax / textureWidth, rect.yMin / textureHeight);
+			uv [quadIndex + 2] = new Vector2 (rect.xMin / textureWidth, rect.yMax / textureHeight);
+			uv [quadIndex + 3] = new Vector2 (rect.xMax / textureWidth, rect.yMax / textureHeight);
+		}
 	}
 }
