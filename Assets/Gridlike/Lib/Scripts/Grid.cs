@@ -4,10 +4,11 @@ using UnityEngine;
 
 // POTENTIAL IMPROVEMENTS
 // Grid updater component: iterates through tiles and updates there information (potentially through compute shader?)
-// Add the drag and drop if possible to the tile atlas
+// Add the drag and drop if possible to the tile atlas (maybe into a window dedicated to it)
+// Allow the procedural generator to not use saving
 
 // OPTIMIZATION
-// Set multiple tiles at once instead of just one
+// New function: Set multiple tiles at once instead of just one
 
 // TWEAK make grid tool window look better than it does (copy grid tile map guy)
 
@@ -16,7 +17,11 @@ using UnityEngine;
 // Deactivate events mouse events when mouse is over scene GUI elements
 
 // TEST SCENARIOS
-// TODO Handle subids, see their limit, define contract and preconditions..
+// Handle subids, see their limit, define contract and preconditions..
+// Make sure if an id is said to be placeable at a given place, it is actually placeable there
+
+// CLEAN UP
+// Remove as many public field as possible (once tests are defined)
 
 // TODO Add namespaces everywhere
 // TODO Put all classes in individual files
@@ -50,6 +55,8 @@ public class Grid : MonoBehaviour {
 	GridAgentLoadPolicy loadPolicy;
 
 	public bool saveOnClose;
+
+	public bool showOnSet;
 
 	public float tileSize {
 		get { return _tileSize; }
@@ -369,11 +376,15 @@ public class Grid : MonoBehaviour {
 		FiniteGrid region;
 		Tile tile = GetOrCreate (x, y, out region);
 
+		if (showOnSet && !region.presented) _PresentRegion (region.regionX, region.regionY, region);
+
 		_Set (tile, x, y, id, subid, state1, state2, state3, region.presented);
 	}
 	public void SetId(int x, int y, int id, int subId = -1) {
 		FiniteGrid region;
 		Tile tile = GetOrCreate (x, y, out region);
+
+		if (showOnSet && !region.presented) _PresentRegion (region.regionX, region.regionY, region);
 
 		_Set (tile, x, y, id, subId, tile.state1, tile.state2, tile.state3, region.presented);
 	}
@@ -384,6 +395,8 @@ public class Grid : MonoBehaviour {
 
 		tile.subId = subId;
 
+		if (showOnSet && !region.presented) _PresentRegion (region.regionX, region.regionY, region);
+
 		if (region.presented) {
 			foreach (GridListener listener in gridListeners) {
 				listener.OnSetSubId (x, y, tile, oldSubId);
@@ -393,6 +406,8 @@ public class Grid : MonoBehaviour {
 	public void SetState(int x, int y, float state1, float state2 = float.NegativeInfinity, float state3 = float.NegativeInfinity) {
 		FiniteGrid region;
 		Tile tile = GetOrCreate (x, y, out region);
+
+		if (showOnSet && !region.presented) _PresentRegion (region.regionX, region.regionY, region);
 
 		float oldState1 = tile.state1, oldState2 = tile.state2, oldState3 = tile.state3;
 

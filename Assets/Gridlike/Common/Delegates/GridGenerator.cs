@@ -86,8 +86,6 @@ public class GridGenerator : GridDataDelegate {
 	public override FiniteGrid LoadTiles (int regionX, int regionY) {
 		if (useSave && gridSerializer.IsRegionSaved(regionX, regionY)) {
 			FiniteGrid grid = gridSerializer.LoadGrid (regionX, regionY);
-
-			//Debug.Log ("Load region from save. X=" + regionX + " Y=" + regionY);
 			return grid;
 		}
 
@@ -97,10 +95,6 @@ public class GridGenerator : GridDataDelegate {
 
 			int largeRegionX = Mathf.FloorToInt (regionX / (float)generationRegionWidth) * generationRegionWidth;
 			int largeRegionY = Mathf.FloorToInt (regionY / (float)generationRegionHeight) * generationRegionHeight;
-
-			//Debug.Log ("Generate large region." + 
-			//		   "RegionX=" + largeRegionX + "->" + (largeRegionX + generationRegionWidth) +
-			//			   "RegionY=" + largeRegionY + "->" + (largeRegionY + generationRegionHeight));
 
 			largeRegion = new LargeRegion {
 				regionX = largeRegionX,
@@ -136,8 +130,6 @@ public class GridGenerator : GridDataDelegate {
 				region.Set(i, j, tile);
 			}
 		}
-
-		//Debug.Log ("Load region from generation. X=" + regionX + " Y=" + regionY + (empty ? "(empty)" : ""));
 
 		if (empty) {
 			return null;
