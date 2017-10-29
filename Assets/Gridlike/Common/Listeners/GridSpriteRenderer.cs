@@ -248,7 +248,7 @@ public class GridSpriteRenderer : GridListener {
 		SpriteRenderer renderer = obj.AddComponent<SpriteRenderer> ();
 
 		obj.transform.localPosition = grid.TileCenterInTransform (x, y);
-		obj.transform.localScale = new Vector3 (grid.tileSize, grid.tileSize, 1);
+		obj.transform.localScale = new Vector3 (1, 1, 1);
 
 		return renderer;
 	}

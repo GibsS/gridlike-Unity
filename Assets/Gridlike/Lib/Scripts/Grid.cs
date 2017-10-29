@@ -67,8 +67,6 @@ public class Grid : MonoBehaviour {
 	[SerializeField] InfiniteGrid tiles;
 	[SerializeField] InfiniteTileGOGrid tileGOs;
 
-	[SerializeField] float _tileSize;
-
 	[HideInInspector] public TileAtlas atlas;
 
 	public bool useLoading;
@@ -79,11 +77,6 @@ public class Grid : MonoBehaviour {
 
 	public bool showOnSet;
 
-	public float tileSize {
-		get { return _tileSize; }
-		set { if(value != _tileSize) SetTileSize (value); }
-	}
-
 	void Init() {
 		if (tiles == null) {
 			gridDelegate = GetComponent<GridDataDelegate> ();
@@ -91,8 +84,6 @@ public class Grid : MonoBehaviour {
 
 			tiles = new InfiniteGrid (REGION_SIZE);
 			tileGOs = new InfiniteTileGOGrid (gameObject, REGION_SIZE);
-
-			_tileSize = 1;
 
 			foreach (GridListener listener in GetComponents<GridListener> ()) {
 				listener.ResetListener ();
@@ -556,28 +547,16 @@ public class Grid : MonoBehaviour {
 
 	#endregion
 
-	#region TILE SIZE
-
-	public void SetTileSize(float tileSize) {
-		this._tileSize = tileSize;
-
-		foreach (GridListener listeners in gridListeners) {
-			listeners.OnTileSizeChange ();
-		}
-	}
-
-	#endregion
-
 	#region REFERENTIAL
 
 	public Vector2 TileCenterInWorld(int x, int y) {
 		return transform.TransformPoint (TileCenterInTransform (x, y));
 	}
 	public Vector2 TileCenterInTransform(int x, int y) {
-		return new Vector2 ((x + 0.5f) * _tileSize, (y + 0.5f) * _tileSize); 
+		return new Vector2 (x + 0.5f, y + 0.5f); 
 	}
 	public Vector2 TileSpaceToTransform(float x, float y) {
-		return new Vector2 (x * _tileSize, y * _tileSize);
+		return new Vector2 (x, y);
 	}
 
 	public void WorldToGrid(Vector2 position, out int x, out int y) {
@@ -587,8 +566,8 @@ public class Grid : MonoBehaviour {
 	}
 
 	public void TransformToGrid(Vector2 position, out int x, out int y) {
-		x = Mathf.FloorToInt(((float)position.x) / tileSize);
-		y = Mathf.FloorToInt(((float)position.y) / tileSize);
+		x = Mathf.FloorToInt((float)position.x);
+		y = Mathf.FloorToInt((float)position.y);
 	}
 
 	#endregion

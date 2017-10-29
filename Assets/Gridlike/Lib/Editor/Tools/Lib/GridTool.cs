@@ -29,7 +29,7 @@ public abstract class GridTool {
 	}
 
 	protected void DrawTileInformation(int x, int y, Color color, string[] text) {
-		Vector2 position = grid.transform.TransformPoint(new Vector2(x * grid.tileSize, y * grid.tileSize));
+		Vector2 position = grid.transform.TransformPoint(new Vector2(x, y));
 
 		Handles.color = color;
 

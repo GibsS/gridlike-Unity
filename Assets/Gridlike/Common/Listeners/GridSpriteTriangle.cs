@@ -25,7 +25,7 @@ public class GridSpriteTriangle : MonoBehaviour {
 
 		obj.transform.SetParent (parent.transform);
 		obj.transform.localPosition = grid.TileCenterInTransform (x, y);
-		obj.transform.localScale = new Vector3 (grid.tileSize, grid.tileSize, 1);
+		obj.transform.localScale = new Vector3 (1, 1, 1);
 
 		return triangle;
 	}

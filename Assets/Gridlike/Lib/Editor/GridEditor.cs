@@ -43,9 +43,6 @@ public class GridEditor : Editor {
 		EditorGUILayout.ObjectField("Script", MonoScript.FromMonoBehaviour((Grid)target), typeof(Grid), false);
 		GUI.enabled = true;
 
-		float tileSize = EditorGUILayout.FloatField ("Tile size", grid.tileSize);
-		grid.tileSize = tileSize < 0 ? 0 : tileSize;
-
 		if (GUILayout.Button ("Rebuild")) {
 			grid.PresentAllAgain ();
 		}
@@ -78,9 +75,12 @@ public class GridEditor : Editor {
 	void OnSceneGUI() {
 		Grid grid = target as Grid;
 
+		// CAN'T EDIT IF THE ATLAS IS NOT SET
+		if (grid.atlas == null) return;
+
 		// REGIONS
 		foreach (FiniteGrid region in grid.GetRegions()) {
-			float size = Grid.REGION_SIZE * grid.tileSize;
+			float size = Grid.REGION_SIZE;
 			float bx = grid.transform.position.x + region.regionX * size;
 			float by = grid.transform.position.y + region.regionY * size;
 
