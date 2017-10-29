@@ -54,7 +54,7 @@ public class GridCreator : MonoBehaviour {
 
 	void Clear() {
 		if (grid != null) {
-			DestroyImmediate (grid.gameObject);
+			Destroy (grid.gameObject);
 		}
 	}
 

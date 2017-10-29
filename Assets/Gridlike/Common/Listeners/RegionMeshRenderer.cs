@@ -42,7 +42,10 @@ public class RegionMeshRenderer : MonoBehaviour {
 	}
 
 	public void Destroy() {
-		DestroyImmediate (gameObject);
+		if (Application.isPlaying)
+			Destroy (gameObject);
+		else
+			DestroyImmediate (gameObject);
 	}
 
 	void GenerateMesh() {

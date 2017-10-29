@@ -3,7 +3,6 @@ using UnityEngine;
 using System;
 
 [CustomEditor(typeof(Grid))]
-// TODO manage to serialize
 public class GridEditor : Editor {
 
 	[SerializeField] public int currentTool = 0;

@@ -13,6 +13,7 @@ using UnityEngine;
 // Show grid
 // Show outline of place and erase tool at all time
 // Show outline of copy tool at all time (also sort out the weird design choices of differentiating drag and copy)
+// Serialize tool information 
 
 // TILE ATLAS
 // Add the drag and drop if possible to the tile atlas (maybe into a window dedicated to it)
@@ -24,6 +25,7 @@ using UnityEngine;
 // BUGS
 // Allow regular gizmos to be accessed even when the grid is selected
 // Deactivate events mouse events when mouse is over scene GUI elements
+// Vertical oneways can't be stretched because only triangle can be stretched vertically (isVertical set to false for oneways..)
 
 // TEST SCENARIOS
 // Handle subids, see their limit, define contract and preconditions..
@@ -31,6 +33,7 @@ using UnityEngine;
 
 // CLEAN UP
 // Remove as many public field as possible (once tests are defined)
+// Pooled region mesh renderer are pooled inside an object
 
 // TODO Add namespaces everywhere
 // TODO Put all classes in individual files
@@ -40,6 +43,8 @@ using UnityEngine;
 
 // TODO Use kenney tiles for testing + samples 
 // TODO Create samples + test
+
+// TODO Handle long triangles
 
 [ExecuteInEditMode]
 [AddComponentMenu("Gridlike/Grid")]

@@ -16,7 +16,11 @@ public class GridCollider : GridListener {
 	public override void OnDestroy() {
 		base.OnDestroy ();
 
-		DestroyImmediate (containerGO);
+		if(Application.isPlaying) 
+			Destroy (containerGO);
+		else
+			DestroyImmediate (containerGO);
+		containerGO = null;
 	}
 
 	public override void ResetListener() {
@@ -73,7 +77,10 @@ public class GridCollider : GridListener {
 							components.Set (i, y, left);
 						}
 
-						DestroyImmediate (right.gameObject);
+						if (Application.isPlaying)
+							Destroy (right.gameObject);
+						else
+							DestroyImmediate (right.gameObject);
 
 						return;
 					}
@@ -115,7 +122,10 @@ public class GridCollider : GridListener {
 							components.Set (i, y, down);
 						}
 
-						DestroyImmediate (up.gameObject);
+						if (Application.isPlaying)
+							Destroy (up.gameObject);
+						else
+							DestroyImmediate (up.gameObject);
 
 						return;
 					}
@@ -152,7 +162,10 @@ public class GridCollider : GridListener {
 		if (wrapper != null) {
 			if (wrapper.width == 1) {
 				if (wrapper.height == 1) {
-					DestroyImmediate (wrapper.gameObject);
+					if (Application.isPlaying)
+						Destroy (wrapper.gameObject);
+					else
+						DestroyImmediate (wrapper.gameObject);
 				} else {
 					if (wrapper.bottomLeftY == y) {
 						wrapper.bottomLeftY += 1;

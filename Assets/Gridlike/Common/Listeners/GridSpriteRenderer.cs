@@ -16,7 +16,11 @@ public class GridSpriteRenderer : GridListener {
 	public override void OnDestroy() {
 		base.OnDestroy ();
 
-		DestroyImmediate (containerGO);
+		if (Application.isPlaying)
+			Destroy (containerGO);
+		else
+			DestroyImmediate (containerGO);
+		containerGO = null;
 	}
 
 	public override void ResetListener() {

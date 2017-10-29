@@ -26,7 +26,11 @@ public class GridRenderer : GridListener {
 	public override void OnDestroy() {
 		base.OnDestroy ();
 
-		DestroyImmediate (containerGO);
+		if (Application.isPlaying)
+			Destroy (containerGO);
+		else
+			DestroyImmediate (containerGO);
+		containerGO = null;
 
 		if(meshes != null) meshes.Clear ();
 	}
@@ -123,7 +127,6 @@ public class GridRenderer : GridListener {
 		case TileShape.DOWN_RIGHT_TRIANGLE:
 		case TileShape.UP_LEFT_TRIANGLE:
 		case TileShape.UP_RIGHT_TRIANGLE: {
-				// TODO: Add longer triangles
 				PositionRegionRenderer renderer = GetContainingRegionRenderer (x, y);
 
 				renderer.mesh.PrepareUV ();

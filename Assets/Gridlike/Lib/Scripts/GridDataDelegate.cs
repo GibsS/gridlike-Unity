@@ -22,11 +22,11 @@ public abstract class GridDataDelegate : MonoBehaviour {
 
 		if (all.Length > 1) {
 			Debug.LogError ("A Grid can only have one grid data delegate, destroying " + this.GetType ().Name);
-			if (Application.isEditor) {
+			if (Application.isEditor)
 				DestroyImmediate (this);
-			} else {
+			else
 				Destroy (this);
-			}
+			
 			gettingDestroyed = true;
 			return;
 		}

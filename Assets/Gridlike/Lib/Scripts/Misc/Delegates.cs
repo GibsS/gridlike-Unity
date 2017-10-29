@@ -1,0 +1,1 @@
+﻿public delegate void PositionCallback(int x, int y);

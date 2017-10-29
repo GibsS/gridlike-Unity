@@ -1,8 +1,5 @@
 ﻿using UnityEngine;
 
-// TODO move
-public delegate void PositionCallback(int x, int y);
-
 [System.Serializable]
 public class InfiniteTileGOGrid {
 
@@ -12,9 +9,17 @@ public class InfiniteTileGOGrid {
 	public InfiniteTileGOGrid(GameObject parent, int regionSize) {
 		componentGrid = new InfiniteComponentGrid (regionSize);
 
-		foreach (Transform t in parent.transform) {
-			if (t.name == "tile container") {
-				UnityEngine.Object.DestroyImmediate (t.gameObject);
+		if (Application.isPlaying) {
+			foreach (Transform t in parent.transform) {
+				if (t.name == "tile container") {
+					Object.Destroy (t.gameObject);
+				}
+			}
+		} else {
+			foreach (Transform t in parent.transform) {
+				if (t.name == "tile container") {
+					Object.DestroyImmediate (t.gameObject);
+				}
 			}
 		}
 
@@ -151,7 +156,10 @@ public class InfiniteTileGOGrid {
 				componentGrid.Set (x, y, null);
 			}
 
-			Object.DestroyImmediate (component.gameObject);
+			if (Application.isPlaying)
+				Object.Destroy (component.gameObject);
+			else
+				Object.DestroyImmediate (component.gameObject);
 		}
 	}
 

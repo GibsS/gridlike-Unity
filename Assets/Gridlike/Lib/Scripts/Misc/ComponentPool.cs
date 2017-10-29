@@ -41,7 +41,7 @@ public class ComponentPool<X> where X : Component {
 	public void Clear() {
 		foreach (X x in components) {
 			if (x != null && x.gameObject != null) {
-				UnityEngine.Object.DestroyImmediate (x.gameObject);
+				UnityEngine.Object.Destroy (x.gameObject);
 			}
 		}
 		components.Clear ();

@@ -17,7 +17,10 @@ public abstract class GridGeneratorAlgorithm : MonoBehaviour {
 
 		if (generator == null) {
 			Debug.LogError ("Generation algorithm requires a GridGenerator");
-			DestroyImmediate (this);
+			if(Application.isPlaying)
+				Destroy (this);
+			else 
+				DestroyImmediate (this);
 			return;
 		}
 
