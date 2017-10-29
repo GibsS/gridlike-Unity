@@ -2,7 +2,8 @@
 using System.Collections;
 
 namespace Gridlike {
-	// only use the first agent added 
+	
+	// only uses the first agent added 
 	public class GridAgentLoadPolicy {
 
 		Grid grid;
@@ -60,10 +61,6 @@ namespace Gridlike {
 						}
 					}
 
-					yield return null;
-					yield return null;
-					yield return null;
-					yield return null;
 					yield return null;
 				}
 			}

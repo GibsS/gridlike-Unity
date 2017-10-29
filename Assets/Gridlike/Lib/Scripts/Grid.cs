@@ -31,13 +31,13 @@ using UnityEngine;
 // Handle subids, see their limit, define contract and preconditions..
 // Make sure if an id is said to be placeable at a given place, it is actually placeable there
 
-
-
 // CLEAN UP
 // Remove as many public field as possible (once tests are defined)
+
+
+
 // Pooled region mesh renderer are pooled inside an object
 
-// TODO Add namespaces everywhere
 // TODO Put all classes in individual files
 // TODO Agree on final naming scheme
 // TODO Comment
