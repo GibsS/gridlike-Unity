@@ -119,4 +119,30 @@ public class RegionMeshRenderer : MonoBehaviour {
 			uv [quadIndex + 3] = new Vector2 (rect.xMax / textureWidth, rect.yMax / textureHeight);
 		}
 	}
+	public void SetPartialVerticalTile(int x, int y, Sprite sprite, int yTileOffset, int tilePixelSize) {
+		int quadIndex = ((y * tilePerSide) + x) * 4;
+
+		Rect rect = sprite.textureRect;
+
+		int minY = (int) (rect.yMin + yTileOffset * tilePixelSize);
+		int maxY = (int) (rect.yMin + (yTileOffset + 1) * tilePixelSize);
+
+		uv [quadIndex] = new Vector2 (rect.xMin / textureWidth, minY / textureHeight);
+		uv [quadIndex + 1] = new Vector2 (rect.xMax / textureWidth, minY / textureHeight);
+		uv [quadIndex + 2] = new Vector2 (rect.xMin / textureWidth, maxY / textureHeight);
+		uv [quadIndex + 3] = new Vector2 (rect.xMax / textureWidth, maxY / textureHeight);
+	}
+	public void SetPartialHorizontalTile(int x, int y, Sprite sprite, int xTileOffset, int tilePixelSize) {
+		int quadIndex = ((y * tilePerSide) + x) * 4;
+
+		Rect rect = sprite.textureRect;
+
+		int minX = (int) (rect.xMin + xTileOffset * tilePixelSize);
+		int maxX = (int) (rect.xMin + (xTileOffset + 1) * tilePixelSize);
+
+		uv [quadIndex] = new Vector2 (minX, rect.yMin / textureHeight);
+		uv [quadIndex + 1] = new Vector2 (maxX, rect.yMin / textureHeight);
+		uv [quadIndex + 2] = new Vector2 (minX, rect.yMax / textureHeight);
+		uv [quadIndex + 3] = new Vector2 (maxX, rect.yMax / textureHeight);
+	}
 }

@@ -104,11 +104,7 @@ public class GridRenderer : GridListener {
 	public override void OnSet(int x, int y, Tile tile) {
 		switch (grid.atlas[tile.id].shape) {
 		case TileShape.EMPTY: {
-				PositionRegionRenderer renderer = GetContainingRegionRenderer (x, y);
-
-				renderer.mesh.PrepareUV ();
-				renderer.mesh.SetTile (x - renderer.regionX * Grid.REGION_SIZE, y - renderer.regionY * Grid.REGION_SIZE, grid.atlas.emptySprite);
-				renderer.mesh.ApplyUV ();
+				Clear (x, y);
 				break;
 			}
 		case TileShape.UP_ONEWAY:
@@ -117,8 +113,6 @@ public class GridRenderer : GridListener {
 		case TileShape.LEFT_ONEWAY:
 		case TileShape.FULL: {
 				PositionRegionRenderer renderer = GetContainingRegionRenderer (x, y);
-
-				SplitTriangle (x, y);
 
 				renderer.mesh.PrepareUV ();
 				renderer.mesh.SetTile (x - renderer.regionX * Grid.REGION_SIZE, y - renderer.regionY * Grid.REGION_SIZE, grid.atlas.GetSprite(tile.id, tile.subId));
@@ -129,7 +123,12 @@ public class GridRenderer : GridListener {
 		case TileShape.DOWN_RIGHT_TRIANGLE:
 		case TileShape.UP_LEFT_TRIANGLE:
 		case TileShape.UP_RIGHT_TRIANGLE: {
-				// TODO 
+				// TODO: Add longer triangles
+				PositionRegionRenderer renderer = GetContainingRegionRenderer (x, y);
+
+				renderer.mesh.PrepareUV ();
+				renderer.mesh.SetTile (x - renderer.regionX * Grid.REGION_SIZE, y - renderer.regionY * Grid.REGION_SIZE, grid.atlas.GetSprite(tile.id, tile.subId));
+				renderer.mesh.ApplyUV ();
 				break;
 			}
 		}
@@ -162,7 +161,11 @@ public class GridRenderer : GridListener {
 		Debug.Log ("[GridSpriteRenderer.OnTileSizeChange] NOT IMPLEMENTED");
 	}
 
-	void SplitTriangle(int x, int y) {
+	void Clear(int x, int y) {
+		PositionRegionRenderer renderer = GetContainingRegionRenderer (x, y);
 
+		renderer.mesh.PrepareUV ();
+		renderer.mesh.SetTile (x - renderer.regionX * Grid.REGION_SIZE, y - renderer.regionY * Grid.REGION_SIZE, grid.atlas.emptySprite);
+		renderer.mesh.ApplyUV ();
 	}
 }
