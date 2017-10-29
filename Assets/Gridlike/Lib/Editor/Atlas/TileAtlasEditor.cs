@@ -185,6 +185,8 @@ public class GridTileAtlasEditor : Editor {
 	void GenerateSpriteSheet() {
 		TileAtlas atlas = target as TileAtlas;
 
+		EditorUtility.DisplayProgressBar("Gridlike", "Generating tile atlas sprite sheet", 0);
+
 		int tilePixelSize = atlas.tilePixelSize;
 
 		int tileCount = atlas.TotalSpriteTileCount;
@@ -312,6 +314,8 @@ public class GridTileAtlasEditor : Editor {
 				}
 			}
 		}
+
+		EditorUtility.ClearProgressBar();
 	}
 
 	void PackHorizontalSpriteInfo(int tilePerRow, int tileSize, TileSpriteInfo tileSpriteInfo, bool isVertical, int id, int subId, ref int tileX, ref int tileY, ref int spriteInd, ref SpriteMetaData[] sprites, ref Texture2D texture) {

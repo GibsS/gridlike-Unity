@@ -2,12 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// LATER
-// 7: Grid updater 1 day
-// TODO Grid updater component
+// POTENTIAL IMPROVEMENTS
+// Grid updater component: iterates through tiles and updates there information (potentially through compute shader?)
+// Add the drag and drop if possible to the tile atlas
 
-// 8: Finish optimizing sprite renderer 2 day
-// TODO Add the drag and drop if possible
+// OPTIMIZATION
+// Set multiple tiles at once instead of just one
+
+// TWEAK make grid tool window look better than it does (copy grid tile map guy)
+
+// BUGS
+// Allow regular gizmos to be accessed even when the grid is selected
+// Deactivate events mouse events when mouse is over scene GUI elements
+
+// TEST SCENARIOS
+// TODO Handle subids, see their limit, define contract and preconditions..
 
 // TODO Add namespaces everywhere
 // TODO Put all classes in individual files
@@ -17,15 +26,6 @@ using UnityEngine;
 
 // TODO Use kenney tiles for testing + samples 
 // TODO Create samples + test
-
-// BUG Allow regular gizmos to be accessed even when the grid is selected
-// TODO Handle subids
-
-// OPTIMIZATION b Set multiple tiles at once instead of just one
-
-// BUG Deactivate events mouse events when mouse is over scene GUI elements
-// TWEAK make grid tool window look better than it does (copy grid tile map guy)
-// TWEAK Deactivate a listener with enable/disable of the component or a field
 
 [ExecuteInEditMode]
 [AddComponentMenu("Gridlike/Grid")]

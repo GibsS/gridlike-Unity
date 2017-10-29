@@ -47,26 +47,25 @@ public class RegionMeshRenderer : MonoBehaviour {
 
 	void GenerateMesh() {
 
-		var tileSize = 1;
-		var quads = tilePerSide * tilePerSide;
+		int tileSize = 1;
+		int quads = tilePerSide * tilePerSide;
 
-		var vertices = new Vector3[quads * 4];
-		var triangles = new int[quads * 6];
-		var normals = new Vector3[vertices.Length];
-		var uv = new Vector2[vertices.Length];
+		Vector3[] vertices = new Vector3[quads * 4];
+		int[] triangles = new int[quads * 6];
+		Vector2[] uv = new Vector2[vertices.Length];
+		Vector3[] normals = new Vector3[vertices.Length];
 
+		// QUAD MESH STRUCTURE:
+		// 2-3
+		// |/|
+		// 0-1
 		for (int y = 0; y < tilePerSide; y++) {
 			for (int x = 0; x < tilePerSide; x++) {
-				var i = (y * tilePerSide) + x; // quad
-				var qi = i * 4; // vertex
-				var ti = i * 6;
-
-				// 2--3
-				// | /|
-				// |/ |
-				// 0--1
-				var vx = x * tileSize;
-				var vy = y * tileSize;
+				int i = (y * tilePerSide) + x; // quad
+				int qi = i * 4; // vertex
+				int ti = i * 6;
+				int vx = x * tileSize;
+				int vy = y * tileSize;
 				vertices[qi] = new Vector3(vx, vy, 0);
 				vertices[qi + 1] = new Vector3(vx + tileSize, vy, 0);
 				vertices[qi + 2] = new Vector3(vx, vy + tileSize, 0);
@@ -84,7 +83,7 @@ public class RegionMeshRenderer : MonoBehaviour {
 
 		for (int i = 0; i < vertices.Length; i++) {
 			normals[i] = Vector3.forward;
-			uv[i] = new Vector2(1, 1); // uv are set by assigning a tile
+			uv[i] = new Vector2(1, 1);
 		}
 
 		mesh = new Mesh {
