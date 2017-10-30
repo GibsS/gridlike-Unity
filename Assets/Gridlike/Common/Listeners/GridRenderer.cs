@@ -40,7 +40,7 @@ namespace Gridlike {
 			base.Awake ();
 
 			if (Application.isPlaying) {
-				meshes = new ComponentPool<RegionMeshRenderer> (16, CreateRegionRenderer);
+				GridlikePools.Initialize ();
 			}
 		}
 
@@ -58,7 +58,15 @@ namespace Gridlike {
 		}
 
 		RegionMeshRenderer CreateRegionRenderer() {
-			return RegionMeshRenderer.Create (Grid.REGION_SIZE, grid.atlas.spriteSheet);
+			RegionMeshRenderer rend;
+			if (Application.isPlaying) {
+				rend = GridlikePools.renderers.Get ();
+			} else {
+				rend = RegionMeshRenderer.Create (Grid.REGION_SIZE);
+			}
+			rend.Initialize (grid.atlas.spriteSheet);
+
+			return rend;
 		}
 
 		PositionRegionRenderer GetContainingRegionRenderer(int x, int y) {
@@ -68,14 +76,7 @@ namespace Gridlike {
 			var rend = components.Find (e => e.regionX == regionX && e.regionY == regionY);
 
 			if (rend == null) {
-				RegionMeshRenderer regionRenderer;
-				if (Application.isPlaying) {
-					if(meshes == null) meshes = new ComponentPool<RegionMeshRenderer> (16, CreateRegionRenderer);
-
-					regionRenderer = meshes.Get ();
-				} else {
-					regionRenderer = CreateRegionRenderer ();
-				}
+				RegionMeshRenderer regionRenderer = CreateRegionRenderer ();
 
 				regionRenderer.transform.SetParent (containerGO.transform);
 				regionRenderer.transform.localPosition = new Vector2 (regionX * Grid.REGION_SIZE, regionY * Grid.REGION_SIZE);

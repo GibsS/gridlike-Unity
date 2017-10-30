@@ -10,7 +10,11 @@ namespace Gridlike {
 
 		Factory<X> factory;
 
-		public ComponentPool(int startCount, Factory<X> factory) {
+		GameObject container;
+
+		public ComponentPool(GameObject container, int startCount, Factory<X> factory) {
+			this.container = container;
+
 			components = new List<X>();
 			this.factory = factory;
 
@@ -18,6 +22,7 @@ namespace Gridlike {
 				X x = factory ();
 
 				x.gameObject.SetActive (false);
+				x.gameObject.transform.SetParent (container.transform);
 
 				components.Add (x);
 			}
@@ -35,6 +40,7 @@ namespace Gridlike {
 		}
 		public void Free(X x) {
 			x.gameObject.SetActive (false);
+			x.gameObject.transform.SetParent (container.transform);
 			components.Add (x);
 		}
 

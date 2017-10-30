@@ -15,19 +15,23 @@ public class RegionMeshRenderer : MonoBehaviour {
 
 	Vector2[] uv;
 
-	public static RegionMeshRenderer Create(int tilePerSide, Texture2D texture) {
+	public static RegionMeshRenderer Create(int tilePerSide) {
 		GameObject obj = new GameObject ("region mesh renderer");
 		RegionMeshRenderer renderer = obj.AddComponent<RegionMeshRenderer> ();
-		renderer.Initialize (tilePerSide, texture);
+
+		renderer.Setup (tilePerSide);
+
 		return renderer;
 	}
-
-	public void Initialize(int tilePerCount, Texture2D texture) {
+	void Setup(int tilePerSide) {
+		this.tilePerSide = tilePerSide;
 		meshFilter = gameObject.AddComponent<MeshFilter> ();
 		meshRenderer = gameObject.AddComponent<MeshRenderer> ();
 
-		this.tilePerSide = tilePerCount;
+		GenerateMesh ();
+	}
 
+	public void Initialize(Texture2D texture) {
 		textureWidth = texture.width;
 		textureHeight = texture.height;
 
@@ -35,8 +39,6 @@ public class RegionMeshRenderer : MonoBehaviour {
 		material.mainTexture = texture;
 
 		meshRenderer.material = material;
-
-		GenerateMesh ();
 	}
 
 	public void Destroy() {

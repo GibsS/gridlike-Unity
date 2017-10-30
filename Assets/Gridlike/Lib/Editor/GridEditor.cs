@@ -175,7 +175,7 @@ namespace Gridlike {
 
 			SceneView.RepaintAll ();
 
-			if (didSomething)
+			if (didSomething && !Application.isPlaying)
 				EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
 		}
 	}
