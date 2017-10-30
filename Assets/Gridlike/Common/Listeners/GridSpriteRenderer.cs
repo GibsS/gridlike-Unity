@@ -227,10 +227,6 @@ namespace Gridlike {
 			}
 		}
 
-		public override void OnTileSizeChange () {
-			Debug.Log ("[GridSpriteRenderer.OnTileSizeChange] NOT IMPLEMENTED");
-		}
-
 		void ClearSprite(Component renderer, int x, int y) {
 			if (renderer != null) {
 				if (renderer is GridSpriteTriangle && ((renderer as GridSpriteTriangle).width != 1 || (renderer as GridSpriteTriangle).height != 1)) {

@@ -36,12 +36,8 @@ using UnityEngine;
 
 
 
-// Pooled region mesh renderer are pooled inside an object
-
-// TODO Put all classes in individual files
 // TODO Agree on final naming scheme
 // TODO Comment
-// TODO Remove any residual Debug.Log
 
 // TODO Use kenney tiles for testing + samples 
 // TODO Create samples + test
@@ -51,7 +47,6 @@ using UnityEngine;
 // Vertical oneways can't be stretched because only triangle can be stretched vertically (isVertical set to false for oneways..)
 
 // Fix bug with procedural generation and the new renderer
-// Add bool to decide if set creates region or not (in play mode)  
 
 namespace Gridlike {
 
@@ -484,7 +479,7 @@ namespace Gridlike {
 			if (tile.tileGOCenter) {
 				_Clear (tile, x, y);
 			} else if (tileGOs.GetTileGO (x, y) != null) {
-				Debug.LogError ("[Grid] Impossible to place a tile here: a tile GO occupies this tile");
+				Debug.LogError ("[[Gridlike] Impossible to place a tile here: a tile GO occupies this tile");
 				return;
 			}
 
@@ -502,7 +497,7 @@ namespace Gridlike {
 							}
 						}
 					})) {
-						Debug.LogError ("[Grid] Impossible to place a tile GO here: a tile GO already occupies these tiles");
+						Debug.LogError ("[[Gridlike] Impossible to place a tile GO here: a tile GO already occupies these tiles");
 						return;
 					}
 

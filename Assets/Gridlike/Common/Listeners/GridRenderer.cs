@@ -163,10 +163,6 @@ namespace Gridlike {
 			renderer.mesh.ApplyUV ();
 		}
 
-		public override void OnTileSizeChange () {
-			Debug.Log ("[GridSpriteRenderer.OnTileSizeChange] NOT IMPLEMENTED");
-		}
-
 		void Clear(int x, int y) {
 			PositionRegionRenderer renderer = GetContainingRegionRenderer (x, y);
 

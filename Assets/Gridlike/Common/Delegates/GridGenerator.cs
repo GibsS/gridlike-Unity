@@ -142,8 +142,6 @@ namespace Gridlike {
 		public override void SaveTiles (int regionX, int regionY, FiniteGrid tiles) {
 			if (useSave) {
 				gridSerializer.SaveGrid (tiles);
-
-				Debug.Log ("Save region. X=" + regionX + " Y=" + regionY);
 			}
 		}
 

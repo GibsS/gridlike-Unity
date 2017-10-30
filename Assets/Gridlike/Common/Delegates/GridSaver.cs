@@ -56,8 +56,6 @@ namespace Gridlike {
 		public override FiniteGrid LoadTiles (int regionX, int regionY) {
 			if (gridSerializer.IsRegionSaved(regionX, regionY)) {
 				FiniteGrid grid = gridSerializer.LoadGrid (regionX, regionY);
-
-				Debug.Log ("Load region from save. X=" + regionX + " Y=" + regionY);
 				return grid;
 			}
 
@@ -65,8 +63,6 @@ namespace Gridlike {
 		}
 		public override void SaveTiles (int regionX, int regionY, FiniteGrid tiles) {
 			gridSerializer.SaveGrid (tiles);
-
-			Debug.Log ("Save region. X=" + regionX + " Y=" + regionY);
 		}
 
 		public void ClearSave() {

@@ -18,7 +18,8 @@ namespace Gridlike {
 			GridGenerator generator = GetComponent<GridGenerator> ();
 
 			if (generator == null) {
-				Debug.LogError ("Generation algorithm requires a GridGenerator");
+				Debug.LogError ("[Gridlike] Generation algorithm requires a GridGenerator");
+
 				if(Application.isPlaying)
 					Destroy (this);
 				else 

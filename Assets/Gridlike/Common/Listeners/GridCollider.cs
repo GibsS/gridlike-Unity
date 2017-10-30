@@ -154,10 +154,6 @@ namespace Gridlike {
 			}
 		}
 
-		public override void OnTileSizeChange() {
-			Debug.Log ("[GridCollider.OnTileSizeChange] NOT IMPLEMENTED");
-		}
-
 		void ClearTile(int x, int y) {
 			GridColliderPart wrapper = components.Get (x, y) as GridColliderPart;
 

@@ -28,7 +28,7 @@ namespace Gridlike {
 				Grid grid = GetComponent<Grid> ();
 
 				if (grid == null) {
-					Debug.LogWarning ("No Grid on this game object");
+					Debug.LogWarning ("[Gridlike] No Grid on this game object");
 				} else {
 					this.grid = grid;
 
@@ -86,7 +86,5 @@ namespace Gridlike {
 		}
 
 		public abstract void OnHideRegion(int X, int Y);
-
-		public abstract void OnTileSizeChange ();
 	}
 }

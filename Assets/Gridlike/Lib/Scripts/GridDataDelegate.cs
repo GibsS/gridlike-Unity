@@ -23,7 +23,7 @@ namespace Gridlike {
 			GridDataDelegate[] all = GetComponents<GridDataDelegate>();
 
 			if (all.Length > 1) {
-				Debug.LogError ("A Grid can only have one grid data delegate, destroying " + this.GetType ().Name);
+				Debug.LogError ("[Gridlike] A Grid GameObject can only have one grid data delegate, destroying " + this.GetType ().Name);
 				if (Application.isEditor)
 					DestroyImmediate (this);
 				else
@@ -37,7 +37,7 @@ namespace Gridlike {
 				Grid grid = GetComponent<Grid> ();
 
 				if (grid == null) {
-					Debug.LogWarning ("No Grid on this game object");
+					Debug.LogWarning ("[Gridlike] No Grid on this game object");
 				} else {
 					this.grid = grid;
 
