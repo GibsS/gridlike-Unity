@@ -56,9 +56,9 @@ namespace Gridlike {
 						renderer = CreateSprite (x, y);
 
 						components.Set (x, y, renderer);
-					} else if (renderer is GridSpriteTriangle) {
-						if ((renderer as GridSpriteTriangle).width != 1 || (renderer as GridSpriteTriangle).height != 1) {
-							SplitTriangle (renderer as GridSpriteTriangle, x, y);
+					} else if (renderer is GridTriangle) {
+						if ((renderer as GridTriangle).width != 1 || (renderer as GridTriangle).height != 1) {
+							SplitTriangle (renderer as GridTriangle, x, y);
 
 							renderer = CreateSprite (x, y);
 
@@ -66,7 +66,7 @@ namespace Gridlike {
 						} else {
 							DestroyImmediate (renderer);
 
-							renderer = (renderer as GridSpriteTriangle).spriteRenderer;
+							//renderer = (renderer as GridTriangle).spriteRenderer;
 
 							components.Set (x, y, renderer);
 						}
@@ -88,16 +88,16 @@ namespace Gridlike {
 					// up
 					Tile other = grid.Get (x, y + 1);
 
-					GridSpriteTriangle upTriangle = null;
+					GridTriangle upTriangle = null;
 					if (other != null && tile.id == other.id && tile.subId == other.subId) {
-						upTriangle = components.Get (x, y + 1) as GridSpriteTriangle;
+						upTriangle = components.Get (x, y + 1) as GridTriangle;
 
 						if (upTriangle != null && upTriangle.width == 1) {
 							components.Set (x, y, upTriangle);
 
 							expand = true;
 
-							renderer = upTriangle.spriteRenderer;
+							//renderer = upTriangle.spriteRenderer;
 
 							upTriangle.transform.localPosition -= new Vector3 (0, 0.5f, 0);
 							upTriangle.bottomLeftY -= 1;
@@ -111,7 +111,7 @@ namespace Gridlike {
 					other = grid.Get (x, y - 1);
 
 					if (other != null && tile.id == other.id && tile.subId == other.subId) {
-						GridSpriteTriangle otherTriangle = components.Get (x, y - 1) as GridSpriteTriangle;
+						GridTriangle otherTriangle = components.Get (x, y - 1) as GridTriangle;
 
 						if (otherTriangle != null && otherTriangle.width == 1) {
 							if (expand) {
@@ -131,7 +131,7 @@ namespace Gridlike {
 
 								expand = true;
 
-								renderer = otherTriangle.spriteRenderer;
+								//renderer = otherTriangle.spriteRenderer;
 
 								otherTriangle.transform.localPosition += new Vector3 (0, 0.5f, 0);
 								otherTriangle.height += 1;
@@ -145,16 +145,16 @@ namespace Gridlike {
 					if (!expand) {
 						other = grid.Get (x + 1, y);
 
-						GridSpriteTriangle rightTriangle = null;
+						GridTriangle rightTriangle = null;
 						if (other != null && tile.id == other.id && tile.subId == other.subId) {
-							rightTriangle = components.Get (x + 1, y) as GridSpriteTriangle;
+							rightTriangle = components.Get (x + 1, y) as GridTriangle;
 
 							if (rightTriangle != null && rightTriangle.height == 1) {
 								components.Set (x, y, rightTriangle);
 
 								expand = true;
 
-								renderer = rightTriangle.spriteRenderer;
+								//renderer = rightTriangle.spriteRenderer;
 
 								rightTriangle.transform.localPosition -= new Vector3 (0.5f, 0, 0);
 								rightTriangle.bottomLeftX -= 1;
@@ -168,7 +168,7 @@ namespace Gridlike {
 						other = grid.Get (x - 1, y);
 
 						if (other != null && tile.id == other.id && tile.subId == other.subId) {
-							GridSpriteTriangle otherTriangle = components.Get (x - 1, y) as GridSpriteTriangle;
+							GridTriangle otherTriangle = components.Get (x - 1, y) as GridTriangle;
 
 							if (otherTriangle != null && otherTriangle.height == 1) {
 								if (expand) {
@@ -188,7 +188,7 @@ namespace Gridlike {
 
 									expand = true;
 
-									renderer = otherTriangle.spriteRenderer;
+									//renderer = otherTriangle.spriteRenderer;
 
 									otherTriangle.transform.localPosition += new Vector3 (0.5f, 0, 0);
 									otherTriangle.width += 1;
@@ -200,11 +200,11 @@ namespace Gridlike {
 					}
 
 					if (!expand) {
-						GridSpriteTriangle triangle = GridSpriteTriangle.CreateSpriteTriangle (containerGO, grid, x, y);
+						//GridTriangle triangle = GridTriangle.CreateSpriteTriangle (containerGO, grid, x, y);
 
-						components.Set (x, y, triangle);
+						//components.Set (x, y, triangle);
 
-						renderer = triangle.spriteRenderer;
+						//renderer = triangle.spriteRenderer;
 					}
 
 					(renderer as SpriteRenderer).sprite = grid.atlas.GetSprite(tile.id, tile.subId, size);
@@ -229,8 +229,8 @@ namespace Gridlike {
 
 		void ClearSprite(Component renderer, int x, int y) {
 			if (renderer != null) {
-				if (renderer is GridSpriteTriangle && ((renderer as GridSpriteTriangle).width != 1 || (renderer as GridSpriteTriangle).height != 1)) {
-					SplitTriangle (renderer as GridSpriteTriangle, x, y);
+				if (renderer is GridTriangle && ((renderer as GridTriangle).width != 1 || (renderer as GridTriangle).height != 1)) {
+					SplitTriangle (renderer as GridTriangle, x, y);
 				} else {
 					DestroyImmediate (renderer.gameObject);
 				}
@@ -250,31 +250,31 @@ namespace Gridlike {
 
 			return renderer;
 		}
-		void SplitTriangle(GridSpriteTriangle triangle, int x, int y) {
+		void SplitTriangle(GridTriangle triangle, int x, int y) {
 			if (triangle.width != 1) {
 				if (triangle.bottomLeftX == x) {
 					Tile other = grid.Get(x + 1, y);
 
 					triangle.width -= 1;
 					triangle.bottomLeftX += 1;
-					triangle.transform.localPosition += new Vector3 (0.5f, 0, 0);
-					triangle.spriteRenderer.sprite = grid.atlas.GetSprite(other.id, other.subId, triangle.width);
+					//triangle.transform.localPosition += new Vector3 (0.5f, 0, 0);
+					//triangle.spriteRenderer.sprite = grid.atlas.GetSprite(other.id, other.subId, triangle.width);
 				} else {
 					int endX = triangle.bottomLeftX + triangle.width - 1;
 					Tile other = grid.Get(triangle.bottomLeftX, y);
 
 					triangle.width = x - triangle.bottomLeftX;
 					triangle.transform.localPosition -= new Vector3 ((endX - x + 1)/2f, 0, 0);
-					triangle.spriteRenderer.sprite = grid.atlas.GetSprite(other.id, other.subId, triangle.width);
+					//triangle.spriteRenderer.sprite = grid.atlas.GetSprite(other.id, other.subId, triangle.width);
 
 					if (endX != x) {
-						GridSpriteTriangle otherTriangle = GridSpriteTriangle.CreateSpriteTriangle(containerGO, grid, x + 1, y);
-						otherTriangle.transform.localPosition += new Vector3 ((endX - x - 1) / 2f, 0, 0);
-						otherTriangle.width = endX - x;
-						otherTriangle.spriteRenderer.sprite = grid.atlas.GetSprite (other.id, other.subId, otherTriangle.width);
+						//GridTriangle otherTriangle = GridTriangle.CreateSpriteTriangle(containerGO, grid, x + 1, y);
+						//otherTriangle.transform.localPosition += new Vector3 ((endX - x - 1) / 2f, 0, 0);
+						//otherTriangle.width = endX - x;
+						//otherTriangle.spriteRenderer.sprite = grid.atlas.GetSprite (other.id, other.subId, otherTriangle.width);
 
 						for (int i = x + 1; i <= endX; i++) {
-							components.Set (i, y, otherTriangle);
+							//components.Set (i, y, otherTriangle);
 						}
 					}
 				} 
@@ -285,23 +285,23 @@ namespace Gridlike {
 					triangle.height -= 1;
 					triangle.bottomLeftY += 1;
 					triangle.transform.localPosition += new Vector3 (0, 0.5f, 0);
-					triangle.spriteRenderer.sprite = grid.atlas.GetSprite(other.id, other.subId, triangle.height);
+					//triangle.spriteRenderer.sprite = grid.atlas.GetSprite(other.id, other.subId, triangle.height);
 				} else {
 					int endY = triangle.bottomLeftY + triangle.height - 1;
 					Tile other = grid.Get(x, triangle.bottomLeftY);
 
 					triangle.height = y - triangle.bottomLeftY;
 					triangle.transform.localPosition -= new Vector3 (0, (endY - y + 1)/2f, 0);
-					triangle.spriteRenderer.sprite = grid.atlas.GetSprite(other.id, other.subId, y - triangle.bottomLeftY);
+					//triangle.spriteRenderer.sprite = grid.atlas.GetSprite(other.id, other.subId, y - triangle.bottomLeftY);
 
 					if (endY != y) {
-						GridSpriteTriangle otherTriangle = GridSpriteTriangle.CreateSpriteTriangle(containerGO, grid, x, y + 1);
-						otherTriangle.transform.localPosition += new Vector3 (0, (endY - y - 1) / 2f, 0);
-						otherTriangle.height = endY - y;
-						otherTriangle.spriteRenderer.sprite = grid.atlas.GetSprite (other.id, other.subId, otherTriangle.height);
+						//GridTriangle otherTriangle = GridTriangle.CreateSpriteTriangle(containerGO, grid, x, y + 1);
+						//otherTriangle.transform.localPosition += new Vector3 (0, (endY - y - 1) / 2f, 0);
+						//otherTriangle.height = endY - y;
+						//otherTriangle.spriteRenderer.sprite = grid.atlas.GetSprite (other.id, other.subId, otherTriangle.height);
 
 						for (int i = y + 1; i <= endY; i++) {
-							components.Set (x, i, otherTriangle);
+							//components.Set (x, i, otherTriangle);
 						}
 					}
 				}

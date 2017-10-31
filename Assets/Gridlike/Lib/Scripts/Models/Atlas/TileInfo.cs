@@ -35,7 +35,7 @@ namespace Gridlike {
 				}
 			}
 
-			if (size == 1) {
+			if (size == 1 || (size - 2) >= info.sprites.Length) {
 				return info.sprite;
 			} else {
 				return info.sprites [size - 2];

@@ -7,13 +7,9 @@ namespace Gridlike {
 	[AddComponentMenu("Gridlike/Grid collider")]
 	public class GridCollider : GridListener {
 
-		[HideInInspector]
-		[SerializeField]
-		InfiniteComponentGrid components;
+		[HideInInspector] [SerializeField] InfiniteComponentGrid components;
 
-		[HideInInspector]
-		[SerializeField] 
-		GameObject containerGO;
+		[HideInInspector] [SerializeField] GameObject containerGO;
 
 		public override void OnDestroy() {
 			base.OnDestroy ();

@@ -31,22 +31,26 @@ using UnityEngine;
 // Handle subids, see their limit, define contract and preconditions..
 // Make sure if an id is said to be placeable at a given place, it is actually placeable there
 
+// SAMPLES
+
+// TUTORIALS
+
 // CLEAN UP
 // Remove as many public field as possible (once tests are defined)
 
 
 
-// TODO Agree on final naming scheme
-// TODO Comment
 
 // TODO Use kenney tiles for testing + samples 
-// TODO Create samples + test
 
 // TODO Handle long triangles
 // TODO Handle vertically stretching one ways
 // Vertical oneways can't be stretched because only triangle can be stretched vertically (isVertical set to false for oneways..)
 
 // Fix bug with procedural generation and the new renderer
+
+// TODO Agree on final naming scheme
+// TODO Comment
 
 namespace Gridlike {
 

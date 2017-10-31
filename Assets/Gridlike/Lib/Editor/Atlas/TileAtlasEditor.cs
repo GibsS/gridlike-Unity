@@ -71,6 +71,9 @@ namespace Gridlike {
 			if (GUILayout.Button ("Create new tile")) {
 				atlas.AddTile ();
 			} 
+
+			DrawDefaultInspector ();
+
 			if (GUI.changed)
 				EditorUtility.SetDirty (target);
 		}
@@ -310,6 +313,14 @@ namespace Gridlike {
 			AssetDatabase.ImportAsset(assetPath);
 			AssetDatabase.Refresh();
 
+			foreach (TileInfo info in atlas.GetTileInfos()) {
+				info.idSpriteInfo.sprites = new Sprite[info.idSpriteInfo.importedSprites.Length];
+
+				for (int i = 0; i < info.subIdSpriteInfo.Length; i++) {
+					info.subIdSpriteInfo [i].sprites = new Sprite[info.subIdSpriteInfo [i].importedSprites.Length];
+				}
+			}
+
 			foreach (Object obj in AssetDatabase.LoadAllAssetsAtPath (assetPath)) {
 				if (!string.IsNullOrEmpty (obj.name) && obj.name [0] == 's' && obj.name != "sprite_sheet") {
 					Sprite sprite = obj as Sprite;
@@ -334,7 +345,6 @@ namespace Gridlike {
 						if (tileSize == 1) {
 							spriteInfo.sprite = sprite;
 						} else {
-							spriteInfo.sprites = new Sprite[spriteInfo.importedSprites.Length];
 							spriteInfo.sprites [tileSize - 2] = sprite;
 						}
 					}
