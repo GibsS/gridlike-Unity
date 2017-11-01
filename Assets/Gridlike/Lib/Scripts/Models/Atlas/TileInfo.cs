@@ -35,10 +35,34 @@ namespace Gridlike {
 				}
 			}
 
-			if (size == 1 || (size - 2) >= info.sprites.Length) {
+			if (size == 1) {
 				return info.sprite;
 			} else {
 				return info.sprites [size - 2];
+			}
+		}
+		public Sprite GetSprite(out int actualSize, int subId = 0, int size = 1) {
+			TileSpriteInfo info;
+
+			if (subId == 0) {
+				info = idSpriteInfo;
+			} else {
+				if (subIdSpriteInfo [subId - 1] != null) {
+					info = subIdSpriteInfo [subId - 1];
+				} else {
+					info = idSpriteInfo;
+				}
+			}
+
+			if (size == 1) {
+				actualSize = 1;
+				return info.sprite;
+			} else if (size - 2 < info.sprites.Length) {
+				actualSize = size;
+				return info.sprites [size - 2];
+			} else {
+				actualSize = info.sprites.Length + 1;
+				return info.sprites [info.sprites.Length - 1];
 			}
 		}
 

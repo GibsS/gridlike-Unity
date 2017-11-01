@@ -316,8 +316,10 @@ namespace Gridlike {
 			foreach (TileInfo info in atlas.GetTileInfos()) {
 				info.idSpriteInfo.sprites = new Sprite[info.idSpriteInfo.importedSprites.Length];
 
-				for (int i = 0; i < info.subIdSpriteInfo.Length; i++) {
-					info.subIdSpriteInfo [i].sprites = new Sprite[info.subIdSpriteInfo [i].importedSprites.Length];
+				if (info.subIdSpriteInfo != null) {
+					for (int i = 0; i < info.subIdSpriteInfo.Length; i++) {
+						info.subIdSpriteInfo [i].sprites = new Sprite[info.subIdSpriteInfo [i].importedSprites.Length];
+					}
 				}
 			}
 

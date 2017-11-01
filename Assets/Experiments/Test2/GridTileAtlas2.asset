@@ -63,7 +63,7 @@ MonoBehaviour:
       importedSprites: []
     subIdSpriteInfo: []
   - id: 3
-    name: triangle
+    name: triangle horizontal
     shape: 8
     isVertical: 0
     isSensor: 0
@@ -74,27 +74,31 @@ MonoBehaviour:
     idSpriteInfo:
       sprite: {fileID: 21300004, guid: 14d458ee54e0cc1438b099feac784f9d, type: 3}
       sprites:
-      - {fileID: 0}
+      - {fileID: 21300006, guid: 14d458ee54e0cc1438b099feac784f9d, type: 3}
       - {fileID: 21300008, guid: 14d458ee54e0cc1438b099feac784f9d, type: 3}
       importedSprite: {fileID: 21300000, guid: a3354a48802511643aebee0f27dc1127, type: 3}
       importedSprites:
       - {fileID: 21300000, guid: a02fad3b796a79b408b11d396cab8561, type: 3}
       - {fileID: 21300000, guid: ba908192b1dc4e843ad3974b4728ed37, type: 3}
     subIdSpriteInfo: []
-  - id: 0
-    name: 
-    shape: 0
-    isVertical: 0
+  - id: 4
+    name: triangle vertical
+    shape: 6
+    isVertical: 1
     isSensor: 0
     layer: 0
-    tag: 
+    tag: Untagged
     isGODetached: 0
     tileGO: {fileID: 0}
     idSpriteInfo:
-      sprite: {fileID: 0}
-      sprites: []
-      importedSprite: {fileID: 0}
-      importedSprites: []
+      sprite: {fileID: 21300010, guid: 14d458ee54e0cc1438b099feac784f9d, type: 3}
+      sprites:
+      - {fileID: 21300012, guid: 14d458ee54e0cc1438b099feac784f9d, type: 3}
+      - {fileID: 21300014, guid: 14d458ee54e0cc1438b099feac784f9d, type: 3}
+      importedSprite: {fileID: 21300000, guid: 9a69a18f3876cf54389d63efa1b8ac49, type: 3}
+      importedSprites:
+      - {fileID: 21300000, guid: e07c95b8ecb1d834d99aa4ce7587cbed, type: 3}
+      - {fileID: 21300000, guid: 6bee4aece6ffcc04c85fd3a50d77b816, type: 3}
     subIdSpriteInfo: []
   - id: 0
     name: 
