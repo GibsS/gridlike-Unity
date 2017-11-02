@@ -200,7 +200,7 @@ namespace Gridlike {
 							triangle.bottomLeftY += 1;
 
 							Sprite sprite = info.GetSprite (out actualSize, triangle.subId, triangle.height);
-							RenderUpTriangle (currentRenderer, relX, bottomRelY, triangle.height, actualSize, sprite);
+							RenderUpTriangle (currentRenderer, relX, bottomRelY + 1, triangle.height, actualSize, sprite);
 						}
 					} else if (y == triangle.bottomLeftY + triangle.height - 1) {
 						triangle.height -= 1;
@@ -239,7 +239,7 @@ namespace Gridlike {
 							triangle.bottomLeftX += 1;
 
 							Sprite sprite = info.GetSprite (out actualSize, triangle.subId, triangle.width);
-							RenderRightTriangle (currentRenderer, bottomRelX, relY, triangle.width, actualSize, sprite);
+							RenderRightTriangle (currentRenderer, bottomRelX + 1, relY, triangle.width, actualSize, sprite);
 						}
 					} else if (x == triangle.bottomLeftX + triangle.width - 1) {
 						triangle.width -= 1;
