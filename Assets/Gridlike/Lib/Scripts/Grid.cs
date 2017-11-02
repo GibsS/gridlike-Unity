@@ -43,9 +43,6 @@ using UnityEngine;
 
 // TODO Use kenney tiles for testing + samples 
 
-// TODO Handle vertically stretching one ways
-// Vertical oneways can't be stretched because only triangle can be stretched vertically (isVertical set to false for oneways..)
-
 // Fix bug with procedural generation and the new renderer
 
 // TODO Agree on final naming scheme
