@@ -117,43 +117,35 @@ namespace Gridlike {
 		}
 
 		public override void OnSet(int x, int y, Tile tile) {
+			PositionRegionRenderer renderer = GetContainingRegionRenderer (x, y);
+
+			ClearRenderers ();
+			renderer.mesh.PrepareUV ();
+
+			_OnSet (renderer, x, y, tile);
+
+			renderer.mesh.ApplyUV ();
+			ApplyRenderers ();
+		}
+		void _OnSet(PositionRegionRenderer renderer, int x, int y, Tile tile) {
 			TileInfo info = grid.atlas [tile.id];
 
-			switch (info.shape) {
-			case TileShape.EMPTY: {
-					PositionRegionRenderer renderer = GetContainingRegionRenderer (x, y);
+			Clear (renderer, x, y);
 
-					renderer.mesh.PrepareUV ();
-					Clear (renderer, x, y);
-					renderer.mesh.ApplyUV ();
-					break;
-				}
+			switch (info.shape) {
 			case TileShape.UP_ONEWAY:
 			case TileShape.RIGHT_ONEWAY:
 			case TileShape.DOWN_ONEWAY:
 			case TileShape.LEFT_ONEWAY:
 			case TileShape.FULL: {
-					PositionRegionRenderer renderer = GetContainingRegionRenderer (x, y);
-
-					renderer.mesh.PrepareUV ();
-					Clear (renderer, x, y);
-
 					renderer.mesh.SetTile (x - renderer.regionX * Grid.REGION_SIZE, y - renderer.regionY * Grid.REGION_SIZE, info.GetSprite(tile.subId));
-					renderer.mesh.ApplyUV ();
 					break;
 				}
 			case TileShape.DOWN_LEFT_TRIANGLE:
 			case TileShape.DOWN_RIGHT_TRIANGLE:
 			case TileShape.UP_LEFT_TRIANGLE:
 			case TileShape.UP_RIGHT_TRIANGLE: {
-					PositionRegionRenderer renderer = GetContainingRegionRenderer (x, y);
-
-					renderer.mesh.PrepareUV ();
-					Clear (renderer, x, y);
-
 					JoinTriangle(renderer, info, tile, x, y);
-					renderer.mesh.ApplyUV ();
-					ApplyRenderers ();
 					break;
 				}
 			}
@@ -161,25 +153,30 @@ namespace Gridlike {
 
 		public override void OnHideRegion(int regionX, int regionY) {
 			ClearRegionRenderer (regionX, regionY);
+			triangles.ClearRegion (regionX, regionY);
 		}
 		public override void OnShowRegion(int regionX, int regionY) {
 			FiniteGrid region = grid.GetRegion (regionX, regionY);
 			PositionRegionRenderer renderer = GetRegionRenderer (regionX, regionY);
 
+			ClearRenderers ();
 			renderer.mesh.PrepareUV ();
+
+			int bx = regionX * Grid.REGION_SIZE;
+			int by = regionY * Grid.REGION_SIZE;
 
 			for (int i = 0; i < Grid.REGION_SIZE; i++) {
 				for (int j = 0; j < Grid.REGION_SIZE; j++) {
 					Tile tile = region.Get (i, j);
 
 					if (tile != null && tile.id != 0) {
-						renderer.mesh.SetTile (i, j, grid.atlas.GetSprite (tile.id, tile.subId));
-					} else {
-						renderer.mesh.SetTile (i, j, grid.atlas.emptySprite);
+						_OnSet (renderer, i + bx, j + by, tile);
 					}
 				}
 			}
+
 			renderer.mesh.ApplyUV ();
+			ApplyRenderers ();
 		}
 
 		void Clear(PositionRegionRenderer currentRenderer, int x, int y) {
@@ -313,7 +310,6 @@ namespace Gridlike {
 
 				if (isExpanded) {
 					if (down != null) {
-						Debug.Log ("Expand down");
 						int actualSize;
 						Sprite sprite = info.GetSprite (out actualSize, down.subId, down.height);
 						int relBottomY = down.bottomLeftY - currentRenderer.regionY * Grid.REGION_SIZE;
@@ -324,7 +320,6 @@ namespace Gridlike {
 							RenderDownTriangle (currentRenderer, relX, relBottomY, down.height, actualSize, sprite);
 						}
 					} else if (up != null) {
-						Debug.Log ("Expand up");
 						int actualSize;
 						Sprite sprite = info.GetSprite (out actualSize, up.subId, up.height);
 						int relBottomY = up.bottomLeftY - currentRenderer.regionY * Grid.REGION_SIZE; 
@@ -365,7 +360,6 @@ namespace Gridlike {
 
 				if (isExpanded) {
 					if (left != null) {
-						Debug.Log ("Expand left");
 						int actualSize;
 						Sprite sprite = info.GetSprite (out actualSize, left.subId, left.width);
 						int relBottomX = left.bottomLeftX - currentRenderer.regionX * Grid.REGION_SIZE;
@@ -376,7 +370,6 @@ namespace Gridlike {
 							RenderLeftTriangle (currentRenderer, relBottomX, relY, left.width, actualSize, sprite);
 						}
 					} else if (right != null) {
-						Debug.Log ("Expand right");
 						int actualSize;
 						Sprite sprite = info.GetSprite (out actualSize, right.subId, right.width);
 						int relBottomX = right.bottomLeftX - currentRenderer.regionX * Grid.REGION_SIZE;
@@ -398,7 +391,6 @@ namespace Gridlike {
 		}
 
 		void RenderUpTriangle(PositionRegionRenderer renderer, int relX, int relY, int height, int actualSize, Sprite sprite) {
-			Debug.Log ("Render up");
 			if (relY + height > Grid.REGION_SIZE) {
 				int count = 0;
 
@@ -420,7 +412,6 @@ namespace Gridlike {
 			}
 		}
 		void RenderLeftTriangle(PositionRegionRenderer renderer, int relX, int relY, int width, int actualSize, Sprite sprite) {
-			Debug.Log ("Render left");
 			if (relX < 0) {
 				int count = 0;
 
@@ -442,7 +433,6 @@ namespace Gridlike {
 			}
 		}		
 		void RenderRightTriangle(PositionRegionRenderer renderer, int relX, int relY, int width, int actualSize, Sprite sprite) {
-			Debug.Log ("Render right");
 			if (relX + width > Grid.REGION_SIZE) {
 				int count = 0;
 
@@ -464,7 +454,6 @@ namespace Gridlike {
 			}
 		}
 		void RenderDownTriangle(PositionRegionRenderer renderer, int relX, int relY, int height, int actualSize, Sprite sprite) {
-			Debug.Log ("Render down");
 			if (relY < 0) {
 				int count = 0;
 

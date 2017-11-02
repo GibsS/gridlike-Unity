@@ -41,6 +41,10 @@ namespace Gridlike {
 			region.Set (x - region.x * _regionSize, y - region.y * _regionSize, value);
 		}
 
+		public void ClearRegion(int X, int Y) {
+			regions.RemoveAll (e => e.x == X && e.y == Y);
+		}
+
 		public FiniteComponentGrid GetRegion(int X, int Y) {
 			foreach (FiniteComponentGrid region in regions) {
 				if (region.x == X && region.y == Y) {
