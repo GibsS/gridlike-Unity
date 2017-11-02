@@ -20,7 +20,10 @@ namespace Gridlike {
 
 		[HideInInspector] [SerializeField] GameObject containerGO;
 
-		ComponentPool<RegionMeshRenderer> meshes;
+		PositionRegionRenderer upRenderer;
+		PositionRegionRenderer downRenderer;
+		PositionRegionRenderer rightRenderer;
+		PositionRegionRenderer leftRenderer;
 
 		public override void OnDestroy() {
 			base.OnDestroy ();
@@ -30,8 +33,6 @@ namespace Gridlike {
 			else
 				DestroyImmediate (containerGO);
 			containerGO = null;
-
-			if(meshes != null) meshes.Clear ();
 		}
 		public override void Awake() {
 			base.Awake ();
@@ -106,7 +107,7 @@ namespace Gridlike {
 							rend.mesh.SetTile (i, j, grid.atlas.emptySprite);
 						}
 					}
-					meshes.Free (rend.mesh);
+					GridlikePools.renderers.Free (rend.mesh);
 				} else {
 					rend.mesh.Destroy();
 				}
@@ -152,6 +153,7 @@ namespace Gridlike {
 
 					JoinTriangle(renderer, info, tile, x, y);
 					renderer.mesh.ApplyUV ();
+					ApplyRenderers ();
 					break;
 				}
 			}
@@ -191,6 +193,8 @@ namespace Gridlike {
 				int actualSize;
 					
 				if (triangle.isVertical) {
+					int bottomRelY = triangle.bottomLeftY - currentRenderer.regionY * Grid.REGION_SIZE;
+
 					if (y == triangle.bottomLeftY) {
 						if (triangle.height == 1) {
 							DestroyImmediate (triangle.gameObject);
@@ -199,19 +203,13 @@ namespace Gridlike {
 							triangle.bottomLeftY += 1;
 
 							Sprite sprite = info.GetSprite (out actualSize, triangle.subId, triangle.height);
-							int bottomRelY = triangle.bottomLeftY - currentRenderer.regionY * Grid.REGION_SIZE;
-							for (int i = 0; i < triangle.height; i++) {
-								currentRenderer.mesh.SetPartialVerticalTile (relX, bottomRelY + i, sprite, i % actualSize);
-							}
+							RenderUpTriangle (currentRenderer, relX, bottomRelY, triangle.height, actualSize, sprite);
 						}
 					} else if (y == triangle.bottomLeftY + triangle.height - 1) {
 						triangle.height -= 1;
 
 						Sprite sprite = info.GetSprite (out actualSize, triangle.subId, triangle.height);
-						int bottomRelY = triangle.bottomLeftY - currentRenderer.regionY * Grid.REGION_SIZE;
-						for (int i = 0; i < triangle.height; i++) {
-							currentRenderer.mesh.SetPartialVerticalTile (relX, bottomRelY + i, sprite, i % actualSize);
-						}
+						RenderDownTriangle (currentRenderer, relX, bottomRelY, triangle.height, actualSize, sprite);
 					} else {
 						GridTriangle other = GridTriangle.CreateTriangle (
 							containerGO, 
@@ -224,19 +222,18 @@ namespace Gridlike {
 						triangle.height = y - triangle.bottomLeftY;
 
 						Sprite sprite = info.GetSprite (out actualSize, triangle.subId, triangle.height);
-						int bottomRelY = triangle.bottomLeftY - currentRenderer.regionY * Grid.REGION_SIZE;
-						for (int i = 0; i < other.height; i++) {
-							currentRenderer.mesh.SetPartialVerticalTile (relX, bottomRelY + i, sprite, i % actualSize);
-						}
+						RenderDownTriangle (currentRenderer, relX, bottomRelY, triangle.height, actualSize, sprite);
 
 						sprite = info.GetSprite (out actualSize, other.subId, other.height);
 						bottomRelY = other.bottomLeftY - currentRenderer.regionY * Grid.REGION_SIZE;
 						for (int i = 0; i < other.height; i++) {
-							currentRenderer.mesh.SetPartialVerticalTile (relX, bottomRelY + i, sprite, i % actualSize);
 							triangles.Set (other.bottomLeftX, other.bottomLeftY + i, other);
 						}
+						RenderUpTriangle (currentRenderer, relX, bottomRelY, other.height, actualSize, sprite);
 					}
 				} else {
+					int bottomRelX = triangle.bottomLeftX - currentRenderer.regionX * Grid.REGION_SIZE;
+
 					if (x == triangle.bottomLeftX) {
 						if (triangle.width == 1) {
 							DestroyImmediate (triangle.gameObject);
@@ -245,19 +242,13 @@ namespace Gridlike {
 							triangle.bottomLeftX += 1;
 
 							Sprite sprite = info.GetSprite (out actualSize, triangle.subId, triangle.width);
-							int bottomRelX = triangle.bottomLeftX - currentRenderer.regionX * Grid.REGION_SIZE;
-							for (int i = 0; i < triangle.width; i++) {
-								currentRenderer.mesh.SetPartialHorizontalTile (bottomRelX + i, relY, sprite, i % actualSize);
-							}
+							RenderRightTriangle (currentRenderer, bottomRelX, relY, triangle.width, actualSize, sprite);
 						}
 					} else if (x == triangle.bottomLeftX + triangle.width - 1) {
 						triangle.width -= 1;
 
 						Sprite sprite = info.GetSprite (out actualSize, triangle.subId, triangle.width);
-						int bottomRelX = triangle.bottomLeftX - currentRenderer.regionX * Grid.REGION_SIZE;
-						for (int i = 0; i < triangle.width; i++) {
-							currentRenderer.mesh.SetPartialHorizontalTile (bottomRelX + i, relY, sprite, i % actualSize);
-						}
+						RenderLeftTriangle (currentRenderer, bottomRelX, relY, triangle.width, actualSize, sprite);
 					} else {
 						GridTriangle other = GridTriangle.CreateTriangle (
 							containerGO, 
@@ -270,17 +261,14 @@ namespace Gridlike {
 						triangle.width = x - triangle.bottomLeftX;
 
 						Sprite sprite = info.GetSprite (out actualSize, triangle.subId, triangle.width);
-						int bottomRelX = triangle.bottomLeftX - currentRenderer.regionX * Grid.REGION_SIZE;
-						for (int i = 0; i < triangle.width; i++) {
-							currentRenderer.mesh.SetPartialHorizontalTile (bottomRelX + i, relY, sprite, i % actualSize);
-						}
+						RenderLeftTriangle (currentRenderer, bottomRelX, relY, triangle.width, actualSize, sprite);
 
 						sprite = info.GetSprite (out actualSize, other.subId, other.width);
 						bottomRelX = other.bottomLeftX - currentRenderer.regionX * Grid.REGION_SIZE;
 						for (int i = 0; i < other.width; i++) {
-							currentRenderer.mesh.SetPartialHorizontalTile (bottomRelX + i, relY, sprite, i % actualSize);
 							triangles.Set (other.bottomLeftX + i, other.bottomLeftY, other);
 						}
+						RenderRightTriangle (currentRenderer, bottomRelX, relY, other.width, actualSize, sprite);
 					}
 				}
 
@@ -325,20 +313,26 @@ namespace Gridlike {
 
 				if (isExpanded) {
 					if (down != null) {
+						Debug.Log ("Expand down");
 						int actualSize;
 						Sprite sprite = info.GetSprite (out actualSize, down.subId, down.height);
 						int relBottomY = down.bottomLeftY - currentRenderer.regionY * Grid.REGION_SIZE;
 
-						for (int i = 0; i < down.height; i++) {
-							currentRenderer.mesh.SetPartialVerticalTile (relX, relBottomY + i, sprite, i % actualSize);
+						if (relBottomY > Grid.REGION_SIZE / 2) {
+							RenderUpTriangle (currentRenderer, relX, relBottomY, down.height, actualSize, sprite);
+						} else {
+							RenderDownTriangle (currentRenderer, relX, relBottomY, down.height, actualSize, sprite);
 						}
 					} else if (up != null) {
+						Debug.Log ("Expand up");
 						int actualSize;
 						Sprite sprite = info.GetSprite (out actualSize, up.subId, up.height);
-						int relBottomY = up.bottomLeftY - currentRenderer.regionY * Grid.REGION_SIZE;
+						int relBottomY = up.bottomLeftY - currentRenderer.regionY * Grid.REGION_SIZE; 
 
-						for (int i = 0; i < up.height; i++) {
-							currentRenderer.mesh.SetPartialVerticalTile (relX, relBottomY + i, sprite, i % actualSize);
+						if (relBottomY > Grid.REGION_SIZE / 2) {
+							RenderUpTriangle (currentRenderer, relX, relBottomY, up.height, actualSize, sprite);
+						} else {
+							RenderDownTriangle (currentRenderer, relX, relBottomY, up.height, actualSize, sprite);
 						}
 					}
 				}
@@ -371,20 +365,26 @@ namespace Gridlike {
 
 				if (isExpanded) {
 					if (left != null) {
+						Debug.Log ("Expand left");
 						int actualSize;
 						Sprite sprite = info.GetSprite (out actualSize, left.subId, left.width);
 						int relBottomX = left.bottomLeftX - currentRenderer.regionX * Grid.REGION_SIZE;
 
-						for (int i = 0; i < left.width; i++) {
-							currentRenderer.mesh.SetPartialHorizontalTile (relBottomX + i, relY, sprite, i % actualSize);
+						if (relBottomX > Grid.REGION_SIZE / 2) {
+							RenderRightTriangle (currentRenderer, relBottomX, relY, left.width, actualSize, sprite);
+						} else {
+							RenderLeftTriangle (currentRenderer, relBottomX, relY, left.width, actualSize, sprite);
 						}
 					} else if (right != null) {
+						Debug.Log ("Expand right");
 						int actualSize;
 						Sprite sprite = info.GetSprite (out actualSize, right.subId, right.width);
 						int relBottomX = right.bottomLeftX - currentRenderer.regionX * Grid.REGION_SIZE;
 
-						for (int i = 0; i < right.width; i++) {
-							currentRenderer.mesh.SetPartialHorizontalTile (relBottomX + i, relY, sprite, i % actualSize);
+						if (relBottomX > Grid.REGION_SIZE / 2) {
+							RenderRightTriangle (currentRenderer, relBottomX, relY, right.width, actualSize, sprite);
+						} else {
+							RenderLeftTriangle (currentRenderer, relBottomX, relY, right.width, actualSize, sprite);
 						}
 					}
 				}
@@ -394,6 +394,124 @@ namespace Gridlike {
 				triangles.Set(x, y, GridTriangle.CreateTriangle(containerGO, grid, tile.id, tile.subId, info.isVertical, x, y, 1, 1));
 					
 				currentRenderer.mesh.SetTile (relX, relY, info.GetSprite (tile.subId));
+			}
+		}
+
+		void RenderUpTriangle(PositionRegionRenderer renderer, int relX, int relY, int height, int actualSize, Sprite sprite) {
+			Debug.Log ("Render up");
+			if (relY + height > Grid.REGION_SIZE) {
+				int count = 0;
+
+				for (int i = relY; i < Grid.REGION_SIZE; i++, count++) {
+					renderer.mesh.SetPartialVerticalTile (relX, i, sprite, count % actualSize);
+				}
+
+				if (upRenderer == null) {
+					upRenderer = GetRegionRenderer (renderer.regionX, renderer.regionY + 1);
+					upRenderer.mesh.PrepareUV ();
+				}
+				for (int i = 0; i < relY + height - Grid.REGION_SIZE; i++, count++) {
+					upRenderer.mesh.SetPartialVerticalTile (relX, i, sprite, count % actualSize);
+				}
+			} else {
+				for (int i = 0; i < height; i++) {
+					renderer.mesh.SetPartialVerticalTile (relX, relY + i, sprite, i % actualSize);
+				}
+			}
+		}
+		void RenderLeftTriangle(PositionRegionRenderer renderer, int relX, int relY, int width, int actualSize, Sprite sprite) {
+			Debug.Log ("Render left");
+			if (relX < 0) {
+				int count = 0;
+
+				if (leftRenderer == null) {
+					leftRenderer = GetRegionRenderer (renderer.regionX - 1, renderer.regionY);
+					leftRenderer.mesh.PrepareUV ();
+				}
+				for (int i = relX + Grid.REGION_SIZE; i < Grid.REGION_SIZE; i++, count++) {
+					leftRenderer.mesh.SetPartialHorizontalTile (i, relY, sprite, count % actualSize);
+				}
+
+				for (int i = 0; i < relX + width; i++, count++) {
+					renderer.mesh.SetPartialHorizontalTile (i, relY, sprite, count % actualSize);
+				}
+			} else {
+				for (int i = 0; i < width; i++) {
+					renderer.mesh.SetPartialHorizontalTile (relX + i, relY, sprite, i % actualSize);
+				}
+			}
+		}		
+		void RenderRightTriangle(PositionRegionRenderer renderer, int relX, int relY, int width, int actualSize, Sprite sprite) {
+			Debug.Log ("Render right");
+			if (relX + width > Grid.REGION_SIZE) {
+				int count = 0;
+
+				for (int i = relX; i < Grid.REGION_SIZE; i++, count++) {
+					renderer.mesh.SetPartialHorizontalTile (i, relY, sprite, count % actualSize);
+				}
+
+				if (rightRenderer == null) {
+					rightRenderer = GetRegionRenderer (renderer.regionX + 1, renderer.regionY);
+					rightRenderer.mesh.PrepareUV ();
+				}
+				for (int i = 0; i < relX + width - Grid.REGION_SIZE; i++, count++) {
+					rightRenderer.mesh.SetPartialHorizontalTile (i, relY, sprite, count % actualSize);
+				}
+			} else {
+				for (int i = 0; i < width; i++) {
+					renderer.mesh.SetPartialHorizontalTile (relX + i, relY, sprite, i % actualSize);
+				}
+			}
+		}
+		void RenderDownTriangle(PositionRegionRenderer renderer, int relX, int relY, int height, int actualSize, Sprite sprite) {
+			Debug.Log ("Render down");
+			if (relY < 0) {
+				int count = 0;
+
+				if (downRenderer == null) {
+					downRenderer = GetRegionRenderer (renderer.regionX, renderer.regionY - 1);
+					downRenderer.mesh.PrepareUV ();
+				}
+				for (int i = relY + Grid.REGION_SIZE; i < Grid.REGION_SIZE; i++, count++) {
+					downRenderer.mesh.SetPartialVerticalTile (relX, i, sprite, count % actualSize);
+				}
+
+				for (int i = 0; i < relY + height; i++, count++) {
+					renderer.mesh.SetPartialVerticalTile (relX, i, sprite, count % actualSize);
+				}
+			} else {
+				for (int i = 0; i < height; i++) {
+					renderer.mesh.SetPartialVerticalTile (relX, relY + i, sprite, i % actualSize);
+				}
+			}
+		}
+
+		void ClearRenderers() {
+			upRenderer = null;
+			downRenderer = null;
+			leftRenderer = null;
+			rightRenderer = null;
+		}
+
+		void ApplyRenderers() {
+			if (upRenderer != null) {
+				upRenderer.mesh.ApplyUV ();
+				upRenderer = null;
+			}
+
+			if (downRenderer != null) {
+				downRenderer.mesh.ApplyUV ();
+				downRenderer = null;
+			}
+
+			if (leftRenderer != null) {
+				leftRenderer.mesh.ApplyUV ();
+				leftRenderer = null;
+			}
+
+			if (rightRenderer != null) {
+				rightRenderer.mesh.ApplyUV ();
+				rightRenderer = null;
 			}
 		}
 	}
