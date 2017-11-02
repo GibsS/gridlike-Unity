@@ -272,7 +272,7 @@ namespace Gridlike {
 				triangles.Set (x, y, null);
 			}
 
-			currentRenderer.mesh.SetTile (x - currentRenderer.regionX * Grid.REGION_SIZE, y - currentRenderer.regionY * Grid.REGION_SIZE, grid.atlas.emptySprite);
+			currentRenderer.mesh.SetTile (relX, relY, grid.atlas.emptySprite);
 		}
 
 		void JoinTriangle(PositionRegionRenderer currentRenderer, TileInfo info, Tile tile, int x, int y) {

@@ -635,7 +635,7 @@ namespace Gridlike {
 			Grid grid = obj.AddComponent<Grid> ();
 			grid.atlas = atlas;
 
-			if(useRenderer) obj.AddComponent<GridSpriteRenderer> ();
+			if(useRenderer) obj.AddComponent<GridRenderer> ();
 			if(useCollider) obj.AddComponent<GridCollider> ();
 
 			return grid;
