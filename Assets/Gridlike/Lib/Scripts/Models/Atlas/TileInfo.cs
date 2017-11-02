@@ -12,7 +12,7 @@ namespace Gridlike {
 		public TileShape shape;
 		public bool isVertical;
 
-		public bool isSensor;
+		public bool isTrigger;
 		public int layer;
 		public string tag;
 

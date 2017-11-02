@@ -102,6 +102,7 @@ namespace Gridlike {
 					}
 
 					GridColliderPart up = components.Get (x, y + 1) as GridColliderPart;
+
 					if (up != null && up.Compatible (info) && up.isVertical && info.isVertical) {
 						if (!expanded) {
 							up.bottomLeftY -= 1;

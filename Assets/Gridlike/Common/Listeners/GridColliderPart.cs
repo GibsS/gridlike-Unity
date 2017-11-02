@@ -49,7 +49,7 @@ namespace Gridlike {
 
 			part.shape = TileShape.FULL;
 			part.id = tile.id;
-			part.box.isTrigger = tile.isSensor;
+			part.box.isTrigger = tile.isTrigger;
 
 			part.bottomLeftX = x;
 			part.bottomLeftY = y;
@@ -75,7 +75,7 @@ namespace Gridlike {
 			part.isVertical = tile.isVertical;
 
 			part.id = tile.id;
-			part.triangle.isTrigger = tile.isSensor;
+			part.triangle.isTrigger = tile.isTrigger;
 
 			part.bottomLeftX = x;
 			part.bottomLeftY = y;
@@ -107,8 +107,10 @@ namespace Gridlike {
 			effector.surfaceArc = 5;
 
 			part.shape = tile.shape;
+			part.isVertical = tile.isVertical;
+
 			part.id = tile.id;
-			part.line.isTrigger = tile.isSensor;
+			part.line.isTrigger = tile.isTrigger;
 
 			part.bottomLeftX = x;
 			part.bottomLeftY = y;
@@ -175,7 +177,7 @@ namespace Gridlike {
 		}
 		public bool Compatible(TileInfo info) {
 			Collider2D collider = (box == null ? (triangle == null ? (line as Collider2D) : (triangle as Collider2D)) : (box as Collider2D));
-			return shape == info.shape && gameObject.tag == info.tag && gameObject.layer == info.layer && collider.isTrigger == info.isSensor;
+			return shape == info.shape && gameObject.tag == info.tag && gameObject.layer == info.layer && collider.isTrigger == info.isTrigger;
 		}
 	}
 }

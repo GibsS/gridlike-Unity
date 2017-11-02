@@ -70,12 +70,9 @@ namespace Gridlike {
 
 			if (GUILayout.Button ("Create new tile")) {
 				atlas.AddTile ();
-			} 
+			}
 
-			DrawDefaultInspector ();
-
-			if (GUI.changed)
-				EditorUtility.SetDirty (target);
+			if (GUI.changed) EditorUtility.SetDirty (target);
 		}
 		void DrawOnGUISprite(Sprite aSprite) {
 			Rect c = aSprite.rect;
@@ -124,10 +121,10 @@ namespace Gridlike {
 						tile.isVertical = EditorGUILayout.Toggle ("Triangle can stretch vertically", tile.isVertical);
 						tile.isVertical = !EditorGUILayout.Toggle ("Triangle can stretch horizontally", !tile.isVertical);
 					} else {
-						tile.isVertical = false;
+						tile.isVertical = tile.shape == TileShape.LEFT_ONEWAY || tile.shape == TileShape.RIGHT_ONEWAY;
 					}
 
-					tile.isSensor = EditorGUILayout.Toggle ("Is sensor?", tile.isSensor);
+					tile.isTrigger = EditorGUILayout.Toggle ("Is trigger?", tile.isTrigger);
 					tile.layer = EditorGUILayout.LayerField ("Layer", tile.layer);
 					tile.tag = EditorGUILayout.TagField ("Tag", tile.tag);
 				} else {
@@ -361,6 +358,7 @@ namespace Gridlike {
 				PackHorizontalSprite (tilePerRow, tileSize, tileSpriteInfo.importedSprite, id, subId, 1, ref tileX, ref tileY, ref spriteInd, ref sprites, ref texture);
 			}
 
+			// ONLY FOR TRIANGLES
 			if (!isVertical && tileSpriteInfo.importedSprites != null) {
 				for (int i = 0; i < tileSpriteInfo.importedSprites.Length; i++) {
 					if (tileSpriteInfo.importedSprites [i] != null) {
