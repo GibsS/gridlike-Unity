@@ -122,53 +122,57 @@ namespace Gridlike {
 			return part;
 		}
 
-		public void SetSize(int w, int h) {
+        public void SetSize(int w, int h) {
 			width = w;
 			height = h;
 
-			switch (shape) {
-			case TileShape.FULL: {
-					box.size = new Vector2 (w, h);
-					break;
-				}
-			case TileShape.DOWN_LEFT_TRIANGLE: {
-					triangle.points = new Vector2[] { 
-						new Vector2 (-w / 2f, -h / 2f),
-						new Vector2 (-w / 2f, h / 2f),
-						new Vector2 (w / 2f, -h / 2f)
-					};
-					break;
-				}
-			case TileShape.DOWN_RIGHT_TRIANGLE: {
-					triangle.points = new Vector2[] { 
-						new Vector2 (-w / 2f, -h / 2f),
-						new Vector2 (w / 2f, h / 2f),
-						new Vector2 (w / 2f, -h / 2f)
-					};
-					break;
-				}
-			case TileShape.UP_LEFT_TRIANGLE: {
-					triangle.points = new Vector2[] { 
-						new Vector2 (-w / 2f, -h / 2f),
-						new Vector2 (-w / 2f, h / 2f),
-						new Vector2 (w / 2f, h / 2f)
-					};
-					break;
-				}
-			case TileShape.UP_RIGHT_TRIANGLE: {
-					triangle.points = new Vector2[] { 
-						new Vector2 (-w / 2f, h / 2f),
-						new Vector2 (w / 2f, h / 2f),
-						new Vector2 (w / 2f, -h / 2f)
-					};
-					break;
-				}
-			case TileShape.UP_ONEWAY:
-			case TileShape.DOWN_ONEWAY: line.points = new Vector2[] { new Vector2 (-w / 2f, h / 2f), new Vector2 (w / 2f, h / 2f) }; break;
-			case TileShape.LEFT_ONEWAY:
-			case TileShape.RIGHT_ONEWAY: line.points = new Vector2[] { new Vector2 (-h / 2f, w / 2f), new Vector2 (h / 2f, w / 2f) }; break;
-			}
+            ApplySize();
 		}
+
+        public void ApplySize() {
+            switch (shape) {
+            case TileShape.FULL: {
+                    box.size = new Vector2 (width, height);
+                    break;
+                }
+            case TileShape.DOWN_LEFT_TRIANGLE: {
+                    triangle.points = new Vector2[] { 
+                        new Vector2 (-width / 2f, -height / 2f),
+                        new Vector2 (-width / 2f, height / 2f),
+                        new Vector2 (width / 2f, -height / 2f)
+                    };
+                    break;
+                }
+            case TileShape.DOWN_RIGHT_TRIANGLE: {
+                    triangle.points = new Vector2[] { 
+                        new Vector2 (-width / 2f, -height / 2f),
+                        new Vector2 (width / 2f, height / 2f),
+                        new Vector2 (width / 2f, -height / 2f)
+                    };
+                    break;
+                }
+            case TileShape.UP_LEFT_TRIANGLE: {
+                    triangle.points = new Vector2[] { 
+                        new Vector2 (-width / 2f, -height / 2f),
+                        new Vector2 (-width / 2f, height / 2f),
+                        new Vector2 (width / 2f, height / 2f)
+                    };
+                    break;
+                }
+            case TileShape.UP_RIGHT_TRIANGLE: {
+                    triangle.points = new Vector2[] { 
+                        new Vector2 (-width / 2f, height / 2f),
+                        new Vector2 (width / 2f, height / 2f),
+                        new Vector2 (width / 2f, -height / 2f)
+                    };
+                    break;
+                }
+            case TileShape.UP_ONEWAY:
+            case TileShape.DOWN_ONEWAY: line.points = new Vector2[] { new Vector2 (-width / 2f, height / 2f), new Vector2 (width / 2f, height / 2f) }; break;
+            case TileShape.LEFT_ONEWAY:
+            case TileShape.RIGHT_ONEWAY: line.points = new Vector2[] { new Vector2 (-height / 2f, width / 2f), new Vector2 (height / 2f, width / 2f) }; break;
+            }
+        }
 
 		public bool Compatible(GridColliderPart other) {
 			return shape == other.shape 

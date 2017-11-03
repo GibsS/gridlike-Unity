@@ -144,68 +144,85 @@ namespace Gridlike {
 			int startY = Y * Grid.REGION_SIZE;
 			int endY = (Y + 1) * Grid.REGION_SIZE;
 
+            FiniteComponentGrid region = components.GetRegion(X, Y);
+
 			for (int i = startX; i < endX; i++) {
 				for (int j = startY; j < endY; j++) {
-					ClearTile (i, j);
+                    GridColliderPart wrapper = region.Get(i - startX, j - startY) as GridColliderPart;
+                    
+					_ClearTile (wrapper, i, j);
+
+                    region.Set(i - startX, j - startY, null);
 				}
 			}
 		}
+        /*public virtual void OnShowRegion(int regionX, int regionY) {
+            if (Application.isPlaying) {
+                StartCoroutine (_OnShowRegion (regionX, regionY));
+            } else {  
+                
+            }
+        }*/
 
 		void ClearTile(int x, int y) {
 			GridColliderPart wrapper = components.Get (x, y) as GridColliderPart;
 
-			if (wrapper != null) {
-				if (wrapper.width == 1) {
-					if (wrapper.height == 1) {
-						if (Application.isPlaying)
-							Destroy (wrapper.gameObject);
-						else
-							DestroyImmediate (wrapper.gameObject);
-					} else {
-						if (wrapper.bottomLeftY == y) {
-							wrapper.bottomLeftY += 1;
-
-							wrapper.SetSize(wrapper.width, wrapper.height - 1);
-							wrapper.transform.localPosition = new Vector2 (wrapper.transform.localPosition.x, wrapper.transform.localPosition.y + 0.5f);
-						} else {
-							int endY = wrapper.bottomLeftY + wrapper.height - 1;
-
-							wrapper.SetSize(wrapper.width, y - wrapper.bottomLeftY);
-							wrapper.transform.localPosition = new Vector2 (wrapper.transform.localPosition.x, wrapper.transform.localPosition.y - (endY - y + 1f)/2f);
-
-							if (endY != y) {
-								GridColliderPart part = GridColliderPart.CreateColliderPart (containerGO, grid, grid.atlas[wrapper.id], x, y + 1, 1, endY - y);
-
-								for (int i = y + 1; i <= endY; i++) {
-									components.Set (x, i, part);
-								}
-							}
-						}
-					}
-				} else {
-					if (wrapper.bottomLeftX == x) {
-						wrapper.bottomLeftX += 1;
-
-						wrapper.SetSize (wrapper.width - 1, wrapper.height);
-						wrapper.transform.localPosition = new Vector2 (wrapper.transform.localPosition.x + 0.5f, wrapper.transform.localPosition.y);
-					} else {
-						int endX = wrapper.bottomLeftX + wrapper.width - 1;
-
-						wrapper.SetSize (x - wrapper.bottomLeftX, wrapper.height);
-						wrapper.transform.localPosition = new Vector2 (wrapper.transform.localPosition.x - (endX - x + 1f)/2f, wrapper.transform.localPosition.y);
-
-						if (endX != x) {
-							GridColliderPart part = GridColliderPart.CreateColliderPart (containerGO, grid, grid.atlas[wrapper.id], x + 1, y, endX - x, 1);
-
-							for (int i = x + 1; i <= endX; i++) {
-								components.Set (i, y, part);
-							}
-						}
-					}
-				}
-			}
+            _ClearTile(wrapper, x, y);
 
 			components.Set (x, y, null);
 		}
+
+        void _ClearTile(GridColliderPart wrapper, int x, int y) {
+            if (wrapper != null) {
+                if (wrapper.width == 1) {
+                    if (wrapper.height == 1) {
+                        if (Application.isPlaying)
+                            Destroy (wrapper.gameObject);
+                        else
+                            DestroyImmediate (wrapper.gameObject);
+                    } else {
+                        if (wrapper.bottomLeftY == y) {
+                            wrapper.bottomLeftY += 1;
+
+                            wrapper.SetSize(wrapper.width, wrapper.height - 1);
+                            wrapper.transform.localPosition = new Vector2 (wrapper.transform.localPosition.x, wrapper.transform.localPosition.y + 0.5f);
+                        } else {
+                            int endY = wrapper.bottomLeftY + wrapper.height - 1;
+
+                            wrapper.SetSize(wrapper.width, y - wrapper.bottomLeftY);
+                            wrapper.transform.localPosition = new Vector2 (wrapper.transform.localPosition.x, wrapper.transform.localPosition.y - (endY - y + 1f)/2f);
+
+                            if (endY != y) {
+                                GridColliderPart part = GridColliderPart.CreateColliderPart (containerGO, grid, grid.atlas[wrapper.id], x, y + 1, 1, endY - y);
+
+                                for (int i = y + 1; i <= endY; i++) {
+                                    components.Set (x, i, part);
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    if (wrapper.bottomLeftX == x) {
+                        wrapper.bottomLeftX += 1;
+
+                        wrapper.SetSize (wrapper.width - 1, wrapper.height);
+                        wrapper.transform.localPosition = new Vector2 (wrapper.transform.localPosition.x + 0.5f, wrapper.transform.localPosition.y);
+                    } else {
+                        int endX = wrapper.bottomLeftX + wrapper.width - 1;
+
+                        wrapper.SetSize (x - wrapper.bottomLeftX, wrapper.height);
+                        wrapper.transform.localPosition = new Vector2 (wrapper.transform.localPosition.x - (endX - x + 1f)/2f, wrapper.transform.localPosition.y);
+
+                        if (endX != x) {
+                            GridColliderPart part = GridColliderPart.CreateColliderPart (containerGO, grid, grid.atlas[wrapper.id], x + 1, y, endX - x, 1);
+
+                            for (int i = x + 1; i <= endX; i++) {
+                                components.Set (i, y, part);
+                            }
+                        }
+                    }
+                }
+            }
+        }
 	}
 }

@@ -30,7 +30,7 @@ namespace Gridlike {
 				tile.state1 = EditorGUILayout.FloatField ("state1", tile.state1);
 				tile.state2 = EditorGUILayout.FloatField ("state2", tile.state2);
 				tile.state3 = EditorGUILayout.FloatField ("state3", tile.state3);
-
+                /*
 				if (tile.dictionary != null) {
 					EditorGUILayout.LabelField ("key list size=" + tile.dictionary.KeyCount);
 					EditorGUILayout.LabelField ("value list size=" + tile.dictionary.ValueCount);
@@ -58,7 +58,7 @@ namespace Gridlike {
 					int i = tile.dictionary.Count;
 
 					tile.dictionary.Add ("key" + i, "value" + i);
-				}
+				}*/
 			} else {
 				EditorGUILayout.LabelField ("No tile under the cursor");
 			}
