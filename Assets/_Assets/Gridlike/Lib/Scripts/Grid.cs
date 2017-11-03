@@ -40,12 +40,10 @@ using UnityEngine;
 // CLEAN UP
 // Remove as many public field as possible (once tests are defined)
 
+// FEATURE TO SHOWCASE
+// 1. Atlas editing
+// 2. Grid editing
 
-
-
-// TODO Use kenney tiles for testing + samples 
-
-// TODO Comment
 
 namespace Gridlike {
 
@@ -655,6 +653,13 @@ namespace Gridlike {
 
 		public static List<Grid> GetAllGrids() {
 			return grids;
+		}
+		public static Grid GetFirstGrid() {
+			if (grids != null && grids.Count > 0) {
+				return grids [0];
+			} else {
+				return null;
+			}
 		}
 
 		#endregion

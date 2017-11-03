@@ -81,6 +81,13 @@ namespace Gridlike {
 						mouseInSelectionY = y - selectMinY;
 
 						toolState = AreaToolState.DRAG;
+					} else {
+						selectStartX = mouseX;
+						selectStartY = mouseY;
+
+						CalculateSelectionBound (selectStartX, selectStartY);
+
+						toolState = AreaToolState.SELECTING;
 					}
 				}
 				break;

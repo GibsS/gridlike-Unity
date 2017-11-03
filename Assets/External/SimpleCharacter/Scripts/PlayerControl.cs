@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+using Gridlike;
+
 public class PlayerControl : MonoBehaviour
 {
 	[HideInInspector]
@@ -39,14 +41,25 @@ public class PlayerControl : MonoBehaviour
 	
 		grounded = hit;
 
-		if (hit && transform.parent != hit.collider.transform)
-			transform.SetParent (hit.collider.transform);
-		else if (!hit && transform.parent != null)
-			transform.SetParent (null);
-
 		// If the jump button is pressed and the player is grounded then the player should jump.
 		if(Input.GetButtonDown("Jump") && grounded) 
 			jump = true;
+
+		Grid grid = Grid.GetFirstGrid ();
+
+		if (grid != null) {
+			int x;
+			int y;
+
+			grid.WorldToGrid (Camera.main.ScreenToWorldPoint (Input.mousePosition), out x, out y);
+
+			if (Input.GetMouseButton (0)) {
+				grid.showOnSet = true;
+				grid.SetId (x, y, 1);
+			} else if (Input.GetMouseButton (1)) {
+				grid.Clear (x, y);
+			}
+		}
 	}
 
 

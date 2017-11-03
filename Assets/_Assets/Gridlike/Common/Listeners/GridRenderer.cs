@@ -102,11 +102,16 @@ namespace Gridlike {
 
 			if (rend != null) {
 				if (Application.isPlaying) {
+					rend.mesh.PrepareUV ();
+
 					for (int i = 0; i < Grid.REGION_SIZE; i++) {
 						for (int j = 0; j < Grid.REGION_SIZE; j++) {
 							rend.mesh.SetTile (i, j, grid.atlas.emptySprite);
 						}
 					}
+
+					rend.mesh.ApplyUV ();
+
 					GridlikePools.renderers.Free (rend.mesh);
 				} else {
 					rend.mesh.Destroy();
