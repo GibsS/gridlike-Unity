@@ -20,8 +20,10 @@ namespace Gridlike {
 			Agent agent = Agent.agents != null && Agent.agents.Count > 0 ? Agent.agents [0] : null;
 
 			if (agent != null) {
-				int X = Mathf.FloorToInt(agent.transform.position.x / Grid.REGION_SIZE);
-				int Y = Mathf.FloorToInt(agent.transform.position.y / Grid.REGION_SIZE);
+                Vector2 relativePosition = grid.transform.InverseTransformPoint(agent.transform.position);
+
+                int X = Mathf.FloorToInt(relativePosition.x / Grid.REGION_SIZE);
+                int Y = Mathf.FloorToInt(relativePosition.y / Grid.REGION_SIZE);
 
 				if (oldX != X || oldY != Y && !processing) {
 					UpdateFromPosition (X, Y);
