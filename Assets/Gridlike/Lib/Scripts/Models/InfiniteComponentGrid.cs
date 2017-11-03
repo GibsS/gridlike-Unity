@@ -22,8 +22,6 @@ namespace Gridlike {
 		public Component Get(int x, int y) {
 			FiniteComponentGrid region = GetContainingRegion (x, y);
 
-			//if(region != null) Debug.Log ("x=" + (x - region.x * _regionSize) + " y=" + (y - region.y * _regionSize));
-
 			return region != null ? region.Get (x - region.x * _regionSize, y - region.y * _regionSize) : null;
 		}
 		public void Set(int x, int y, Component value) {
@@ -52,6 +50,17 @@ namespace Gridlike {
 				}
 			}
 			return null;
+		}
+		public FiniteComponentGrid GetOrCreateRegion(int X, int Y) {
+			FiniteComponentGrid region = GetRegion (X, Y);
+
+			if (region == null) {
+				region = new FiniteComponentGrid (X, Y, _regionSize);
+
+				regions.Add(region);
+			}
+
+			return region;
 		}
 		public FiniteComponentGrid GetContainingRegion(int x, int y) {
 			x = Mathf.FloorToInt(((float) x) / _regionSize);

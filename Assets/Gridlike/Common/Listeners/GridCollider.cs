@@ -19,11 +19,11 @@ namespace Gridlike {
 
 		[HideInInspector] [SerializeField] GameObject containerGO;
 
-        HashSet<GridColliderPart> parts;
+        /*HashSet<GridColliderPart> parts;
         void ResetModified() {
             if(parts == null) parts = new HashSet<GridColliderPart>();
             else parts.Clear();
-        }
+        }*/
 
 		public override void OnDestroy() {
 			base.OnDestroy ();
@@ -170,11 +170,32 @@ namespace Gridlike {
 				}
 			}
 		}
-        /*public virtual void OnShowRegion(int regionX, int regionY) {
+		/*public override void OnShowRegion(int regionX, int regionY) {
+			int bx = regionX * Grid.REGION_SIZE;
+			int by = regionY * Grid.REGION_SIZE;
+
+			FiniteGrid region = grid.GetRegion (regionX, regionY);
+			FiniteComponentGrid regionComponents = components.GetOrCreateRegion ();
+
+			List<GridColliderPart> partsToUpdate = new List<GridColliderPart> ();
+
             if (Application.isPlaying) {
-                StartCoroutine (_OnShowRegion (regionX, regionY));
+				for (int y = 0; y < Grid.REGION_SIZE; y++) {
+					int x = 0;
+					GridColliderPart currentWrapper = components.Get (bx - 1, y + by) as GridColliderPart;
+
+					if (currentWrapper == null) {
+						Tile tile = region.Get (x, y);
+						TileInfo info = grid.atlas [tile.id];
+
+						currentWrapper = GridColliderPart.CreateColliderPart (containerGO, grid, info, x + bx, y + by, 1, 1);
+						regionComponents.Set (x + bx, y + by, currentWrapper);
+
+					}
+				}
+
             } else {  
-                
+				base.OnShowRegion (regionX, regionY);
             }
         }*/
 

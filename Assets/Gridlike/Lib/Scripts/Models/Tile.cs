@@ -6,7 +6,7 @@ namespace Gridlike {
 	[Serializable]
 	public class Tile {
 
-        //[NonSerialized] public TileDictionary dictionary;
+        [NonSerialized] public TileDictionary dictionary;
 
 		public bool tileGOCenter;
 
@@ -19,7 +19,7 @@ namespace Gridlike {
 
 		public Tile Clone() {
 			return new Tile {
-				//dictionary = dictionary.Clone (),
+				dictionary = dictionary.Clone (),
 
 				tileGOCenter = tileGOCenter,
 

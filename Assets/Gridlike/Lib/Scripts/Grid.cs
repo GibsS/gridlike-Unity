@@ -8,6 +8,8 @@ using UnityEngine;
 // OPTIMIZATION
 // New function: Set multiple tiles at once instead of just one
 // Grid hash: Replace list of regions by actual hash table and see performance differences
+// Grid collider: Generate colliders in one go every region
+// Loading: Use asynchronous loading or make the data smaller
 
 // TOOLS
 // Make grid tool window look better than it does (copy grid tile map guy)
@@ -42,8 +44,6 @@ using UnityEngine;
 
 
 // TODO Use kenney tiles for testing + samples 
-
-// Fix bug with procedural generation and the new renderer
 
 // TODO Agree on final naming scheme
 // TODO Comment
@@ -435,7 +435,7 @@ namespace Gridlike {
 		void _Clear(Tile tile, int x, int y) {
 			Component component = tileGOs.GetComponent (x, y);
 
-			//tile.dictionary = null;
+			tile.dictionary = null;
 
 			if (component == null) {
 				tile.id = 0;

@@ -169,9 +169,9 @@ namespace Gridlike {
 						if (info.tileGO != null) {
 							if (tile.tileGOCenter) {
 								grid.Set (x + i, y + j, tile.id, tile.subId, tile.state1, tile.state2, tile.state3);
-								/*if (tile.dictionary != null) {
+								if (tile.dictionary != null) {
 									grid.Get (x + i, y + j).dictionary = tile.dictionary.Clone ();
-								}*/
+								}
 							}
 						} else {
 							grid.Set (x + i, y + j, tile.id, tile.subId, tile.state1, tile.state2, tile.state3);
