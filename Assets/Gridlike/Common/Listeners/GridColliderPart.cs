@@ -174,6 +174,10 @@ namespace Gridlike {
             }
         }
 
+        public void ResetPosition(Grid grid) {
+            transform.localPosition = grid.TileSpaceToTransform (bottomLeftX + width/2f, bottomLeftY + height/2f);
+        }
+
 		public bool Compatible(GridColliderPart other) {
 			return shape == other.shape 
 				&& (bottomLeftX != other.bottomLeftX && height == 1 && other.height == 1 

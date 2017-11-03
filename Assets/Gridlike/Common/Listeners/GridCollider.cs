@@ -4,12 +4,26 @@ using UnityEngine;
 
 namespace Gridlike {
 	
+    /* OPTIMIZATION
+     * 
+     * Apply size change to the collider at the end of any given operation
+     * Apply position change to the collider at the end of any given operation
+     * No destroy or instantiation, pooling
+     * Limit access to the infinite grid and access directly to regions
+     */
+
 	[AddComponentMenu("Gridlike/Grid collider")]
 	public class GridCollider : GridListener {
 
 		[HideInInspector] [SerializeField] InfiniteComponentGrid components;
 
 		[HideInInspector] [SerializeField] GameObject containerGO;
+
+        HashSet<GridColliderPart> parts;
+        void ResetModified() {
+            if(parts == null) parts = new HashSet<GridColliderPart>();
+            else parts.Clear();
+        }
 
 		public override void OnDestroy() {
 			base.OnDestroy ();
@@ -48,8 +62,8 @@ namespace Gridlike {
 
 					GridColliderPart left = components.Get (x - 1, y) as GridColliderPart;
 					if (left != null && left.Compatible (info) && !left.isVertical && !info.isVertical) {
-						left.transform.localPosition = new Vector2 (left.transform.localPosition.x + 0.5f, left.transform.localPosition.y);
-						left.SetSize (left.width + 1, 1);
+                        left.SetSize (left.width + 1, 1);
+                        left.ResetPosition(grid);
 
 						components.Set (x, y, left);
 
@@ -61,15 +75,15 @@ namespace Gridlike {
 						if (!expanded) {
 							right.bottomLeftX -= 1;
 
-							right.transform.localPosition = new Vector2 (right.transform.localPosition.x - 0.5f, right.transform.localPosition.y);
-							right.SetSize (right.width + 1, 1);
+                            right.SetSize (right.width + 1, 1);
+                            right.ResetPosition(grid);
 
 							components.Set (x, y, right);
 
 							return;
 						} else {
-							left.transform.localPosition = new Vector2 (left.transform.localPosition.x + right.width / 2f, left.transform.localPosition.y);
 							left.SetSize (left.width + right.width, 1);
+                            left.ResetPosition(grid);
 
 							for (int i = right.bottomLeftX; i < right.bottomLeftX + right.width; i++) {
 								components.Set (i, y, left);
@@ -93,8 +107,8 @@ namespace Gridlike {
 
 					GridColliderPart down = components.Get (x, y - 1) as GridColliderPart;
 					if (down != null && down.Compatible (info) && down.isVertical && info.isVertical) {
-						down.transform.localPosition = new Vector2 (down.transform.localPosition.x, down.transform.localPosition.y + 0.5f);
 						down.SetSize (1, down.height + 1);
+                        down.ResetPosition(grid);
 
 						components.Set (x, y, down);
 
@@ -107,15 +121,15 @@ namespace Gridlike {
 						if (!expanded) {
 							up.bottomLeftY -= 1;
 
-							up.transform.localPosition = new Vector2 (up.transform.localPosition.x, up.transform.localPosition.y - 0.5f);
 							up.SetSize (1, up.height + 1);
+                            up.ResetPosition(grid);
 
 							components.Set (x, y, up);
 
 							return;
 						} else {
-							down.transform.localPosition = new Vector2 (down.transform.localPosition.x, down.transform.localPosition.y + up.height / 2f);
 							down.SetSize (1, down.height + up.height);
+                            down.ResetPosition(grid);
 
 							for (int i = up.bottomLeftY; i < up.bottomLeftY + up.width; i++) {
 								components.Set (i, y, down);
@@ -185,12 +199,12 @@ namespace Gridlike {
                             wrapper.bottomLeftY += 1;
 
                             wrapper.SetSize(wrapper.width, wrapper.height - 1);
-                            wrapper.transform.localPosition = new Vector2 (wrapper.transform.localPosition.x, wrapper.transform.localPosition.y + 0.5f);
+                            wrapper.ResetPosition(grid);
                         } else {
                             int endY = wrapper.bottomLeftY + wrapper.height - 1;
 
                             wrapper.SetSize(wrapper.width, y - wrapper.bottomLeftY);
-                            wrapper.transform.localPosition = new Vector2 (wrapper.transform.localPosition.x, wrapper.transform.localPosition.y - (endY - y + 1f)/2f);
+                            wrapper.ResetPosition(grid);
 
                             if (endY != y) {
                                 GridColliderPart part = GridColliderPart.CreateColliderPart (containerGO, grid, grid.atlas[wrapper.id], x, y + 1, 1, endY - y);
@@ -206,12 +220,12 @@ namespace Gridlike {
                         wrapper.bottomLeftX += 1;
 
                         wrapper.SetSize (wrapper.width - 1, wrapper.height);
-                        wrapper.transform.localPosition = new Vector2 (wrapper.transform.localPosition.x + 0.5f, wrapper.transform.localPosition.y);
+                        wrapper.ResetPosition(grid);
                     } else {
                         int endX = wrapper.bottomLeftX + wrapper.width - 1;
 
                         wrapper.SetSize (x - wrapper.bottomLeftX, wrapper.height);
-                        wrapper.transform.localPosition = new Vector2 (wrapper.transform.localPosition.x - (endX - x + 1f)/2f, wrapper.transform.localPosition.y);
+                        wrapper.ResetPosition(grid);
 
                         if (endX != x) {
                             GridColliderPart part = GridColliderPart.CreateColliderPart (containerGO, grid, grid.atlas[wrapper.id], x + 1, y, endX - x, 1);
