@@ -11,7 +11,7 @@ public class TestGridGeneratorAlgorithm : GridGeneratorAlgorithm {
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
 				tiles [i, j] = new Tile {
-					id = 1
+					id = (i % Grid.REGION_SIZE) != 0 ? 1 : 0
 				};
 			}
 		}

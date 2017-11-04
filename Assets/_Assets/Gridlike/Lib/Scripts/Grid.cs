@@ -63,6 +63,7 @@ namespace Gridlike {
 
 		[HideInInspector] public TileAtlas atlas;
 
+		// TODO add better indication to know what this means
 		public bool useLoading;
 		public bool useAgentBasedLoading;
 		GridAgentLoadPolicy loadPolicy;

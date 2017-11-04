@@ -21,7 +21,7 @@ MonoBehaviour:
     name: 
     shape: 0
     isVertical: 0
-    isSensor: 0
+    isTrigger: 0
     layer: 0
     tag: 
     isGODetached: 0
@@ -36,7 +36,7 @@ MonoBehaviour:
     name: sprite
     shape: 1
     isVertical: 0
-    isSensor: 0
+    isTrigger: 0
     layer: 0
     tag: Untagged
     isGODetached: 0
@@ -51,7 +51,7 @@ MonoBehaviour:
     name: prefab
     shape: 1
     isVertical: 0
-    isSensor: 0
+    isTrigger: 0
     layer: 0
     tag: Untagged
     isGODetached: 0
@@ -66,7 +66,7 @@ MonoBehaviour:
     name: triangle horizontal
     shape: 8
     isVertical: 0
-    isSensor: 0
+    isTrigger: 0
     layer: 0
     tag: Untagged
     isGODetached: 0
@@ -85,7 +85,7 @@ MonoBehaviour:
     name: triangle vertical
     shape: 6
     isVertical: 1
-    isSensor: 0
+    isTrigger: 0
     layer: 0
     tag: Untagged
     isGODetached: 0
@@ -104,7 +104,7 @@ MonoBehaviour:
     name: 
     shape: 0
     isVertical: 0
-    isSensor: 0
+    isTrigger: 0
     layer: 0
     tag: 
     isGODetached: 0
@@ -119,7 +119,7 @@ MonoBehaviour:
     name: 
     shape: 0
     isVertical: 0
-    isSensor: 0
+    isTrigger: 0
     layer: 0
     tag: 
     isGODetached: 0
@@ -134,7 +134,7 @@ MonoBehaviour:
     name: 
     shape: 0
     isVertical: 0
-    isSensor: 0
+    isTrigger: 0
     layer: 0
     tag: 
     isGODetached: 0
@@ -149,7 +149,7 @@ MonoBehaviour:
     name: 
     shape: 0
     isVertical: 0
-    isSensor: 0
+    isTrigger: 0
     layer: 0
     tag: 
     isGODetached: 0
@@ -164,7 +164,7 @@ MonoBehaviour:
     name: 
     shape: 0
     isVertical: 0
-    isSensor: 0
+    isTrigger: 0
     layer: 0
     tag: 
     isGODetached: 0
@@ -179,7 +179,7 @@ MonoBehaviour:
     name: 
     shape: 0
     isVertical: 0
-    isSensor: 0
+    isTrigger: 0
     layer: 0
     tag: 
     isGODetached: 0
@@ -194,7 +194,7 @@ MonoBehaviour:
     name: 
     shape: 0
     isVertical: 0
-    isSensor: 0
+    isTrigger: 0
     layer: 0
     tag: 
     isGODetached: 0
@@ -209,7 +209,7 @@ MonoBehaviour:
     name: 
     shape: 0
     isVertical: 0
-    isSensor: 0
+    isTrigger: 0
     layer: 0
     tag: 
     isGODetached: 0
@@ -224,7 +224,7 @@ MonoBehaviour:
     name: 
     shape: 0
     isVertical: 0
-    isSensor: 0
+    isTrigger: 0
     layer: 0
     tag: 
     isGODetached: 0
@@ -239,7 +239,7 @@ MonoBehaviour:
     name: 
     shape: 0
     isVertical: 0
-    isSensor: 0
+    isTrigger: 0
     layer: 0
     tag: 
     isGODetached: 0
@@ -254,7 +254,7 @@ MonoBehaviour:
     name: 
     shape: 0
     isVertical: 0
-    isSensor: 0
+    isTrigger: 0
     layer: 0
     tag: 
     isGODetached: 0
@@ -269,7 +269,7 @@ MonoBehaviour:
     name: 
     shape: 0
     isVertical: 0
-    isSensor: 0
+    isTrigger: 0
     layer: 0
     tag: 
     isGODetached: 0
@@ -284,7 +284,7 @@ MonoBehaviour:
     name: 
     shape: 0
     isVertical: 0
-    isSensor: 0
+    isTrigger: 0
     layer: 0
     tag: 
     isGODetached: 0
@@ -299,7 +299,7 @@ MonoBehaviour:
     name: 
     shape: 0
     isVertical: 0
-    isSensor: 0
+    isTrigger: 0
     layer: 0
     tag: 
     isGODetached: 0
@@ -314,7 +314,7 @@ MonoBehaviour:
     name: 
     shape: 0
     isVertical: 0
-    isSensor: 0
+    isTrigger: 0
     layer: 0
     tag: 
     isGODetached: 0
@@ -329,7 +329,7 @@ MonoBehaviour:
     name: 
     shape: 0
     isVertical: 0
-    isSensor: 0
+    isTrigger: 0
     layer: 0
     tag: 
     isGODetached: 0
@@ -344,7 +344,7 @@ MonoBehaviour:
     name: 
     shape: 0
     isVertical: 0
-    isSensor: 0
+    isTrigger: 0
     layer: 0
     tag: 
     isGODetached: 0
@@ -359,7 +359,7 @@ MonoBehaviour:
     name: 
     shape: 0
     isVertical: 0
-    isSensor: 0
+    isTrigger: 0
     layer: 0
     tag: 
     isGODetached: 0
@@ -374,7 +374,7 @@ MonoBehaviour:
     name: 
     shape: 0
     isVertical: 0
-    isSensor: 0
+    isTrigger: 0
     layer: 0
     tag: 
     isGODetached: 0
@@ -389,7 +389,7 @@ MonoBehaviour:
     name: 
     shape: 0
     isVertical: 0
-    isSensor: 0
+    isTrigger: 0
     layer: 0
     tag: 
     isGODetached: 0
@@ -404,7 +404,7 @@ MonoBehaviour:
     name: 
     shape: 0
     isVertical: 0
-    isSensor: 0
+    isTrigger: 0
     layer: 0
     tag: 
     isGODetached: 0
@@ -419,7 +419,7 @@ MonoBehaviour:
     name: 
     shape: 0
     isVertical: 0
-    isSensor: 0
+    isTrigger: 0
     layer: 0
     tag: 
     isGODetached: 0
@@ -434,7 +434,7 @@ MonoBehaviour:
     name: 
     shape: 0
     isVertical: 0
-    isSensor: 0
+    isTrigger: 0
     layer: 0
     tag: 
     isGODetached: 0
@@ -449,7 +449,7 @@ MonoBehaviour:
     name: 
     shape: 0
     isVertical: 0
-    isSensor: 0
+    isTrigger: 0
     layer: 0
     tag: 
     isGODetached: 0
@@ -464,7 +464,7 @@ MonoBehaviour:
     name: 
     shape: 0
     isVertical: 0
-    isSensor: 0
+    isTrigger: 0
     layer: 0
     tag: 
     isGODetached: 0
