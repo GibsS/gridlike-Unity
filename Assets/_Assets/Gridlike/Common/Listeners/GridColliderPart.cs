@@ -115,8 +115,6 @@ namespace Gridlike {
 			part.bottomLeftX = x;
 			part.bottomLeftY = y;
 
-			part.transform.localPosition = grid.TileSpaceToTransform (x + w/2f, y + h/2f);
-
 			part.SetSize (w, h);
 
 			return part;
@@ -125,11 +123,11 @@ namespace Gridlike {
         public void SetSize(int w, int h) {
 			width = w;
 			height = h;
-
-            ApplySize();
 		}
 
-        public void ApplySize() {
+		public void ResetSizeAndPosition(Grid grid) {
+			transform.localPosition = grid.TileSpaceToTransform (bottomLeftX + width/2f, bottomLeftY + height/2f);
+
             switch (shape) {
             case TileShape.FULL: {
                     box.size = new Vector2 (width, height);
@@ -172,10 +170,6 @@ namespace Gridlike {
             case TileShape.LEFT_ONEWAY:
             case TileShape.RIGHT_ONEWAY: line.points = new Vector2[] { new Vector2 (-height / 2f, width / 2f), new Vector2 (height / 2f, width / 2f) }; break;
             }
-        }
-
-        public void ResetPosition(Grid grid) {
-            transform.localPosition = grid.TileSpaceToTransform (bottomLeftX + width/2f, bottomLeftY + height/2f);
         }
 
 		public bool Compatible(GridColliderPart other) {

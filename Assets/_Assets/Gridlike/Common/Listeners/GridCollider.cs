@@ -56,14 +56,17 @@ namespace Gridlike {
 
 			// add new
 			if (info.shape != TileShape.EMPTY) {
+
+				GridColliderPart wrapper = null;
+
 				// HORIZONTAL GROWTH
 				if (info.shape != TileShape.LEFT_ONEWAY && info.shape != TileShape.RIGHT_ONEWAY) {
 					bool expanded = false;
 
 					GridColliderPart left = components.Get (x - 1, y) as GridColliderPart;
 					if (left != null && left.Compatible (info) && !left.isVertical && !info.isVertical) {
-                        left.SetSize (left.width + 1, 1);
-                        left.ResetPosition(grid);
+						left.SetSize (left.width + 1, 1);
+						wrapper = left;
 
 						components.Set (x, y, left);
 
@@ -74,16 +77,15 @@ namespace Gridlike {
 					if (right != null && right.Compatible (info) && !right.isVertical && !info.isVertical) {
 						if (!expanded) {
 							right.bottomLeftX -= 1;
-
                             right.SetSize (right.width + 1, 1);
-                            right.ResetPosition(grid);
+							wrapper = right;
 
 							components.Set (x, y, right);
 
+							wrapper.ResetSizeAndPosition (grid);
 							return;
 						} else {
 							left.SetSize (left.width + right.width, 1);
-                            left.ResetPosition(grid);
 
 							for (int i = right.bottomLeftX; i < right.bottomLeftX + right.width; i++) {
 								components.Set (i, y, left);
@@ -94,11 +96,15 @@ namespace Gridlike {
 							else
 								DestroyImmediate (right.gameObject);
 
+							wrapper.ResetSizeAndPosition (grid);
 							return;
 						}
 					}
 
-					if (expanded) return;
+					if (expanded) {
+						wrapper.ResetSizeAndPosition (grid);
+						return;
+					}
 				}
 
 				// VERTICAL GROWTH
@@ -108,7 +114,7 @@ namespace Gridlike {
 					GridColliderPart down = components.Get (x, y - 1) as GridColliderPart;
 					if (down != null && down.Compatible (info) && down.isVertical && info.isVertical) {
 						down.SetSize (1, down.height + 1);
-                        down.ResetPosition(grid);
+						wrapper = down;
 
 						components.Set (x, y, down);
 
@@ -120,16 +126,15 @@ namespace Gridlike {
 					if (up != null && up.Compatible (info) && up.isVertical && info.isVertical) {
 						if (!expanded) {
 							up.bottomLeftY -= 1;
-
 							up.SetSize (1, up.height + 1);
-                            up.ResetPosition(grid);
+							wrapper = up;
 
 							components.Set (x, y, up);
 
+							wrapper.ResetSizeAndPosition (grid);
 							return;
 						} else {
 							down.SetSize (1, down.height + up.height);
-                            down.ResetPosition(grid);
 
 							for (int i = up.bottomLeftY; i < up.bottomLeftY + up.width; i++) {
 								components.Set (i, y, down);
@@ -140,15 +145,22 @@ namespace Gridlike {
 							else
 								DestroyImmediate (up.gameObject);
 
+							wrapper.ResetSizeAndPosition (grid);
 							return;
 						}
 					}
 
-					if (expanded) return;
+					if (expanded) {
+						wrapper.ResetSizeAndPosition (grid);
+						return;
+					}
 				}
 
 				// NO EXPANSE, CREATE NEW
-				components.Set (x, y, GridColliderPart.CreateColliderPart (containerGO, grid, info, x, y, 1, 1));
+				wrapper = GridColliderPart.CreateColliderPart (containerGO, grid, info, x, y, 1, 1);
+				components.Set (x, y, wrapper);
+
+				wrapper.ResetSizeAndPosition (grid);
 			}
 		}
 
@@ -220,15 +232,16 @@ namespace Gridlike {
                             wrapper.bottomLeftY += 1;
 
                             wrapper.SetSize(wrapper.width, wrapper.height - 1);
-                            wrapper.ResetPosition(grid);
+							wrapper.ResetSizeAndPosition(grid);
                         } else {
                             int endY = wrapper.bottomLeftY + wrapper.height - 1;
 
                             wrapper.SetSize(wrapper.width, y - wrapper.bottomLeftY);
-                            wrapper.ResetPosition(grid);
+							wrapper.ResetSizeAndPosition(grid);
 
                             if (endY != y) {
                                 GridColliderPart part = GridColliderPart.CreateColliderPart (containerGO, grid, grid.atlas[wrapper.id], x, y + 1, 1, endY - y);
+								part.ResetSizeAndPosition (grid);
 
                                 for (int i = y + 1; i <= endY; i++) {
                                     components.Set (x, i, part);
@@ -241,15 +254,16 @@ namespace Gridlike {
                         wrapper.bottomLeftX += 1;
 
                         wrapper.SetSize (wrapper.width - 1, wrapper.height);
-                        wrapper.ResetPosition(grid);
+						wrapper.ResetSizeAndPosition(grid);
                     } else {
                         int endX = wrapper.bottomLeftX + wrapper.width - 1;
 
                         wrapper.SetSize (x - wrapper.bottomLeftX, wrapper.height);
-                        wrapper.ResetPosition(grid);
+						wrapper.ResetSizeAndPosition(grid);
 
                         if (endX != x) {
-                            GridColliderPart part = GridColliderPart.CreateColliderPart (containerGO, grid, grid.atlas[wrapper.id], x + 1, y, endX - x, 1);
+							GridColliderPart part = GridColliderPart.CreateColliderPart (containerGO, grid, grid.atlas[wrapper.id], x + 1, y, endX - x, 1);
+							part.ResetSizeAndPosition (grid);
 
                             for (int i = x + 1; i <= endX; i++) {
                                 components.Set (i, y, part);
