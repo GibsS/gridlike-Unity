@@ -194,27 +194,38 @@ namespace Gridlike {
 
 				for (int x = 0; x < Grid.REGION_SIZE - 1; x++) {
 					Tile tile = region.Get (x, y);
-					TileInfo info = grid.atlas [tile.id];
 
-					if (currentWrapper == null || !currentWrapper.Compatible (info) || info.isVertical != currentWrapper.isVertical) {
-						if (currentWrapper != null)
-							currentWrapper.ResetSizeAndPosition (grid);
+					if (tile != null) {
+						TileInfo info = grid.atlas [tile.id];
 
-						if (info.shape != TileShape.EMPTY) {
-							currentWrapper = GridColliderPart.CreateColliderPart (containerGO, grid, info, bx + x, by + y, 1, 1);
+						if (currentWrapper == null || !currentWrapper.Compatible (info) || info.isVertical != currentWrapper.isVertical) {
+							if (currentWrapper != null)
+								currentWrapper.ResetSizeAndPosition (grid);
+
+							if (info.shape != TileShape.EMPTY) {
+								currentWrapper = GridColliderPart.CreateColliderPart (containerGO, grid, info, bx + x, by + y, 1, 1);
+							} else {
+								currentWrapper = null;
+							}
 						} else {
+							currentWrapper.width++;
+						}
+
+						regionComponents.Set (x, y, currentWrapper);
+					} else {
+						if (currentWrapper != null) {
+							currentWrapper.ResetSizeAndPosition (grid);
 							currentWrapper = null;
 						}
-					} else {
-						currentWrapper.width++;
-					}
 
-					regionComponents.Set (x, y, currentWrapper);
+						regionComponents.Set (x, y, null);
+					}
 				}
 
 				if (currentWrapper != null) currentWrapper.ResetSizeAndPosition (grid);
 
-				OnSet (bx + Grid.REGION_SIZE - 1, by + y, region.Get (Grid.REGION_SIZE - 1, y));
+				Tile edgeTile = region.Get (Grid.REGION_SIZE - 1, y);
+				if (edgeTile != null) OnSet (bx + Grid.REGION_SIZE - 1, by + y, edgeTile);
 			}
         }
 
