@@ -182,34 +182,41 @@ namespace Gridlike {
 				}
 			}
 		}
-		/*public override void OnShowRegion(int regionX, int regionY) {
+		public override void OnShowRegion(int regionX, int regionY) {
 			int bx = regionX * Grid.REGION_SIZE;
 			int by = regionY * Grid.REGION_SIZE;
 
 			FiniteGrid region = grid.GetRegion (regionX, regionY);
-			FiniteComponentGrid regionComponents = components.GetOrCreateRegion ();
+			FiniteComponentGrid regionComponents = components.GetOrCreateRegion (regionX, regionY);
 
-			List<GridColliderPart> partsToUpdate = new List<GridColliderPart> ();
+			for (int y = 0; y < Grid.REGION_SIZE; y++) {
+				GridColliderPart currentWrapper = components.Get (bx - 1, y + by) as GridColliderPart;
 
-            if (Application.isPlaying) {
-				for (int y = 0; y < Grid.REGION_SIZE; y++) {
-					int x = 0;
-					GridColliderPart currentWrapper = components.Get (bx - 1, y + by) as GridColliderPart;
+				for (int x = 0; x < Grid.REGION_SIZE - 1; x++) {
+					Tile tile = region.Get (x, y);
+					TileInfo info = grid.atlas [tile.id];
 
-					if (currentWrapper == null) {
-						Tile tile = region.Get (x, y);
-						TileInfo info = grid.atlas [tile.id];
+					if (currentWrapper == null || !currentWrapper.Compatible (info) || info.isVertical != currentWrapper.isVertical) {
+						if (currentWrapper != null)
+							currentWrapper.ResetSizeAndPosition (grid);
 
-						currentWrapper = GridColliderPart.CreateColliderPart (containerGO, grid, info, x + bx, y + by, 1, 1);
-						regionComponents.Set (x + bx, y + by, currentWrapper);
-
+						if (info.shape != TileShape.EMPTY) {
+							currentWrapper = GridColliderPart.CreateColliderPart (containerGO, grid, info, bx + x, by + y, 1, 1);
+						} else {
+							currentWrapper = null;
+						}
+					} else {
+						currentWrapper.width++;
 					}
+
+					regionComponents.Set (x, y, currentWrapper);
 				}
 
-            } else {  
-				base.OnShowRegion (regionX, regionY);
-            }
-        }*/
+				if (currentWrapper != null) currentWrapper.ResetSizeAndPosition (grid);
+
+				OnSet (bx + Grid.REGION_SIZE - 1, by + y, region.Get (Grid.REGION_SIZE - 1, y));
+			}
+        }
 
 		void ClearTile(int x, int y) {
 			GridColliderPart wrapper = components.Get (x, y) as GridColliderPart;
