@@ -165,21 +165,52 @@ namespace Gridlike {
 		}
 
 		public override void OnHideRegion(int X, int Y) {
-			int startX = X * Grid.REGION_SIZE;
-			int endX = (X + 1) * Grid.REGION_SIZE;
-			int startY = Y * Grid.REGION_SIZE;
-			int endY = (Y + 1) * Grid.REGION_SIZE;
+			int bx = X * Grid.REGION_SIZE;
+			int by = Y * Grid.REGION_SIZE;
 
-            FiniteComponentGrid region = components.GetRegion(X, Y);
+			FiniteComponentGrid regionComponents = components.GetRegion(X, Y);
 
-			for (int i = startX; i < endX; i++) {
-				for (int j = startY; j < endY; j++) {
-                    GridColliderPart wrapper = region.Get(i - startX, j - startY) as GridColliderPart;
-                    
-					_ClearTile (wrapper, i, j);
+			if (regionComponents != null) {
+				for (int i = 0; i < Grid.REGION_SIZE; i++) {
+					for (int j = 0; j < Grid.REGION_SIZE; j++) {
+						GridColliderPart wrapper = regionComponents.Get (i, j) as GridColliderPart;
 
-                    region.Set(i - startX, j - startY, null);
+						if (wrapper != null) {
+							if (wrapper.bottomLeftX >= bx && wrapper.bottomLeftX + wrapper.width <= bx + Grid.REGION_SIZE
+							   && wrapper.bottomLeftY >= by && wrapper.bottomLeftY + wrapper.height <= by + Grid.REGION_SIZE) {
+
+								if (Application.isPlaying)
+									Destroy (wrapper.gameObject);
+								else
+									DestroyImmediate (wrapper.gameObject);
+							} else if (wrapper.isVertical) {
+								if (wrapper.bottomLeftY < by) {
+									int topY = wrapper.bottomLeftY + wrapper.height;
+
+									wrapper.SetSize (1, by - wrapper.bottomLeftY);
+									wrapper.ResetSizeAndPosition (grid);
+								} else if (wrapper.bottomLeftY + wrapper.height > by + Grid.REGION_SIZE) {
+									wrapper.SetSize (1, wrapper.bottomLeftY + wrapper.height - (by + Grid.REGION_SIZE));
+									wrapper.bottomLeftY = by + Grid.REGION_SIZE;
+									wrapper.ResetSizeAndPosition (grid);
+								}
+							} else if (!wrapper.isVertical) {
+								if (wrapper.bottomLeftX < bx) {
+									int rightX = wrapper.bottomLeftX + wrapper.width;
+
+									wrapper.SetSize (bx - wrapper.bottomLeftX, 1);
+									wrapper.ResetSizeAndPosition (grid);
+								} else if (wrapper.bottomLeftX + wrapper.width > bx + Grid.REGION_SIZE) {
+									wrapper.SetSize (wrapper.bottomLeftX + wrapper.width - (bx + Grid.REGION_SIZE), 1);
+									wrapper.bottomLeftX = bx + Grid.REGION_SIZE;
+									wrapper.ResetSizeAndPosition (grid);
+								}
+							}
+						}
+					}
 				}
+
+				components.ClearRegion (X, Y);
 			}
 		}
 		public override void OnShowRegion(int regionX, int regionY) {

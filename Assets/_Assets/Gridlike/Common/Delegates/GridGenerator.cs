@@ -146,6 +146,8 @@ namespace Gridlike {
 		}
 
 		LargeRegion GetRegions(int regionX, int regionY) {
+			if (largeRegions == null) largeRegions = new List<LargeRegion> ();
+			
 			foreach (LargeRegion generatedRegion in largeRegions) {
 				if (generatedRegion.regionX <= regionX && generatedRegion.regionX + generatedRegion.regionWidth > regionX
 				    && generatedRegion.regionY <= regionY && generatedRegion.regionY + generatedRegion.regionHeight > regionY) {
