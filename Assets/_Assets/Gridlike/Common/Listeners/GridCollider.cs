@@ -198,17 +198,17 @@ namespace Gridlike {
 					if (tile != null) {
 						TileInfo info = grid.atlas [tile.id];
 
-						if (currentWrapper == null || !currentWrapper.Compatible (info) || info.isVertical != currentWrapper.isVertical) {
+						if (currentWrapper != null && currentWrapper.Compatible (info) && !info.isVertical && !currentWrapper.isVertical) {
+							currentWrapper.width++;
+						} else {
 							if (currentWrapper != null)
 								currentWrapper.ResetSizeAndPosition (grid);
 
-							if (info.shape != TileShape.EMPTY) {
+							if (info.shape != TileShape.EMPTY && !info.isVertical) {
 								currentWrapper = GridColliderPart.CreateColliderPart (containerGO, grid, info, bx + x, by + y, 1, 1);
 							} else {
 								currentWrapper = null;
 							}
-						} else {
-							currentWrapper.width++;
 						}
 
 						regionComponents.Set (x, y, currentWrapper);
@@ -226,6 +226,45 @@ namespace Gridlike {
 
 				Tile edgeTile = region.Get (Grid.REGION_SIZE - 1, y);
 				if (edgeTile != null) OnSet (bx + Grid.REGION_SIZE - 1, by + y, edgeTile);
+			}
+
+			for (int x = 0; x < Grid.REGION_SIZE; x++) {
+				GridColliderPart currentWrapper = components.Get (bx + x, by - 1) as GridColliderPart;
+
+				for (int y = 0; y < Grid.REGION_SIZE - 1; y++) {
+					Tile tile = region.Get (x, y);
+
+					if (tile != null) {
+						TileInfo info = grid.atlas [tile.id];
+
+						if (currentWrapper != null && currentWrapper.Compatible (info) && info.isVertical && currentWrapper.isVertical) {
+							currentWrapper.height++;
+
+							regionComponents.Set (x, y, currentWrapper);
+						} else {
+							if (currentWrapper != null)
+								currentWrapper.ResetSizeAndPosition (grid);
+
+							if (info.shape != TileShape.EMPTY && info.isVertical) {
+								currentWrapper = GridColliderPart.CreateColliderPart (containerGO, grid, info, bx + x, by + y, 1, 1);
+
+								regionComponents.Set (x, y, currentWrapper);
+							} else {
+								currentWrapper = null;
+							}
+						}
+					} else {
+						if (currentWrapper != null) {
+							currentWrapper.ResetSizeAndPosition (grid);
+							currentWrapper = null;
+						}
+					}
+				}
+
+				if (currentWrapper != null) currentWrapper.ResetSizeAndPosition (grid);
+
+				Tile edgeTile = region.Get (x, Grid.REGION_SIZE - 1);
+				if (edgeTile != null && grid.atlas[edgeTile.id].isVertical) OnSet (bx + x, by + Grid.REGION_SIZE - 1, edgeTile);
 			}
         }
 
