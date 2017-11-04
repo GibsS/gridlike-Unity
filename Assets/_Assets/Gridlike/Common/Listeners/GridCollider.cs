@@ -189,6 +189,19 @@ namespace Gridlike {
 
 									wrapper.SetSize (1, by - wrapper.bottomLeftY);
 									wrapper.ResetSizeAndPosition (grid);
+
+									if (topY > by + Grid.REGION_SIZE) {
+										GridColliderPart topWrapper = GridColliderPart.CreateColliderPart (
+				                             containerGO, grid, grid.atlas [wrapper.id], 
+				                             wrapper.bottomLeftX, by + Grid.REGION_SIZE, 1, topY - (by + Grid.REGION_SIZE)
+										);
+										topWrapper.ResetSizeAndPosition (grid);
+
+										for (int k = topWrapper.bottomLeftY; k < topWrapper.bottomLeftY + topWrapper.height; k++) {
+											components.Set (topWrapper.bottomLeftX, k, topWrapper);
+										}
+									}
+
 								} else if (wrapper.bottomLeftY + wrapper.height > by + Grid.REGION_SIZE) {
 									wrapper.SetSize (1, wrapper.bottomLeftY + wrapper.height - (by + Grid.REGION_SIZE));
 									wrapper.bottomLeftY = by + Grid.REGION_SIZE;
@@ -200,6 +213,18 @@ namespace Gridlike {
 
 									wrapper.SetSize (bx - wrapper.bottomLeftX, 1);
 									wrapper.ResetSizeAndPosition (grid);
+
+									if (rightX > bx + Grid.REGION_SIZE) {
+										GridColliderPart rightWrapper = GridColliderPart.CreateColliderPart (
+			                               	containerGO, grid, grid.atlas [wrapper.id], 
+			                               	bx + Grid.REGION_SIZE, wrapper.bottomLeftY, rightX - (bx + Grid.REGION_SIZE), 1
+		                               	);
+										rightWrapper.ResetSizeAndPosition (grid);
+
+										for (int k = rightWrapper.bottomLeftX; k < rightWrapper.bottomLeftX + rightWrapper.width; k++) {
+											components.Set (k, rightWrapper.bottomLeftY, rightWrapper);
+										}
+									}
 								} else if (wrapper.bottomLeftX + wrapper.width > bx + Grid.REGION_SIZE) {
 									wrapper.SetSize (wrapper.bottomLeftX + wrapper.width - (bx + Grid.REGION_SIZE), 1);
 									wrapper.bottomLeftX = bx + Grid.REGION_SIZE;
