@@ -8,7 +8,6 @@ using UnityEngine;
 // OPTIMIZATION
 // New function: Set multiple tiles at once instead of just one
 // Grid hash: Replace list of regions by actual hash table and see performance differences
-// Grid collider: Generate colliders in one go every region
 // Loading: Use asynchronous loading or make the data smaller
 
 // TOOLS
@@ -43,7 +42,8 @@ using UnityEngine;
 // FEATURE TO SHOWCASE
 // 1. Atlas editing
 // 2. Grid editing
-
+// 3. Procedural generation
+// 4. Simple ship + miner (place blocks wherever, mine whatever) example
 
 
 
