@@ -2,6 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// TICKETS
+// Set multiple tiles (1-2 days)
+// Improve grid editor (2-3 days)
+// Fixing dictionary (do NOT create dictionary for every tile) (1 day)
+// Tile GO look up dictionary [runtime] (1-2 days)
+// Character controller (7-14 days)
+// Improving performance on serializing
+
 // #### POTENTIAL IMPROVEMENTS ##
 // Grid updater component: iterates through tiles and updates there information (potentially through compute shader?)
 
