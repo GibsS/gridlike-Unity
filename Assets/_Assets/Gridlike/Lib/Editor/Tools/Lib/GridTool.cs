@@ -33,12 +33,7 @@ namespace Gridlike {
 		protected void DrawTileInformation(int x, int y, Color color, string[] text) {
 			Vector2 position = grid.transform.TransformPoint(new Vector2(x, y));
 
-			Handles.color = color;
-
-			Handles.DrawLine (new Vector2(position.x + 0.1f, position.y + 0.1f), new Vector2(position.x + 0.9f, position.y + 0.1f));
-			Handles.DrawLine (new Vector2(position.x + 0.9f, position.y + 0.1f), new Vector2(position.x + 0.9f, position.y + 0.9f));
-			Handles.DrawLine (new Vector2(position.x + 0.9f, position.y + 0.9f), new Vector2(position.x + 0.1f, position.y + 0.9f));
-			Handles.DrawLine (new Vector2(position.x + 0.1f, position.y + 0.9f), new Vector2(position.x + 0.1f, position.y + 0.1f));
+			DrawSquare (position.x, position.y, position.x + 1, position.y + 1, color);
 
 			if (text != null && text.Length > 0) {
 				GUIStyle style = new GUIStyle ();
@@ -49,6 +44,17 @@ namespace Gridlike {
 				}
 			}
 		}
+		protected void DrawSquare(float minx, float miny, float maxx, float maxy, Color color) {
+
+			Handles.color = color;
+
+			Handles.DrawLine (new Vector2(minx, miny), new Vector2(maxx, miny));
+			Handles.DrawLine (new Vector2(maxx, miny), new Vector2(maxx, maxy));
+			Handles.DrawLine (new Vector2(maxx, maxy), new Vector2(minx, maxy));
+			Handles.DrawLine (new Vector2(minx, maxy), new Vector2(minx, miny));
+		}
+
+		public virtual void Serialize() { }
 
 		public virtual int WindowHeight() { return 300; }
 		public virtual bool UseWindow () { return false; }

@@ -4,10 +4,17 @@ using System;
 
 namespace Gridlike {
 	
-	[Serializable]
 	public class EraseTool : GridTool {
 
-		[SerializeField] int radius;
+		int radius;
+
+		public EraseTool() {
+			radius = Mathf.Max(1, PlayerPrefs.GetInt ("grid.erase.radius"));
+		}
+
+		public override void Serialize() {
+			PlayerPrefs.SetInt ("grid.erase.radius", radius);
+		}
 
 		public override bool UseWindow() {
 			return true;
@@ -18,6 +25,12 @@ namespace Gridlike {
 
 		public override bool Window() {
 			radius = Mathf.Max(1, EditorGUILayout.IntField ("radius", radius));
+			return false;
+		}
+
+		public override bool Update () {
+			Vector2 position = grid.transform.TransformPoint (new Vector2 (mouseX, mouseY));
+			DrawSquare (position.x - radius + 1, position.y - radius + 1, position.x + radius, position.y + radius, Color.magenta);
 			return false;
 		}
 

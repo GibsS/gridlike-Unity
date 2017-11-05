@@ -9,9 +9,8 @@ namespace Gridlike {
 	[CustomEditor(typeof(Grid))]
 	public class GridEditor : Editor {
 
-		[SerializeField] public int currentTool = 0;
-
-		[SerializeField] public GridTool[] tools;
+		int currentTool = 0;
+		GridTool[] tools;
 
 		void OnChangePlayMode() {
 			Grid grid = target as Grid;
@@ -26,6 +25,8 @@ namespace Gridlike {
 			EditorApplication.playmodeStateChanged += OnChangePlayMode;
 
 			if(tools == null) {
+				currentTool = PlayerPrefs.GetInt ("grid.currentTool");
+
 				tools = new GridTool[] {
 					new PlaceTool(),
 					new EraseTool(),
@@ -35,6 +36,13 @@ namespace Gridlike {
 					new EraseRegionTool(),
 					new AreaTool()
 				};
+			}
+		}
+		void OnDisable() {
+			PlayerPrefs.SetInt ("grid.currentTool", currentTool);
+
+			foreach (GridTool tool in tools) {
+				tool.Serialize ();
 			}
 		}
 
@@ -78,13 +86,49 @@ namespace Gridlike {
 			Grid grid = target as Grid;
 
 			// CAN'T EDIT IF THE ATLAS IS NOT SET
-			if (grid.atlas == null) return;
+			if (grid.atlas == null) {
+				Handles.BeginGUI();
+
+				GUILayout.BeginArea(new Rect(20, 20, 400, 80));
+
+				var rect1 = EditorGUILayout.BeginVertical ();
+
+				GUI.color = Color.white;
+				GUI.Box(rect1, GUIContent.none);
+
+				EditorGUILayout.LabelField ("Grid tile atlas is not set (It can be set in the grid inspector)");
+
+				EditorGUILayout.EndVertical ();
+
+				GUILayout.EndArea ();
+
+				Handles.EndGUI ();
+				return;
+			}
 
 			// REGIONS
+			int mouseX, mouseY;
+
+			grid.WorldToGrid(HandleUtility.GUIPointToWorldRay (Event.current.mousePosition).origin, out mouseX, out mouseY);
+
+			int mouseRegionX = Mathf.FloorToInt (mouseX / (float)Grid.REGION_SIZE);
+			int mouseRegionY = Mathf.FloorToInt (mouseY / (float)Grid.REGION_SIZE);
+				
 			foreach (FiniteGrid region in grid.GetRegions()) {
 				float size = Grid.REGION_SIZE;
 				float bx = grid.transform.position.x + region.regionX * size;
 				float by = grid.transform.position.y + region.regionY * size;
+
+				if (mouseRegionX == region.regionX && mouseRegionY == region.regionY) {
+					Handles.color = new Color(1, 1, 1, 0.2f);
+
+					for (int i = 0; i <= Grid.REGION_SIZE; i++) {
+						Handles.DrawLine (new Vector2 (bx + i, by), new Vector2 (bx + i, by + Grid.REGION_SIZE));
+
+						Handles.DrawLine (new Vector2 (bx, by + i), new Vector2 (bx + Grid.REGION_SIZE, by + i));
+					}
+				}
+
 
 				Handles.color = region.presented ? Color.green : Color.white;
 
@@ -94,13 +138,16 @@ namespace Gridlike {
 				Handles.DrawLine (new Vector2(bx + 0.2f, by + size - 0.2f), new Vector2(bx + 0.2f, by + 0.2f));
 			}
 
-			Handles.BeginGUI();
-
 			// TOOL
 			GridTool tool = tools [currentTool];
 			tool._grid = grid;
 
-			bool sendInput = true;
+			bool didSomething = false;
+			bool acceptClick = true;
+
+			didSomething = tool.Update () || didSomething;
+
+			Handles.BeginGUI();
 
 			// TOOL LIST
 			GUILayout.BeginArea(new Rect(20, 20, 10 + 95 * tools.Length, 80));
@@ -111,7 +158,7 @@ namespace Gridlike {
 				GridTool optionTool = tools[i];
 
 				GUI.color = i == currentTool ? Color.cyan : Color.white;
-				if (GUI.Button (new Rect(85 * i, 0, 80, 20), optionTool.Name ())) {
+				if (GUILayout.Button (optionTool.Name (), GUILayout.MinHeight(40))) {
 					currentTool = i;
 				}
 				GUI.color = Color.white;
@@ -121,11 +168,9 @@ namespace Gridlike {
 
 			GUILayout.EndArea();
 
-			bool didSomething = false;
-
 			// TOOL WINDOW
 			if (tool.UseWindow ()) {
-				GUILayout.BeginArea(new Rect(20, 60, 450, tool.WindowHeight()));
+				GUILayout.BeginArea(new Rect(20, 90, 450, tool.WindowHeight()));
 
 				var rect1 = EditorGUILayout.BeginVertical ();
 
@@ -134,21 +179,21 @@ namespace Gridlike {
 
 				didSomething = tool.Window () || didSomething;
 
-				//sendInput = !rect.Contains (Event.current.mousePosition);
-
 				EditorGUILayout.EndVertical ();
+
+				EventType type = Event.current.type;
+				if (Event.current.button == 0 && (type == EventType.mouseDown || type == EventType.mouseUp || type == EventType.mouseDrag)) {
+					acceptClick = !rect1.Contains (Event.current.mousePosition);
+				}
 
 				GUILayout.EndArea();
 			}
 
 			Handles.EndGUI();
 
-
-			didSomething = tool.Update () || didSomething;
-
 			// TOOL INPUT
 			if (Event.current.button == 0) {
-				if (sendInput) {
+				if (acceptClick) {
 					switch (Event.current.type) {
 					case EventType.mouseDown:
 						{

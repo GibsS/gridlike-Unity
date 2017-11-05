@@ -23,6 +23,10 @@ namespace Gridlike {
 		public int KeyCount { get { return keys.Count; } }
 		public int ValueCount { get { return values.Count; } }
 
+		public bool ContainsKey(string key) {
+			return _Get (key) != -1;
+		}
+
 		public void Remove(string key) {
 			for (int i = 0, len = keys.Count; i < len; i++) {
 				if (keys [i] == key) {
@@ -63,6 +67,10 @@ namespace Gridlike {
 			return values [i];
 		}
 		public void SetKey(int i, string key) {
+			int index = _Get (key);
+
+			if (index != -1) return;
+
 			keys [i] = key;
 		}
 		public void SetValue(int i, string key) {

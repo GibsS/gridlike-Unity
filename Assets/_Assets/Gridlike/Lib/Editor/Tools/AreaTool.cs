@@ -27,7 +27,6 @@ namespace Gridlike {
 
 		AreaToolState toolState;
 
-
 		public override bool UseWindow () {
 			return true;
 		}

@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Improve grid editor + atlas (2-3 days)
+
 // TICKETS
 // Set multiple tiles (1-2 days)
-// Improve grid editor (2-3 days)
-// Fixing dictionary (do NOT create dictionary for every tile) (1 day)
+
+// Fixing dictionary (do NOT create dictionary for every tile) (1 day) (do with look up at the same time)
 // Tile GO look up dictionary [runtime] (1-2 days)
+
 // Character controller (7-14 days)
 // Improving performance on serializing
 
@@ -20,10 +23,7 @@ using UnityEngine;
 
 // TOOLS
 // Make grid tool window look better than it does (copy grid tile map guy)
-// Show grid
-// Show outline of place and erase tool at all time
 // Show outline of copy tool at all time (also sort out the weird design choices of differentiating drag and copy)
-// Serialize tool information 
 
 // TILE ATLAS
 // Add the drag and drop if possible to the tile atlas (maybe into a window dedicated to it)
@@ -34,7 +34,6 @@ using UnityEngine;
 
 // BUGS
 // Allow regular gizmos to be accessed even when the grid is selected
-// Deactivate events mouse events when mouse is over scene GUI elements
 
 // TEST SCENARIOS
 // Handle subids, see their limit, define contract and preconditions..
@@ -53,7 +52,13 @@ using UnityEngine;
 // 3. Procedural generation
 // 4. Simple ship + miner (place blocks wherever, mine whatever) example
 
+// Serialization: Allow the creation of the world ahead of time, saving to be loaded later on
 
+// Add some form of model validation including:
+// - does id exist
+// - does subId exist
+// - triangles are coherent
+// - tileGO do not overlap
 
 namespace Gridlike {
 
