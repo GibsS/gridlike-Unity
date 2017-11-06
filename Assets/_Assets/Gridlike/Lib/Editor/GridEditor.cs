@@ -176,12 +176,14 @@ namespace Gridlike {
 			// TOOL WINDOW
 			if (tool.UseWindow ()) {
 				GUIStyle myStyle = new GUIStyle (GUI.skin.box); 
-				myStyle.padding = new RectOffset(5, 5, 5, 5);
+				myStyle.padding = new RectOffset(8, 8, 8, 8);
 
 				GUILayout.BeginArea(new Rect(20, 90, 400, tool.WindowHeight()));
-				scroll = GUILayout.BeginScrollView (scroll, myStyle);
+				scroll = GUILayout.BeginScrollView (scroll);
+				//GUI.backgroundColor = Color.clear;
 				var rect1 = EditorGUILayout.BeginVertical (myStyle);
 
+				GUI.backgroundColor = Color.white;
 				GUI.color = Color.white;
 				GUI.Box(rect1, GUIContent.none);
 

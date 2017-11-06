@@ -22,7 +22,7 @@ namespace Gridlike {
 		int mouseInSelectionX;
 		int mouseInSelectionY;
 
-		bool copy; // true means at the end of dragging the selection, it get copied to the locatin, false means the selection gets moved
+		bool deletePrevious; // true means at the end of dragging the selection, it get copied to the locatin, false means the selection gets moved
 		bool copyEmpty;
 
 		AreaToolState toolState;
@@ -35,11 +35,10 @@ namespace Gridlike {
 		}
 
 		public override bool Window () {
-			copy = EditorGUILayout.Toggle ("copy", copy);
-			copy = !EditorGUILayout.Toggle ("drag", !copy);
-			copyEmpty = EditorGUILayout.Toggle ("copy empty tiles", copyEmpty);
+			deletePrevious = EditorGUILayout.Toggle ("Remove previous tiles", deletePrevious);
+			copyEmpty = EditorGUILayout.Toggle ("Copy empty tiles", copyEmpty);
 
-			if (GUILayout.Button ("cancel selection")) {
+			if (GUILayout.Button ("Cancel selection")) {
 				toolState = AreaToolState.NONE;
 			}
 
@@ -70,24 +69,19 @@ namespace Gridlike {
 			case AreaToolState.SELECTION:
 				int x = mouseX;
 				int y = mouseY;
-				if (copy) {
-					CopyCurrentTo (x, y);
 
-					return true;
+				if (IsMouseInSelection (x, y)) {
+					mouseInSelectionX = x - selectMinX;
+					mouseInSelectionY = y - selectMinY;
+
+					toolState = AreaToolState.DRAG;
 				} else {
-					if (IsMouseInSelection (x, y)) {
-						mouseInSelectionX = x - selectMinX;
-						mouseInSelectionY = y - selectMinY;
+					selectStartX = mouseX;
+					selectStartY = mouseY;
 
-						toolState = AreaToolState.DRAG;
-					} else {
-						selectStartX = mouseX;
-						selectStartY = mouseY;
+					CalculateSelectionBound (selectStartX, selectStartY);
 
-						CalculateSelectionBound (selectStartX, selectStartY);
-
-						toolState = AreaToolState.SELECTING;
-					}
+					toolState = AreaToolState.SELECTING;
 				}
 				break;
 			case AreaToolState.NONE:
@@ -119,7 +113,7 @@ namespace Gridlike {
 		public override bool OnMouseUp() { 
 			switch (toolState) {
 			case AreaToolState.DRAG:
-				CopyCurrentTo (mouseX - mouseInSelectionX, mouseY - mouseInSelectionY, true);
+				CopyCurrentTo (mouseX - mouseInSelectionX, mouseY - mouseInSelectionY, deletePrevious);
 
 				toolState = AreaToolState.NONE;
 				return true;
@@ -136,21 +130,14 @@ namespace Gridlike {
 		}
 
 		void DrawSelection() {
-			for (int i = selectMinX; i <= selectMaxX; i++) {
-				for (int j = selectMinY; j <= selectMaxY; j++) {
-					DrawTileInformation (i, j, Color.magenta, null);
-				}
-			}
+			Vector2 bottomLeft = grid.transform.TransformPoint (new Vector2 (selectMinX, selectMinY));
+
+			DrawSquare (bottomLeft.x, bottomLeft.y, bottomLeft.x + (selectMaxX - selectMinX), bottomLeft.y + (selectMaxY - selectMinY), Color.magenta);
 		}
 		void DrawDrag() {
-			int x = mouseX;
-			int y = mouseY;
+			Vector2 bottomLeft = grid.transform.TransformPoint (new Vector2 (mouseX - mouseInSelectionX, mouseY - mouseInSelectionY));
 
-			for (int i = 0; i <= selectMaxX - selectMinX; i++) {
-				for (int j = 0; j <= selectMaxY - selectMinY; j++) {
-					DrawTileInformation (x - mouseInSelectionX + i, y - mouseInSelectionY + j, Color.blue, null);
-				}
-			}
+			DrawSquare (bottomLeft.x, bottomLeft.y, bottomLeft.x + (selectMaxX - selectMinX), bottomLeft.y + (selectMaxY - selectMinY), Color.blue);
 		}
 
 		bool IsMouseInSelection(int x, int y) {
@@ -164,28 +151,40 @@ namespace Gridlike {
 			selectMaxY = Mathf.Max (selectStartY, endY);
 		}
 
-		void CopyCurrentTo(int x, int y, bool clear = false) {
-			for (int i = 0; i <= selectMaxX - selectMinX; i++) {
-				for (int j = 0; j <= selectMaxY - selectMinY; j++) {
+		void CopyCurrentTo(int x, int y, bool clear) {
+			Tile[,] tiles = new Tile[selectMaxX - selectMinX, selectMaxY - selectMinY];
+
+			for (int i = 0; i < selectMaxX - selectMinX; i++) {
+				for (int j = 0; j < selectMaxY - selectMinY; j++) {
 					Tile tile = grid.Get (selectMinX + i, selectMinY + j);
 
 					if (tile != null && (copyEmpty || tile.id != 0)) {
 						TileInfo info = grid.atlas [tile.id];
 
-						if (info.tileGO != null) {
-							if (tile.tileGOCenter) {
-								grid.Set (x + i, y + j, tile.id, tile.subId, tile.state1, tile.state2, tile.state3);
-								if (tile.dictionary != null) {
-									grid.Get (x + i, y + j).dictionary = tile.dictionary.Clone ();
-								}
-							}
-						} else {
-							grid.Set (x + i, y + j, tile.id, tile.subId, tile.state1, tile.state2, tile.state3);
+						if (info.tileGO == null || tile.tileGOCenter) {
+							tiles[i, j] = new Tile {
+								id = tile.id,
+								subId = tile.subId,
+								state1 = tile.state1,
+								state2 = tile.state2,
+								state3 = tile.state3,
+
+								dictionary = tile.dictionary == null ? null : tile.dictionary.Clone()
+							};
 						}
 					}
 
 					if (clear) {
 						grid.Clear (selectMinX + i, selectMinY + j);
+					}
+				}
+			}
+
+			for (int i = 0; i < tiles.GetLength (0); i++) {
+				for (int j = 0; j < tiles.GetLength (1); j++) {
+					if (tiles [i, j] != null) {
+						grid.Set (x + i, y + j, tiles [i, j].id, tiles [i, j].subId, tiles [i, j].state1, tiles [i, j].state2, tiles [i, j].state3);
+						grid.Get (x + i, y + j).dictionary = tiles [i, j].dictionary;
 					}
 				}
 			}

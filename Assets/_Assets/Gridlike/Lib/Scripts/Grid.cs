@@ -5,7 +5,6 @@ using UnityEngine;
 // Improve grid editor + atlas (2-3 days)
 
 // TOOLS
-// Make grid tool window look better than it does (copy grid tile map guy)
 // Show outline of copy tool at all time (also sort out the weird design choices of differentiating drag and copy)
 // Add palette in place tool
 
