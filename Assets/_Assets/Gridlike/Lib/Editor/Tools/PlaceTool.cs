@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System;
+using System.Collections.Generic;
 using UnityEditor;
 
 namespace Gridlike {
@@ -10,10 +11,15 @@ namespace Gridlike {
 		int id = 1;
 		int subId = 0;
 
+		Dictionary<string, Texture2D> thumbnailCache;
+		TileAtlas cachedAtlas;
+
 		public PlaceTool() {
 			radius = Mathf.Max(1, PlayerPrefs.GetInt ("grid.place.radius"));
 			id = Mathf.Max(1, PlayerPrefs.GetInt ("grid.place.id"));
 			subId = Mathf.Max(0, PlayerPrefs.GetInt ("grid.place.subId"));
+
+			thumbnailCache = null;
 		}
 
 		public override void Serialize() {
@@ -29,6 +35,25 @@ namespace Gridlike {
 			return "place";
 		}
 
+		Texture GetThumbnail(Sprite sprite) {
+			Texture2D texture = null;
+			if (thumbnailCache == null || cachedAtlas != grid.atlas) {
+				thumbnailCache = new Dictionary<string, Texture2D> ();
+				cachedAtlas = grid.atlas;
+			}
+
+			if (!thumbnailCache.TryGetValue(sprite.name, out texture))
+			{
+				var rect = sprite.textureRect;
+				texture = new Texture2D((int)rect.width, (int)rect.height);
+				texture.SetPixels(sprite.texture.GetPixels((int)rect.x, (int)rect.y, (int)rect.width, (int)rect.height));
+				texture.Apply();
+
+				thumbnailCache[sprite.name] = texture;
+			}
+			return texture;
+		}
+
 		public override bool Window() {
 
 			id = EditorGUILayout.IntField ("Id", id);
@@ -41,8 +66,40 @@ namespace Gridlike {
 			if (grid.atlas [id].tileGO == null) {
 				radius = Mathf.Max(1, EditorGUILayout.IntField ("Radius", radius));
 			} else {
-				radius = 1;
+				GUI.enabled = false;
+				radius = EditorGUILayout.IntField ("Radius", 1);
+				GUI.enabled = true;
 			}
+
+			int count = 0;
+
+			EditorGUILayout.BeginVertical ();
+
+			EditorGUILayout.BeginHorizontal ();
+
+			foreach (TileInfo info in grid.atlas.GetTileInfos()) {
+				if (count % 8 == 0 && count != 0) {
+					EditorGUILayout.EndHorizontal ();
+
+					EditorGUILayout.BeginHorizontal ();
+				}
+				count++;
+				GUIContent content;
+				if (info.idSpriteInfo.sprite == null || info.tileGO != null) {
+					content = new GUIContent (info.id.ToString());
+				} else {
+					content = new GUIContent (GetThumbnail (info.idSpriteInfo.sprite));
+				}
+
+				if (GUILayout.Toggle (info.id == id, content, GUI.skin.button, GUILayout.Width (40), GUILayout.Height (40))) {
+					id = info.id;
+				}
+			}
+
+			EditorGUILayout.EndHorizontal ();
+
+			EditorGUILayout.EndVertical ();
+
 			return false;
 		}
 

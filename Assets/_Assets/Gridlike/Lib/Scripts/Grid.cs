@@ -4,10 +4,6 @@ using UnityEngine;
 
 // Improve grid editor + atlas (2-3 days)
 
-// TOOLS
-// Show outline of copy tool at all time (also sort out the weird design choices of differentiating drag and copy)
-// Add palette in place tool
-
 // TICKETS
 // Set multiple tiles (1-2 days)
 
