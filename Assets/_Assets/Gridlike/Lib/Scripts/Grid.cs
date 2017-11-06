@@ -3,6 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 // Improve grid editor + atlas (2-3 days)
+// Better palette (with subId picker?)
+
+// TILE ATLAS
+// Add the drag and drop if possible to the tile atlas (maybe into a window dedicated to it)
+// Have sprite size verification with error boxes in tile atlas
+// Tighter encapsulation with tile info and sprites
+
 
 // TICKETS
 // Set multiple tiles (1-2 days)
@@ -20,10 +27,6 @@ using UnityEngine;
 // New function: Set multiple tiles at once instead of just one
 // Grid hash: Replace list of regions by actual hash table and see performance differences
 // Loading: Use asynchronous loading or make the data smaller
-
-// TILE ATLAS
-// Add the drag and drop if possible to the tile atlas (maybe into a window dedicated to it)
-// Have sprite size verification with error boxes in tile atlas
 
 // TILE GO
 // Add concept of tile GO name (+ lookup)

@@ -187,6 +187,8 @@ namespace Gridlike {
 				GUI.color = Color.white;
 				GUI.Box(rect1, GUIContent.none);
 
+				EditorGUILayout.LabelField(tool.Name().ToUpper(), EditorStyles.boldLabel);
+
 				didSomething = tool.Window () || didSomething;
 
 				EditorGUILayout.EndVertical ();
