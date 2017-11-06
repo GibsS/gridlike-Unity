@@ -24,7 +24,7 @@ namespace Gridlike {
 		}
 
 		public override bool Window() {
-			radius = Mathf.Max(1, EditorGUILayout.IntField ("radius", radius));
+			radius = Mathf.Max(1, EditorGUILayout.IntField ("Radius", radius));
 			return false;
 		}
 

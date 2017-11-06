@@ -4,6 +4,11 @@ using UnityEngine;
 
 // Improve grid editor + atlas (2-3 days)
 
+// TOOLS
+// Make grid tool window look better than it does (copy grid tile map guy)
+// Show outline of copy tool at all time (also sort out the weird design choices of differentiating drag and copy)
+// Add palette in place tool
+
 // TICKETS
 // Set multiple tiles (1-2 days)
 
@@ -20,10 +25,6 @@ using UnityEngine;
 // New function: Set multiple tiles at once instead of just one
 // Grid hash: Replace list of regions by actual hash table and see performance differences
 // Loading: Use asynchronous loading or make the data smaller
-
-// TOOLS
-// Make grid tool window look better than it does (copy grid tile map guy)
-// Show outline of copy tool at all time (also sort out the weird design choices of differentiating drag and copy)
 
 // TILE ATLAS
 // Add the drag and drop if possible to the tile atlas (maybe into a window dedicated to it)
@@ -53,6 +54,7 @@ using UnityEngine;
 // 4. Simple ship + miner (place blocks wherever, mine whatever) example
 
 // Serialization: Allow the creation of the world ahead of time, saving to be loaded later on
+// Scriptable objects storage of grid tiles
 
 // Add some form of model validation including:
 // - does id exist

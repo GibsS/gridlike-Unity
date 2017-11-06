@@ -12,6 +12,8 @@ namespace Gridlike {
 		int currentTool = 0;
 		GridTool[] tools;
 
+		Vector2 scroll = Vector2.zero;
+
 		void OnChangePlayMode() {
 			Grid grid = target as Grid;
 
@@ -26,6 +28,7 @@ namespace Gridlike {
 
 			if(tools == null) {
 				currentTool = PlayerPrefs.GetInt ("grid.currentTool");
+				scroll = new Vector2(PlayerPrefs.GetFloat("grid.scroll.x"), PlayerPrefs.GetFloat("grid.scroll.y"));
 
 				tools = new GridTool[] {
 					new PlaceTool(),
@@ -40,6 +43,8 @@ namespace Gridlike {
 		}
 		void OnDisable() {
 			PlayerPrefs.SetInt ("grid.currentTool", currentTool);
+			PlayerPrefs.SetFloat ("grid.scroll.x", scroll.x);
+			PlayerPrefs.SetFloat ("grid.scroll.y", scroll.y);
 
 			foreach (GridTool tool in tools) {
 				tool.Serialize ();
@@ -170,9 +175,12 @@ namespace Gridlike {
 
 			// TOOL WINDOW
 			if (tool.UseWindow ()) {
-				GUILayout.BeginArea(new Rect(20, 90, 450, tool.WindowHeight()));
+				GUIStyle myStyle = new GUIStyle (GUI.skin.box); 
+				myStyle.padding = new RectOffset(5, 5, 5, 5);
 
-				var rect1 = EditorGUILayout.BeginVertical ();
+				GUILayout.BeginArea(new Rect(20, 90, 400, tool.WindowHeight()));
+				scroll = GUILayout.BeginScrollView (scroll, myStyle);
+				var rect1 = EditorGUILayout.BeginVertical (myStyle);
 
 				GUI.color = Color.white;
 				GUI.Box(rect1, GUIContent.none);
@@ -180,13 +188,13 @@ namespace Gridlike {
 				didSomething = tool.Window () || didSomething;
 
 				EditorGUILayout.EndVertical ();
+				GUILayout.EndScrollView ();
+				GUILayout.EndArea();
 
 				EventType type = Event.current.type;
 				if (Event.current.button == 0 && (type == EventType.mouseDown || type == EventType.mouseUp || type == EventType.mouseDrag)) {
 					acceptClick = !rect1.Contains (Event.current.mousePosition);
 				}
-
-				GUILayout.EndArea();
 			}
 
 			Handles.EndGUI();

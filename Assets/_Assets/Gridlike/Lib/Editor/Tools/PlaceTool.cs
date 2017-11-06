@@ -31,7 +31,7 @@ namespace Gridlike {
 
 		public override bool Window() {
 
-			id = EditorGUILayout.IntField ("id", id);
+			id = EditorGUILayout.IntField ("Id", id);
 			if (grid.atlas == null || id <= 0 || id >= grid.atlas.atlas.Length) id = 0;
 			if (grid.atlas == null || grid.atlas [id] == null) id = 0;
 
@@ -39,7 +39,7 @@ namespace Gridlike {
 			if (subId < 0) subId = 0;
 
 			if (grid.atlas [id].tileGO == null) {
-				radius = Mathf.Max(1, EditorGUILayout.IntField ("radius", radius));
+				radius = Mathf.Max(1, EditorGUILayout.IntField ("Radius", radius));
 			} else {
 				radius = 1;
 			}
