@@ -473,14 +473,12 @@ namespace Gridlike {
 					Tile tile = region.GetOrCreate(xr, yr);
 
 					_Set(tile, xg, yg, newTile.id, newTile.subId, newTile.state1, newTile.state2, newTile.state3, region.presented, false);
-
-					if(region.presented) {
-						foreach(GridListener listener in gridListeners) {
-							listener.OnSet (xg, yg, tile);
-						}
-					}
 				}
 			});
+
+			foreach(GridListener listener in gridListeners) {
+				listener.OnSet (x, y, t);
+			}
 		}
 		public void Clear(int x, int y, int width, int height) {
 			ExecuteAreaAction (x, y, width, height, (xa, ya, xr, yr, xg, yg, region) => {
@@ -488,11 +486,11 @@ namespace Gridlike {
 
 				if (tile != null)
 					_Clear (tile, xg, yg, false);
-
-				foreach (GridListener listener in gridListeners) {
-					listener.OnSet (xg, yg, tile);
-				}
 			});
+
+			foreach (GridListener listener in gridListeners) {
+				listener.OnClear (x, y, width, height);
+			}
 		}
 		//TODO move
 		public delegate void AreaAction(int xInArea, int yInArea, int xInRegion, int yInRegion, int xInGrid, int yInGrid, FiniteGrid region);
@@ -506,14 +504,17 @@ namespace Gridlike {
 				for (int regionY = minRegionY; regionY <= maxRegionY; regionY++) {
 					FiniteGrid region = tiles.GetOrCreateRegion (regionX, regionY);
 
-					int minX = Mathf.Max (x, regionX * Grid.REGION_SIZE);
-					int minY = Mathf.Max (y, regionY * Grid.REGION_SIZE);
+					int gridStartX = regionX * Grid.REGION_SIZE;
+					int gridStartY = regionY * Grid.REGION_SIZE;
+
+					int minX = Mathf.Max (x, gridStartX);
+					int minY = Mathf.Max (y, gridStartY);
 					int maxX = Mathf.Min (x + width, (regionX + 1) * Grid.REGION_SIZE);
 					int maxY = Mathf.Min (y + height, (regionY + 1) * Grid.REGION_SIZE);
 
 					for (int i = minX; i < maxX; i++) {
 						for (int j = minY; j < maxY; j++) {
-							action (i - x, j - y, i - minX, j - minY, i, j, region);
+							action (i - x, j - y, i - gridStartX, j - gridStartY, i, j, region);
 						}
 					}
 				}
