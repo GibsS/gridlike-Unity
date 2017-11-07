@@ -156,6 +156,42 @@ namespace Gridlike {
 			}
 		}
 
+		public override void OnSet(int x, int y, int width, int height) {
+			int minRegionX = Mathf.FloorToInt (x / (float) Grid.REGION_SIZE);
+			int minRegionY = Mathf.FloorToInt (y / (float) Grid.REGION_SIZE);
+			int maxRegionX = Mathf.FloorToInt ((x + width) / (float) Grid.REGION_SIZE);
+			int maxRegionY = Mathf.FloorToInt ((y + height) / (float) Grid.REGION_SIZE);
+
+			for (int regionX = minRegionX; regionX <= maxRegionX; regionX++) {
+				for (int regionY = minRegionY; regionY <= maxRegionY; regionY++) {
+					FiniteGrid region = grid.GetRegion (regionX, regionY);
+					PositionRegionRenderer renderer = GetRegionRenderer (regionX, regionY);
+
+					int startX = regionX * Grid.REGION_SIZE;
+					int startY = regionY * Grid.REGION_SIZE;
+
+					int minX = Mathf.Max (x, startX);
+					int minY = Mathf.Max (y, startY);
+					int maxX = Mathf.Min (x + width, (regionX + 1) * Grid.REGION_SIZE);
+					int maxY = Mathf.Min (y + height, (regionY + 1) * Grid.REGION_SIZE);
+
+					renderer.mesh.PrepareUV ();
+
+					for (int i = minX; i < maxX; i++) {
+						for (int j = minY; j < maxY; j++) {
+							Tile tile = region.Get (i - startX, j - startY);
+
+							if (tile != null) {
+								_OnSet (renderer, i, j, tile);
+							}
+						}
+					}
+
+					renderer.mesh.ApplyUV ();
+				}
+			}
+		}
+
 		public override void OnHideRegion(int regionX, int regionY) {
 			ClearRegionRenderer (regionX, regionY);
 			triangles.ClearRegion (regionX, regionY);

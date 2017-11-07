@@ -445,6 +445,8 @@ namespace Gridlike {
 			}
 		}
 
+		// TODO Fix bug with grid renderer
+		// TODO Implement optimization for grid collider
 		// TODO Make sure if present on set is true, it shows the region
 		// TODO Add option to ignore empty set tiles
 		// TODO Add callback base set
@@ -456,14 +458,12 @@ namespace Gridlike {
 					Tile tile = region.GetOrCreate(xr, yr);
 
 					_Set(tile, xg, yg, newId, 0, 0, 0, 0, region.presented, false);
-
-					if(region.presented) {
-						foreach(GridListener listener in gridListeners) {
-							listener.OnSet (xg, yg, tile);
-						}
-					}
 				}
 			});
+
+			foreach(GridListener listener in gridListeners) {
+				listener.OnSet (x, y, ids.GetLength(0), ids.GetLength(1));
+			}
 		}
 		public void Set(int x, int y, Tile[,] t) {
 			ExecuteAreaAction (x, y, t.GetLength (0), t.GetLength (1), (xa, ya, xr, yr, xg, yg, region) => {
@@ -477,7 +477,7 @@ namespace Gridlike {
 			});
 
 			foreach(GridListener listener in gridListeners) {
-				listener.OnSet (x, y, t);
+				listener.OnSet (x, y, t.GetLength(0), t.GetLength(1));
 			}
 		}
 		public void Clear(int x, int y, int width, int height) {
@@ -489,7 +489,7 @@ namespace Gridlike {
 			});
 
 			foreach (GridListener listener in gridListeners) {
-				listener.OnClear (x, y, width, height);
+				listener.OnSet (x, y, width, height);
 			}
 		}
 		//TODO move

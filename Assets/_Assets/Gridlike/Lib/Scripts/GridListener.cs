@@ -45,16 +45,7 @@ namespace Gridlike {
 			OnSet (x, y, tile);
 		}
 
-		public virtual void OnClear(int x, int y, int width, int height) {
-			_OnSet (x, y, width, height);
-		}
-		public virtual void OnSet(int x, int y, Tile[,] tiles) {
-			int width = tiles.GetLength (0);
-			int height = tiles.GetLength (1);
-
-			_OnSet (x, y, width, height);
-		}
-		void _OnSet(int x, int y, int width, int height) {
+		public virtual void OnSet(int x, int y, int width, int height) {
 			int minRegionX = Mathf.FloorToInt (x / (float) Grid.REGION_SIZE);
 			int minRegionY = Mathf.FloorToInt (y / (float) Grid.REGION_SIZE);
 			int maxRegionX = Mathf.FloorToInt ((x + width) / (float) Grid.REGION_SIZE);
@@ -64,14 +55,17 @@ namespace Gridlike {
 				for (int regionY = minRegionY; regionY <= maxRegionY; regionY++) {
 					FiniteGrid region = grid.GetRegion (regionX, regionY);
 
-					int minX = Mathf.Max (x, regionX * Grid.REGION_SIZE);
-					int minY = Mathf.Max (y, regionY * Grid.REGION_SIZE);
+					int startX = regionX * Grid.REGION_SIZE;
+					int startY = regionY * Grid.REGION_SIZE;
+
+					int minX = Mathf.Max (x, startX);
+					int minY = Mathf.Max (y, startY);
 					int maxX = Mathf.Min (x + width, (regionX + 1) * Grid.REGION_SIZE);
 					int maxY = Mathf.Min (y + height, (regionY + 1) * Grid.REGION_SIZE);
 
 					for (int i = minX; i < maxX; i++) {
 						for (int j = minY; j < maxY; j++) {
-							Tile tile = region.Get (i - minX, j - minY);
+							Tile tile = region.Get (i - startX, j - startY);
 
 							if (tile != null) {
 								OnSet (i, j, tile);
