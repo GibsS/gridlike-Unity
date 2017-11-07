@@ -65,6 +65,17 @@ namespace Gridlike {
 			}
 			return null;
 		}
+		public FiniteGrid GetOrCreateRegion(int X, int Y) {
+			FiniteGrid region = GetRegion (X, Y);
+
+			if (region == null) {
+				region = new FiniteGrid (X, Y, _regionSize);
+
+				regions.Add(region);
+			}
+
+			return region;
+		}
 		public FiniteGrid GetContainingRegion(int x, int y) {
 			x = Mathf.FloorToInt(((float) x) / _regionSize);
 			y = Mathf.FloorToInt (((float) y) / _regionSize);
@@ -129,6 +140,16 @@ namespace Gridlike {
 			}
 		}
 
+		public Tile GetOrCreate(int x, int y) {
+			Tile tile = grid [x] [y];
+
+			if (tile == null) {
+				tile = new Tile ();
+				grid [x] [y] = tile;
+			}
+
+			return tile;
+		}
 		public Tile Get(int x, int y) {
 			return grid [x] [y];
 		}

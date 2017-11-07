@@ -51,11 +51,7 @@ namespace Gridlike {
 			int x = mouseX, y = mouseY;
 			int r = radius - 1;
 
-			for (int i = -r; i <= r; i++) {
-				for (int j = -r; j <= r; j++) {
-					grid.Clear (x + i, y + j);
-				}
-			}
+			grid.Clear (x - r, y - r, 2 * r + 1, 2 * r + 1);
 		}
 	}
 }

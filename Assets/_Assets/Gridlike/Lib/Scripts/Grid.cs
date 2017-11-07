@@ -394,7 +394,7 @@ namespace Gridlike {
 
 			if (showOnSet && !region.presented) _PresentRegion (region.regionX, region.regionY, region);
 
-			_Set (tile, x, y, id, subid, state1, state2, state3, region.presented);
+			_Set (tile, x, y, id, subid, state1, state2, state3, region.presented, true);
 		}
 		public void SetId(int x, int y, int id, int subId = 0) {
 			FiniteGrid region;
@@ -402,7 +402,7 @@ namespace Gridlike {
 
 			if (showOnSet && !region.presented) _PresentRegion (region.regionX, region.regionY, region);
 
-			_Set (tile, x, y, id, subId, tile.state1, tile.state2, tile.state3, region.presented);
+			_Set (tile, x, y, id, subId, tile.state1, tile.state2, tile.state3, region.presented, true);
 		}
 		public void SetSubId(int x, int y, int subId) {
 			FiniteGrid region;
@@ -441,11 +441,86 @@ namespace Gridlike {
 			Tile tile = tiles.Get (x, y);
 
 			if (tile != null) {
-				_Clear (tile, x, y);
+				_Clear (tile, x, y, true);
 			}
 		}
 
-		void _Clear(Tile tile, int x, int y) {
+		// TODO Make sure if present on set is true, it shows the region
+		// TODO Add option to ignore empty set tiles
+		// TODO Add callback base set
+		public void Set(int x, int y, int[,] ids) {
+			ExecuteAreaAction (x, y, ids.GetLength (0), ids.GetLength (1), (xa, ya, xr, yr, xg, yg, region) => {
+				int newId = ids[xa, ya];
+
+				if(newId != 0) {
+					Tile tile = region.GetOrCreate(xr, yr);
+
+					_Set(tile, xg, yg, newId, 0, 0, 0, 0, region.presented, false);
+
+					if(region.presented) {
+						foreach(GridListener listener in gridListeners) {
+							listener.OnSet (xg, yg, tile);
+						}
+					}
+				}
+			});
+		}
+		public void Set(int x, int y, Tile[,] t) {
+			ExecuteAreaAction (x, y, t.GetLength (0), t.GetLength (1), (xa, ya, xr, yr, xg, yg, region) => {
+				Tile newTile = t[xa, ya];
+
+				if(newTile != null) {
+					Tile tile = region.GetOrCreate(xr, yr);
+
+					_Set(tile, xg, yg, newTile.id, newTile.subId, newTile.state1, newTile.state2, newTile.state3, region.presented, false);
+
+					if(region.presented) {
+						foreach(GridListener listener in gridListeners) {
+							listener.OnSet (xg, yg, tile);
+						}
+					}
+				}
+			});
+		}
+		public void Clear(int x, int y, int width, int height) {
+			ExecuteAreaAction (x, y, width, height, (xa, ya, xr, yr, xg, yg, region) => {
+				Tile tile = region.Get (xr, yr);
+
+				if (tile != null)
+					_Clear (tile, xg, yg, false);
+
+				foreach (GridListener listener in gridListeners) {
+					listener.OnSet (xg, yg, tile);
+				}
+			});
+		}
+		//TODO move
+		public delegate void AreaAction(int xInArea, int yInArea, int xInRegion, int yInRegion, int xInGrid, int yInGrid, FiniteGrid region);
+		void ExecuteAreaAction(int x, int y, int width, int height, AreaAction action) {
+			int minRegionX = Mathf.FloorToInt (x / (float)Grid.REGION_SIZE);
+			int minRegionY = Mathf.FloorToInt (y / (float)Grid.REGION_SIZE);
+			int maxRegionX = Mathf.FloorToInt ((x + width) / (float)Grid.REGION_SIZE);
+			int maxRegionY = Mathf.FloorToInt ((y + height) / (float)Grid.REGION_SIZE);
+
+			for (int regionX = minRegionX; regionX <= maxRegionX; regionX++) {
+				for (int regionY = minRegionY; regionY <= maxRegionY; regionY++) {
+					FiniteGrid region = tiles.GetOrCreateRegion (regionX, regionY);
+
+					int minX = Mathf.Max (x, regionX * Grid.REGION_SIZE);
+					int minY = Mathf.Max (y, regionY * Grid.REGION_SIZE);
+					int maxX = Mathf.Min (x + width, (regionX + 1) * Grid.REGION_SIZE);
+					int maxY = Mathf.Min (y + height, (regionY + 1) * Grid.REGION_SIZE);
+
+					for (int i = minX; i < maxX; i++) {
+						for (int j = minY; j < maxY; j++) {
+							action (i - x, j - y, i - minX, j - minY, i, j, region);
+						}
+					}
+				}
+			}
+		}
+
+		void _Clear(Tile tile, int x, int y, bool _signal) {
 			Component component = tileGOs.GetComponent (x, y);
 
 			tile.dictionary = null;
@@ -453,10 +528,13 @@ namespace Gridlike {
 			if (component == null) {
 				tile.id = 0;
 				tile.subId = 0;
+				tile.tileGOCenter = false;
 
 				// POTENTIAL BUG : make sure it can be called even if we don't check it's presented
-				foreach (GridListener listener in gridListeners) {
-					listener.OnSet (x, y, tile);
+				if (_signal) {
+					foreach (GridListener listener in gridListeners) {
+						listener.OnSet (x, y, tile);
+					}
 				}
 			} else {
 				if (component is TileBehaviour) {
@@ -486,11 +564,11 @@ namespace Gridlike {
 			}
 		}
 
-		void _Set(Tile tile, int x, int y, int id, int subid, float state1, float state2, float state3, bool show) {
+		void _Set(Tile tile, int x, int y, int id, int subid, float state1, float state2, float state3, bool show, bool signal) {
 			TileInfo info = atlas.GetTile (id);
 
 			if (tile.tileGOCenter) {
-				_Clear (tile, x, y);
+				_Clear (tile, x, y, true);
 			} else if (tileGOs.GetTileGO (x, y) != null) {
 				Debug.LogError ("[[Gridlike] Impossible to place a tile here: a tile GO occupies this tile");
 				return;
@@ -522,8 +600,10 @@ namespace Gridlike {
 					tile.id = id;
 					tile.subId = subid;
 
-					foreach (GridListener listener in gridListeners) {
-						listener.OnSet (x, y, tile);
+					if (signal) {
+						foreach (GridListener listener in gridListeners) {
+							listener.OnSet (x, y, tile);
+						}
 					}
 				}
 			}

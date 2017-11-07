@@ -129,14 +129,14 @@ namespace Gridlike {
 
 			int r = radius - 1;
 
-			for (int i = -r; i <= r; i++) {
-				for (int j = -r; j <= r; j++) {
-					if (grid.CanSet (x, y, id)) {
-						hasPlaced = true;
-						grid.Set (x + i, y + j, id, subId, 0, 0, 0);
-					}
+			int[,] ids = new int[2 * r + 1, 2 * r + 1];
+			for (int i = 0; i < ids.GetLength (0); i++) {
+				for (int j = 0; j < ids.GetLength (1); j++) {
+					ids [i, j] = id;
 				}
 			}
+
+			grid.Set (x - r, y - r, ids);
 
 			if(hasPlaced) grid.PresentContainingRegion (mouseX, mouseY);
 		}

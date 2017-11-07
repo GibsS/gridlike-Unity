@@ -45,28 +45,44 @@ namespace Gridlike {
 			OnSet (x, y, tile);
 		}
 
-		public virtual void OnShowRegion(int regionX, int regionY) {
-			if (Application.isPlaying) {
-				StartCoroutine (_OnShowRegion (regionX, regionY));
-			} else {		
-				FiniteGrid region = grid.GetRegion (regionX, regionY);
+		public virtual void OnClear(int x, int y, int width, int height) {
+			_OnSet (x, y, width, height);
+		}
+		public virtual void OnSet(int x, int y, Tile[,] tiles) {
+			int width = tiles.GetLength (0);
+			int height = tiles.GetLength (1);
 
-				int startX = regionX * Grid.REGION_SIZE;
-				int endX = (regionX + 1) * Grid.REGION_SIZE;
-				int startY = regionY * Grid.REGION_SIZE;
-				int endY = (regionY + 1) * Grid.REGION_SIZE;
+			_OnSet (x, y, width, height);
+		}
+		void _OnSet(int x, int y, int width, int height) {
+			int minRegionX = Mathf.FloorToInt (x / (float) Grid.REGION_SIZE);
+			int minRegionY = Mathf.FloorToInt (y / (float) Grid.REGION_SIZE);
+			int maxRegionX = Mathf.FloorToInt ((x + width) / (float) Grid.REGION_SIZE);
+			int maxRegionY = Mathf.FloorToInt ((y + height) / (float) Grid.REGION_SIZE);
 
-				for (int i = startX; i < endX; i++) {
-					for(int j = startY; j < endY; j++) {
-						Tile tile = region.Get (i - startX, j - startY);
+			for (int regionX = minRegionX; regionX <= maxRegionX; regionX++) {
+				for (int regionY = minRegionY; regionY <= maxRegionY; regionY++) {
+					FiniteGrid region = grid.GetRegion (regionX, regionY);
 
-						if(tile != null) OnSet(i, j, tile);
+					int minX = Mathf.Max (x, regionX * Grid.REGION_SIZE);
+					int minY = Mathf.Max (y, regionY * Grid.REGION_SIZE);
+					int maxX = Mathf.Min (x + width, (regionX + 1) * Grid.REGION_SIZE);
+					int maxY = Mathf.Min (y + height, (regionY + 1) * Grid.REGION_SIZE);
+
+					for (int i = minX; i < maxX; i++) {
+						for (int j = minY; j < maxY; j++) {
+							Tile tile = region.Get (i - minX, j - minY);
+
+							if (tile != null) {
+								OnSet (i, j, tile);
+							}
+						}
 					}
 				}
 			}
 		}
 
-		IEnumerator _OnShowRegion(int regionX, int regionY) {
+		public virtual void OnShowRegion(int regionX, int regionY) {
 			FiniteGrid region = grid.GetRegion (regionX, regionY);
 
 			int startX = regionX * Grid.REGION_SIZE;
@@ -80,8 +96,6 @@ namespace Gridlike {
 
 					if(tile != null) OnSet(i, j, tile);
 				}
-
-				if (i % 3 == 0) yield return null;
 			}
 		}
 
