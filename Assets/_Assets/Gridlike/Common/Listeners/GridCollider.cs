@@ -3,14 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Gridlike {
-	
-    /* OPTIMIZATION
-     * 
-     * Apply size change to the collider at the end of any given operation
-     * Apply position change to the collider at the end of any given operation
-     * No destroy or instantiation, pooling
-     * Limit access to the infinite grid and access directly to regions
-     */
 
 	[AddComponentMenu("Gridlike/Grid collider")]
 	public class GridCollider : GridListener {
@@ -18,12 +10,6 @@ namespace Gridlike {
 		[HideInInspector] [SerializeField] InfiniteComponentGrid components;
 
 		[HideInInspector] [SerializeField] GameObject containerGO;
-
-        /*HashSet<GridColliderPart> parts;
-        void ResetModified() {
-            if(parts == null) parts = new HashSet<GridColliderPart>();
-            else parts.Clear();
-        }*/
 
 		public override void OnDestroy() {
 			base.OnDestroy ();

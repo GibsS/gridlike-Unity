@@ -125,8 +125,6 @@ namespace Gridlike {
 		void Place() {
 			int x = mouseX, y = mouseY;
 
-			bool hasPlaced = false;
-
 			int r = radius - 1;
 
 			int[,] ids = new int[2 * r + 1, 2 * r + 1];
@@ -138,7 +136,7 @@ namespace Gridlike {
 
 			grid.Set (x - r, y - r, ids);
 
-			if(hasPlaced) grid.PresentContainingRegion (mouseX, mouseY);
+			grid.PresentContainingRegion (mouseX, mouseY);
 		}
 	}
 }

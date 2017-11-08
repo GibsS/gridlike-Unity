@@ -55,20 +55,22 @@ namespace Gridlike {
 				for (int regionY = minRegionY; regionY <= maxRegionY; regionY++) {
 					FiniteGrid region = grid.GetRegion (regionX, regionY);
 
-					int startX = regionX * Grid.REGION_SIZE;
-					int startY = regionY * Grid.REGION_SIZE;
+					if (region.presented) {
+						int startX = regionX * Grid.REGION_SIZE;
+						int startY = regionY * Grid.REGION_SIZE;
 
-					int minX = Mathf.Max (x, startX);
-					int minY = Mathf.Max (y, startY);
-					int maxX = Mathf.Min (x + width, (regionX + 1) * Grid.REGION_SIZE);
-					int maxY = Mathf.Min (y + height, (regionY + 1) * Grid.REGION_SIZE);
+						int minX = Mathf.Max (x, startX);
+						int minY = Mathf.Max (y, startY);
+						int maxX = Mathf.Min (x + width, (regionX + 1) * Grid.REGION_SIZE);
+						int maxY = Mathf.Min (y + height, (regionY + 1) * Grid.REGION_SIZE);
 
-					for (int i = minX; i < maxX; i++) {
-						for (int j = minY; j < maxY; j++) {
-							Tile tile = region.Get (i - startX, j - startY);
+						for (int i = minX; i < maxX; i++) {
+							for (int j = minY; j < maxY; j++) {
+								Tile tile = region.Get (i - startX, j - startY);
 
-							if (tile != null) {
-								OnSet (i, j, tile);
+								if (tile != null) {
+									OnSet (i, j, tile);
+								}
 							}
 						}
 					}

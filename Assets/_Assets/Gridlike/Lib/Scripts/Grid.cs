@@ -12,7 +12,6 @@ using UnityEngine;
 
 
 // TICKETS
-// Set multiple tiles (1-2 days)
 
 // Fixing dictionary (do NOT create dictionary for every tile) (1 day) (do with look up at the same time)
 // Tile GO look up dictionary [runtime] (1-2 days)
@@ -24,7 +23,6 @@ using UnityEngine;
 // Grid updater component: iterates through tiles and updates there information (potentially through compute shader?)
 
 // OPTIMIZATION
-// New function: Set multiple tiles at once instead of just one
 // Grid hash: Replace list of regions by actual hash table and see performance differences
 // Loading: Use asynchronous loading or make the data smaller
 
@@ -445,16 +443,64 @@ namespace Gridlike {
 			}
 		}
 
-		// TODO Fix bug with grid renderer
 		// TODO Implement optimization for grid collider
-		// TODO Make sure if present on set is true, it shows the region
-		// TODO Add option to ignore empty set tiles
-		// TODO Add callback base set
-		public void Set(int x, int y, int[,] ids) {
+		public delegate Tile SetCallback (int x, int y);
+		public delegate int SetIntCallback (int x, int y);
+		public delegate void AreaAction(int xInArea, int yInArea, int xInRegion, int yInRegion, int xInGrid, int yInGrid, FiniteGrid region);
+		public void Set(int x, int y, int width, int height, SetIntCallback callback, bool ignoreEmpty = false) {
+			ExecuteAreaAction (x, y, width, height, (xa, ya, xr, yr, xg, yg, region) => {
+				int newId = callback(xa, ya);
+
+				if(newId == 0) {
+					if(!ignoreEmpty) {
+						Tile tile = region.Get(xr, yr);
+
+						if (tile != null) _Clear(tile, xg, yg, false);
+					}
+				} else {
+					Tile tile = region.GetOrCreate(xr, yr);
+
+					_Set(tile, xg, yg, newId, 0, 0, 0, 0, region.presented, false);
+				}
+			});
+
+			foreach(GridListener listener in gridListeners) {
+				listener.OnSet (x, y, width, height);
+			}
+		}
+		public void Set(int x, int y, int width, int height, SetCallback callback, bool ignoreEmpty = false) {
+			ExecuteAreaAction (x, y, width, height, (xa, ya, xr, yr, xg, yg, region) => {
+				Tile newTile = callback(xa, ya);
+
+				if(newTile == null) {
+					if(!ignoreEmpty) {
+						Tile tile = region.Get(xr, yr);
+
+						if(tile != null) _Clear(tile, xg, yg, false);
+					}
+				} else {
+					Tile tile = region.GetOrCreate(xr, yr);
+
+					_Set(tile, xg, yg, newTile.id, newTile.subId, newTile.state1, newTile.state2, newTile.state3, region.presented, false);
+				}
+			});
+
+			foreach(GridListener listener in gridListeners) {
+				listener.OnSet (x, y, width, height);
+			}
+		}
+
+		public void Set(int x, int y, int[,] ids, bool ignoreEmpty = false) {
 			ExecuteAreaAction (x, y, ids.GetLength (0), ids.GetLength (1), (xa, ya, xr, yr, xg, yg, region) => {
 				int newId = ids[xa, ya];
 
-				if(newId != 0) {
+				if(newId == 0) {
+					if(!ignoreEmpty) {
+						Tile tile = region.Get(xr, yr);
+
+						if (tile != null) _Clear(tile, xg, yg, false);
+					}
+				} else {
 					Tile tile = region.GetOrCreate(xr, yr);
 
 					_Set(tile, xg, yg, newId, 0, 0, 0, 0, region.presented, false);
@@ -465,11 +511,17 @@ namespace Gridlike {
 				listener.OnSet (x, y, ids.GetLength(0), ids.GetLength(1));
 			}
 		}
-		public void Set(int x, int y, Tile[,] t) {
+		public void Set(int x, int y, Tile[,] t, bool ignoreEmpty = false) {
 			ExecuteAreaAction (x, y, t.GetLength (0), t.GetLength (1), (xa, ya, xr, yr, xg, yg, region) => {
 				Tile newTile = t[xa, ya];
 
-				if(newTile != null) {
+				if(newTile == null) {
+					if(!ignoreEmpty) {
+						Tile tile = region.Get(xr, yr);
+
+						if(tile != null) _Clear(tile, xg, yg, false);
+					}
+				} else {
 					Tile tile = region.GetOrCreate(xr, yr);
 
 					_Set(tile, xg, yg, newTile.id, newTile.subId, newTile.state1, newTile.state2, newTile.state3, region.presented, false);
@@ -484,16 +536,14 @@ namespace Gridlike {
 			ExecuteAreaAction (x, y, width, height, (xa, ya, xr, yr, xg, yg, region) => {
 				Tile tile = region.Get (xr, yr);
 
-				if (tile != null)
-					_Clear (tile, xg, yg, false);
+				if (tile != null) _Clear (tile, xg, yg, false);
 			});
 
 			foreach (GridListener listener in gridListeners) {
 				listener.OnSet (x, y, width, height);
 			}
 		}
-		//TODO move
-		public delegate void AreaAction(int xInArea, int yInArea, int xInRegion, int yInRegion, int xInGrid, int yInGrid, FiniteGrid region);
+
 		void ExecuteAreaAction(int x, int y, int width, int height, AreaAction action) {
 			int minRegionX = Mathf.FloorToInt (x / (float)Grid.REGION_SIZE);
 			int minRegionY = Mathf.FloorToInt (y / (float)Grid.REGION_SIZE);
