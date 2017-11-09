@@ -90,16 +90,14 @@ namespace Gridlike {
 	[Serializable]
 	public class FiniteGrid {
 
-		// region space, not tile space
-		[SerializeField]
-		int _x;
-		[SerializeField]
-		int _y;
-		[SerializeField]
-		int _size;
+		[SerializeField] List<TileExtra> extras;
 
-		[SerializeField]
-		Array[] grid;
+		// region space, not tile space
+		[SerializeField] int _x;
+		[SerializeField] int _y;
+		[SerializeField] int _size;
+
+		[SerializeField] Array[] grid;
 
 		public bool presented;
 
@@ -155,6 +153,34 @@ namespace Gridlike {
 		}
 		public void Set(int x, int y, Tile value) {
 			grid [x] [y] = value;
+		}
+
+		public void LoadExtra() {
+			if (extras != null) {
+				foreach (TileExtra extra in extras) {
+					Tile tile = Get (extra.x, extra.y);
+
+					if (tile != null) {
+						tile.ApplyExtra (extra);
+					}
+				}
+			}
+		}
+		public void SaveExtra() {
+			extras = new List<TileExtra> ();
+
+			for (int i = 0; i < _size; i++) {
+				for (int j = 0; j < _size; j++) {
+					Tile tile = Get (i, j);
+
+					if (tile != null && (tile.dictionary != null || !string.IsNullOrEmpty (tile.name))) {
+						TileExtra extra = tile.GetExtra ();
+						extra.x = i;
+						extra.y = j;
+						extras.Add (extra);
+					}
+				}
+			}
 		}
 	}
 

@@ -17,9 +17,12 @@ namespace Gridlike {
 		void OnChangePlayMode() {
 			Grid grid = target as Grid;
 
-			if (!Application.isPlaying && EditorApplication.isPlayingOrWillChangePlaymode && grid.useLoading && grid.useAgentBasedLoading) {
+			if (!Application.isPlaying && EditorApplication.isPlayingOrWillChangePlaymode) {
+				grid.SaveExtra ();
 
-				grid.HideAll ();
+				if (grid.useLoading && grid.useAgentBasedLoading) {
+					grid.HideAll ();
+				}
 			}
 		}
 
@@ -40,6 +43,10 @@ namespace Gridlike {
 					new AreaTool()
 				};
 			}
+
+			Grid grid = target as Grid;
+
+			grid.LoadExtra ();
 		}
 		void OnDisable() {
 			PlayerPrefs.SetInt ("grid.currentTool", currentTool);

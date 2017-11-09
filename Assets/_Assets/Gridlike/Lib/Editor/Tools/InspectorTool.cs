@@ -39,6 +39,8 @@ namespace Gridlike {
 				tile.state1 = EditorGUILayout.FloatField ("State1", tile.state1);
 				tile.state2 = EditorGUILayout.FloatField ("State2", tile.state2);
 				tile.state3 = EditorGUILayout.FloatField ("State3", tile.state3);
+
+				tile.name = EditorGUILayout.TextField ("Name", tile.name);
                 
 				EditorGUILayout.LabelField ("Tile dictionary");
 

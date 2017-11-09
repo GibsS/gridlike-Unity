@@ -4,9 +4,18 @@ using UnityEngine;
 namespace Gridlike {
 
 	[Serializable]
+	public class TileExtra {
+
+		public int x;
+		public int y;
+		public TileDictionary dictionary;
+		public string name;
+	}
+
+	[Serializable]
 	public class Tile {
 
-        [NonSerialized] public TileDictionary dictionary;
+		[NonSerialized] public TileDictionary dictionary;
 		[NonSerialized] public string name;
 
 		public bool tileGOCenter;
@@ -30,6 +39,17 @@ namespace Gridlike {
 				state1 = state1,
 				state2 = state2,
 				state3 = state3
+			};
+		}
+
+		public void ApplyExtra(TileExtra extra) {
+			dictionary = extra.dictionary;
+			name = extra.name;
+		}
+		public TileExtra GetExtra() {
+			return new TileExtra {
+				dictionary = dictionary,
+				name = name
 			};
 		}
 	}

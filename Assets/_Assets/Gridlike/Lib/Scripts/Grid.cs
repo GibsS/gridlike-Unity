@@ -229,6 +229,8 @@ namespace Gridlike {
 					region = gridDelegate.LoadTiles (X, Y);
 
 					if (region != null) {
+						region.LoadExtra ();
+
 						tiles.SetRegion (X, Y, region);
 					}
 				}
@@ -244,6 +246,8 @@ namespace Gridlike {
 				FiniteGrid region = tiles.GetRegion (X, Y);
 
 				if (region != null) {
+					region.SaveExtra ();
+
 					gridDelegate.SaveTiles (X, Y, region);
 				}
 			}
@@ -681,6 +685,17 @@ namespace Gridlike {
 		}
 
 		#endregion
+
+		public void SaveExtra() {
+			foreach (FiniteGrid region in tiles.GetRegions()) {
+				region.SaveExtra ();
+			}
+		}
+		public void LoadExtra() {
+			foreach (FiniteGrid region in tiles.GetRegions()) {
+				region.LoadExtra ();
+			}
+		}
 
 		#region REFERENTIAL
 

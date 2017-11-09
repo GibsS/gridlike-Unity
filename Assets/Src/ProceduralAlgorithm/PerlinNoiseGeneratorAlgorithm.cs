@@ -18,6 +18,8 @@ public class PerlinNoiseGeneratorAlgorithm : GridGeneratorAlgorithm {
 				tiles [i, j] = new Tile {
 					id = noise > threshold ? 1 : 0
 				};
+
+				if (i % 50 == 0 && j % 50 == 0) tiles [i, j].name = "test";
 			}
 		}
 
