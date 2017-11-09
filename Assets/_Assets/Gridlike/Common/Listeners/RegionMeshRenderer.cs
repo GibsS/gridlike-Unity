@@ -4,17 +4,22 @@ using UnityEngine;
 
 public class RegionMeshRenderer : MonoBehaviour {
 	
-	[HideInInspector] [SerializeField] int tilePerSide;
+	[HideInInspector, SerializeField] int tilePerSide;
 
-	[HideInInspector] [SerializeField] int textureWidth;
-	[HideInInspector] [SerializeField] int textureHeight;
-	[HideInInspector] [SerializeField] int tilePixelSize;
+	[HideInInspector, SerializeField] int textureWidth;
+	[HideInInspector, SerializeField] int textureHeight;
+	[HideInInspector, SerializeField] int tilePixelSize;
 
-	[HideInInspector] [SerializeField] Mesh mesh;
-	[HideInInspector] [SerializeField] MeshFilter meshFilter;
-	[HideInInspector] [SerializeField] MeshRenderer meshRenderer;
+	[HideInInspector, SerializeField] Mesh mesh;
+	[HideInInspector, SerializeField] MeshFilter meshFilter;
+	[HideInInspector, SerializeField] MeshRenderer meshRenderer;
 
 	Vector2[] uv;
+
+	Vector2 bottomLeftEmpty;
+	Vector2 bottomRightEmpty;
+	Vector2 topLeftEmpty;
+	Vector2 topRightEmpty;
 
 	public static RegionMeshRenderer Create(int tilePerSide) {
 		GameObject obj = new GameObject ("region mesh renderer");
@@ -32,7 +37,7 @@ public class RegionMeshRenderer : MonoBehaviour {
 		GenerateMesh ();
 	}
 
-	public void Initialize(Texture2D texture, int tilePixelSize) {
+	public void Initialize(Texture2D texture, int tilePixelSize, Sprite emptySprite) {
 		textureWidth = texture.width;
 		textureHeight = texture.height;
 		this.tilePixelSize = tilePixelSize;
@@ -41,6 +46,13 @@ public class RegionMeshRenderer : MonoBehaviour {
 		material.mainTexture = texture;
 
 		meshRenderer.material = material;
+
+		Rect rect = emptySprite.textureRect;
+
+		bottomLeftEmpty = new Vector2 (rect.xMin / textureWidth, rect.yMin / textureHeight);
+		bottomRightEmpty = new Vector2 (rect.xMax / textureWidth, rect.yMin / textureHeight);
+		topLeftEmpty = new Vector2 (rect.xMin / textureWidth, rect.yMax / textureHeight);
+		topRightEmpty = new Vector2 (rect.xMax / textureWidth, rect.yMax / textureHeight);
 	}
 
 	public void Destroy() {
@@ -110,20 +122,24 @@ public class RegionMeshRenderer : MonoBehaviour {
 		meshFilter.sharedMesh.uv = uv;
 	}
 
+	public void Clear(int x, int y) {
+		int quadIndex = ((y * tilePerSide) + x) * 4;
+
+		uv [quadIndex] = bottomLeftEmpty;
+		uv [quadIndex + 1] = bottomRightEmpty;
+		uv [quadIndex + 2] = topLeftEmpty;
+		uv [quadIndex + 3] = topRightEmpty;
+	}
+
 	public void SetTile(int x, int y, Sprite sprite) {
-		// TODO if sprite is null, render the empty sprite
-		if (sprite != null) {
-			int quadIndex = ((y * tilePerSide) + x) * 4;
+		int quadIndex = ((y * tilePerSide) + x) * 4;
 
-			Rect rect = sprite.textureRect;
+		Rect rect = sprite.textureRect;
 
-			//Debug.Log ("minx=" + rect.xMin + " maxx=" + rect.xMax);
-
-			uv [quadIndex] = new Vector2 (rect.xMin / textureWidth, rect.yMin / textureHeight);
-			uv [quadIndex + 1] = new Vector2 (rect.xMax / textureWidth, rect.yMin / textureHeight);
-			uv [quadIndex + 2] = new Vector2 (rect.xMin / textureWidth, rect.yMax / textureHeight);
-			uv [quadIndex + 3] = new Vector2 (rect.xMax / textureWidth, rect.yMax / textureHeight);
-		}
+		uv [quadIndex] = new Vector2 (rect.xMin / textureWidth, rect.yMin / textureHeight);
+		uv [quadIndex + 1] = new Vector2 (rect.xMax / textureWidth, rect.yMin / textureHeight);
+		uv [quadIndex + 2] = new Vector2 (rect.xMin / textureWidth, rect.yMax / textureHeight);
+		uv [quadIndex + 3] = new Vector2 (rect.xMax / textureWidth, rect.yMax / textureHeight);
 	}
 	public void SetPartialVerticalTile(int x, int y, Sprite sprite, int yTileOffset) {
 		int quadIndex = ((y * tilePerSide) + x) * 4;

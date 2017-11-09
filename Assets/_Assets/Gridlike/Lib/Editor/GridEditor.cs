@@ -83,7 +83,7 @@ namespace Gridlike {
 				grid.saveOnClose = EditorGUILayout.ToggleLeft ("Save grid on destroy", grid.saveOnClose);
 			}
 
-			if (GUI.changed)
+			if (GUI.changed && !Application.isPlaying)
 				EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
 		}
 

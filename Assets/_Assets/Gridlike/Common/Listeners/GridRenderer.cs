@@ -67,7 +67,7 @@ namespace Gridlike {
 				rend = RegionMeshRenderer.Create (Grid.REGION_SIZE);
 			}
 
-			rend.Initialize (grid.atlas.spriteSheet, grid.atlas.tilePixelSize);
+			rend.Initialize (grid.atlas.spriteSheet, grid.atlas.tilePixelSize, grid.atlas.emptySprite);
 
 			return rend;
 		}
@@ -106,7 +106,7 @@ namespace Gridlike {
 
 					for (int i = 0; i < Grid.REGION_SIZE; i++) {
 						for (int j = 0; j < Grid.REGION_SIZE; j++) {
-							rend.mesh.SetTile (i, j, grid.atlas.emptySprite);
+							rend.mesh.Clear (i, j);
 						}
 					}
 
@@ -123,19 +123,20 @@ namespace Gridlike {
 
 		public override void OnSet(int x, int y, Tile tile) {
 			PositionRegionRenderer renderer = GetContainingRegionRenderer (x, y);
+			GridTriangle triangle = triangles.Get (x, y) as GridTriangle;
 
 			ClearRenderers ();
 			renderer.mesh.PrepareUV ();
 
-			_OnSet (renderer, x, y, tile);
+			_OnSet (triangle, renderer, x, y, tile);
 
 			renderer.mesh.ApplyUV ();
 			ApplyRenderers ();
 		}
-		void _OnSet(PositionRegionRenderer renderer, int x, int y, Tile tile) {
+		void _OnSet(GridTriangle triangle, PositionRegionRenderer renderer, int x, int y, Tile tile) {
 			TileInfo info = grid.atlas [tile.id];
 
-			Clear (renderer, x, y);
+			Clear (triangle, renderer, x, y);
 
 			switch (info.shape) {
 			case TileShape.UP_ONEWAY:
@@ -150,6 +151,7 @@ namespace Gridlike {
 			case TileShape.DOWN_RIGHT_TRIANGLE:
 			case TileShape.UP_LEFT_TRIANGLE:
 			case TileShape.UP_RIGHT_TRIANGLE: {
+
 					JoinTriangle(renderer, info, tile, x, y);
 					break;
 				}
@@ -168,6 +170,7 @@ namespace Gridlike {
 
 					if (region.presented) {
 						PositionRegionRenderer renderer = GetRegionRenderer (regionX, regionY);
+						FiniteComponentGrid triangleRegion = triangles.GetRegion (regionX, regionY);
 
 						int startX = regionX * Grid.REGION_SIZE;
 						int startY = regionY * Grid.REGION_SIZE;
@@ -184,8 +187,12 @@ namespace Gridlike {
 								Tile tile = region.Get (i - startX, j - startY);
 
 								if (tile != null) {
-									_OnSet (renderer, i, j, tile);
-								}
+									if (triangleRegion != null) {
+										_OnSet (triangleRegion.Get (x - startX, y - startY) as GridTriangle, renderer, i, j, tile);
+									} else {
+										_OnSet (null, renderer, i, j, tile);
+									}
+								} 
 							}
 						}
 
@@ -201,6 +208,7 @@ namespace Gridlike {
 		}
 		public override void OnShowRegion(int regionX, int regionY) {
 			FiniteGrid region = grid.GetRegion (regionX, regionY);
+			FiniteComponentGrid regionTriangle = triangles.GetRegion (regionX, regionY);
 			PositionRegionRenderer renderer = GetRegionRenderer (regionX, regionY);
 
 			ClearRenderers ();
@@ -214,7 +222,11 @@ namespace Gridlike {
 					Tile tile = region.Get (i, j);
 
 					if (tile != null && tile.id != 0) {
-						_OnSet (renderer, i + bx, j + by, tile);
+						if (regionTriangle == null) {
+							_OnSet (null, renderer, i + bx, j + by, tile);
+						} else {
+							_OnSet (regionTriangle.Get (i, j) as GridTriangle, renderer, i + bx, j + by, tile);
+						}
 					}
 				}
 			}
@@ -223,13 +235,12 @@ namespace Gridlike {
 			ApplyRenderers ();
 		}
 
-		void Clear(PositionRegionRenderer currentRenderer, int x, int y) {
-			GridTriangle triangle = triangles.Get (x, y) as GridTriangle;
-
+		void Clear(GridTriangle triangle, PositionRegionRenderer currentRenderer, int x, int y) {
 			int relX = x - currentRenderer.regionX * Grid.REGION_SIZE;
 			int relY = y - currentRenderer.regionY * Grid.REGION_SIZE;
 
 			if (triangle != null) {
+
 				TileInfo info = grid.atlas [triangle.id];
 				int actualSize;
 					
@@ -316,7 +327,7 @@ namespace Gridlike {
 				triangles.Set (x, y, null);
 			}
 
-			currentRenderer.mesh.SetTile (relX, relY, grid.atlas.emptySprite);
+			currentRenderer.mesh.Clear (relX, relY);
 		}
 
 		void JoinTriangle(PositionRegionRenderer currentRenderer, TileInfo info, Tile tile, int x, int y) {

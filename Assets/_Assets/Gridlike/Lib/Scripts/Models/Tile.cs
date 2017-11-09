@@ -7,6 +7,7 @@ namespace Gridlike {
 	public class Tile {
 
         [NonSerialized] public TileDictionary dictionary;
+		[NonSerialized] public string name;
 
 		public bool tileGOCenter;
 
