@@ -113,10 +113,6 @@ namespace Gridlike {
 			Place ();
 			return true;
 		}
-		public override bool OnMouseUp() {
-			Place ();
-			return true;
-		}
 		public override bool OnMouse() {
 			Place ();
 			return true;

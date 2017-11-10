@@ -72,34 +72,37 @@ namespace Gridlike {
 		}
 
 		// true if succeeds or there is no GO
-		public bool TryCreateTileGO(TileInfo info, int x, int y, PositionCallback callback) {
+		public Component TryCreateTileGO(TileInfo info, int x, int y, PositionCallback callback) {
 			if (info.tileGO != null) {
 				TileBehaviour behaviour = info.tileGO.GetComponent<TileBehaviour> ();
 
 				if (behaviour == null) {
 					if (componentGrid.Get (x, y) != null) {
-						return false;
+						return null;
 					}
 				} else {
 					if (HasOverlap (x, y, behaviour)) {
-						return false;
+						return null;
 					}
 				}
 
-				_CreateTileGO (info.tileGO, x, y, callback);
+				return _CreateTileGO (info.tileGO, x, y, callback);
 			}
 
-			return true;
+			return null;
 		}
 
 		// PRECONDITION: space is available!
-		public void CreateTileGO(TileInfo info, int x, int y, PositionCallback callback) {
+		public Component CreateTileGO(TileInfo info, int x, int y, PositionCallback callback) {
 			if (info.tileGO != null) {
-				_CreateTileGO (info.tileGO, x, y, callback);
+				return _CreateTileGO (info.tileGO, x, y, callback);
+			} else {
+				return null;
 			}
 		}
-		void _CreateTileGO(GameObject prefab, int x, int y, PositionCallback callback) {
+		Component _CreateTileGO(GameObject prefab, int x, int y, PositionCallback callback) {
 			GameObject tile = Object.Instantiate (prefab);
+
 			tile.transform.SetParent (container.transform);
 			tile.transform.localPosition = new Vector2 (x + 0.5f, y + 0.5f);
 
@@ -129,12 +132,16 @@ namespace Gridlike {
 					tileBehaviour._y, 
 					tileBehaviour
 				);
+
+				return tileBehaviour;
 			} else {
 				componentGrid.Set (x, y, tile.transform);
+
+				return tile.transform;
 			}
 		}
 
-		public void DestroyTileGO(int x, int y, PositionCallback callback) {
+		public Component DestroyTileGO(int x, int y, PositionCallback callback) {
 			Component component = componentGrid.Get (x, y);
 
 			if (component != null) {
@@ -162,7 +169,10 @@ namespace Gridlike {
 					Object.Destroy (component.gameObject);
 				else
 					Object.DestroyImmediate (component.gameObject);
+
+				return component;
 			}
+			return null;
 		}
 
 		public FiniteComponentGrid GetRegion(int regionX, int regionY) {

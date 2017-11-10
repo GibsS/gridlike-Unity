@@ -31,5 +31,8 @@ namespace Gridlike {
 		public void Destroy() {
 			grid.Clear (_x, _y);
 		}
+
+		public virtual void OnShow() { }
+		public virtual void OnHide() { }
 	}
 }

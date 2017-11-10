@@ -11,8 +11,8 @@ namespace Gridlike {
 		int selectedY;
 
 		public InspectorTool() {
-			selectedX = Mathf.Max(1, PlayerPrefs.GetInt ("grid.inspector.selectedX"));
-			selectedY = Mathf.Max(1, PlayerPrefs.GetInt ("grid.inspector.selectedY"));
+			selectedX = PlayerPrefs.GetInt ("grid.inspector.selectedX");
+			selectedY = PlayerPrefs.GetInt ("grid.inspector.selectedY");
 		}
 
 		public override void Serialize() {

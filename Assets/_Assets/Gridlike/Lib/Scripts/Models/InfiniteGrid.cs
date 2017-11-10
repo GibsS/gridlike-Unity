@@ -164,6 +164,8 @@ namespace Gridlike {
 						tile.ApplyExtra (extra);
 					}
 				}
+
+				extras = null;
 			}
 		}
 		public void SaveExtra() {

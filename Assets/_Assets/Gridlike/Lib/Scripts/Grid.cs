@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// #### POTENTIAL IMPROVEMENTS ##
+// Grid updater component: iterates through tiles and updates there information (potentially through compute shader?)
+
 // Improve grid editor + atlas (2-3 days)
 // Better palette (with subId picker?)
 
@@ -10,24 +13,13 @@ using UnityEngine;
 // Have sprite size verification with error boxes in tile atlas
 // Tighter encapsulation with tile info and sprites
 
-
 // TICKETS
-
-// Fixing dictionary (do NOT create dictionary for every tile) (1 day) (do with look up at the same time)
-// Tile GO look up dictionary [runtime] (1-2 days)
-
 // Character controller (7-14 days)
 // Improving performance on serializing
-
-// #### POTENTIAL IMPROVEMENTS ##
-// Grid updater component: iterates through tiles and updates there information (potentially through compute shader?)
 
 // OPTIMIZATION
 // Grid hash: Replace list of regions by actual hash table and see performance differences
 // Loading: Use asynchronous loading or make the data smaller
-
-// TILE GO
-// Add concept of tile GO name (+ lookup)
 
 // BUGS
 // Allow regular gizmos to be accessed even when the grid is selected
@@ -36,9 +28,13 @@ using UnityEngine;
 // Handle subids, see their limit, define contract and preconditions..
 // Make sure if an id is said to be placeable at a given place, it is actually placeable there
 
+// COMMENTS
+
 // SAMPLES
 
 // TUTORIALS
+
+// MANUAL
 
 // CLEAN UP
 // Remove as many public field as possible (once tests are defined)
@@ -85,6 +81,8 @@ namespace Gridlike {
 
 		public bool showOnSet;
 
+		Dictionary<string, List<TileBehaviour>> nameToTileGO;
+
 		void Init() {
 			if (tiles == null) {
 				gridDelegate = GetComponent<GridDataDelegate> ();
@@ -113,6 +111,33 @@ namespace Gridlike {
 			grids.Add (this);
 
 			Init ();
+
+			LoadExtra ();
+
+			nameToTileGO = new Dictionary<string, List<TileBehaviour>> ();
+
+			foreach (FiniteGrid region in GetRegions()) {
+				if (region.presented) {
+					FiniteComponentGrid components = tileGOs.GetRegion (region.regionX, region.regionY);
+
+					if(components != null) {
+
+						for (int i = 0; i < Grid.REGION_SIZE; i++) {
+							for (int j = 0; j < Grid.REGION_SIZE; j++) {
+								Tile tile = region.Get (i, j);
+
+								if (tile.tileGOCenter) {
+									Component component = components.Get(i, j);
+
+									if (component is TileBehaviour) {
+										RegisterTileGO (tile, component as TileBehaviour);
+									}
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 
 		void OnDestroy() {
@@ -283,9 +308,13 @@ namespace Gridlike {
 					Tile tile = grid.Get (i, j);
 
 					if (tile != null && tile.tileGOCenter) {
-						if (!tileGOs.TryCreateTileGO (atlas [tile.id], bx + i, by + j, (xx, yy) => { })) {
+						Component component = tileGOs.TryCreateTileGO (atlas [tile.id], bx + i, by + j, (xx, yy) => { });
+
+						if (component == null) {
 							tile.tileGOCenter = false;
 							tile.id = 0;
+						} else if (component is TileBehaviour) {
+							if(Application.isPlaying) RegisterTileGO (tile, component as TileBehaviour);
 						}
 					}
 				}
@@ -305,7 +334,11 @@ namespace Gridlike {
 					Tile tile = grid.Get (i, j);
 
 					if (tile != null && tile.tileGOCenter) {
-						tileGOs.DestroyTileGO (bx + i, by + j, (xx, yy) => { });
+						Component component = tileGOs.DestroyTileGO (bx + i, by + j, (xx, yy) => { });
+
+						if (component is TileBehaviour && Application.isPlaying) {
+							UnregisterTileGO (tile, component as TileBehaviour);
+						}
 					}
 				}
 			}
@@ -611,6 +644,8 @@ namespace Gridlike {
 					}
 				});
 
+				if(Application.isPlaying) UnregisterTileGO ((component as TileBehaviour).tile, component as TileBehaviour);
+
 				if (tile.tileGOCenter) {
 					tile.tileGOCenter = false;
 				} else {
@@ -625,13 +660,13 @@ namespace Gridlike {
 			if (tile.tileGOCenter) {
 				_Clear (tile, x, y, true);
 			} else if (tileGOs.GetTileGO (x, y) != null) {
-				Debug.LogError ("[[Gridlike] Impossible to place a tile here: a tile GO occupies this tile");
+				Debug.LogError ("[Gridlike] Impossible to place a tile here: a tile GO occupies this tile");
 				return;
 			}
 
 			if (show) {
 				if (info.tileGO != null) {
-					if (!tileGOs.TryCreateTileGO (info, x, y, (xx, yy) => {
+					Component component = tileGOs.TryCreateTileGO (info, x, y, (xx, yy) => {
 						Tile otherTile = tiles.Get (xx, yy);
 
 						if (otherTile != null) {
@@ -642,9 +677,15 @@ namespace Gridlike {
 								listener.OnSet (xx, yy, otherTile);
 							}
 						}
-					})) {
-						Debug.LogError ("[[Gridlike] Impossible to place a tile GO here: a tile GO already occupies these tiles");
+					});
+						
+					if(component == null) {
+						Debug.LogError ("[Gridlike] Impossible to place a tile GO here: a tile GO already occupies these tiles");
 						return;
+					} else if(component is TileBehaviour && Application.isPlaying) {
+						(component as TileBehaviour)._grid = this;
+
+						RegisterTileGO (tile, component as TileBehaviour);
 					}
 
 					tile.id = id;
@@ -696,6 +737,59 @@ namespace Gridlike {
 				region.LoadExtra ();
 			}
 		}
+
+		#region TILE GO DATA
+
+		void RegisterTileGO(Tile tile, TileBehaviour behaviour) {
+			Debug.Log ("register tile GO center at x=" + behaviour.x + " y=" + behaviour.y);
+			behaviour._grid = this;
+
+			behaviour.OnShow ();
+
+			if (!string.IsNullOrEmpty (tile.name)) {
+				List<TileBehaviour> list;
+
+				if (!nameToTileGO.TryGetValue (tile.name, out list)) {
+					list = new List<TileBehaviour> ();
+				}
+
+				list.Add (behaviour);
+
+				Debug.Log ("Register a tile behaviour under name=" + tile.name);
+			}
+		}
+		void UnregisterTileGO(Tile tile, TileBehaviour behaviour) {
+			if (!string.IsNullOrEmpty (tile.name)) {
+				List<TileBehaviour> list = nameToTileGO [tile.name];
+
+				list.Remove (behaviour);
+			}
+
+			behaviour.OnHide ();
+
+			Debug.Log ("unregister tile GO center at x=" + behaviour.x + " y=" + behaviour.y);
+		}
+
+		public List<TileBehaviour> GetTileBehaviours(string name) {
+			List<TileBehaviour> list = null;
+
+			nameToTileGO.TryGetValue (name, out list);
+
+			return list;
+		}
+		public TileBehaviour GetTileBehaviour(string name) {
+			List<TileBehaviour> list = null;
+
+			nameToTileGO.TryGetValue (name, out list);
+
+			if (list != null && list.Count > 0) {
+				return list [0];
+			} else {
+				return null;
+			}
+		}
+
+		#endregion
 
 		#region REFERENTIAL
 
