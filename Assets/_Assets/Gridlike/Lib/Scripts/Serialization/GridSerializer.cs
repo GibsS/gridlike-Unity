@@ -33,10 +33,12 @@ namespace Gridlike {
 			}
 		}
 
+		string persistentDataPath;
 		bool usePersistentPath;
 		string path;
 
 		public GridSerializer(bool usePersistentPath, string path) {
+			this.persistentDataPath = Application.persistentDataPath;
 			this.usePersistentPath = usePersistentPath;
 			this.path = path;
 		}
@@ -49,7 +51,7 @@ namespace Gridlike {
 
 		public string RootPath() {
 			if (usePersistentPath) {
-				return Application.persistentDataPath + "/" + path;
+				return persistentDataPath + "/" + path;
 			} else {
 				return path;
 			}
@@ -94,11 +96,7 @@ namespace Gridlike {
 				_manifest.regionPositions.Add (point);
 			}
 
-			BinaryFormatter bf = new BinaryFormatter();
-			Directory.CreateDirectory (RootPath());
-			FileStream file = File.Create(RegionPath (tiles.regionX, tiles.regionY));
-			bf.Serialize(file, tiles);
-			file.Close();
+			Serialize (tiles);
 		}
 
 		public void SaveGrid(FiniteGrid tiles) {
@@ -115,17 +113,7 @@ namespace Gridlike {
 		}
 		public void LoadGrid(int X, int Y, FiniteGridCallback callback) {
 			if (File.Exists (RegionPath(X, Y))) {
-				BinaryFormatter bf = new BinaryFormatter ();
-				FileStream file = File.Open (RegionPath(X, Y), FileMode.Open);
-
-				try {
-					callback(bf.Deserialize (file) as FiniteGrid);
-					return;
-				} catch {
-					Debug.Log ("[GridSerializer] Failed to load region X=" + X + "Y=" + Y);
-					callback (null);
-					return;
-				}
+				callback (Deserialize (X, Y));
 			} else {
 				Debug.Log ("[GridSerializer] Region region X=" + X + "Y=" + Y + " not found");
 				callback (null);
@@ -141,5 +129,24 @@ namespace Gridlike {
 			}
 		}
 
+		void Serialize(FiniteGrid tiles) {
+			BinaryFormatter bf = new BinaryFormatter();
+			Directory.CreateDirectory (RootPath());
+			FileStream file = File.Create(RegionPath (tiles.regionX, tiles.regionY));
+			bf.Serialize(file, tiles);
+			file.Close();
+		}
+
+		FiniteGrid Deserialize(int regionX, int regionY) {
+			BinaryFormatter bf = new BinaryFormatter ();
+			FileStream file = File.Open (RegionPath(regionX, regionY), FileMode.Open);
+
+			try {
+				return bf.Deserialize (file) as FiniteGrid;
+			} catch {
+				Debug.Log ("[GridSerializer] Failed to load region X=" + regionX + "Y=" + regionY);
+				return null;
+			}
+		}
 	}
 }

@@ -223,18 +223,18 @@ namespace Gridlike {
 		}
 
 		public void PresentRegion(int X, int Y) {
-			FiniteGrid grid = tiles.GetRegion (X, Y);
+			FiniteGrid oldRegion = tiles.GetRegion (X, Y);
 
-			if (grid == null || !grid.presented) {
+			if (oldRegion == null || !oldRegion.presented) {
 
-				if (grid == null) {
-					LoadRegion (X, Y);
-
-					grid = tiles.GetRegion (X, Y);
-				}
-
-				if (grid != null) {
-					_PresentRegion (X, Y, grid);
+				if (oldRegion == null) {
+					_LoadRegion (X, Y, region => {
+						if(region != null) {
+							_PresentRegion (X, Y, region);
+						}
+					});
+				} else {
+					_PresentRegion (X, Y, oldRegion);
 				}
 			}
 		}
@@ -247,6 +247,9 @@ namespace Gridlike {
 		}
 
 		public void LoadRegion(int X, int Y) {
+			_LoadRegion (X, Y, null);
+		}
+		void _LoadRegion(int X, int Y, FiniteGridCallback callback) {
 			if (gridDelegate != null) {
 				FiniteGrid region = tiles.GetRegion (X, Y);
 
@@ -259,6 +262,8 @@ namespace Gridlike {
 
 							tiles.SetRegion (X, Y, newRegion);
 						}
+
+						if(callback != null) callback(newRegion);
 					});
 				}
 			}
