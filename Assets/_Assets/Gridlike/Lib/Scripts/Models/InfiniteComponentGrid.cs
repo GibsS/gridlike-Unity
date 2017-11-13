@@ -7,11 +7,9 @@ namespace Gridlike {
 	[Serializable]
 	public class InfiniteComponentGrid {
 
-		[SerializeField]
-		public int _regionSize;
+		[SerializeField] public int _regionSize;
 
-		[SerializeField]
-		public List<FiniteComponentGrid> regions;
+		[SerializeField] public List<FiniteComponentGrid> regions;
 
 		public InfiniteComponentGrid(int gridSize) {
 			_regionSize = gridSize;

@@ -3336,7 +3336,7 @@ MonoBehaviour:
   atlas: {fileID: 11400000, guid: 7cd6bb9c26d744a418d3f5b76989fcd8, type: 2}
   useLoading: 1
   useAgentBasedLoading: 1
-  saveOnClose: 0
+  saveOnClose: 1
   showOnSet: 0
 --- !u!114 &1469547351
 MonoBehaviour:

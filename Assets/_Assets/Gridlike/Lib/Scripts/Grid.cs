@@ -252,6 +252,7 @@ namespace Gridlike {
 
 				if (region == null) {
 					region = gridDelegate.LoadTiles (X, Y);
+					region.presented = false;
 
 					if (region != null) {
 						region.LoadExtra ();
