@@ -23,7 +23,9 @@ namespace Gridlike {
 
 		public static void Initialize() {
 			if (_instance == null) {
-				GameObject go = new GameObject ("Gridlike pools");
+				GameObject go = GameObject.Find ("Gridlike");
+				if (go == null) go = new GameObject ("Gridlike");
+
 				go.transform.position = Vector2.zero;
 				_instance = go.AddComponent<GridlikePools> ();
 

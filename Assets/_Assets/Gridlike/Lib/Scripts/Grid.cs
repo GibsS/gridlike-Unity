@@ -77,8 +77,6 @@ namespace Gridlike {
 		public bool useAgentBasedLoading;
 		GridAgentLoadPolicy loadPolicy;
 
-		public bool saveOnClose;
-
 		public bool showOnSet;
 
 		Dictionary<string, List<TileBehaviour>> nameToTileGO;
@@ -143,10 +141,6 @@ namespace Gridlike {
 		void OnDestroy() {
 			foreach (GridListener listener in GetComponents<GridListener> ()) {
 				listener.ResetListener ();
-			}
-
-			if (Application.isPlaying && saveOnClose) {
-				SaveAllRegion ();
 			}
 
 			if (grids != null) grids.Remove (this);
@@ -255,6 +249,10 @@ namespace Gridlike {
 
 				if (region == null) {
 					gridDelegate.LoadTiles (X, Y, newRegion => {
+						region = tiles.GetRegion(X, Y);
+
+						if(region != null && region.presented) _HideRegion(X, Y, region);
+
 						if (newRegion != null) {
 							newRegion.presented = false;
 

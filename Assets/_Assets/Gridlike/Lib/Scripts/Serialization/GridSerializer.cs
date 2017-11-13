@@ -95,8 +95,8 @@ namespace Gridlike {
 			if (!_manifest.regionPositions.Contains (point)) {
 				_manifest.regionPositions.Add (point);
 			}
-
-			Serialize (tiles);
+				
+			ThreadManager.CreateJob(() => { Serialize(tiles); return 0; }, (fail, res) => { });
 		}
 
 		public void SaveGrid(FiniteGrid tiles) {
@@ -113,7 +113,11 @@ namespace Gridlike {
 		}
 		public void LoadGrid(int X, int Y, FiniteGridCallback callback) {
 			if (File.Exists (RegionPath(X, Y))) {
-				callback (Deserialize (X, Y));
+				ThreadManager.CreateJob(() => Deserialize (X, Y), (fail, res) => {
+					callback(res);
+					if(fail) callback(null); 
+					else callback(res);
+				});
 			} else {
 				Debug.Log ("[GridSerializer] Region region X=" + X + "Y=" + Y + " not found");
 				callback (null);

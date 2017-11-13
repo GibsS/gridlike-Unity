@@ -87,7 +87,12 @@ namespace Gridlike {
 
 			if (grid.useLoading) {
 				grid.useAgentBasedLoading = EditorGUILayout.ToggleLeft ("Use agent based loading", grid.useAgentBasedLoading);
-				grid.saveOnClose = EditorGUILayout.ToggleLeft ("Save grid on destroy", grid.saveOnClose);
+
+				if (Application.isPlaying) {
+					if (GUILayout.Button ("Save grid")) {
+						grid.SaveAllRegion ();
+					}
+				}
 			}
 
 			if (GUI.changed && !Application.isPlaying)
