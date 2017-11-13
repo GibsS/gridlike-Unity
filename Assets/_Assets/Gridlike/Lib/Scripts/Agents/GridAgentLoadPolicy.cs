@@ -25,7 +25,7 @@ namespace Gridlike {
                 int X = Mathf.FloorToInt(relativePosition.x / Grid.REGION_SIZE);
                 int Y = Mathf.FloorToInt(relativePosition.y / Grid.REGION_SIZE);
 
-				if (oldX != X || oldY != Y && !processing) {
+				if ((oldX != X || oldY != Y) && !processing) {
 					UpdateFromPosition (X, Y);
 				}
 			}
@@ -66,6 +66,8 @@ namespace Gridlike {
 					yield return null;
 				}
 			}
+
+			yield return new WaitForSeconds (4);
 
 			processing = false;
 		}

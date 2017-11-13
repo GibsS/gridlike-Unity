@@ -1,9 +1,12 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Gridlike {
-	
+
+	// TODO MOVe
+	public delegate void FiniteGridCallback(FiniteGrid region);
+
 	[ExecuteInEditMode]
 	[RequireComponent(typeof(Grid))]
 	public abstract class GridDataDelegate : MonoBehaviour {
@@ -46,7 +49,7 @@ namespace Gridlike {
 			}
 		}
 
-		public abstract FiniteGrid LoadTiles (int regionX, int regionY);
+		public abstract void LoadTiles (int regionX, int regionY, FiniteGridCallback callback);
 		public abstract void SaveTiles (int regionX, int regionY, FiniteGrid tiles);
 	}
 }

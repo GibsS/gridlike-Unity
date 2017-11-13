@@ -113,20 +113,23 @@ namespace Gridlike {
 
 			SaveManifest ();
 		}
-		public FiniteGrid LoadGrid(int X, int Y) {
+		public void LoadGrid(int X, int Y, FiniteGridCallback callback) {
 			if (File.Exists (RegionPath(X, Y))) {
 				BinaryFormatter bf = new BinaryFormatter ();
 				FileStream file = File.Open (RegionPath(X, Y), FileMode.Open);
 
 				try {
-					return bf.Deserialize (file) as FiniteGrid;
+					callback(bf.Deserialize (file) as FiniteGrid);
+					return;
 				} catch {
 					Debug.Log ("[GridSerializer] Failed to load region X=" + X + "Y=" + Y);
-					return null;
+					callback (null);
+					return;
 				}
 			} else {
 				Debug.Log ("[GridSerializer] Region region X=" + X + "Y=" + Y + " not found");
-				return null;
+				callback (null);
+				return;
 			}
 		}
 
@@ -137,5 +140,6 @@ namespace Gridlike {
 				Directory.Delete (RootPath (), true);
 			}
 		}
+
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 namespace Gridlike {
 	
@@ -85,10 +86,10 @@ namespace Gridlike {
 			this.algorithm = algorithm;
 		}
 
-		public override FiniteGrid LoadTiles (int regionX, int regionY) {
+		public override void LoadTiles (int regionX, int regionY, FiniteGridCallback callback) {
 			if (useSave && gridSerializer.IsRegionSaved(regionX, regionY)) {
-				FiniteGrid grid = gridSerializer.LoadGrid (regionX, regionY);
-				return grid;
+				gridSerializer.LoadGrid (regionX, regionY, callback);
+				return;
 			}
 
 			LargeRegion largeRegion = GetRegions (regionX, regionY);
@@ -120,7 +121,7 @@ namespace Gridlike {
 			int xOffset = (regionX - largeRegion.regionX) * Grid.REGION_SIZE;
 			int yOffset = (regionY - largeRegion.regionY) * Grid.REGION_SIZE;
 
-			FiniteGrid region = new FiniteGrid(regionX, regionY, Grid.REGION_SIZE);
+			FiniteGrid region2 = new FiniteGrid(regionX, regionY, Grid.REGION_SIZE);
 
 			bool empty = true;
 			for (int i = 0; i < Grid.REGION_SIZE; i++) {
@@ -129,14 +130,14 @@ namespace Gridlike {
 
 					if (tile.id > 0) empty = false;
 
-					region.Set(i, j, tile);
+					region2.Set(i, j, tile);
 				}
 			}
 
 			if (empty) {
-				return null;
+				callback (null);
 			} else {
-				return region;
+				callback (region2);
 			}
 		}
 		public override void SaveTiles (int regionX, int regionY, FiniteGrid tiles) {

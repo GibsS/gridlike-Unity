@@ -53,13 +53,13 @@ namespace Gridlike {
 			gridSerializer = new GridSerializer (usePersistentPath, path);
 		}
 
-		public override FiniteGrid LoadTiles (int regionX, int regionY) {
+		public override void LoadTiles (int regionX, int regionY, FiniteGridCallback callback) {
 			if (gridSerializer.IsRegionSaved(regionX, regionY)) {
-				FiniteGrid grid = gridSerializer.LoadGrid (regionX, regionY);
-				return grid;
+				gridSerializer.LoadGrid (regionX, regionY, callback);
+				return;
 			}
 
-			return null;
+			callback (null);
 		}
 		public override void SaveTiles (int regionX, int regionY, FiniteGrid tiles) {
 			gridSerializer.SaveGrid (tiles);

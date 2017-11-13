@@ -251,14 +251,15 @@ namespace Gridlike {
 				FiniteGrid region = tiles.GetRegion (X, Y);
 
 				if (region == null) {
-					region = gridDelegate.LoadTiles (X, Y);
-					region.presented = false;
+					gridDelegate.LoadTiles (X, Y, newRegion => {
+						if (newRegion != null) {
+							newRegion.presented = false;
 
-					if (region != null) {
-						region.LoadExtra ();
+							newRegion.LoadExtra ();
 
-						tiles.SetRegion (X, Y, region);
-					}
+							tiles.SetRegion (X, Y, newRegion);
+						}
+					});
 				}
 			}
 		}
