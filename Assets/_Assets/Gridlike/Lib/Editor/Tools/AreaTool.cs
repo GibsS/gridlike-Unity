@@ -31,7 +31,7 @@ namespace Gridlike {
 			return true;
 		}
 		public override string Name() {
-			return "select";
+			return "drag";
 		}
 
 		public override bool Window () {

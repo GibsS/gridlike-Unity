@@ -8,18 +8,34 @@ using UnityEngine;
 // Improve grid editor + atlas (2-3 days)
 // Better palette (with subId picker?)
 
+// Character controller (7-14 days)
+
 // TILE ATLAS
 // Add the drag and drop if possible to the tile atlas (maybe into a window dedicated to it)
 // Have sprite size verification with error boxes in tile atlas
 // Tighter encapsulation with tile info and sprites
 
-// TICKETS
-// Character controller (7-14 days)
-// Improving performance on serializing
+// Serialization: Allow the creation of the world ahead of time, saving to be loaded later on
+// Scriptable objects storage of grid tiles
+
+// Add some form of model validation including:
+// - does id exist
+// - does subId exist
+// - triangles are coherent
+// - tileGO do not overlap
+
+
+
+
+// Clean up inspector for different components
+
+// Add that other guys 2D character controller
 
 // OPTIMIZATION
 // Grid hash: Replace list of regions by actual hash table and see performance differences
-// Loading: Use asynchronous loading or make the data smaller
+// clear listener regions when not used
+// factorize mesh renderer material
+// add show on set multiple tiles
 
 // BUGS
 // Allow regular gizmos to be accessed even when the grid is selected
@@ -44,15 +60,6 @@ using UnityEngine;
 // 2. Grid editing
 // 3. Procedural generation
 // 4. Simple ship + miner (place blocks wherever, mine whatever) example
-
-// Serialization: Allow the creation of the world ahead of time, saving to be loaded later on
-// Scriptable objects storage of grid tiles
-
-// Add some form of model validation including:
-// - does id exist
-// - does subId exist
-// - triangles are coherent
-// - tileGO do not overlap
 
 namespace Gridlike {
 
@@ -80,6 +87,7 @@ namespace Gridlike {
 		public bool showOnSet;
 
 		Dictionary<string, List<TileBehaviour>> nameToTileGO;
+		List<Point> loadingTiles;
 
 		void Init() {
 			if (tiles == null) {
@@ -113,6 +121,7 @@ namespace Gridlike {
 			LoadExtra ();
 
 			nameToTileGO = new Dictionary<string, List<TileBehaviour>> ();
+			loadingTiles = new List<Point> ();
 
 			foreach (FiniteGrid region in GetRegions()) {
 				if (region.presented) {
@@ -244,11 +253,16 @@ namespace Gridlike {
 			_LoadRegion (X, Y, null);
 		}
 		void _LoadRegion(int X, int Y, FiniteGridCallback callback) {
-			if (gridDelegate != null) {
+			Point p = new Point (X, Y);
+			if (gridDelegate != null && !loadingTiles.Contains(p)) {
+
 				FiniteGrid region = tiles.GetRegion (X, Y);
 
 				if (region == null) {
+					loadingTiles.Add (p);
+
 					gridDelegate.LoadTiles (X, Y, newRegion => {
+						loadingTiles.Remove(p);
 						region = tiles.GetRegion(X, Y);
 
 						if(region != null && region.presented) _HideRegion(X, Y, region);

@@ -4,7 +4,7 @@ using System;
 namespace Gridlike {
 	
 	[Serializable]
-	public class Point {
+	public class Point : IEquatable<Point> {
 
 		[SerializeField] public int x { get; private set; }
 		[SerializeField] public int y { get; private set; }
