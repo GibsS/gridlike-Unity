@@ -19,11 +19,14 @@ namespace Gridlike {
 
 			GUI.enabled = !Application.isPlaying;
 
+			EditorGUILayout.LabelField("Generation algorithm", EditorStyles.boldLabel);
+
 			generator.algorithm = EditorGUILayout.ObjectField ("Algorithm", (GridGeneratorAlgorithm)generator.algorithm, typeof(GridGeneratorAlgorithm), false) as GridGeneratorAlgorithm;
 
 			generator.generationRegionWidth = Mathf.Max (1, EditorGUILayout.IntField ("Generation region width", generator.generationRegionWidth));
 			generator.generationRegionHeight = Mathf.Max (1, EditorGUILayout.IntField ("Generation region height", generator.generationRegionHeight));
 
+			EditorGUILayout.LabelField("Saving", EditorStyles.boldLabel);
 			generator.useSave = EditorGUILayout.ToggleLeft ("Use saving", generator.useSave);
 
 			if (generator.useSave) {

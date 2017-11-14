@@ -65,24 +65,7 @@ namespace Gridlike {
 			EditorGUILayout.ObjectField("Script", MonoScript.FromMonoBehaviour((Grid)target), typeof(Grid), false);
 			GUI.enabled = true;
 
-			if (GUILayout.Button ("Rebuild")) {
-				grid.PresentAllAgain ();
-			}
-			if (GUILayout.Button ("Hide all")) {
-				grid.HideAll ();
-			}
-
-			if (grid.atlas == null) {
-				EditorGUILayout.HelpBox ("The grid requires a tile atlas", MessageType.Warning);
-			}
-			grid.atlas = EditorGUILayout.ObjectField("Tile atlas", grid.atlas, typeof(ScriptableObject), false) as TileAtlas;
-
-			if (GUILayout.Button ("Create new tile atlas")) {
-				grid.atlas = ScriptableObjectUtility.CreateAsset<TileAtlas> ();
-
-				Selection.activeObject = grid.atlas;
-			}
-
+			EditorGUILayout.LabelField ("Grid data", EditorStyles.boldLabel);
 			grid.useLoading = EditorGUILayout.ToggleLeft ("Use loading", grid.useLoading);
 
 			if (grid.useLoading) {
@@ -93,6 +76,26 @@ namespace Gridlike {
 						grid.SaveAllRegion ();
 					}
 				}
+			}
+
+			EditorGUILayout.LabelField("Grid listeners", EditorStyles.boldLabel);
+			if (GUILayout.Button ("Rebuild")) {
+				grid.PresentAllAgain ();
+			}
+			if (GUILayout.Button ("Hide all")) {
+				grid.HideAll ();
+			}
+
+			EditorGUILayout.LabelField("Atlas", EditorStyles.boldLabel);
+			if (grid.atlas == null) {
+				EditorGUILayout.HelpBox ("The grid requires a tile atlas", MessageType.Warning);
+			}
+			grid.atlas = EditorGUILayout.ObjectField("Tile atlas", grid.atlas, typeof(ScriptableObject), false) as TileAtlas;
+
+			if (GUILayout.Button ("Create new tile atlas")) {
+				grid.atlas = ScriptableObjectUtility.CreateAsset<TileAtlas> ();
+
+				Selection.activeObject = grid.atlas;
 			}
 
 			if (GUI.changed && !Application.isPlaying)

@@ -27,8 +27,6 @@ using UnityEngine;
 
 
 
-// Clean up inspector for different components
-
 // Add that other guys 2D character controller
 
 // OPTIMIZATION
