@@ -9,6 +9,7 @@ namespace Gridlike {
 
 	[ExecuteInEditMode]
 	[RequireComponent(typeof(Grid))]
+	[DisallowMultipleComponent]
 	public abstract class GridDataDelegate : MonoBehaviour {
 
 		[SerializeField] public Grid grid { get; private set; }

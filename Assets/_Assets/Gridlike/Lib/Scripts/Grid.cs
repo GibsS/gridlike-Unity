@@ -9,6 +9,7 @@ using UnityEngine;
 // Better palette (with subId picker?)
 
 // Character controller (7-14 days)
+// Replace EasingFunction with Easing (much more straight forward and more efficient)
 
 // TILE ATLAS
 // Add the drag and drop if possible to the tile atlas (maybe into a window dedicated to it)
@@ -26,13 +27,6 @@ using UnityEngine;
 
 
 
-
-// Add that other guys 2D character controller
-
-// OPTIMIZATION
-// clear listener regions when not used
-// factorize mesh renderer material
-// add show on set multiple tiles
 
 // BUGS
 // Allow regular gizmos to be accessed even when the grid is selected
@@ -62,6 +56,7 @@ namespace Gridlike {
 
 	[ExecuteInEditMode]
 	[AddComponentMenu("Gridlike/Grid")]
+	[DisallowMultipleComponent]
 	public class Grid : MonoBehaviour {
 
 		public const int REGION_SIZE = 50;
@@ -249,7 +244,7 @@ namespace Gridlike {
 		public void LoadRegion(int X, int Y) {
 			_LoadRegion (X, Y, null);
 		}
-		void _LoadRegion(int X, int Y, FiniteGridCallback callback) {
+		void _LoadRegion(int X, int Y, Action<FiniteGrid> callback) {
 			Point p = new Point (X, Y);
 			if (gridDelegate != null && !loadingTiles.Contains(p)) {
 
@@ -496,7 +491,6 @@ namespace Gridlike {
 			}
 		}
 
-		// TODO Implement optimization for grid collider
 		public delegate Tile SetCallback (int x, int y);
 		public delegate int SetIntCallback (int x, int y);
 		public delegate void AreaAction(int xInArea, int yInArea, int xInRegion, int yInRegion, int xInGrid, int yInGrid, FiniteGrid region);
@@ -606,6 +600,8 @@ namespace Gridlike {
 			for (int regionX = minRegionX; regionX <= maxRegionX; regionX++) {
 				for (int regionY = minRegionY; regionY <= maxRegionY; regionY++) {
 					FiniteGrid region = tiles.GetOrCreateRegion (regionX, regionY);
+
+					if (showOnSet && !region.presented) _PresentRegion (regionX, regionY, region);
 
 					int gridStartX = regionX * Grid.REGION_SIZE;
 					int gridStartY = regionY * Grid.REGION_SIZE;
@@ -757,7 +753,6 @@ namespace Gridlike {
 		#region TILE GO DATA
 
 		void RegisterTileGO(Tile tile, TileBehaviour behaviour) {
-			Debug.Log ("register tile GO center at x=" + behaviour.x + " y=" + behaviour.y);
 			behaviour._grid = this;
 
 			behaviour.OnShow ();
@@ -770,8 +765,6 @@ namespace Gridlike {
 				}
 
 				list.Add (behaviour);
-
-				Debug.Log ("Register a tile behaviour under name=" + tile.name);
 			}
 		}
 		void UnregisterTileGO(Tile tile, TileBehaviour behaviour) {
@@ -782,8 +775,6 @@ namespace Gridlike {
 			}
 
 			behaviour.OnHide ();
-
-			Debug.Log ("unregister tile GO center at x=" + behaviour.x + " y=" + behaviour.y);
 		}
 
 		public List<TileBehaviour> GetTileBehaviours(string name) {
