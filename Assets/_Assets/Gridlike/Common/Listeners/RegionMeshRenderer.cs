@@ -37,13 +37,10 @@ public class RegionMeshRenderer : MonoBehaviour {
 		GenerateMesh ();
 	}
 
-	public void Initialize(Texture2D texture, int tilePixelSize, Sprite emptySprite) {
-		textureWidth = texture.width;
-		textureHeight = texture.height;
+	public void Initialize(Material material, int tilePixelSize, Sprite emptySprite) {
+		textureWidth = material.mainTexture.width;
+		textureHeight = material.mainTexture.height;
 		this.tilePixelSize = tilePixelSize;
-
-		Material material = new Material (Shader.Find ("Sprites/Default"));
-		material.mainTexture = texture;
 
 		meshRenderer.material = material;
 

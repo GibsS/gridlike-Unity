@@ -19,6 +19,8 @@ namespace Gridlike {
 
 		public TileInfo[] atlas;
 
+		public Material material;
+
 		public int Count { 
 			get {
 				int count = 0;

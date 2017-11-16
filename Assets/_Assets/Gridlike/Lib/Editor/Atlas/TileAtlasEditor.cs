@@ -45,6 +45,12 @@ namespace Gridlike {
 			EditorGUILayout.ObjectField("Sprite sheet", atlas.spriteSheet, typeof(Texture2D), false);
 			GUI.enabled = true;
 
+			atlas.material = EditorGUILayout.ObjectField ("Material", atlas.material, typeof(Material), false) as Material;
+			if (atlas.material == null) {
+				atlas.material = new Material (Shader.Find ("Sprites/Default"));
+			}
+			atlas.material.mainTexture = atlas.spriteSheet;
+
 			// SPRITE SHEET PATH
 			atlas.useRelativePath = EditorGUILayout.Toggle("Sprite sheet path is relative", atlas.useRelativePath);
 

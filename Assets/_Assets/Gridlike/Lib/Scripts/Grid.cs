@@ -30,7 +30,6 @@ using UnityEngine;
 // Add that other guys 2D character controller
 
 // OPTIMIZATION
-// Grid hash: Replace list of regions by actual hash table and see performance differences
 // clear listener regions when not used
 // factorize mesh renderer material
 // add show on set multiple tiles
