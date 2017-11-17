@@ -25,7 +25,7 @@ using UnityEngine;
 // - triangles are coherent
 // - tileGO do not overlap
 
-
+// The spritesheet doesn't update every time a sprite is added 
 
 
 // BUGS

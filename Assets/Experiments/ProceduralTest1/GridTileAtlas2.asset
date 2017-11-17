@@ -100,19 +100,34 @@ MonoBehaviour:
       - {fileID: 21300000, guid: e07c95b8ecb1d834d99aa4ce7587cbed, type: 3}
       - {fileID: 21300000, guid: 6bee4aece6ffcc04c85fd3a50d77b816, type: 3}
     subIdSpriteInfo: []
-  - id: 0
-    name: 
-    shape: 0
+  - id: 5
+    name: up oneway
+    shape: 2
     isVertical: 0
     isTrigger: 0
     layer: 0
-    tag: 
+    tag: Untagged
     isGODetached: 0
     tileGO: {fileID: 0}
     idSpriteInfo:
-      sprite: {fileID: 0}
+      sprite: {fileID: 21300016, guid: 14d458ee54e0cc1438b099feac784f9d, type: 3}
       sprites: []
-      importedSprite: {fileID: 0}
+      importedSprite: {fileID: 21300000, guid: 65d9e0a0a88a18d419ef3f77a219d7d4, type: 3}
+      importedSprites: []
+    subIdSpriteInfo: []
+  - id: 6
+    name: left oneway
+    shape: 4
+    isVertical: 1
+    isTrigger: 0
+    layer: 0
+    tag: Untagged
+    isGODetached: 0
+    tileGO: {fileID: 0}
+    idSpriteInfo:
+      sprite: {fileID: 21300018, guid: 14d458ee54e0cc1438b099feac784f9d, type: 3}
+      sprites: []
+      importedSprite: {fileID: 21300000, guid: d1887bcdb7d2de84eb0400ea2e6a9e38, type: 3}
       importedSprites: []
     subIdSpriteInfo: []
   - id: 0
@@ -460,18 +475,4 @@ MonoBehaviour:
       importedSprite: {fileID: 0}
       importedSprites: []
     subIdSpriteInfo: []
-  - id: 0
-    name: 
-    shape: 0
-    isVertical: 0
-    isTrigger: 0
-    layer: 0
-    tag: 
-    isGODetached: 0
-    tileGO: {fileID: 0}
-    idSpriteInfo:
-      sprite: {fileID: 0}
-      sprites: []
-      importedSprite: {fileID: 0}
-      importedSprites: []
-    subIdSpriteInfo: []
+  material: {fileID: 0}

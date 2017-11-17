@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 14d458ee54e0cc1438b099feac784f9d
-timeCreated: 1509659209
+timeCreated: 1510957374
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -12,6 +12,8 @@ TextureImporter:
     21300010: sprite_4_0_1
     21300012: sprite_4_0_2
     21300014: sprite_4_0_3
+    21300016: sprite_5_0_1
+    21300018: sprite_6_0_1
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -139,6 +141,32 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 48
+        y: 16
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: sprite_5_0_1
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 16
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: -1
+    - serializedVersion: 2
+      name: sprite_6_0_1
+      rect:
+        serializedVersion: 2
+        x: 80
         y: 16
         width: 16
         height: 16
