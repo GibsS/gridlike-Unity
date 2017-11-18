@@ -3,6 +3,7 @@ using PC2D;
 using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider2D))]
+[DisallowMultipleComponent]
 public class PlatformerMotor2D : MonoBehaviour
 {
     #region Public
@@ -1664,6 +1665,8 @@ public class PlatformerMotor2D : MonoBehaviour
         {
             ladderZone = LadderZone.Middle;
         }
+
+		Debug.Log (_movingPlatformState.platform);
     }
 
     private float UpdateMotor(float deltaTime)
@@ -1960,16 +1963,15 @@ public class PlatformerMotor2D : MonoBehaviour
         _movingPlatformState.platform = null;
         _movingPlatformState.stuckToWall = CollidedSurface.None;
 
-        //Debug.Log(collidingAgainst);
+		GameObject movingPlatform = null;
 
-        if (HasFlag(CollidedSurface.Ground))
-        {
-            //Debug.Log(IsMovingPlatform(_collidersUpAgainst[DIRECTION_DOWN].gameObject));
-        }
+		if (_collidersUpAgainst [DIRECTION_DOWN] != null) {
+			movingPlatform = GetMovingPlatform (_collidersUpAgainst [DIRECTION_DOWN]);
+		}
         
-        if (HasFlag(CollidedSurface.Ground) && IsMovingPlatform(_collidersUpAgainst[DIRECTION_DOWN].gameObject))
+		if (HasFlag(CollidedSurface.Ground) && movingPlatform != null && IsMovingPlatform(movingPlatform))
         {
-            _movingPlatformState.platform = _collidersUpAgainst[DIRECTION_DOWN].GetComponent<MovingPlatformMotor2D>();
+			_movingPlatformState.platform = movingPlatform.GetComponent<MovingPlatformMotor2D>();
 
             if (fallFast)
             {
@@ -2999,10 +3001,16 @@ public class PlatformerMotor2D : MonoBehaviour
 
                 if (isTouching)
                 {
-                    if (checkWereTouching && ((1 << _hits[i].collider.gameObject.layer) & movingPlatformLayerMask) != 0)
+					GameObject movingPlatform = null;
+
+					if (checkWereTouching) {
+						movingPlatform = GetMovingPlatform (_hits [i].collider);
+					}
+
+					if (checkWereTouching && ((1 << movingPlatform.layer) & movingPlatformLayerMask) != 0)
                     {
                         // If it's a moving platform then we need to know if we were touching.
-                        MovingPlatformMotor2D mpMotor = _hits[i].collider.GetComponent<MovingPlatformMotor2D>();
+						MovingPlatformMotor2D mpMotor = movingPlatform.GetComponent<MovingPlatformMotor2D>();
                         Vector3 curPos = mpMotor.transform.position;
                         mpMotor.transform.position = mpMotor.previousPosition;
                         bool wasTouching = false;
@@ -3033,7 +3041,9 @@ public class PlatformerMotor2D : MonoBehaviour
                     }
                 }
 
-                Vector3 oneWayPlatformForward = _hits[i].collider.transform.TransformDirection(Vector3.up);
+				GameObject platform = GetMovingPlatform (_hits [i].collider);
+
+				Vector3 oneWayPlatformForward = platform.transform.TransformDirection(Vector3.up);
                 float dot = 0;
 
                 if (_velocity != Vector2.zero)
@@ -3042,10 +3052,10 @@ public class PlatformerMotor2D : MonoBehaviour
                         oneWayPlatformForward,
                         _velocity);
                 }
-                else if (((1 << _hits[i].collider.gameObject.layer) & movingPlatformLayerMask) != 0)
+				else if (((1 << platform.layer) & movingPlatformLayerMask) != 0)
                 {
                     // If we aren't moving then it's interesting if it's a moving platform.
-                    MovingPlatformMotor2D mpMotor = _hits[i].collider.GetComponent<MovingPlatformMotor2D>();
+					MovingPlatformMotor2D mpMotor = platform.GetComponent<MovingPlatformMotor2D>();
 
                     if (_movingPlatformState.platform != mpMotor)
                     {
@@ -3475,4 +3485,14 @@ public class PlatformerMotor2D : MonoBehaviour
     }
 
     #endregion
+
+	GameObject GetMovingPlatform(Collider2D collider) {
+		Transform t = collider.transform;
+
+		while (t.parent != null) {
+			t = t.parent;
+		}
+
+		return t.gameObject;
+	}
 }
