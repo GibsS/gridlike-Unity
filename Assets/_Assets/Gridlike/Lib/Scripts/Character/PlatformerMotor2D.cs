@@ -1317,7 +1317,8 @@ public class PlatformerMotor2D : MonoBehaviour
 
         return new Vector2(
             bounds.center.x + multiplier * bounds.size.y / (2 * Mathf.Tan(angle * Mathf.Deg2Rad)),
-            multiplier * bounds.size.y / 2 + bounds.center.y);
+            multiplier * bounds.size.y / 2 + bounds.center.y
+		);
     }
 
     private void UpdateProperties()
@@ -2958,7 +2959,8 @@ public class PlatformerMotor2D : MonoBehaviour
                     0f,
                     direction,
                     distance,
-                    _collisionMask);
+                    _collisionMask
+				);
             }
 
             return Physics2D.Raycast(origin, direction, distance, _collisionMask);
