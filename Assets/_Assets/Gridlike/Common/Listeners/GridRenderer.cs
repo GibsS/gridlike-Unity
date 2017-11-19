@@ -67,6 +67,9 @@ namespace Gridlike {
 				rend = RegionMeshRenderer.Create (Grid.REGION_SIZE);
 			}
 
+			if (grid.atlas.material == null) {
+				grid.atlas.RegenerateMaterial ();
+			}
 			rend.Initialize (grid.atlas.material, grid.atlas.tilePixelSize, grid.atlas.emptySprite);
 
 			return rend;

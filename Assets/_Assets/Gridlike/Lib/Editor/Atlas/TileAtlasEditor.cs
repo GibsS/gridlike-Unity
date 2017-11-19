@@ -331,8 +331,10 @@ namespace Gridlike {
 			}
 
 			foreach (Object obj in AssetDatabase.LoadAllAssetsAtPath (assetPath)) {
-				if (!string.IsNullOrEmpty (obj.name) && obj.name [0] == 's' && obj.name != "sprite_sheet") {
+				if (!string.IsNullOrEmpty (obj.name) && obj.name [0] == 's' && obj.name != "sprite_sheet" && obj is Sprite) {
 					Sprite sprite = obj as Sprite;
+
+					Debug.Log (obj.name);
 
 					string[] values = sprite.name.Split ('_');
 

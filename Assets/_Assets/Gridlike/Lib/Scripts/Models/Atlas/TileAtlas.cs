@@ -177,5 +177,12 @@ namespace Gridlike {
 
 			return tile;
 		}
+
+		public void RegenerateMaterial() {
+			if (material == null) {
+				material = new Material (Shader.Find ("Sprites/Default"));
+				material.mainTexture = spriteSheet;
+			}
+		}
 	}
 }

@@ -1106,6 +1106,19 @@ public class PlatformerMotor2D : MonoBehaviour
     private Bounds _ladderBottomArea;
     private Bounds _ladderTopArea;
 
+	private Vector2 relativeMovingPlatformTransform;
+
+	public void GetRelativeToPlatform() {
+		if (_movingPlatformState.isOnPlatform) {
+			relativeMovingPlatformTransform = _movingPlatformState.platform.transform.InverseTransformPoint (transform.position);
+		}
+	}
+	public void SetRelativeToPlatform() {
+		if (_movingPlatformState.isOnPlatform) {
+			transform.position = _movingPlatformState.platform.position + relativeMovingPlatformTransform;
+		}
+	}
+
     // Contains the various jump variables, this is for organization.
     private class JumpState
     {
@@ -1625,8 +1638,14 @@ public class PlatformerMotor2D : MonoBehaviour
         SetLastJumpType();
     }
 
+	private void Update() {
+		SetRelativeToPlatform ();
+	}
+
     private void FixedUpdate()
     {
+		SetRelativeToPlatform ();
+
         // Frozen?
         if (frozen || timeScale == 0)
         {
@@ -1666,7 +1685,7 @@ public class PlatformerMotor2D : MonoBehaviour
             ladderZone = LadderZone.Middle;
         }
 
-		Debug.Log (_movingPlatformState.platform);
+		GetRelativeToPlatform ();
     }
 
     private float UpdateMotor(float deltaTime)
@@ -1727,8 +1746,9 @@ public class PlatformerMotor2D : MonoBehaviour
         // Update location if on a moving platform.
         if (!IsDashing() && _movingPlatformState.isOnPlatform)
         {
-            Vector3 toNewPos = _movingPlatformState.platform.position - _movingPlatformState.previousPos;
-            transform.position += toNewPos;
+			// REMOVED: moving platform tracking is done through hard setting position of character controller
+            // Vector3 toNewPos = _movingPlatformState.platform.position - _movingPlatformState.previousPos;
+            // transform.position += toNewPos;
 
             _prevColliderBounds = _collider2D.bounds;
         }
@@ -1745,14 +1765,14 @@ public class PlatformerMotor2D : MonoBehaviour
 
         if (col != null)
         {
-            SeparateFromEnvirionment();
+            SeparateFromEnvironment();
             return true;
         }
 
         return false;
     }
 
-    private void SeparateFromEnvirionment()
+    private void SeparateFromEnvironment()
     {
         // We'll start with the corners
         RaycastAndSeparate(
@@ -1814,13 +1834,6 @@ public class PlatformerMotor2D : MonoBehaviour
 
             Vector3 toPointOnCol = pointOnCol - hit.point;
             Vector3 pointToSepFrom = (Vector3)hit.point + Vector3.Project(toPointOnCol, -hit.normal);
-
-            if (movingPlatformDebug)
-            {
-                _point = hit.point;
-                _point2 = pointToSepFrom;
-                _startPosMotor = _collider2D.bounds;
-            }
 
             transform.position += ((Vector3)hit.point - pointToSepFrom) + (Vector3)hit.normal * minDistanceFromEnv;
 
@@ -2351,7 +2364,8 @@ public class PlatformerMotor2D : MonoBehaviour
                         _velocity.y = Accelerate(
                             _velocity.y,
                             gravityMultiplier * Physics2D.gravity.y,
-                            -fallSpeed);
+                            -fallSpeed
+						);
                     }
                     else
                     {
@@ -3430,7 +3444,7 @@ public class PlatformerMotor2D : MonoBehaviour
 
     private void ChangeState(MotorState newState)
     {
-        // no change...
+        // no change
         if (motorState == newState)
         {
             return;
