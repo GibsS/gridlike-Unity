@@ -30,7 +30,8 @@ public class Placer : Tool {
 			GridUtility.GetEmptyNextToBlock (position, out grid, out x, out y);
 			if (grid != null) {
 				character.ConsumeCubes(GSConsts.tiles[id].cubeCost);
-				grid.SetId (x, y, id);
+				GSGrid gsGrid = grid.GetComponent<GSGrid> ();
+				gsGrid.Place (x, y, id);
 			}
 		}
 	}

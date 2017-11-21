@@ -16,7 +16,7 @@ public static class GSConsts {
 				id = 1,
 				cubeCost = 5,
 				HP = 3,
-				cubePerHP = 1
+				cubePerHP = 5
 			} 
 		}
 	};

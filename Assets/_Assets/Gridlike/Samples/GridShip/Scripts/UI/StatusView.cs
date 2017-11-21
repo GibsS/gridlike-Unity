@@ -8,6 +8,10 @@ public class StatusView : MonoBehaviour {
 	public Slider progressSlider;
 	public Text cubeCountText;
 
+	public void Initialize() {
+		progressSlider.interactable = false;
+	}
+
 	public void SetProgress(float progress, float progressMax) {
 		progressSlider.value = progress;
 		progressSlider.maxValue = progressMax;

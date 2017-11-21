@@ -12,6 +12,7 @@ public class RootView : MonoBehaviour {
 
 	public void Initialize() {
 		toolbar.Initialize ();
+		status.Initialize ();
 	}
 
 	public void Show() {

@@ -8,6 +8,7 @@ public class Pickaxe : Tool {
 
 	public float cooldown;
 	public float radius;
+	public int damage;
 
 	float lastPickaxe = -10000;
 
@@ -25,7 +26,11 @@ public class Pickaxe : Tool {
 
 			GridUtility.GetAnyNonEmptyTile (position, out grid, out x, out y);
 
-			if (grid != null) grid.Clear (x, y);
+			if (grid != null) {
+				GSGrid gsGrid = grid.GetComponent<GSGrid> ();
+
+				gsGrid.Damage (character, x, y, damage, position);
+			}
 		}
 	}
 }
