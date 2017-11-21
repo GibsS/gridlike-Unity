@@ -2,15 +2,36 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Placer : MonoBehaviour {
+using Gridlike;
 
-	// Use this for initialization
-	void Start () {
-		
+public class Placer : Tool {
+
+	public static Dictionary<int, int> costs = new Dictionary<int, int> {
+		{ 1, 5 }
+	};
+
+	public int placeId;
+
+	public float radius;
+
+	public override void OnMouseAny (Vector2 position) {
+		TryPlace (position, placeId);
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+
+	void TryPlace(Vector2 position, int id) {
+		if (Vector2.Distance (transform.position, position) < radius 
+			&& GSConsts.TileExists(id) 
+			&& character.GetCubeCount() >= GSConsts.tiles[id].cubeCost) {
+
+			Grid grid;
+			int x;
+			int y;
+
+			GridUtility.GetEmptyNextToBlock (position, out grid, out x, out y);
+			if (grid != null) {
+				character.ConsumeCubes(GSConsts.tiles[id].cubeCost);
+				grid.SetId (x, y, id);
+			}
+		}
 	}
 }

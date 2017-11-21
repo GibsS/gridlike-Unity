@@ -51,6 +51,9 @@ public class GSSingleton : MonoBehaviour {
 
 		if (character.HasPlacer ()) root.toolbar.EnablePlacer ();
 		else root.toolbar.DisablePlacer ();
+
+		character.onAddCube += HandleAddCube;
+		character.onRemoveCube += HandleRemoveCube;
 	}
 
 	public void RegisterCharacter(GSCharacter character) {
@@ -68,6 +71,13 @@ public class GSSingleton : MonoBehaviour {
 
 			Initialize ();
 		}
+	}
+
+	void HandleAddCube(int cube) {
+		root.status.SetCubeCount (character.cubeCount);
+	}
+	void HandleRemoveCube(int cube) {
+		root.status.SetCubeCount (character.cubeCount);
 	}
 
 	void PickBow() {
