@@ -6,6 +6,11 @@ public class GSSingleton : MonoBehaviour {
 
 	public static GSSingleton instance;
 
+	public int totalCube;
+	public int level;
+	public int cubeProgress;
+	public int cubeToNextLevel;
+
 	RootView root;
 
 	GSCharacter character;
@@ -75,6 +80,8 @@ public class GSSingleton : MonoBehaviour {
 
 	void HandleAddCube(int cube) {
 		root.status.SetCubeCount (character.cubeCount);
+
+		IncreaseCubeProgress (character.cubeCount - cube);
 	}
 	void HandleRemoveCube(int cube) {
 		root.status.SetCubeCount (character.cubeCount);
@@ -101,5 +108,25 @@ public class GSSingleton : MonoBehaviour {
 	void AcquirePlacer() {
 		character.AcquirePlacer ();
 		root.toolbar.EnablePlacer ();
+	}
+
+	void InitializeLevel() {
+		root.status.SetLevel (level);
+		cubeToNextLevel = 100;
+	}
+
+	void IncreaseCubeProgress(int added) {
+		totalCube += added;
+		cubeProgress += added;
+
+		if (cubeProgress >= cubeToNextLevel) {
+			cubeProgress -= cubeToNextLevel;
+			level++;
+
+			root.notifications.ShowNotification ("New level!");
+		}
+
+		root.status.SetLevel (level);
+		root.status.SetProgress (cubeProgress, cubeToNextLevel);
 	}
 }

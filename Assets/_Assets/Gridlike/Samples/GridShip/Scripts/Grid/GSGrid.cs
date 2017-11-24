@@ -38,7 +38,6 @@ public class GSGrid : MonoBehaviour {
 			int HP = (int) tile.state1;
 
 			if (behaviour != null) {
-				Debug.Log ("Try and damage tile behaviour");
 				id = behaviour.tile.id;
 				x = behaviour.x;
 				y = behaviour.y;
@@ -56,8 +55,6 @@ public class GSGrid : MonoBehaviour {
 					hpLost = damage;
 					grid.SetState (x, y, HP + damage, 0, 0);
 				}
-
-				Debug.Log ("HP lost=" + hpLost);
 
 				if (position == Vector2.zero) {
 					position = grid.TileCenterInWorld (x, y);

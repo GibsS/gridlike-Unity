@@ -8,11 +8,12 @@ public class NotificationView : MonoBehaviour {
 	const float NOTIFICATION_DURATION = 6;
 
 	public Text text;
+	public GameObject container;
 
 	Queue<string> notifications;
-	float lastNotificationDate;
+	float lastNotificationDate = -NOTIFICATION_DURATION;
 
-	void Initialize() {
+	public void Initialize() {
 		notifications = new Queue<string> ();
 	}
 
@@ -20,10 +21,10 @@ public class NotificationView : MonoBehaviour {
 		if (Time.time - lastNotificationDate > NOTIFICATION_DURATION) {
 			if (notifications.Count > 0) {
 				lastNotificationDate = Time.time;
-				gameObject.SetActive (true);
+				container.SetActive (true);
 				text.text = notifications.Dequeue ();
 			} else {
-				gameObject.SetActive (false);
+				container.SetActive (false);
 			}
 		}
 	}
@@ -33,9 +34,9 @@ public class NotificationView : MonoBehaviour {
 	}
 
 	public void Show() {
-		gameObject.SetActive (true);
+		container.SetActive (true);
 	}
 	public void Hide() {
-		gameObject.SetActive (false);
+		container.SetActive (false);
 	}
 }

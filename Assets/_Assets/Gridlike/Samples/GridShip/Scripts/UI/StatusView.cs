@@ -7,6 +7,7 @@ public class StatusView : MonoBehaviour {
 
 	public Slider progressSlider;
 	public Text cubeCountText;
+	public Text levelText;
 
 	public void Initialize() {
 		progressSlider.interactable = false;
@@ -18,6 +19,10 @@ public class StatusView : MonoBehaviour {
 	}
 	public void SetCubeCount(int cubeCount) {
 		cubeCountText.text = cubeCount + " cube" + (cubeCount == 1 ? "" : "s");
+	}
+
+	public void SetLevel(int level) {
+		levelText.text = "LEVEL " + level;
 	}
 
 	public void Show() {
