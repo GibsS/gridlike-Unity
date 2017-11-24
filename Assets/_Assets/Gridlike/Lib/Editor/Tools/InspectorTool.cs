@@ -34,7 +34,8 @@ namespace Gridlike {
 				EditorGUILayout.LabelField ("Id:" + tile.id.ToString());
 				EditorGUILayout.LabelField ("Sub id:" + tile.subId.ToString());
 
-				EditorGUILayout.LabelField ("Is tile GO center:" +tile.tileGOCenter.ToString());
+				EditorGUILayout.LabelField ("Is tile GO center:" + tile.tileGOCenter.ToString());
+				EditorGUILayout.LabelField ("Has tile component:" + (grid.GetTileComponent (selectedX, selectedY) != null));
 
 				tile.state1 = EditorGUILayout.FloatField ("State1", tile.state1);
 				tile.state2 = EditorGUILayout.FloatField ("State2", tile.state2);

@@ -6,9 +6,8 @@ using Gridlike;
 
 public class Placer : Tool {
 
-	public static Dictionary<int, int> costs = new Dictionary<int, int> {
-		{ 1, 5 }
-	};
+	// TODO factor
+	public TileAtlas atlas;
 
 	public int placeId;
 
@@ -27,7 +26,14 @@ public class Placer : Tool {
 			int x;
 			int y;
 
-			GridUtility.GetEmptyNextToBlock (position, out grid, out x, out y);
+			if (atlas [id].tileGO != null) {
+				GSTileBehaviour behaviour = atlas [id].tileGO.GetComponent<GSTileBehaviour> ();
+
+				GridUtility.GetEmptyInAreaOverBlock (position, behaviour.width, behaviour.height, out grid, out x, out y);
+			} else {
+				GridUtility.GetEmptyNextToBlock (position, out grid, out x, out y);
+			}
+
 			if (grid != null) {
 				character.ConsumeCubes(GSConsts.tiles[id].cubeCost);
 				GSGrid gsGrid = grid.GetComponent<GSGrid> ();

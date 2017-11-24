@@ -33,8 +33,18 @@ public class GSGrid : MonoBehaviour {
 		Tile tile = grid.Get (x, y);
 
 		if (tile != null) {
+			GSTileBehaviour behaviour = grid.GetTileComponent (x, y) as GSTileBehaviour;
 			int id = tile.id;
-			int HP = (int)tile.state1;
+			int HP = (int) tile.state1;
+
+			if (behaviour != null) {
+				Debug.Log ("Try and damage tile behaviour");
+				id = behaviour.tile.id;
+				x = behaviour.x;
+				y = behaviour.y;
+
+				HP = (int) grid.Get (x, y).state1;
+			}
 
 			if (GSConsts.TileExists (id)) {
 				int hpLost;
@@ -47,6 +57,8 @@ public class GSGrid : MonoBehaviour {
 					grid.SetState (x, y, HP + damage, 0, 0);
 				}
 
+				Debug.Log ("HP lost=" + hpLost);
+
 				if (position == Vector2.zero) {
 					position = grid.TileCenterInWorld (x, y);
 				}
@@ -55,9 +67,15 @@ public class GSGrid : MonoBehaviour {
 			}
 		}
 	}
+	public bool CanPlace(int x, int y, int id) {
+		return grid.CanSet (x, y, id);
+	}
+
 	public void Place(int x, int y, int id) {
-		grid.SetId (x, y, id);
-		grid.SetState (x, y, 0, 0, 0);
+		if(CanPlace(x, y, id)) {
+			grid.SetId (x, y, id);
+			grid.SetState (x, y, 0, 0, 0);
+		}
 	}
 }
 

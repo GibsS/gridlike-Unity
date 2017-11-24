@@ -11,11 +11,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58f291cc963ceb94a8e5d54588854ef1, type: 3}
   m_Name: GridShipAtlas
   m_EditorClassIdentifier: 
-  tilePixelSize: 0
-  useRelativePath: 0
+  tilePixelSize: 16
+  useRelativePath: 1
   spriteSheetPath: sprite_sheet.png
-  spriteSheet: {fileID: 0}
-  emptySprite: {fileID: 0}
+  spriteSheet: {fileID: 2800000, guid: d17f58f7a7b24714882072ddc0939c6a, type: 3}
+  emptySprite: {fileID: 21300000, guid: d17f58f7a7b24714882072ddc0939c6a, type: 3}
   atlas:
   - id: 0
     name: 
@@ -32,64 +32,64 @@ MonoBehaviour:
       importedSprite: {fileID: 0}
       importedSprites: []
     subIdSpriteInfo: []
-  - id: 0
-    name: 
-    shape: 0
+  - id: 1
+    name: ground1
+    shape: 1
     isVertical: 0
     isTrigger: 0
     layer: 0
-    tag: 
+    tag: Untagged
     isGODetached: 0
     tileGO: {fileID: 0}
     idSpriteInfo:
-      sprite: {fileID: 0}
+      sprite: {fileID: 21300002, guid: d17f58f7a7b24714882072ddc0939c6a, type: 3}
       sprites: []
-      importedSprite: {fileID: 0}
+      importedSprite: {fileID: 21300000, guid: ab925c1676de3e94fbb5f0c1a5fd4d34, type: 3}
       importedSprites: []
     subIdSpriteInfo: []
-  - id: 0
-    name: 
-    shape: 0
+  - id: 2
+    name: ground2
+    shape: 1
     isVertical: 0
     isTrigger: 0
     layer: 0
-    tag: 
+    tag: Untagged
     isGODetached: 0
     tileGO: {fileID: 0}
     idSpriteInfo:
-      sprite: {fileID: 0}
+      sprite: {fileID: 21300004, guid: d17f58f7a7b24714882072ddc0939c6a, type: 3}
       sprites: []
-      importedSprite: {fileID: 0}
+      importedSprite: {fileID: 21300000, guid: 5d70716725fd4b54dba628ec4865f895, type: 3}
       importedSprites: []
     subIdSpriteInfo: []
-  - id: 0
-    name: 
-    shape: 0
+  - id: 3
+    name: ground3
+    shape: 1
     isVertical: 0
     isTrigger: 0
     layer: 0
-    tag: 
+    tag: Untagged
     isGODetached: 0
     tileGO: {fileID: 0}
     idSpriteInfo:
-      sprite: {fileID: 0}
+      sprite: {fileID: 21300006, guid: d17f58f7a7b24714882072ddc0939c6a, type: 3}
       sprites: []
-      importedSprite: {fileID: 0}
+      importedSprite: {fileID: 21300000, guid: 89f274e7a06fac14fa4ef0a92eb2bfa1, type: 3}
       importedSprites: []
     subIdSpriteInfo: []
-  - id: 0
-    name: 
-    shape: 0
+  - id: 4
+    name: ground4
+    shape: 1
     isVertical: 0
     isTrigger: 0
     layer: 0
-    tag: 
+    tag: Untagged
     isGODetached: 0
     tileGO: {fileID: 0}
     idSpriteInfo:
-      sprite: {fileID: 0}
+      sprite: {fileID: 21300008, guid: d17f58f7a7b24714882072ddc0939c6a, type: 3}
       sprites: []
-      importedSprite: {fileID: 0}
+      importedSprite: {fileID: 21300000, guid: 2ad4e3c8e64a37c44918b4ba9253d3fe, type: 3}
       importedSprites: []
     subIdSpriteInfo: []
   - id: 0

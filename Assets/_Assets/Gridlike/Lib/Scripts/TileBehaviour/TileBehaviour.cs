@@ -6,9 +6,9 @@ namespace Gridlike {
 
 	public abstract class TileBehaviour : MonoBehaviour {
 
-		public Grid _grid;
-		public int _x;
-		public int _y;
+		[HideInInspector] public Grid _grid;
+		[HideInInspector] public int _x;
+		[HideInInspector] public int _y;
 
 		Tile _tile;
 
@@ -34,5 +34,19 @@ namespace Gridlike {
 
 		public virtual void OnShow() { }
 		public virtual void OnHide() { }
+
+		protected bool[,] CreateBoolGrid(int width, int height, bool fillWithTrue) {
+			bool[,] res = new bool[width, height];
+
+			if (fillWithTrue) {
+				for (int i = 0; i < width; i++) {
+					for (int j = 0; j < height; j++) {
+						res [i, j] = true;
+					}
+				}
+			}
+
+			return res;
+		}
 	}
 }
