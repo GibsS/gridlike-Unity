@@ -14,7 +14,6 @@ public class GSShip : MonoBehaviour {
 	public float propulsionForce;
 
 	[HideInInspector] public bool hasCharacter = true;
-	[HideInInspector] public int lastHasCharacterFrames;
 
 	[HideInInspector] public bool pushLeft;
 	[HideInInspector] public bool pushRight;
@@ -25,6 +24,8 @@ public class GSShip : MonoBehaviour {
 		rigidbody = GetComponent<Rigidbody2D> ();
 		platformer = GetComponent<MovingPlatformMotor2D> ();
 		grid = GetComponent<Grid> ();
+
+		GSSingleton.instance.RegisterShip (this);
 	}
 
 	void Update() {
@@ -46,7 +47,7 @@ public class GSShip : MonoBehaviour {
 			rigidbody.AddForce (10 * (rigidbody.mass -  maxMass) * Vector2.down);
 		}
 
-		if (true || hasCharacter) {
+		if (hasCharacter) {
 			if (pushLeft)
 				rigidbody.AddForce (propulsionForce * Vector2.left);
 			if (pushRight)
@@ -56,10 +57,5 @@ public class GSShip : MonoBehaviour {
 			if (pushDown)
 				rigidbody.AddForce (propulsionForce * Vector2.down);
 		}
-
-		//lastHasCharacterFrames--;
-		//if (lastHasCharacterFrames <= 0) {
-		//	hasCharacter = false;
-		//}
 	}
 }

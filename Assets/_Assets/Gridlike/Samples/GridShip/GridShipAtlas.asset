@@ -92,15 +92,15 @@ MonoBehaviour:
       importedSprite: {fileID: 21300000, guid: 2ad4e3c8e64a37c44918b4ba9253d3fe, type: 3}
       importedSprites: []
     subIdSpriteInfo: []
-  - id: 0
-    name: 
+  - id: 5
+    name: engine
     shape: 0
     isVertical: 0
     isTrigger: 0
     layer: 0
-    tag: 
+    tag: Untagged
     isGODetached: 0
-    tileGO: {fileID: 0}
+    tileGO: {fileID: 1901949885414750, guid: 120bbcb41a0c9b344898481aa53dbb32, type: 2}
     idSpriteInfo:
       sprite: {fileID: 0}
       sprites: []

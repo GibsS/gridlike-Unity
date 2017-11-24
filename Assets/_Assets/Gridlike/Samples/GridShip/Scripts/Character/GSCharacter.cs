@@ -26,7 +26,12 @@ public class GSCharacter : MonoBehaviour, ICubeStorage {
 
 	public Tool currentTool;
 
+	PlatformerMotor2D motor;
+	MovingPlatformMotor2D platform;
+
 	void Start () {
+		motor = GetComponent<PlatformerMotor2D> ();
+
 		GSSingleton.instance.RegisterCharacter (this);
 
 		if (bow != null) bow._Inject (this);
@@ -51,6 +56,21 @@ public class GSCharacter : MonoBehaviour, ICubeStorage {
 			if ((Input.GetMouseButtonDown (0) || Input.GetMouseButton (0) || Input.GetMouseButtonUp (0)) && !IsPointerOverUIObject ()) {
 				currentTool.OnMouseAny (Camera.main.ScreenToWorldPoint (Input.mousePosition));
 			}
+		}
+
+		MovingPlatformMotor2D newPlatform = motor.connectedPlatform;
+		if (platform != null && newPlatform == null) {
+			GSShip ship = platform.GetComponent<GSShip> ();
+
+			if (ship != null) ship.hasCharacter = false;
+
+			platform = null;
+		} else if (platform == null && newPlatform != null) {
+			GSShip ship = newPlatform.GetComponent<GSShip> ();
+
+			if (ship != null) ship.hasCharacter = true;
+
+			platform = newPlatform;
 		}
 	}
 	bool IsPointerOverUIObject() {
