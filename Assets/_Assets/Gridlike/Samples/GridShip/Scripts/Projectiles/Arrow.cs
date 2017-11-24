@@ -8,10 +8,12 @@ public class Arrow : MonoBehaviour {
 
 	GSCharacter character;
 	int damage;
+	int radius;
 
-	public void Initialize(GSCharacter character, int damage, Vector2 position, Vector2 velocity) {
+	public void Initialize(GSCharacter character, int damage, Vector2 position, Vector2 velocity, int radius = 0) {
 		this.character = character;
 		this.damage = damage;
+		this.radius = radius;
 
 		transform.position = position;
 
@@ -21,19 +23,23 @@ public class Arrow : MonoBehaviour {
 	}
 
 	void OnCollisionEnter2D(Collision2D collision) {
-		GameObject go = TransformUtility.GetTopParent (collision.gameObject);
+		if (radius == 0) {
+			GameObject go = TransformUtility.GetTopParent (collision.gameObject);
 
-		Grid grid = go.GetComponent<Grid> ();
-		if (grid != null) {
-			int x;
-			int y;
-
-			GridUtility.GetClosestNonEmptyTile (grid, transform.position, out x, out y);
+			Grid grid = go.GetComponent<Grid> ();
 			if (grid != null) {
-				GSGrid gsGrid = grid.GetComponent<GSGrid> ();
+				int x;
+				int y;
 
-				gsGrid.Damage (character, x, y, damage, transform.position);
+				GridUtility.GetClosestNonEmptyTile (grid, transform.position, out x, out y);
+				if (grid != null) {
+					GSGrid gsGrid = grid.GetComponent<GSGrid> ();
+
+					gsGrid.Damage (character, x, y, damage, transform.position);
+				}
 			}
+		} else {
+			GridUtility.ExplodeInAllGrid (character, transform.position, radius, damage);
 		}
 
 		StartCoroutine (DestroyAnimation ());

@@ -80,4 +80,16 @@ public class GridUtility {
 			}
 		}
 	}
+
+	public static void ExplodeInAllGrid(GSCharacter character, Vector2 position, int radius, int damage) {
+		foreach (Grid grid in Grid.GetAllGrids()) {
+			GSGrid wrapper = grid.GetComponent<GSGrid> ();
+
+			if (wrapper != null) {
+				wrapper.Explosion (character, position, radius, damage);
+			} else {
+				Debug.LogWarning ("Grid has no GSGrid");
+			}
+		}
+	}
 }

@@ -11,27 +11,48 @@ public class GSGrid : MonoBehaviour {
 		grid = GetComponent<Grid>();
 	}
 
+	public void Explosion(GSCharacter character, Vector2 position, int radius, int damage) {
+		int x;
+		int y;
+
+		grid.WorldToGrid (position, out x, out y);
+
+		for (int i = x - radius; i <= x + radius; i++) {
+			for (int j = y - radius; j <= y + radius; j++) {
+				int dx = i - x;
+				int dy = j - y;
+
+				if (dx * dx + dy * dy <= radius * radius) {
+					Damage (character, i, j, damage, grid.TileCenterInWorld (i, j));
+				}
+			}
+		}
+	}
+
 	public void Damage(GSCharacter character, int x, int y, int damage, Vector2 position) {
 		Tile tile = grid.Get (x, y);
-		int id = tile.id;
-		int HP = (int) tile.state1;
 
-		if (GSConsts.TileExists (id)) {
-			int hpLost;
+		if (tile != null) {
+			int id = tile.id;
+			int HP = (int)tile.state1;
 
-			if (HP + damage >= GSConsts.tiles [id].HP) {
-				hpLost = Mathf.Min(damage, GSConsts.tiles [id].HP - HP);
-				grid.Clear (x, y);
-			} else {
-				hpLost = damage;
-				grid.SetState (x, y, HP + damage, 0, 0);
+			if (GSConsts.TileExists (id)) {
+				int hpLost;
+
+				if (HP + damage >= GSConsts.tiles [id].HP) {
+					hpLost = Mathf.Min (damage, GSConsts.tiles [id].HP - HP);
+					grid.Clear (x, y);
+				} else {
+					hpLost = damage;
+					grid.SetState (x, y, HP + damage, 0, 0);
+				}
+
+				if (position == Vector2.zero) {
+					position = grid.TileCenterInWorld (x, y);
+				}
+
+				CubeParticle.CreateParticles (position, character, Mathf.CeilToInt (hpLost * GSConsts.tiles [id].cubePerHP));
 			}
-
-			if (position == Vector2.zero) {
-				position = grid.TileCenterInWorld (x, y);
-			}
-
-			CubeParticle.CreateParticles (position, character, Mathf.CeilToInt(hpLost * GSConsts.tiles[id].cubePerHP));
 		}
 	}
 	public void Place(int x, int y, int id) {

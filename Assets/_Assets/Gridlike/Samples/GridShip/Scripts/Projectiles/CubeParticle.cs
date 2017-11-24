@@ -20,7 +20,7 @@ public class CubeParticle : MonoBehaviour {
 	public void Initialize(GSCharacter character) {
 		target = character;
 		startTime = Time.time;
-		speed = 5 * Random.insideUnitCircle;
+		speed = 10 * Random.insideUnitCircle;
 	}
 
 	void FixedUpdate() {

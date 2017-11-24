@@ -10,6 +10,7 @@ public class Bow : Tool {
 	public float cooldown;
 	public float speed;
 	public int damage;
+	public int radius;
 
 	float lastShot = -100000;
 
@@ -38,7 +39,8 @@ public class Bow : Tool {
 			character,
 			damage,
 			transform.position, 
-			speed * (position - (Vector2) transform.position).normalized
+			speed * (position - (Vector2) transform.position).normalized,
+			radius
 		);
 	}
 }
