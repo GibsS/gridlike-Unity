@@ -1,0 +1,470 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 58f291cc963ceb94a8e5d54588854ef1, type: 3}
+  m_Name: GridShipAtlas
+  m_EditorClassIdentifier: 
+  tilePixelSize: 0
+  useRelativePath: 0
+  spriteSheetPath: sprite_sheet.png
+  spriteSheet: {fileID: 0}
+  emptySprite: {fileID: 0}
+  atlas:
+  - id: 0
+    name: 
+    shape: 0
+    isVertical: 0
+    isTrigger: 0
+    layer: 0
+    tag: 
+    isGODetached: 0
+    tileGO: {fileID: 0}
+    idSpriteInfo:
+      sprite: {fileID: 0}
+      sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
+    subIdSpriteInfo: []
+  - id: 0
+    name: 
+    shape: 0
+    isVertical: 0
+    isTrigger: 0
+    layer: 0
+    tag: 
+    isGODetached: 0
+    tileGO: {fileID: 0}
+    idSpriteInfo:
+      sprite: {fileID: 0}
+      sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
+    subIdSpriteInfo: []
+  - id: 0
+    name: 
+    shape: 0
+    isVertical: 0
+    isTrigger: 0
+    layer: 0
+    tag: 
+    isGODetached: 0
+    tileGO: {fileID: 0}
+    idSpriteInfo:
+      sprite: {fileID: 0}
+      sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
+    subIdSpriteInfo: []
+  - id: 0
+    name: 
+    shape: 0
+    isVertical: 0
+    isTrigger: 0
+    layer: 0
+    tag: 
+    isGODetached: 0
+    tileGO: {fileID: 0}
+    idSpriteInfo:
+      sprite: {fileID: 0}
+      sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
+    subIdSpriteInfo: []
+  - id: 0
+    name: 
+    shape: 0
+    isVertical: 0
+    isTrigger: 0
+    layer: 0
+    tag: 
+    isGODetached: 0
+    tileGO: {fileID: 0}
+    idSpriteInfo:
+      sprite: {fileID: 0}
+      sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
+    subIdSpriteInfo: []
+  - id: 0
+    name: 
+    shape: 0
+    isVertical: 0
+    isTrigger: 0
+    layer: 0
+    tag: 
+    isGODetached: 0
+    tileGO: {fileID: 0}
+    idSpriteInfo:
+      sprite: {fileID: 0}
+      sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
+    subIdSpriteInfo: []
+  - id: 0
+    name: 
+    shape: 0
+    isVertical: 0
+    isTrigger: 0
+    layer: 0
+    tag: 
+    isGODetached: 0
+    tileGO: {fileID: 0}
+    idSpriteInfo:
+      sprite: {fileID: 0}
+      sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
+    subIdSpriteInfo: []
+  - id: 0
+    name: 
+    shape: 0
+    isVertical: 0
+    isTrigger: 0
+    layer: 0
+    tag: 
+    isGODetached: 0
+    tileGO: {fileID: 0}
+    idSpriteInfo:
+      sprite: {fileID: 0}
+      sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
+    subIdSpriteInfo: []
+  - id: 0
+    name: 
+    shape: 0
+    isVertical: 0
+    isTrigger: 0
+    layer: 0
+    tag: 
+    isGODetached: 0
+    tileGO: {fileID: 0}
+    idSpriteInfo:
+      sprite: {fileID: 0}
+      sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
+    subIdSpriteInfo: []
+  - id: 0
+    name: 
+    shape: 0
+    isVertical: 0
+    isTrigger: 0
+    layer: 0
+    tag: 
+    isGODetached: 0
+    tileGO: {fileID: 0}
+    idSpriteInfo:
+      sprite: {fileID: 0}
+      sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
+    subIdSpriteInfo: []
+  - id: 0
+    name: 
+    shape: 0
+    isVertical: 0
+    isTrigger: 0
+    layer: 0
+    tag: 
+    isGODetached: 0
+    tileGO: {fileID: 0}
+    idSpriteInfo:
+      sprite: {fileID: 0}
+      sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
+    subIdSpriteInfo: []
+  - id: 0
+    name: 
+    shape: 0
+    isVertical: 0
+    isTrigger: 0
+    layer: 0
+    tag: 
+    isGODetached: 0
+    tileGO: {fileID: 0}
+    idSpriteInfo:
+      sprite: {fileID: 0}
+      sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
+    subIdSpriteInfo: []
+  - id: 0
+    name: 
+    shape: 0
+    isVertical: 0
+    isTrigger: 0
+    layer: 0
+    tag: 
+    isGODetached: 0
+    tileGO: {fileID: 0}
+    idSpriteInfo:
+      sprite: {fileID: 0}
+      sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
+    subIdSpriteInfo: []
+  - id: 0
+    name: 
+    shape: 0
+    isVertical: 0
+    isTrigger: 0
+    layer: 0
+    tag: 
+    isGODetached: 0
+    tileGO: {fileID: 0}
+    idSpriteInfo:
+      sprite: {fileID: 0}
+      sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
+    subIdSpriteInfo: []
+  - id: 0
+    name: 
+    shape: 0
+    isVertical: 0
+    isTrigger: 0
+    layer: 0
+    tag: 
+    isGODetached: 0
+    tileGO: {fileID: 0}
+    idSpriteInfo:
+      sprite: {fileID: 0}
+      sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
+    subIdSpriteInfo: []
+  - id: 0
+    name: 
+    shape: 0
+    isVertical: 0
+    isTrigger: 0
+    layer: 0
+    tag: 
+    isGODetached: 0
+    tileGO: {fileID: 0}
+    idSpriteInfo:
+      sprite: {fileID: 0}
+      sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
+    subIdSpriteInfo: []
+  - id: 0
+    name: 
+    shape: 0
+    isVertical: 0
+    isTrigger: 0
+    layer: 0
+    tag: 
+    isGODetached: 0
+    tileGO: {fileID: 0}
+    idSpriteInfo:
+      sprite: {fileID: 0}
+      sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
+    subIdSpriteInfo: []
+  - id: 0
+    name: 
+    shape: 0
+    isVertical: 0
+    isTrigger: 0
+    layer: 0
+    tag: 
+    isGODetached: 0
+    tileGO: {fileID: 0}
+    idSpriteInfo:
+      sprite: {fileID: 0}
+      sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
+    subIdSpriteInfo: []
+  - id: 0
+    name: 
+    shape: 0
+    isVertical: 0
+    isTrigger: 0
+    layer: 0
+    tag: 
+    isGODetached: 0
+    tileGO: {fileID: 0}
+    idSpriteInfo:
+      sprite: {fileID: 0}
+      sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
+    subIdSpriteInfo: []
+  - id: 0
+    name: 
+    shape: 0
+    isVertical: 0
+    isTrigger: 0
+    layer: 0
+    tag: 
+    isGODetached: 0
+    tileGO: {fileID: 0}
+    idSpriteInfo:
+      sprite: {fileID: 0}
+      sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
+    subIdSpriteInfo: []
+  - id: 0
+    name: 
+    shape: 0
+    isVertical: 0
+    isTrigger: 0
+    layer: 0
+    tag: 
+    isGODetached: 0
+    tileGO: {fileID: 0}
+    idSpriteInfo:
+      sprite: {fileID: 0}
+      sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
+    subIdSpriteInfo: []
+  - id: 0
+    name: 
+    shape: 0
+    isVertical: 0
+    isTrigger: 0
+    layer: 0
+    tag: 
+    isGODetached: 0
+    tileGO: {fileID: 0}
+    idSpriteInfo:
+      sprite: {fileID: 0}
+      sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
+    subIdSpriteInfo: []
+  - id: 0
+    name: 
+    shape: 0
+    isVertical: 0
+    isTrigger: 0
+    layer: 0
+    tag: 
+    isGODetached: 0
+    tileGO: {fileID: 0}
+    idSpriteInfo:
+      sprite: {fileID: 0}
+      sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
+    subIdSpriteInfo: []
+  - id: 0
+    name: 
+    shape: 0
+    isVertical: 0
+    isTrigger: 0
+    layer: 0
+    tag: 
+    isGODetached: 0
+    tileGO: {fileID: 0}
+    idSpriteInfo:
+      sprite: {fileID: 0}
+      sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
+    subIdSpriteInfo: []
+  - id: 0
+    name: 
+    shape: 0
+    isVertical: 0
+    isTrigger: 0
+    layer: 0
+    tag: 
+    isGODetached: 0
+    tileGO: {fileID: 0}
+    idSpriteInfo:
+      sprite: {fileID: 0}
+      sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
+    subIdSpriteInfo: []
+  - id: 0
+    name: 
+    shape: 0
+    isVertical: 0
+    isTrigger: 0
+    layer: 0
+    tag: 
+    isGODetached: 0
+    tileGO: {fileID: 0}
+    idSpriteInfo:
+      sprite: {fileID: 0}
+      sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
+    subIdSpriteInfo: []
+  - id: 0
+    name: 
+    shape: 0
+    isVertical: 0
+    isTrigger: 0
+    layer: 0
+    tag: 
+    isGODetached: 0
+    tileGO: {fileID: 0}
+    idSpriteInfo:
+      sprite: {fileID: 0}
+      sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
+    subIdSpriteInfo: []
+  - id: 0
+    name: 
+    shape: 0
+    isVertical: 0
+    isTrigger: 0
+    layer: 0
+    tag: 
+    isGODetached: 0
+    tileGO: {fileID: 0}
+    idSpriteInfo:
+      sprite: {fileID: 0}
+      sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
+    subIdSpriteInfo: []
+  - id: 0
+    name: 
+    shape: 0
+    isVertical: 0
+    isTrigger: 0
+    layer: 0
+    tag: 
+    isGODetached: 0
+    tileGO: {fileID: 0}
+    idSpriteInfo:
+      sprite: {fileID: 0}
+      sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
+    subIdSpriteInfo: []
+  - id: 0
+    name: 
+    shape: 0
+    isVertical: 0
+    isTrigger: 0
+    layer: 0
+    tag: 
+    isGODetached: 0
+    tileGO: {fileID: 0}
+    idSpriteInfo:
+      sprite: {fileID: 0}
+      sprites: []
+      importedSprite: {fileID: 0}
+      importedSprites: []
+    subIdSpriteInfo: []
+  material: {fileID: 0}

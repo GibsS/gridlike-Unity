@@ -65,6 +65,7 @@ namespace Gridlike {
 
 			// TILE PIXEL SIZE
 			atlas.tilePixelSize = EditorGUILayout.IntField ("Tile pixel size", atlas.tilePixelSize);
+			atlas.tilePixelSize = Mathf.Clamp (atlas.tilePixelSize, 1, 1024);
 
 			if (GUILayout.Button ("Generate sprite sheet")) {
 				GenerateSpriteSheet ();
@@ -225,7 +226,7 @@ namespace Gridlike {
 			int tilePixelSize = atlas.tilePixelSize;
 
 			int tileCount = atlas.TotalSpriteTileCount;
-			int tilePerRow = Mathf.Max(2, Mathf.Min(Mathf.FloorToInt(Mathf.Sqrt(tileCount * 4)), TileAtlas.MAX_SPRITE_SHEET_SIZE / tilePixelSize));
+			int tilePerRow = Mathf.Clamp(Mathf.FloorToInt(Mathf.Sqrt(tileCount * 4)), 2, TileAtlas.MAX_SPRITE_SHEET_SIZE / tilePixelSize);
 			int tilePerColumn = tilePerRow;
 
 			Texture2D texture = new Texture2D (tilePerRow * tilePixelSize, tilePerColumn * tilePixelSize);
@@ -333,8 +334,6 @@ namespace Gridlike {
 			foreach (Object obj in AssetDatabase.LoadAllAssetsAtPath (assetPath)) {
 				if (!string.IsNullOrEmpty (obj.name) && obj.name [0] == 's' && obj.name != "sprite_sheet" && obj is Sprite) {
 					Sprite sprite = obj as Sprite;
-
-					Debug.Log (obj.name);
 
 					string[] values = sprite.name.Split ('_');
 
