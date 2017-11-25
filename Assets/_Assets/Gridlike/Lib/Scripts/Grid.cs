@@ -27,6 +27,9 @@ using UnityEngine;
 
 // The spritesheet doesn't update every time a sprite is added 
 
+// Simple way of increasing decreasing brush size (big button in corner?)
+// Replace (place but only on tiles with specific ids)
+
 
 // BUGS
 // Allow regular gizmos to be accessed even when the grid is selected

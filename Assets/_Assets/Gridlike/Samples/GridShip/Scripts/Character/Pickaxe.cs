@@ -29,7 +29,7 @@ public class Pickaxe : Tool {
 			if (grid != null) {
 				GSGrid gsGrid = grid.GetComponent<GSGrid> ();
 
-				gsGrid.Damage (character, x, y, damage, position);
+ 				gsGrid.Damage (character, x, y, damage, position);
 			}
 		}
 	}

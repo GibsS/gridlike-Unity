@@ -51,6 +51,7 @@ public class GSSingleton : MonoBehaviour, INotifier {
 			root = uiGO.GetComponent<RootView> ();
 			root.Initialize ();
 
+
 			root.toolbar.onBowClick += PickBow;
 			root.toolbar.onPickaxeClick += PickPickaxe;
 			root.toolbar.onPlacerClick += PickPlacer;
@@ -82,12 +83,21 @@ public class GSSingleton : MonoBehaviour, INotifier {
 		if (character.HasPlacer ()) root.toolbar.EnablePlacer ();
 		else root.toolbar.DisablePlacer ();
 
+		root.status.SetCubeCount (character.cubeCount);
+
 		character.onAddCube += HandleAddCube;
 		character.onRemoveCube += HandleRemoveCube;
 	}
 
 	void Update() {
 		tutorial.Upgrade ();
+
+		if (character.HasBow()) {
+			root.toolbar.EnableBow ();
+		}
+		if (character.HasPlacer()) {
+			root.toolbar.EnablePlacer ();
+		}
 
 		if (upgradeQueue.Count > 0 && !root.upgrades.IsPicking()) {
 			List<Upgrade> upgrades;

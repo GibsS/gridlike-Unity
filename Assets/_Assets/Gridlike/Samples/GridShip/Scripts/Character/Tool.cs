@@ -6,6 +6,8 @@ public class Tool : MonoBehaviour {
 
 	protected GSCharacter character { get; private set; }
 
+	public bool acquired;
+
 	public void _Inject(GSCharacter character) {
 		this.character = character;
 	}

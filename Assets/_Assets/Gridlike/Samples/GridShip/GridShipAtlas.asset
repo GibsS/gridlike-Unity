@@ -197,45 +197,45 @@ MonoBehaviour:
       importedSprite: {fileID: 0}
       importedSprites: []
     subIdSpriteInfo: []
-  - id: 0
-    name: 
+  - id: 12
+    name: engine
     shape: 0
     isVertical: 0
     isTrigger: 0
     layer: 0
-    tag: 
+    tag: Untagged
     isGODetached: 0
-    tileGO: {fileID: 0}
+    tileGO: {fileID: 1737699191710676, guid: 1649841c2dcfa4147a9ab182dd399d4f, type: 2}
     idSpriteInfo:
       sprite: {fileID: 0}
       sprites: []
       importedSprite: {fileID: 0}
       importedSprites: []
     subIdSpriteInfo: []
-  - id: 0
-    name: 
+  - id: 13
+    name: anti gravity
     shape: 0
     isVertical: 0
     isTrigger: 0
     layer: 0
-    tag: 
+    tag: Untagged
     isGODetached: 0
-    tileGO: {fileID: 0}
+    tileGO: {fileID: 1393419927419742, guid: 561a5a3d1d82d594099ef70cef351d2c, type: 2}
     idSpriteInfo:
       sprite: {fileID: 0}
       sprites: []
       importedSprite: {fileID: 0}
       importedSprites: []
     subIdSpriteInfo: []
-  - id: 0
-    name: 
+  - id: 14
+    name: special upgrade cube
     shape: 0
     isVertical: 0
     isTrigger: 0
     layer: 0
-    tag: 
+    tag: Untagged
     isGODetached: 0
-    tileGO: {fileID: 0}
+    tileGO: {fileID: 1218513211377656, guid: 3027551e38447a443904fd3866958613, type: 2}
     idSpriteInfo:
       sprite: {fileID: 0}
       sprites: []

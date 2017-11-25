@@ -66,13 +66,20 @@ public class GSCharacter : MonoBehaviour, ICubeStorage {
 		if (platform != null && newPlatform == null) {
 			GSShip ship = platform.GetComponent<GSShip> ();
 
-			if (ship != null) ship.hasCharacter = false;
+			if (ship != null) {
+				Camera.main.orthographicSize /= 2;
+
+				ship.hasCharacter = false;
+			}
 
 			platform = null;
 		} else if (platform == null && newPlatform != null) {
 			GSShip ship = newPlatform.GetComponent<GSShip> ();
 
-			if (ship != null) ship.hasCharacter = true;
+			if (ship != null) {
+				Camera.main.orthographicSize *= 2;
+				ship.hasCharacter = true;
+			}
 
 			platform = newPlatform;
 		}
@@ -115,13 +122,13 @@ public class GSCharacter : MonoBehaviour, ICubeStorage {
 	#region ITEMS
 
 	public bool HasBow() {
-		return bow != null && bow.enabled;
+		return bow != null && bow.enabled && bow.acquired;
 	}
 	public bool HasPickaxe() {
-		return pickaxe != null && pickaxe.enabled;
+		return pickaxe != null && pickaxe.enabled && pickaxe.acquired;
 	}
 	public bool HasPlacer() {
-		return placer != null && placer.enabled;
+		return placer != null && placer.enabled && placer.acquired;
 	}
 
 	public void AcquireBow() {
@@ -129,18 +136,21 @@ public class GSCharacter : MonoBehaviour, ICubeStorage {
 		bow._Inject (this);
 
 		bow.enabled = true;
+		bow.acquired = true;
 	}
 	public void AcquirePickaxe() {
 		if (pickaxe == null) pickaxe = gameObject.AddComponent<Pickaxe> ();
 		pickaxe._Inject (this);
 
 		pickaxe.enabled = true;
+		pickaxe.acquired = true;
 	}
 	public void AcquirePlacer() {
 		if (placer == null) placer = gameObject.AddComponent<Placer> ();
 		placer._Inject (this);
 
 		placer.enabled = true;
+		placer.acquired = true;
 	}
 
 	public void SelectBow() {

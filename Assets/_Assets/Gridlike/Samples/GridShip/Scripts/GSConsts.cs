@@ -22,7 +22,7 @@ public static class GSConsts {
 		{ 1, new GSTile { // ground1
 				id = 1,
 				cubeCost = 6,
-				HP = 5,
+				HP = 2,
 				cubePerHP = 1
 			} 
 		},
@@ -50,28 +50,28 @@ public static class GSConsts {
 		{ 5, new GSTile { // ore1
 				id = 5,
 				cubeCost = 1000,
-				HP = 3,
-				cubePerHP = 10
+				HP = 2,
+				cubePerHP = 5
 			} 
 		},
 		{ 6, new GSTile { // ore2
 				id = 6,
 				cubeCost = 1000,
-				HP = 5,
-				cubePerHP = 15
+				HP = 3,
+				cubePerHP = 10
 			} 
 		},
 		{ 7, new GSTile { // ore3
 				id = 7,
 				cubeCost = 1000,
-				HP = 7,
+				HP = 5,
 				cubePerHP = 15
 			} 
 		},
 		{ 8, new GSTile { // ore4
 				id = 8,
 				cubeCost = 1000,
-				HP = 9,
+				HP = 6,
 				cubePerHP = 20
 			} 
 		},
