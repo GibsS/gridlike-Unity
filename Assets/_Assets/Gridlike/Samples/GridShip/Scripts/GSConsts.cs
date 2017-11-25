@@ -67,6 +67,20 @@ public static class GSConsts {
 				HP = 9,
 				cubePerHP = 20
 			} 
+		},
+		{ 12, new GSTile { // engine
+				id = 12,
+				cubeCost = 200,
+				HP = 50,
+				cubePerHP = 1
+			} 
+		},
+		{ 13, new GSTile { // anti gravity
+				id = 13,
+				cubeCost = 500,
+				HP = 50,
+				cubePerHP = 1
+			} 
 		}
 	};
 

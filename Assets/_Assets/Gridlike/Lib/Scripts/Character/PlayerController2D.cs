@@ -114,8 +114,7 @@ public class PlayerController2D : MonoBehaviour
             _motor.fallFast = false;
         }
 
-        if (Input.GetButtonDown(PC2D.Input.DASH))
-        {
+		if (Input.GetButtonDown(PC2D.Input.DASH) && _motor.IsInAir()) {
             _motor.Dash();
         }
     }
