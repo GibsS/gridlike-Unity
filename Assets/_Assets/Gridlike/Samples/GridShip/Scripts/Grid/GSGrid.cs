@@ -61,6 +61,8 @@ public class GSGrid : MonoBehaviour {
 				}
 
 				CubeParticle.CreateParticles (position, character, Mathf.CeilToInt (hpLost * GSConsts.tiles [id].cubePerHP));
+			} else {
+				grid.Clear (x, y);
 			}
 		}
 	}

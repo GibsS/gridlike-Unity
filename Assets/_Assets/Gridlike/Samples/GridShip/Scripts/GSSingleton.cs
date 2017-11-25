@@ -2,7 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GSSingleton : MonoBehaviour {
+// Progression system
+// Tutorial system
+
+// Progression implementation
+// Tutorial implementation
+
+// Design first level
+
+public interface INotifier {
+
+	void Notify (string notification);
+}
+
+public class GSSingleton : MonoBehaviour, INotifier {
 
 	public static GSSingleton instance;
 
@@ -15,6 +28,11 @@ public class GSSingleton : MonoBehaviour {
 
 	GSCharacter character;
 	GSShip ship;
+
+	Tutorial tutorial;
+
+	UpgradeProgression progression;
+	Queue<bool> upgradeQueue;
 
 	void Awake() {
 		if (instance != null) {
@@ -42,6 +60,13 @@ public class GSSingleton : MonoBehaviour {
 			root.upgrades.Hide ();
 
 			root.Hide ();
+
+			progression = new UpgradeProgression1 ();
+
+			upgradeQueue = new Queue<bool> ();
+
+			tutorial = new Tutorial ();
+			tutorial._Inject (this);
 		}
 	}
 
@@ -59,6 +84,50 @@ public class GSSingleton : MonoBehaviour {
 
 		character.onAddCube += HandleAddCube;
 		character.onRemoveCube += HandleRemoveCube;
+	}
+
+	void Update() {
+		tutorial.Upgrade ();
+
+		if (upgradeQueue.Count > 0 && !root.upgrades.IsPicking()) {
+			List<Upgrade> upgrades;
+
+			if (upgradeQueue.Dequeue ()) {
+				upgrades = progression.GetSpecialUpgrades (3);
+			} else {
+				upgrades = progression.GetNormalUpgrades (3);
+			}
+
+			if (upgrades.Count > 0) {
+
+				Upgrade upgrade1 = null;
+				Upgrade upgrade2 = null;
+				Upgrade upgrade3 = null;
+
+				Debug.Log ("Upgrade count=" + upgrades.Count);
+
+				if (upgrades.Count > 0)
+					upgrade1 = upgrades [0]; 
+				if (upgrades.Count > 1)
+					upgrade2 = upgrades [1]; 
+				if (upgrades.Count > 2)
+					upgrade3 = upgrades [2]; 
+
+				root.upgrades.ProposeUpgrades (
+					upgrade1 != null ? upgrade1.Name () : null, () => HandleUprade (upgrade1),
+					upgrade2 != null ? upgrade2.Name () : null, () => HandleUprade (upgrade2),
+					upgrade3 != null ? upgrade3.Name () : null, () => HandleUprade (upgrade3)
+				);
+			}
+		}
+	}
+
+	void HandleUprade(Upgrade upgrade) {
+		upgrade._Inject (character, ship);
+		upgrade.Execute ();
+		progression.CompleteUpgrade (upgrade);
+
+		Notify (upgrade.Description ());
 	}
 
 	public void RegisterCharacter(GSCharacter character) {
@@ -123,10 +192,14 @@ public class GSSingleton : MonoBehaviour {
 			cubeProgress -= cubeToNextLevel;
 			level++;
 
-			root.notifications.ShowNotification ("New level!");
+			upgradeQueue.Enqueue (false);
 		}
 
 		root.status.SetLevel (level);
 		root.status.SetProgress (cubeProgress, cubeToNextLevel);
+	}
+
+	public void Notify(string notification) {
+		root.notifications.ShowNotification (notification);
 	}
 }

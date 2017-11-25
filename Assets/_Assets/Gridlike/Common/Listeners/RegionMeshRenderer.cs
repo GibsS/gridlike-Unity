@@ -133,33 +133,31 @@ public class RegionMeshRenderer : MonoBehaviour {
 
 		Rect rect = sprite.textureRect;
 
-		uv [quadIndex] = new Vector2 (rect.xMin / textureWidth, rect.yMin / textureHeight);
-		uv [quadIndex + 1] = new Vector2 (rect.xMax / textureWidth, rect.yMin / textureHeight);
-		uv [quadIndex + 2] = new Vector2 (rect.xMin / textureWidth, rect.yMax / textureHeight);
-		uv [quadIndex + 3] = new Vector2 (rect.xMax / textureWidth, rect.yMax / textureHeight);
+		uv [quadIndex] = new Vector2 ((rect.xMin + 0.1f) / textureWidth, (rect.yMin + 0.1f) / textureHeight);
+		uv [quadIndex + 1] = new Vector2 ((rect.xMax - 0.1f) / textureWidth, (rect.yMin + 0.1f) / textureHeight);
+		uv [quadIndex + 2] = new Vector2 ((rect.xMin + 0.1f) / textureWidth, (rect.yMax - 0.1f) / textureHeight);
+		uv [quadIndex + 3] = new Vector2 ((rect.xMax - 0.1f) / textureWidth, (rect.yMax - 0.1f) / textureHeight);
 	}
 	public void SetPartialVerticalTile(int x, int y, Sprite sprite, int yTileOffset) {
 		int quadIndex = ((y * tilePerSide) + x) * 4;
 
 		Rect rect = sprite.textureRect;
 
-		float minY = (rect.yMin + yTileOffset * tilePixelSize);
-		float maxY = (rect.yMin + (yTileOffset + 1) * tilePixelSize);
+		float minY = (rect.yMin + yTileOffset * tilePixelSize) + 0.1f;
+		float maxY = (rect.yMin + (yTileOffset + 1) * tilePixelSize) - 0.1f;
 
-		uv [quadIndex] = new Vector2 (rect.xMin / textureWidth, minY / textureHeight);
-		uv [quadIndex + 1] = new Vector2 (rect.xMax / textureWidth, minY / textureHeight);
-		uv [quadIndex + 2] = new Vector2 (rect.xMin / textureWidth, maxY / textureHeight);
-		uv [quadIndex + 3] = new Vector2 (rect.xMax / textureWidth, maxY / textureHeight);
+		uv [quadIndex] = new Vector2 ((rect.xMin + 0.1f) / textureWidth, minY / textureHeight);
+		uv [quadIndex + 1] = new Vector2 ((rect.xMax - 0.1f) / textureWidth, minY / textureHeight);
+		uv [quadIndex + 2] = new Vector2 ((rect.xMin + 0.1f) / textureWidth, maxY / textureHeight);
+		uv [quadIndex + 3] = new Vector2 ((rect.xMax - 0.1f) / textureWidth, maxY / textureHeight);
 	}
 	public void SetPartialHorizontalTile(int x, int y, Sprite sprite, int xTileOffset) {
 		int quadIndex = ((y * tilePerSide) + x) * 4;
 
 		Rect rect = sprite.textureRect;
 
-		float minX = (rect.xMin + xTileOffset * tilePixelSize);
-		float maxX = (rect.xMin + (xTileOffset + 1) * tilePixelSize);
-
-		//Debug.Log ("sprite=" + sprite + " minx=" + minX + " maxx=" + maxX + " miny=" + rect.yMin + " maxy=" + rect.yMax);
+		float minX = (rect.xMin + xTileOffset * tilePixelSize) + 0.1f;
+		float maxX = (rect.xMin + (xTileOffset + 1) * tilePixelSize) - 0.1f;
 
 		uv [quadIndex] = new Vector2 (minX / textureWidth, rect.yMin / textureHeight);
 		uv [quadIndex + 1] = new Vector2 (maxX / textureWidth, rect.yMin / textureHeight);

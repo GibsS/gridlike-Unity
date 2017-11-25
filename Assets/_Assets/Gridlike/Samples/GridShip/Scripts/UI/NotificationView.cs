@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class NotificationView : MonoBehaviour {
 
-	const float NOTIFICATION_DURATION = 6;
+	const float NOTIFICATION_DURATION = 2;
 
 	public Text text;
 	public GameObject container;
