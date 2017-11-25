@@ -3,9 +3,12 @@ using System.Collections;
 
 public class Tutorial {
 
+	public static Tutorial instance;
+
 	INotifier notifier;
 
 	public void _Inject(INotifier notifier) {
+		instance = this;
 		this.notifier = notifier;
 	}
 

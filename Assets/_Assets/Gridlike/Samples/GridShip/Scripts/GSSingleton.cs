@@ -104,8 +104,6 @@ public class GSSingleton : MonoBehaviour, INotifier {
 				Upgrade upgrade2 = null;
 				Upgrade upgrade3 = null;
 
-				Debug.Log ("Upgrade count=" + upgrades.Count);
-
 				if (upgrades.Count > 0)
 					upgrade1 = upgrades [0]; 
 				if (upgrades.Count > 1)
@@ -184,6 +182,9 @@ public class GSSingleton : MonoBehaviour, INotifier {
 		cubeToNextLevel = 100;
 	}
 
+	public void AcquireSpecialUpgrade() {
+		upgradeQueue.Enqueue (true);
+	}
 	void IncreaseCubeProgress(int added) {
 		totalCube += added;
 		cubeProgress += added;

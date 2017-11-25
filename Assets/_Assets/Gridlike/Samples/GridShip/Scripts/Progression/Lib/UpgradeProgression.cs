@@ -46,8 +46,12 @@ public abstract class UpgradeProgression {
 		}
 	}
 
-	protected Upgrade Add(Upgrade upgrade) {
+	protected Upgrade Add(Upgrade upgrade, params Upgrade[] dependecies) {
 		upgrades.Add (upgrade);
+
+		foreach (Upgrade dependency in dependecies) {
+			upgrade.DependOn (dependency);
+		}
 
 		return upgrade;
 	}

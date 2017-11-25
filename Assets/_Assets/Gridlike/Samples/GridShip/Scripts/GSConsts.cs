@@ -11,6 +11,13 @@ public class GSTile {
 
 public static class GSConsts {
 
+	public const int GROUND2 = 2;
+
+	public const int ONE_WAY_PLATFORM = 10;
+
+	public const int ENGINE = 12;
+	public const int ANTI_GRAVITY = 13;
+
 	public static Dictionary<int, GSTile> tiles = new Dictionary<int, GSTile> { 
 		{ 1, new GSTile { // ground1
 				id = 1,
@@ -19,8 +26,8 @@ public static class GSConsts {
 				cubePerHP = 1
 			} 
 		},
-		{ 2, new GSTile { // ground2
-				id = 2,
+		{ GROUND2, new GSTile { // ground2
+				id = GROUND2,
 				cubeCost = 15,
 				HP = 12,
 				cubePerHP = 1
@@ -68,15 +75,22 @@ public static class GSConsts {
 				cubePerHP = 20
 			} 
 		},
-		{ 12, new GSTile { // engine
-				id = 12,
+		{ ONE_WAY_PLATFORM, new GSTile {
+				id = ONE_WAY_PLATFORM,
+				cubeCost = 100,
+				HP = 10,
+				cubePerHP = 1
+			}
+		},
+		{ ENGINE, new GSTile { // engine
+				id = ENGINE,
 				cubeCost = 200,
 				HP = 50,
 				cubePerHP = 1
 			} 
 		},
-		{ 13, new GSTile { // anti gravity
-				id = 13,
+		{ ANTI_GRAVITY, new GSTile { // anti gravity
+				id = ANTI_GRAVITY,
 				cubeCost = 500,
 				HP = 50,
 				cubePerHP = 1

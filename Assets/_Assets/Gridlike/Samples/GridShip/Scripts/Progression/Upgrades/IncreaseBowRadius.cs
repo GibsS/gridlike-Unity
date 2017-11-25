@@ -1,19 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class IncreaseBowRadius : MonoBehaviour
-{
+public class IncreaseBowRadius : Upgrade {
 
-	// Use this for initialization
-	void Start ()
-	{
-	
+	int radius;
+
+	public IncreaseBowRadius(int radius) {
+		this.radius = radius;
 	}
-	
-	// Update is called once per frame
-	void Update ()
-	{
-	
+
+	public override string Name() {
+		return "Bow explosion++";
+	}
+	public override string Description () {
+		return "Bow radius increased to " + character.bow.radius;
+	}
+
+	public override void Execute () {
+		character.bow.radius += radius;
 	}
 }
-

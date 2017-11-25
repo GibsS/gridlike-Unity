@@ -23,8 +23,9 @@ public abstract class Upgrade {
 		this.ship = ship;
 	}
 
-	public void DependOn(Upgrade upgrade) {
+	public Upgrade DependOn(Upgrade upgrade) {
 		dependentIds.Add (upgrade.id);
+		return this;
 	}
 
 	public abstract string Name();

@@ -1,19 +1,23 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ArrowsAreBombs : MonoBehaviour
-{
+public class ArrowsAreBombs : Upgrade {
 
-	// Use this for initialization
-	void Start ()
-	{
-	
+	int radius;
+
+	public ArrowsAreBombs(int radius) {
+		this.radius = radius;
 	}
-	
-	// Update is called once per frame
-	void Update ()
-	{
-	
+
+	public override string Name () {
+		return "arrows are bombs";
+	}
+
+	public override string Description () {
+		return "you're arrows will now explode";
+	}
+
+	public override void Execute () {
+		character.bow.radius = radius;
 	}
 }
-

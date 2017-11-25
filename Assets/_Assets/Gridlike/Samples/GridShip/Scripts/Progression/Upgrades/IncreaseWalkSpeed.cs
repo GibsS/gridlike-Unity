@@ -1,19 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class IncreaseWalkSpeed : MonoBehaviour
-{
+public class IncreaseWalkSpeed : Upgrade {
 
-	// Use this for initialization
-	void Start ()
-	{
-	
+	float speedIncrease;
+
+	public IncreaseWalkSpeed(int speedIncrease) {
+		this.speedIncrease = speedIncrease;
 	}
-	
-	// Update is called once per frame
-	void Update ()
-	{
-	
+
+	public override string Name() {
+		return "Speed++";
+	}
+	public override string Description () {
+		return "You can run faster!";
+	}
+
+	public override void Execute () {
+		character.GetComponent<PlatformerMotor2D>().groundSpeed += speedIncrease;
 	}
 }
-

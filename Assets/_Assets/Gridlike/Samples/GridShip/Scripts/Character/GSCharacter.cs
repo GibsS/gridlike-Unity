@@ -18,6 +18,8 @@ public class GSCharacter : MonoBehaviour, ICubeStorage {
 	public event Action<int> onAddCube;
 	public event Action<int> onRemoveCube;
 
+	public List<int> availableGridItems;
+
 	public int cubeCount;
 
 	public Bow bow;
@@ -31,6 +33,8 @@ public class GSCharacter : MonoBehaviour, ICubeStorage {
 
 	void Start () {
 		motor = GetComponent<PlatformerMotor2D> ();
+
+		availableGridItems = new List<int> ();
 
 		GSSingleton.instance.RegisterCharacter (this);
 

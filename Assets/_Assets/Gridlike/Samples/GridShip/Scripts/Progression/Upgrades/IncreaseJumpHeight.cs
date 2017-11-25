@@ -1,19 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class IncreaseJumpHeight : MonoBehaviour
-{
+public class IncreaseJumpHeight : Upgrade {
 
-	// Use this for initialization
-	void Start ()
-	{
-	
+	float heightIncrease;
+
+	public IncreaseJumpHeight(int heightIncrease) {
+		this.heightIncrease = heightIncrease;
 	}
-	
-	// Update is called once per frame
-	void Update ()
-	{
-	
+
+	public override string Name() {
+		return "Jump height++";
+	}
+	public override string Description () {
+		return "You can jump higher!";
+	}
+
+	public override void Execute () {
+		character.GetComponent<PlatformerMotor2D>().jumpHeight += heightIncrease;
 	}
 }
-

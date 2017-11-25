@@ -21,8 +21,8 @@ public class UpgradePickerView : MonoBehaviour {
 		button2.gameObject.SetActive (false);
 		button3.gameObject.SetActive (false);
 
-		AddListener (choice1, callback1, button1);
 		AddListener (choice2, callback2, button2);
+		AddListener (choice1, callback1, button1);
 		AddListener (choice3, callback3, button3);
 	}
 

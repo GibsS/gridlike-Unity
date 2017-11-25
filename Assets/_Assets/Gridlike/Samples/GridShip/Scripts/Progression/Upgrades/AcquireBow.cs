@@ -1,19 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AcquireBow : MonoBehaviour
-{
+public class AcquireBow : Upgrade {
 
-	// Use this for initialization
-	void Start ()
-	{
-	
+	public override string Name () {
+		return "bow";
 	}
-	
-	// Update is called once per frame
-	void Update ()
-	{
-	
+
+	public override string Description () {
+		return "you've acquired the bow. select it and left click to shoot";
+	}
+
+	public override void Execute () {
+		character.AcquireBow ();
 	}
 }
-

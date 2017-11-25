@@ -1,19 +1,25 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AcquireGridItem : MonoBehaviour
-{
+public class AcquireGridItem : Upgrade {
 
-	// Use this for initialization
-	void Start ()
-	{
-	
+	int itemID;
+
+	public AcquireGridItem(int itemId) {
+		this.itemID = itemID;
 	}
-	
-	// Update is called once per frame
-	void Update ()
-	{
-	
+
+	public override string Name () {
+		return "acquire item " + itemID;
+	}
+
+	public override string Description () {
+		return "you've acquired the item " + itemID;
+	}
+
+	public override void Execute () {
+		if (!character.availableGridItems.Contains (itemID)) {
+			character.availableGridItems.Add (itemID);
+		}
 	}
 }
-

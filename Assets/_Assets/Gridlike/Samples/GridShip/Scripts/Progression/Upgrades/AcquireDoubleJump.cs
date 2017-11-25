@@ -1,19 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AcquireDoubleJump : MonoBehaviour
-{
+public class AcquireDoubleJump : Upgrade {
 
-	// Use this for initialization
-	void Start ()
-	{
-	
+	public override string Name () {
+		return "double jump";
 	}
-	
-	// Update is called once per frame
-	void Update ()
-	{
-	
+
+	public override string Description () {
+		return "you've acquired the legendary double jump";
+	}
+
+	public override void Execute () {
+		character.GetComponent<PlatformerMotor2D> ().numOfAirJumps = 1;
 	}
 }
-

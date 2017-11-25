@@ -1,19 +1,17 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AcquirePlacer : MonoBehaviour
-{
-
-	// Use this for initialization
-	void Start ()
-	{
+public class AcquirePlacer : Upgrade {
 	
+	public override string Name () {
+		return "materializer";
 	}
-	
-	// Update is called once per frame
-	void Update ()
-	{
-	
+
+	public override string Description () {
+		return "you've acquired the materializer";
+	}
+
+	public override void Execute () {
+		character.AcquirePlacer ();
 	}
 }
-
