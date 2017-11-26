@@ -83,6 +83,10 @@ public class GSSingleton : MonoBehaviour, INotifier {
 		if (character.HasPlacer ()) root.toolbar.EnablePlacer ();
 		else root.toolbar.DisablePlacer ();
 
+		if (character.currentTool as Bow) root.toolbar.SelectBow ();
+		if (character.currentTool as Pickaxe) root.toolbar.SelectPickaxe ();
+		if (character.currentTool as Placer) root.toolbar.SelectPlacer ();
+
 		root.status.SetCubeCount (character.cubeCount);
 
 		character.onAddCube += HandleAddCube;
@@ -104,6 +108,12 @@ public class GSSingleton : MonoBehaviour, INotifier {
 
 			if (upgradeQueue.Dequeue ()) {
 				upgrades = progression.GetSpecialUpgrades (3);
+
+				if (upgrades.Count == 1) {
+					HandleUprade (upgrades [0]);
+
+					upgrades.Clear ();
+				}
 			} else {
 				upgrades = progression.GetNormalUpgrades (3);
 			}
@@ -119,7 +129,7 @@ public class GSSingleton : MonoBehaviour, INotifier {
 				if (upgrades.Count > 1)
 					upgrade2 = upgrades [1]; 
 				if (upgrades.Count > 2)
-					upgrade3 = upgrades [2]; 
+					upgrade3 = upgrades [2];
 
 				root.upgrades.ProposeUpgrades (
 					upgrade1 != null ? upgrade1.Name () : null, () => HandleUprade (upgrade1),
@@ -166,12 +176,15 @@ public class GSSingleton : MonoBehaviour, INotifier {
 
 	void PickBow() {
 		character.SelectBow ();
+		root.toolbar.SelectBow ();
 	}
 	void PickPickaxe() {
 		character.SelectPickaxe ();
+		root.toolbar.SelectPickaxe ();
 	}
 	void PickPlacer() {
 		character.SelectPlacer ();
+		root.toolbar.SelectPlacer ();
 	}
 
 	void AcquireBow() {

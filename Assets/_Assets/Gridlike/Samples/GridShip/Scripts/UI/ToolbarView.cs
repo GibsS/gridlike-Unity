@@ -32,6 +32,22 @@ public class ToolbarView : MonoBehaviour {
 		placerButton.gameObject.SetActive (false);
 	}
 
+	public void SelectBow() {
+		bowButton.GetComponent<Image> ().color = Color.yellow;
+		pickaxeButton.GetComponent<Image> ().color = Color.white;
+		placerButton.GetComponent<Image> ().color = Color.white;
+	}
+	public void SelectPickaxe() {
+		bowButton.GetComponent<Image> ().color = Color.white;
+		pickaxeButton.GetComponent<Image> ().color = Color.yellow;
+		placerButton.GetComponent<Image> ().color = Color.white;
+	}
+	public void SelectPlacer() {
+		bowButton.GetComponent<Image> ().color = Color.white;
+		pickaxeButton.GetComponent<Image> ().color = Color.white;
+		placerButton.GetComponent<Image> ().color = Color.yellow;
+	}
+
 	public void Initialize() {
 		bowButton.onClick.AddListener (() => {
 			if(onBowClick != null) onBowClick();

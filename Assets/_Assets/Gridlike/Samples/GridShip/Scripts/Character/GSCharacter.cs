@@ -67,7 +67,7 @@ public class GSCharacter : MonoBehaviour, ICubeStorage {
 			GSShip ship = platform.GetComponent<GSShip> ();
 
 			if (ship != null) {
-				Camera.main.orthographicSize /= 2;
+				Camera.main.orthographicSize /= 4;
 
 				ship.hasCharacter = false;
 			}
@@ -77,7 +77,7 @@ public class GSCharacter : MonoBehaviour, ICubeStorage {
 			GSShip ship = newPlatform.GetComponent<GSShip> ();
 
 			if (ship != null) {
-				Camera.main.orthographicSize *= 2;
+				Camera.main.orthographicSize *= 4;
 				ship.hasCharacter = true;
 			}
 
