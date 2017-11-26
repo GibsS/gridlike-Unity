@@ -26,9 +26,23 @@ public abstract class UpgradeProgression {
 			}
 		}
 
-		readyUpgrades.AddRange (move);
-		foreach (Upgrade upgrade in move) upgrades.Remove (upgrade);
+		Utility.MoveList (upgrades, readyUpgrades, move);
 	}
+
+	public Upgrade GetUpgrade(int id) {
+		Upgrade upgrade = upgrades.Find (u => u.id == id);
+
+		if (upgrade != null) return upgrade;
+
+		upgrade = readyUpgrades.Find (u => u.id == id);
+
+		if (upgrade != null) return upgrade;
+
+		upgrade = achievedUpgrades.Find (u => u.id == id);
+
+		return upgrade;
+	}
+
 	public List<Upgrade> GetSpecialUpgrades(int count) {
 		return new List<Upgrade>(readyUpgrades.Where(x => x.isSpecial)
 			.OrderBy (x => Random.Range (0, 1))
@@ -43,7 +57,17 @@ public abstract class UpgradeProgression {
 		upgrades.Remove (upgrade);
 		if (readyUpgrades.Remove (upgrade)) {
 			achievedUpgrades.Add (upgrade);
+			upgrade.isDone = true;
 		}
+
+		List<Upgrade> move = new List<Upgrade> ();
+		foreach (Upgrade u in upgrades) {
+			if (u.dependentIds.All (u1 => GetUpgrade(u1).isDone)) {
+				move.Add (u);
+			}
+		}
+
+		Utility.MoveList (upgrades, readyUpgrades, move);
 	}
 
 	protected Upgrade Add(Upgrade upgrade, params Upgrade[] dependecies) {

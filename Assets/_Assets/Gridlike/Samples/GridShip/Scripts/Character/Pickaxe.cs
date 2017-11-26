@@ -18,8 +18,6 @@ public class Pickaxe : Tool {
 
 	void TryPickaxe(Vector2 position) {
 		if(Time.time - lastPickaxe > cooldown && Vector2.Distance((Vector2)transform.position, position) < radius) {
-			lastPickaxe = Time.time;
-
 			Grid grid;
 			int x;
 			int y;
@@ -27,6 +25,8 @@ public class Pickaxe : Tool {
 			GridUtility.GetAnyNonEmptyTile (position, out grid, out x, out y);
 
 			if (grid != null) {
+				lastPickaxe = Time.time;
+
 				GSGrid gsGrid = grid.GetComponent<GSGrid> ();
 
  				gsGrid.Damage (character, x, y, damage, position);

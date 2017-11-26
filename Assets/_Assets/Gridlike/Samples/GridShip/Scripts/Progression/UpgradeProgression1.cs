@@ -20,8 +20,6 @@ public class UpgradeProgression1 : UpgradeProgression {
 		arrowsAreBombs.DependOn (bow).DependOn(placer);
 		arrowsAreBombs.isSpecial = true;
 
-		Add (new IncreasePickaxeDamage (1));
-
 		// BOW UPGRADES
 		int DAMAGE_INCREASE = 1;
 		Upgrade upgrade = AddIncreaseBowDamage(null, DAMAGE_INCREASE);
@@ -46,12 +44,12 @@ public class UpgradeProgression1 : UpgradeProgression {
 		Add(new AcquireDoubleJump());
 
 		int SPEED_INCREASE = 1;
-		Add (new IncreaseWalkSpeed (SPEED_INCREASE));
-		Add (new IncreaseWalkSpeed (SPEED_INCREASE));
+		upgrade = Add (new IncreaseWalkSpeed (SPEED_INCREASE));
+		upgrade = Add (new IncreaseWalkSpeed (SPEED_INCREASE), upgrade);
 
-		Add (new IncreaseJumpHeight (1));
-		Add (new IncreaseJumpHeight (1));
-		Add (new IncreaseJumpHeight (1));
+		upgrade = Add (new IncreaseJumpHeight (1));
+		upgrade = Add (new IncreaseJumpHeight (1), upgrade);
+		upgrade = Add (new IncreaseJumpHeight (1), upgrade);
 
 		// GRID ITEM
 		AddAcquireGridItem (GSConsts.ENGINE);

@@ -9,6 +9,7 @@ public abstract class Upgrade {
 	public List<int> dependentIds { get; private set; }
 
 	public bool isSpecial;
+	public bool isDone;
 
 	protected GSCharacter character { get; private set; }
 	protected GSShip ship { get; private set; }

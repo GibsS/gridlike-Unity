@@ -20,14 +20,14 @@ public class GSSingleton : MonoBehaviour, INotifier {
 	public static GSSingleton instance;
 
 	public int totalCube;
-	public int level;
+	public int level = 1;
 	public int cubeProgress;
 	public int cubeToNextLevel;
 
 	RootView root;
 
-	GSCharacter character;
-	GSShip ship;
+	public GSCharacter character { get; private set; }
+	public GSShip ship { get; private set; }
 
 	Tutorial tutorial;
 
@@ -202,6 +202,7 @@ public class GSSingleton : MonoBehaviour, INotifier {
 		if (cubeProgress >= cubeToNextLevel) {
 			cubeProgress -= cubeToNextLevel;
 			level++;
+			cubeToNextLevel += (level-1) * 100;
 
 			upgradeQueue.Enqueue (false);
 		}

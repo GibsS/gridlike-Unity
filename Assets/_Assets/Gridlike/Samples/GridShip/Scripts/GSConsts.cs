@@ -51,28 +51,28 @@ public static class GSConsts {
 				id = 5,
 				cubeCost = 1000,
 				HP = 2,
-				cubePerHP = 5
+				cubePerHP = 3
 			} 
 		},
 		{ 6, new GSTile { // ore2
 				id = 6,
 				cubeCost = 1000,
-				HP = 3,
-				cubePerHP = 10
+				HP = 2,
+				cubePerHP = 5
 			} 
 		},
 		{ 7, new GSTile { // ore3
 				id = 7,
 				cubeCost = 1000,
-				HP = 5,
-				cubePerHP = 15
+				HP = 4,
+				cubePerHP = 10
 			} 
 		},
 		{ 8, new GSTile { // ore4
 				id = 8,
 				cubeCost = 1000,
-				HP = 6,
-				cubePerHP = 20
+				HP = 5,
+				cubePerHP = 15
 			} 
 		},
 		{ ONE_WAY_PLATFORM, new GSTile {
