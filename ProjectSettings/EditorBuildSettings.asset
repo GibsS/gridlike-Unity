@@ -5,12 +5,15 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Empty.unity
     guid: 00000000000000000000000000000000
   - enabled: 0
-    path: Assets/Experiments/ProceduralTest1/ProceduralTest1.unity
+    path: Assets/Experiments/Ship1/Ship1.unity
     guid: 4bfa7169690a0a9439e28b17fc2b9a30
   - enabled: 0
     path: Assets/Scenes/Level.unity
+    guid: 00000000000000000000000000000000
+  - enabled: 1
+    path: Assets/_Assets/Gridlike/Samples/GridShip/Scenes/GSScene1.unity
     guid: 00000000000000000000000000000000

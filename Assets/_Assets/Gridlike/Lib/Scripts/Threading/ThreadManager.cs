@@ -111,7 +111,7 @@ public class ThreadManager : MonoBehaviour
 	public static void CreateJob<T>(Func<T> action, JobCallback<T> callback) {
 
 #if UNITY_WEBGL && !UNITY_EDITOR
-		callback(action());
+		callback(false, action());
 #else
 		if(Application.isPlaying) {
 			if (_instance == null) {
