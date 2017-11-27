@@ -2,37 +2,61 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// #### POTENTIAL IMPROVEMENTS ##
-// Grid updater component: iterates through tiles and updates there information (potentially through compute shader?)
+// ## IMPROVEMENTS (for later)
+// Grid updater component: iterates through tiles and updates there information
 
-// Improve grid editor + atlas (2-3 days)
+// Serialization: Allow the creation of the world ahead of time, saving to be loaded later on
+
+// Scriptable objects storage of grid tiles
+
+// # TICKET 1 - Better palette (1day)
 // Better palette (with subId picker?)
+// Simple way of increasing decreasing brush size (big button in corner?)
+// Replace (place but only on tiles with specific ids)
+// Add regular gizmo tool
 
-// Character controller (7-14 days)
+// # TICKET 2 - Character controller easing functions (1hour)
 // Replace EasingFunction with Easing (much more straight forward and more efficient)
 
-// TILE ATLAS
+// # TICKET 3 - Improve atlas (1day)
 // Add the drag and drop if possible to the tile atlas (maybe into a window dedicated to it)
 // Have sprite size verification with error boxes in tile atlas
 // Tighter encapsulation with tile info and sprites
 
-// Serialization: Allow the creation of the world ahead of time, saving to be loaded later on
-// Scriptable objects storage of grid tiles
-
-// Add some form of model validation including:
+// # TICKET 4 - Grid data validation (1hour)
+// Add some form of model validation including on a grid (runnable whenever):
 // - does id exist
 // - does subId exist
 // - triangles are coherent
 // - tileGO do not overlap
 
+// Automatic fix (with options?)
+
+// # TICKET 5 - Script file with tile ID (1hour)
+// Automatic script generation with ID constants inside
+// + Simple accessor functions
+
+// # TICKET 6 - Atlas is up to date (2hour)
+// Concept of version id to signal a need for updating a grid (because the atlas changed since last version update)
+// Push for update on the 
 // The spritesheet doesn't update every time a sprite is added 
 
-// Simple way of increasing decreasing brush size (big button in corner?)
-// Replace (place but only on tiles with specific ids)
+// # TICKET 7 - Simpler access to grid info (1hour)
+// Add simpler oneliner access function to get current tile at x, y + component or tilebehaviour
 
+// # TICKET 8 - GridUtility file in library + make generic (1hour)
+// Integrate GridUtility to Gridlike directly
 
-// BUGS
-// Allow regular gizmos to be accessed even when the grid is selected
+// # TICKET 9 - Comment EVERYTHING + correct namespace (1day)
+// comments on gridlike
+// namespace on gridship
+
+// # TICKET 10 - Remove Globals from PC2D
+
+// # TICKET 11 - Make PC2D inherit speed from ship when loosing contact
+
+// # TICKET 12 - Simplify grid ship creation (merge platform motor into Grid?)
+
 
 // TEST SCENARIOS
 // Handle subids, see their limit, define contract and preconditions..

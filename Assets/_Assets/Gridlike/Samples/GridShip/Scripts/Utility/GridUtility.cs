@@ -70,6 +70,7 @@ public class GridUtility {
 			candidate.WorldToGrid (position, out x, out y);
 
 			if (candidate.GetId (x, y) == 0 
+				&& candidate.GetTileComponent(x, y) == null
 				&& (candidate.GetId(x - 1, y) != 0 
 				|| candidate.GetId(x + 1, y) != 0
 				|| candidate.GetId(x, y - 1) != 0
