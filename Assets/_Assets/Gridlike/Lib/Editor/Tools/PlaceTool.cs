@@ -9,7 +9,9 @@ namespace Gridlike {
 
 		int radius = 1;
 		int id = 1;
-		int subId = 0;
+
+		bool replace;
+		int replacedId;
 
 		Dictionary<string, Texture2D> thumbnailCache;
 		TileAtlas cachedAtlas;
@@ -17,7 +19,8 @@ namespace Gridlike {
 		public PlaceTool() {
 			radius = Mathf.Max(1, PlayerPrefs.GetInt ("grid.place.radius"));
 			id = Mathf.Max(1, PlayerPrefs.GetInt ("grid.place.id"));
-			subId = Mathf.Max(0, PlayerPrefs.GetInt ("grid.place.subId"));
+			replace = PlayerPrefs.GetInt ("grid.place.replace") == 1;
+			replacedId = Mathf.Max (1, PlayerPrefs.GetInt ("grid.place.replaceId"));
 
 			thumbnailCache = null;
 		}
@@ -25,7 +28,8 @@ namespace Gridlike {
 		public override void Serialize() {
 			PlayerPrefs.SetInt ("grid.place.radius", radius);
 			PlayerPrefs.SetInt ("grid.place.id", id);
-			PlayerPrefs.SetInt ("grid.place.subId", subId);
+			PlayerPrefs.SetInt ("grid.place.replace", replace ? 1 : 0);
+			PlayerPrefs.SetInt ("grid.place.replaceId", replacedId);
 		}
 
 		public override bool UseWindow() {
@@ -60,11 +64,26 @@ namespace Gridlike {
 			if (grid.atlas == null || id <= 0 || id >= grid.atlas.atlas.Length) id = 0;
 			if (grid.atlas == null || grid.atlas [id] == null) id = 0;
 
-			subId = EditorGUILayout.IntField ("Sub id", subId);
-			if (subId < 0) subId = 0;
-
 			if (grid.atlas [id].tileGO == null) {
+				EditorGUILayout.BeginHorizontal ();
+
 				radius = Mathf.Max(1, EditorGUILayout.IntField ("Radius", radius));
+
+				if (GUILayout.Button ("-", GUILayout.Width(40))) {
+					radius -= 1;
+					if (radius == 0) radius = 1;
+				}
+				if (GUILayout.Button ("+", GUILayout.Width(40))) {
+					radius += 1;
+				}
+
+				EditorGUILayout.EndHorizontal ();
+
+				replace = EditorGUILayout.Toggle ("Replace", replace);
+
+				if (replace) {
+					replacedId = Mathf.Max (1, EditorGUILayout.IntField ("Replaced id", replacedId));
+				}
 			} else {
 				GUI.enabled = false;
 				radius = EditorGUILayout.IntField ("Radius", 1);
@@ -126,11 +145,11 @@ namespace Gridlike {
 			int[,] ids = new int[2 * r + 1, 2 * r + 1];
 			for (int i = 0; i < ids.GetLength (0); i++) {
 				for (int j = 0; j < ids.GetLength (1); j++) {
-					ids [i, j] = id;
+					if(!replace || grid.GetId(x - r + i, y - r + j) == replacedId) ids [i, j] = id;
 				}
 			}
 
-			grid.Set (x - r, y - r, ids);
+			grid.Set (x - r, y - r, ids, true);
 
 			grid.PresentContainingRegion (mouseX, mouseY);
 		}
