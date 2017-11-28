@@ -13,6 +13,7 @@ namespace Gridlike {
 		public int tilePixelSize;
 		public bool useRelativePath = false;
 		public string spriteSheetPath;
+		public string scriptPath;
 
 		public Texture2D spriteSheet;
 		public Sprite emptySprite;
@@ -20,6 +21,8 @@ namespace Gridlike {
 		public TileInfo[] atlas;
 
 		public Material material;
+
+		public TileAtlasHelper helper;
 
 		public int Count { 
 			get {
@@ -107,7 +110,11 @@ namespace Gridlike {
 				for (int i = 0; i < atlas.Length; i++) {
 					atlas [i] = new TileInfo ();
 				}
+
 			}
+
+			helper = Activator.CreateInstance (Type.GetType (Path.GetFileNameWithoutExtension (scriptPath))) as TileAtlasHelper;
+			helper._Inject (this);
 		}
 
 		public IEnumerable<TileInfo> GetTileInfos() {

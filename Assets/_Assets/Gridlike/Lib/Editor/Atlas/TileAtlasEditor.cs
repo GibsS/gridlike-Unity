@@ -24,6 +24,11 @@ namespace Gridlike {
 				return Application.dataPath + "/" + spriteSheetProjectPath;
 			} 
 		}
+		public string scriptPath {
+			get {
+				return Application.dataPath + "/" + scriptProjectPath;
+			}
+		}
 		// PATH AFTER ASSETS example: for sprite sheet to be place at c:/a folder/Unity project/Assets/test/sprite_sheet.png, 
 		// will return test/sprite_sheet.png
 		public string spriteSheetProjectPath {
@@ -31,9 +36,20 @@ namespace Gridlike {
 				TileAtlas atlas = target as TileAtlas;
 
 				if (atlas.useRelativePath) {
-					return Path.GetDirectoryName (AssetDatabase.GetAssetPath (target)).Substring(7) + "/" +  atlas.spriteSheetPath;
+					return Path.GetDirectoryName (AssetDatabase.GetAssetPath (target)).Substring(7) + "/" + atlas.spriteSheetPath;
 				} else {
 					return atlas.spriteSheetPath;
+				}
+			}
+		}
+		public string scriptProjectPath {
+			get {
+				TileAtlas atlas = target as TileAtlas;
+
+				if (atlas.useRelativePath) {
+					return Path.GetDirectoryName (AssetDatabase.GetAssetPath (target)).Substring(7) + "/" + atlas.scriptPath;
+				} else {
+					return atlas.scriptPath;
 				}
 			}
 		}
@@ -52,7 +68,7 @@ namespace Gridlike {
 			atlas.material.mainTexture = atlas.spriteSheet;
 
 			// SPRITE SHEET PATH
-			atlas.useRelativePath = EditorGUILayout.Toggle("Sprite sheet path is relative", atlas.useRelativePath);
+			atlas.useRelativePath = EditorGUILayout.Toggle("Paths are relative", atlas.useRelativePath);
 
 			atlas.spriteSheetPath = EditorGUILayout.TextField ("Sprite sheet path", atlas.spriteSheetPath);
 			if (string.IsNullOrEmpty (atlas.spriteSheetPath)) {
@@ -69,6 +85,20 @@ namespace Gridlike {
 
 			if (GUILayout.Button ("Generate sprite sheet")) {
 				GenerateSpriteSheet ();
+			}
+
+			// HELPER SCRIPT
+			atlas.scriptPath = EditorGUILayout.TextField ("Script path", atlas.scriptPath);
+			if (string.IsNullOrEmpty (atlas.scriptPath)) {
+				atlas.scriptPath = atlas.name + "Script.cs";
+			} else {
+				if (!atlas.scriptPath.EndsWith (".cs")) {
+					atlas.scriptPath += ".cs";
+				}
+			}
+
+			if (GUILayout.Button ("Generate script")) {
+				GenerateScript ();
 			}
 
 			foreach(TileInfo info in atlas.GetTileInfos()) {
@@ -458,6 +488,39 @@ namespace Gridlike {
 
 			spriteInd += 1;
 			tileY += tileHeight;
+		}
+
+		void GenerateScript() {
+			TileAtlas atlas = target as TileAtlas;
+
+			string className = Path.GetFileNameWithoutExtension (scriptProjectPath);
+
+			string copyPath = "Assets/" + scriptProjectPath;
+			using (StreamWriter outfile = new StreamWriter(copyPath)) {
+				outfile.WriteLine("using UnityEngine;");
+				outfile.WriteLine("using System;");
+				outfile.WriteLine("using System.Collections;");
+				outfile.WriteLine("");
+				outfile.WriteLine("using Gridlike;");
+				outfile.WriteLine("");
+				outfile.WriteLine("[Serializable]");
+				outfile.WriteLine("public class " + className + " : TileAtlasHelper {");
+				outfile.WriteLine("");
+				outfile.WriteLine("\tpublic static " + className + " helper;");
+				outfile.WriteLine("\tpublic static TileAtlas atlas { get { return helper._atlas; } }");
+				outfile.WriteLine("");
+				outfile.WriteLine("\tpublic " + className + "() {");
+				outfile.WriteLine("\t\thelper = this;");
+				outfile.WriteLine("\t}");
+				outfile.WriteLine("");
+
+				foreach (TileInfo tile in atlas.GetTileInfos()) {
+					outfile.WriteLine ("\tpublic const int " + tile.name.Replace (" ", "_").ToUpper() + " = " + tile.id + ";");
+				}
+
+				outfile.WriteLine("}");
+			}
+			AssetDatabase.Refresh();
 		}
 	}
 }

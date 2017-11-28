@@ -2,14 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-// Progression system
-// Tutorial system
-
-// Progression implementation
-// Tutorial implementation
-
-// Design first level
-
 public interface INotifier {
 
 	void Notify (string notification);
@@ -35,6 +27,7 @@ public class GSSingleton : MonoBehaviour, INotifier {
 	Queue<bool> upgradeQueue;
 
 	void Awake() {
+
 		if (instance != null) {
 			Destroy (this);
 			return;

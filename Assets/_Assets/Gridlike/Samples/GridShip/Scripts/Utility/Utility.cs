@@ -9,7 +9,5 @@ public class Utility {
 		foreach (X u in move) {
 			source.Remove (u);
 		}
-
-		Debug.Log ("Move=" + string.Join (", ", move.ConvertAll (u => (u as Upgrade).Name ()).ToArray ()));
 	}
 }

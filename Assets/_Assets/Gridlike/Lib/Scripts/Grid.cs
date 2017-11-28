@@ -30,10 +30,6 @@ using UnityEngine;
 
 // Automatic fix (with options?)
 
-// # TICKET 5 - Script file with tile ID (1hour)
-// Automatic script generation with ID constants inside
-// + Simple accessor functions
-
 // # TICKET 6 - Atlas is up to date (2hour)
 // Concept of version id to signal a need for updating a grid (because the atlas changed since last version update)
 // Push for update on the 
@@ -51,6 +47,7 @@ using UnityEngine;
 
 // # TICKET 11 - Make PC2D inherit speed from ship when loosing contact
 
+// # TICKET 12 - PC2D - Allow moving a character with transform despite the transform moving when on a platform
 
 // TEST SCENARIOS
 // Handle subids, see their limit, define contract and preconditions..
