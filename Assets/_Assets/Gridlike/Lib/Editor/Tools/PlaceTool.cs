@@ -10,6 +10,8 @@ namespace Gridlike {
 		int radius = 1;
 		int id = 1;
 
+		bool brushIsCircular;
+
 		bool replace;
 		int replacedId;
 
@@ -19,6 +21,9 @@ namespace Gridlike {
 		public PlaceTool() {
 			radius = Mathf.Max(1, PlayerPrefs.GetInt ("grid.place.radius"));
 			id = Mathf.Max(1, PlayerPrefs.GetInt ("grid.place.id"));
+
+			brushIsCircular = PlayerPrefs.GetInt ("grid.place.brushIsCircular") == 1;
+
 			replace = PlayerPrefs.GetInt ("grid.place.replace") == 1;
 			replacedId = Mathf.Max (1, PlayerPrefs.GetInt ("grid.place.replaceId"));
 
@@ -28,6 +33,9 @@ namespace Gridlike {
 		public override void Serialize() {
 			PlayerPrefs.SetInt ("grid.place.radius", radius);
 			PlayerPrefs.SetInt ("grid.place.id", id);
+
+			PlayerPrefs.SetInt ("grid.place.brushIsCircular", brushIsCircular ? 1 : 0);
+
 			PlayerPrefs.SetInt ("grid.place.replace", replace ? 1 : 0);
 			PlayerPrefs.SetInt ("grid.place.replaceId", replacedId);
 		}
@@ -64,6 +72,8 @@ namespace Gridlike {
 			if (grid.atlas == null || id <= 0 || id >= grid.atlas.atlas.Length) id = 0;
 			if (grid.atlas == null || grid.atlas [id] == null) id = 0;
 
+			EditorGUILayout.Space ();
+
 			if (grid.atlas [id].tileGO == null) {
 				EditorGUILayout.BeginHorizontal ();
 
@@ -78,6 +88,11 @@ namespace Gridlike {
 				}
 
 				EditorGUILayout.EndHorizontal ();
+
+				brushIsCircular = !EditorGUILayout.Toggle ("Square", !brushIsCircular);
+				brushIsCircular = EditorGUILayout.Toggle ("Circle", brushIsCircular);
+
+				EditorGUILayout.Space ();
 
 				replace = EditorGUILayout.Toggle ("Replace", replace);
 
@@ -145,7 +160,19 @@ namespace Gridlike {
 			int[,] ids = new int[2 * r + 1, 2 * r + 1];
 			for (int i = 0; i < ids.GetLength (0); i++) {
 				for (int j = 0; j < ids.GetLength (1); j++) {
-					if(!replace || grid.GetId(x - r + i, y - r + j) == replacedId) ids [i, j] = id;
+					// CHECK IF, IN REPLACE MODE, THE CURRENT ID IS CORRECT
+					if (replace && grid.GetId (x - r + i, y - r + j) != replacedId) {
+						continue;
+					}
+
+					// CHECK BRUSH TYPE
+					float dx = i - r;
+					float dy = j - r;
+					if (brushIsCircular && dx * dx + dy * dy - 1 > r * r) {
+						continue;
+					}
+
+					ids [i, j] = id;
 				}
 			}
 

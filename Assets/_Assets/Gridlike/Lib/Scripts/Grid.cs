@@ -49,11 +49,7 @@ using UnityEngine;
 // comments on gridlike
 // namespace on gridship
 
-// # TICKET 10 - Remove Globals from PC2D
-
 // # TICKET 11 - Make PC2D inherit speed from ship when loosing contact
-
-// # TICKET 12 - Simplify grid ship creation (merge platform motor into Grid?)
 
 
 // TEST SCENARIOS
@@ -82,7 +78,7 @@ namespace Gridlike {
 	[ExecuteInEditMode]
 	[AddComponentMenu("Gridlike/Grid")]
 	[DisallowMultipleComponent]
-	public class Grid : MonoBehaviour {
+	public class Grid : MovingPlatformMotor2D {
 
 		public const int REGION_SIZE = 50;
 
