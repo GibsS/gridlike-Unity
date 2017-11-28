@@ -72,8 +72,6 @@ namespace Gridlike {
 			if (grid.atlas == null || id <= 0 || id >= grid.atlas.atlas.Length) id = 0;
 			if (grid.atlas == null || grid.atlas [id] == null) id = 0;
 
-			EditorGUILayout.Space ();
-
 			if (grid.atlas [id].tileGO == null) {
 				EditorGUILayout.BeginHorizontal ();
 
@@ -91,8 +89,6 @@ namespace Gridlike {
 
 				brushIsCircular = !EditorGUILayout.Toggle ("Square", !brushIsCircular);
 				brushIsCircular = EditorGUILayout.Toggle ("Circle", brushIsCircular);
-
-				EditorGUILayout.Space ();
 
 				replace = EditorGUILayout.Toggle ("Replace", replace);
 
