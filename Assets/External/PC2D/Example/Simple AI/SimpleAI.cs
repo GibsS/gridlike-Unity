@@ -54,7 +54,7 @@ namespace  PC2D
                     transform.position,
                     dir,
                     distanceCheckForJump,
-                    Globals.ENV_MASK);
+					0x100);
 
                 if (hit.collider != null)
                 {
@@ -73,7 +73,7 @@ namespace  PC2D
                     transform.position,
                     -Vector2.up,
                     heightToFallFast,
-                    Globals.ENV_MASK);
+					0x100);
 
                 Vector2 dir = Vector2.right;
 
@@ -86,7 +86,7 @@ namespace  PC2D
                     transform.position,
                     dir,
                     distanceCheckForJump,
-                    Globals.ENV_MASK);
+					0x100);
 
                 if (hit.collider == null && hit2.collider == null)
                 {

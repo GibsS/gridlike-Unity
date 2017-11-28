@@ -392,7 +392,7 @@ public class PlatformerMotor2DEditor : Editor
                 "'{0}' is not a multiple of the fixed time step ({1}). This results in an extra frame effectively making '{0}' {2} instead of {3}",
                 property.text,
                 Time.fixedDeltaTime,
-                Globals.GetFrameCount(_properties[property.name].floatValue) * Time.fixedDeltaTime,
+                PlatformerMotor2D._GetFrameCount(_properties[property.name].floatValue) * Time.fixedDeltaTime,
                 _properties[property.name].floatValue);
 
             EditorGUILayout.HelpBox(
@@ -428,7 +428,7 @@ public class PlatformerMotor2DEditor : Editor
 
         if (!_properties[property.name].hasMultipleDifferentValues)
         {
-            frameCount = Globals.GetFrameCount(_properties[property.name].floatValue).ToString();
+			frameCount = PlatformerMotor2D._GetFrameCount(_properties[property.name].floatValue).ToString();
         }
 
         EditorGUILayout.PropertyField(_properties[property.name],
@@ -451,15 +451,15 @@ public class PlatformerMotor2DEditor : Editor
     private void CheckValues()
     {
         if (!_properties[ENV_CHECK_DISTANCE.name].hasMultipleDifferentValues &&
-            _properties[ENV_CHECK_DISTANCE.name].floatValue <= Globals.MINIMUM_DISTANCE_CHECK * 2)
+			_properties[ENV_CHECK_DISTANCE.name].floatValue <= PlatformerMotor2D.MINIMUM_DISTANCE_CHECK * 2)
         {
-            _properties[ENV_CHECK_DISTANCE.name].floatValue = Globals.MINIMUM_DISTANCE_CHECK * 2;
+			_properties[ENV_CHECK_DISTANCE.name].floatValue = PlatformerMotor2D.MINIMUM_DISTANCE_CHECK * 2;
         }
 
         if (!_properties[MIN_DISTANCE_FROM_ENV.name].hasMultipleDifferentValues &&
-            _properties[MIN_DISTANCE_FROM_ENV.name].floatValue <= Globals.MINIMUM_DISTANCE_CHECK)
+			_properties[MIN_DISTANCE_FROM_ENV.name].floatValue <= PlatformerMotor2D.MINIMUM_DISTANCE_CHECK)
         {
-            _properties[MIN_DISTANCE_FROM_ENV.name].floatValue = Globals.MINIMUM_DISTANCE_CHECK;
+			_properties[MIN_DISTANCE_FROM_ENV.name].floatValue = PlatformerMotor2D.MINIMUM_DISTANCE_CHECK;
         }
 
         if (!_properties[NUM_OF_ITERATIONS.name].hasMultipleDifferentValues &&

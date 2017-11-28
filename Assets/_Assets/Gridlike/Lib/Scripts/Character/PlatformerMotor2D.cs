@@ -1046,6 +1046,23 @@ public class PlatformerMotor2D : MonoBehaviour
         return ((0x1 << obj.layer) & staticEnvLayerMask) != 0;
     }
 
+
+	public const float MINIMUM_DISTANCE_CHECK = 0.01f;
+
+	public static int _GetFrameCount(float time)
+	{
+		float frames = time / Time.fixedDeltaTime;
+		int roundedFrames = Mathf.RoundToInt(frames);
+
+		if (Mathf.Approximately(frames, roundedFrames))
+		{
+			return roundedFrames;
+		}
+
+		return Mathf.CeilToInt(frames);
+
+	}
+
     #endregion
 
     #region Private
@@ -3329,7 +3346,7 @@ public class PlatformerMotor2D : MonoBehaviour
 
     private int GetFrameCount(float time)
     {
-        return Mathf.RoundToInt(PC2D.Globals.GetFrameCount(time) / (timeScale != 0 ? timeScale : _savedTimeScale));
+        return Mathf.RoundToInt(_GetFrameCount(time) / (timeScale != 0 ? timeScale : _savedTimeScale));
     }
 
     void OnDrawGizmosSelected()

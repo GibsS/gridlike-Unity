@@ -9,11 +9,9 @@ using UnityEngine;
 
 // Scriptable objects storage of grid tiles
 
-// # TICKET 1 - Better palette (1day)
-// Better palette (with subId picker?)
-// Simple way of increasing decreasing brush size (big button in corner?)
-// Replace (place but only on tiles with specific ids)
-// Add regular gizmo tool
+// Sub id calculation algorithm definition
+
+// Depth based lighting
 
 // # TICKET 2 - Character controller easing functions (1hour)
 // Replace EasingFunction with Easing (much more straight forward and more efficient)
