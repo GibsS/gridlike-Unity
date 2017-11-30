@@ -13,8 +13,11 @@ using UnityEngine;
 
 // Depth based lighting
 
-// # TICKET 2 - Character controller easing functions (1hour)
-// Replace EasingFunction with Easing (much more straight forward and more efficient)
+// # TICKET 11 - Make PC2D inherit speed from ship when loosing contact
+
+// # TICKET 12 - PC2D - Allow moving a character with transform despite the transform moving when on a platform
+
+
 
 // # TICKET 3 - Improve atlas (1day)
 // Add the drag and drop if possible to the tile atlas (maybe into a window dedicated to it)
@@ -33,21 +36,11 @@ using UnityEngine;
 // # TICKET 6 - Atlas is up to date (2hour)
 // Concept of version id to signal a need for updating a grid (because the atlas changed since last version update)
 // Push for update on the 
-// The spritesheet doesn't update every time a sprite is added 
-
-// # TICKET 7 - Simpler access to grid info (1hour)
-// Add simpler oneliner access function to get current tile at x, y + component or tilebehaviour
-
-// # TICKET 8 - GridUtility file in library + make generic (1hour)
-// Integrate GridUtility to Gridlike directly
+// The spritesheet doesn't update every time a sprite is added
 
 // # TICKET 9 - Comment EVERYTHING + correct namespace (1day)
 // comments on gridlike
 // namespace on gridship
-
-// # TICKET 11 - Make PC2D inherit speed from ship when loosing contact
-
-// # TICKET 12 - PC2D - Allow moving a character with transform despite the transform moving when on a platform
 
 // TEST SCENARIOS
 // Handle subids, see their limit, define contract and preconditions..
@@ -412,7 +405,23 @@ namespace Gridlike {
 		#region TILE GET/SET
 
 		public Tile Get(int x, int y) {
-			return tiles.Get (x, y) as Tile;
+			Tile tile =  tiles.Get (x, y) as Tile;
+
+			return tile;
+		}
+		public Tile Get(int x, int y, out Component tileComponent) {
+			Tile tile = tiles.Get(x, y) as Tile;
+
+			tileComponent = tileGOs.GetComponent(x, y);
+
+			if(tileComponent != null && tileComponent is TileBehaviour) {
+				return (tileComponent as TileBehaviour).tile;
+			} else {
+				return tile;
+			}
+		}
+		public Tile Get(int x, int y, out TileBehaviour tileBehaviour) {
+			return Get (x, y, out tileBehaviour);
 		}
 		public TileShape GetShape(int x, int y) {
 			Tile tile = tiles.Get (x, y) as Tile;
@@ -424,6 +433,20 @@ namespace Gridlike {
 
 			return tile == null ? 0 : tile.id;
 		}
+		public int GetId(int x, int y, out Component tileComponent) {
+			Tile tile = tiles.Get(x, y) as Tile;
+
+			tileComponent = tileGOs.GetComponent(x, y);
+
+			if(tileComponent != null && tileComponent is TileBehaviour) {
+				return (tileComponent as TileBehaviour).tile.id;
+			} else {
+				return tile != null ? tile.id : 0;
+			}
+		}
+		public int GetId(int x, int y, out TileBehaviour tileBehaviour) {
+			return GetId (x, y, out tileBehaviour);
+		}
 		public int GetSubId(int x, int y) {
 			Tile tile = tiles.Get (x, y) as Tile;
 
@@ -431,6 +454,9 @@ namespace Gridlike {
 		}
 		public Component GetTileComponent(int x, int y) {
 			return tileGOs.GetComponent (x, y);
+		}
+		public TileBehaviour GetTileBehaviour(int x, int y) {
+			return tileGOs.GetTileBehaviour (x, y);
 		}
 
 		public bool CanSet(int x, int y, int id) {
