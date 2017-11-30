@@ -1123,8 +1123,8 @@ public class PlatformerMotor2D : MonoBehaviour
     private Bounds _ladderBottomArea;
     private Bounds _ladderTopArea;
 
+	// Moving platform extra (ADDED for Gridlike)
 	private Vector2 relativeMovingPlatformPosition;
-
 	private Vector2 positionOnFetchRelativeMovingPlatform;
 
 	public void GetRelativeToPlatform() {
@@ -1665,6 +1665,8 @@ public class PlatformerMotor2D : MonoBehaviour
 
     private void FixedUpdate()
     {
+		MovingPlatformMotor2D oldPlatform = _movingPlatformState.platform;
+
 		SetRelativeToPlatform ();
 
         // Frozen?
@@ -1707,6 +1709,15 @@ public class PlatformerMotor2D : MonoBehaviour
         }
 
 		GetRelativeToPlatform ();
+
+		if (!_movingPlatformState.isOnPlatform && oldPlatform != null) {
+			Rigidbody2D rigid = oldPlatform.GetComponent<Rigidbody2D> ();
+
+			if (rigid != null) {
+				Vector2 addedVelocity = rigid.velocity;
+				velocity += addedVelocity;
+			}
+		}
     }
 
     private float UpdateMotor(float deltaTime)

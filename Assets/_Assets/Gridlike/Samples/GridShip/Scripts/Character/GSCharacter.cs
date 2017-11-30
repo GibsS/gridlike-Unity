@@ -28,6 +28,8 @@ public class GSCharacter : MonoBehaviour, ICubeStorage {
 
 	public Tool currentTool;
 
+	public bool enableCameraZoomOut;
+
 	PlatformerMotor2D motor;
 	MovingPlatformMotor2D platform;
 
@@ -67,7 +69,7 @@ public class GSCharacter : MonoBehaviour, ICubeStorage {
 			GSShip ship = platform.GetComponent<GSShip> ();
 
 			if (ship != null) {
-				Camera.main.orthographicSize /= 4;
+				if(enableCameraZoomOut) Camera.main.orthographicSize /= 4;
 
 				ship.hasCharacter = false;
 			}
@@ -77,7 +79,8 @@ public class GSCharacter : MonoBehaviour, ICubeStorage {
 			GSShip ship = newPlatform.GetComponent<GSShip> ();
 
 			if (ship != null) {
-				Camera.main.orthographicSize *= 4;
+				if(enableCameraZoomOut) Camera.main.orthographicSize *= 4;
+
 				ship.hasCharacter = true;
 			}
 

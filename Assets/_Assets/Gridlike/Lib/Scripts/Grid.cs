@@ -13,8 +13,6 @@ using UnityEngine;
 
 // Depth based lighting
 
-// # TICKET 11 - Make PC2D inherit speed from ship when loosing contact
-
 
 
 // # TICKET 3 - Improve atlas (1day)
