@@ -113,8 +113,12 @@ namespace Gridlike {
 
 			}
 
-			helper = Activator.CreateInstance (Type.GetType (Path.GetFileNameWithoutExtension (scriptPath))) as TileAtlasHelper;
-			helper._Inject (this);
+			Type type = Type.GetType (Path.GetFileNameWithoutExtension (scriptPath));
+
+			if (type != null) {
+				helper = Activator.CreateInstance (type) as TileAtlasHelper;
+				helper._Inject (this);
+			}
 		}
 
 		public IEnumerable<TileInfo> GetTileInfos() {
