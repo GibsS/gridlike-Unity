@@ -15,8 +15,6 @@ using UnityEngine;
 
 // # TICKET 11 - Make PC2D inherit speed from ship when loosing contact
 
-// # TICKET 12 - PC2D - Allow moving a character with transform despite the transform moving when on a platform
-
 
 
 // # TICKET 3 - Improve atlas (1day)

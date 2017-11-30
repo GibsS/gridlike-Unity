@@ -1123,16 +1123,19 @@ public class PlatformerMotor2D : MonoBehaviour
     private Bounds _ladderBottomArea;
     private Bounds _ladderTopArea;
 
-	private Vector2 relativeMovingPlatformTransform;
+	private Vector2 relativeMovingPlatformPosition;
+
+	private Vector2 positionOnFetchRelativeMovingPlatform;
 
 	public void GetRelativeToPlatform() {
 		if (_movingPlatformState.isOnPlatform) {
-			relativeMovingPlatformTransform = _movingPlatformState.platform.transform.InverseTransformPoint (transform.position);
+			relativeMovingPlatformPosition = _movingPlatformState.platform.transform.InverseTransformPoint (transform.position);
+			positionOnFetchRelativeMovingPlatform = transform.position;
 		}
 	}
 	public void SetRelativeToPlatform() {
-		if (_movingPlatformState.isOnPlatform) {
-			transform.position = _movingPlatformState.platform.position + relativeMovingPlatformTransform;
+		if (_movingPlatformState.isOnPlatform && Vector2.Distance(transform.position, positionOnFetchRelativeMovingPlatform) < 0.01f) {
+			transform.position = _movingPlatformState.platform.position + relativeMovingPlatformPosition;
 		}
 	}
 
