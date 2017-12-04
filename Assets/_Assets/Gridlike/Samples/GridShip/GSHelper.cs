@@ -1,3 +1,5 @@
+// AUTOMATICALLY GENERATED. DO NOT EDIT MANUALLY.
+
 using UnityEngine;
 using System;
 using System.Collections;

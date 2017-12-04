@@ -57,6 +57,15 @@ namespace Gridlike {
 		public override void OnInspectorGUI() {
 			TileAtlas atlas = target as TileAtlas;
 
+			atlas.useRelativePath = EditorGUILayout.Toggle("Paths are relative", atlas.useRelativePath);
+
+			if (GUILayout.Button ("bump minor")) {
+				atlas.BumpMinor ();
+			}
+			if (GUILayout.Button ("bump major")) {
+				atlas.BumpMajor ();
+			}
+
 			GUI.enabled = false;
 			EditorGUILayout.ObjectField("Sprite sheet", atlas.spriteSheet, typeof(Texture2D), false);
 			GUI.enabled = true;
@@ -68,8 +77,6 @@ namespace Gridlike {
 			atlas.material.mainTexture = atlas.spriteSheet;
 
 			// SPRITE SHEET PATH
-			atlas.useRelativePath = EditorGUILayout.Toggle("Paths are relative", atlas.useRelativePath);
-
 			atlas.spriteSheetPath = EditorGUILayout.TextField ("Sprite sheet path", atlas.spriteSheetPath);
 			if (string.IsNullOrEmpty (atlas.spriteSheetPath)) {
 				atlas.spriteSheetPath = "sprite_sheet.png";
@@ -82,6 +89,14 @@ namespace Gridlike {
 			// TILE PIXEL SIZE
 			atlas.tilePixelSize = EditorGUILayout.IntField ("Tile pixel size", atlas.tilePixelSize);
 			atlas.tilePixelSize = Mathf.Clamp (atlas.tilePixelSize, 1, 1024);
+
+			if (atlas.majorVersion != atlas.spriteSheetMajorVersion) {
+				EditorGUILayout.HelpBox ("Sprite sheet is outdated. It requires regeneration", MessageType.Error);
+			} else if (atlas.minorVersion != atlas.spriteSheetMinorVersion) {
+				EditorGUILayout.HelpBox ("Sprite sheet is outdated. It requires regeneration", MessageType.Warning);
+			} else {
+				EditorGUILayout.HelpBox ("Sprite sheet is up to date", MessageType.Info);
+			}
 
 			if (GUILayout.Button ("Generate sprite sheet")) {
 				GenerateSpriteSheet ();
@@ -97,6 +112,14 @@ namespace Gridlike {
 				}
 			}
 
+			if (atlas.majorVersion != atlas.helperMajorVersion) {
+				EditorGUILayout.HelpBox ("Helper is outdated. It requires regeneration", MessageType.Error);
+			} else if (atlas.minorVersion != atlas.helperMinorVersion) {
+				EditorGUILayout.HelpBox ("Helper is outdated. It requires regeneration", MessageType.Warning);
+			} else {
+				EditorGUILayout.HelpBox ("Helper is up to date", MessageType.Info);
+			}
+
 			if (GUILayout.Button ("Generate script")) {
 				GenerateScript ();
 			}
@@ -107,6 +130,8 @@ namespace Gridlike {
 
 			if (GUILayout.Button ("Create new tile")) {
 				atlas.AddTile ();
+
+				atlas.BumpMinor ();
 			}
 
 			if (GUI.changed) EditorUtility.SetDirty (target);
@@ -145,32 +170,81 @@ namespace Gridlike {
 			
 			if (GUILayout.Button ("remove", GUILayout.MaxWidth(80))) {
 				atlas.RemoveTile (tile.id);
+
+				atlas.BumpMajor ();
 			}
 			EditorGUILayout.EndHorizontal ();
 
 			if (info.isRevealed) {
-				tile.name = EditorGUILayout.TextField ("Name", tile.name);
+				string old = EditorGUILayout.TextField ("Name", tile.name);
+				if (old != tile.name) {
+					tile.name = old;
 
-				if (tile.tileGO == null) {
-					tile.shape = (TileShape)EditorGUILayout.EnumPopup ("Shape", tile.shape);
-
-					if (TileShapeHelper.IsTriangle (tile.shape)) {
-						tile.isVertical = EditorGUILayout.Toggle ("Triangle can stretch vertically", tile.isVertical);
-						tile.isVertical = !EditorGUILayout.Toggle ("Triangle can stretch horizontally", !tile.isVertical);
-					} else {
-						tile.isVertical = tile.shape == TileShape.LEFT_ONEWAY || tile.shape == TileShape.RIGHT_ONEWAY;
-					}
-
-					tile.isTrigger = EditorGUILayout.Toggle ("Is trigger?", tile.isTrigger);
-					tile.layer = EditorGUILayout.LayerField ("Layer", tile.layer);
-					tile.tag = EditorGUILayout.TagField ("Tag", tile.tag);
-				} else {
-					tile.shape = TileShape.EMPTY;
+					atlas.BumpMinor ();
 				}
 
-				tile.tileGO = EditorGUILayout.ObjectField ("Tile GO", tile.tileGO, typeof(GameObject), false) as GameObject;
+				if (tile.tileGO == null) {
+					TileShape shape = (TileShape) EditorGUILayout.EnumPopup ("Shape", tile.shape);
+					if (shape != tile.shape) {
+						tile.shape = shape;
+
+						atlas.BumpMinor ();
+					}
+
+					bool isVertical;
+
+					if (TileShapeHelper.IsTriangle (tile.shape)) {
+						isVertical = EditorGUILayout.Toggle ("Triangle can stretch vertically", tile.isVertical);
+						isVertical = !EditorGUILayout.Toggle ("Triangle can stretch horizontally", !tile.isVertical);
+					} else {
+						isVertical = tile.shape == TileShape.LEFT_ONEWAY || tile.shape == TileShape.RIGHT_ONEWAY;
+					}
+
+					if (tile.isVertical != isVertical) {
+						tile.isVertical = isVertical;
+
+						atlas.BumpMinor ();
+					}
+
+					bool isTrigger = EditorGUILayout.Toggle ("Is trigger?", tile.isTrigger);
+					if (isTrigger != tile.isTrigger) {
+						tile.isTrigger = isTrigger;
+
+						atlas.BumpMinor ();
+					}
+					int layer = EditorGUILayout.LayerField ("Layer", tile.layer);
+					if(layer != tile.layer) {
+						tile.layer = layer;
+
+						atlas.BumpMinor ();
+					}
+					string tag = EditorGUILayout.TagField ("Tag", tile.tag);
+					if (tag != tile.tag) {
+						tile.tag = tag;
+
+						atlas.BumpMinor ();
+					}
+				} else {
+					if (tile.shape != TileShape.EMPTY) {
+						tile.shape = TileShape.EMPTY;
+
+						atlas.BumpMinor ();
+					}
+				}
+
+				GameObject obj = EditorGUILayout.ObjectField ("Tile GO", tile.tileGO, typeof(GameObject), false) as GameObject;
+				if (tile.tileGO != obj) {
+					tile.tileGO = obj;
+
+					atlas.BumpMajor ();
+				}
 				if (tile.tileGO != null) {
-					tile.isGODetached = EditorGUILayout.Toggle ("Tile GO is detached", tile.isGODetached);
+					bool val = EditorGUILayout.Toggle ("Tile GO is detached", tile.isGODetached);
+					if(val != tile.isGODetached) {
+						tile.isGODetached = val;
+
+						atlas.BumpMinor ();
+					}
 				}
 
 				bool isTriangle = TileShapeHelper.IsTriangle (tile.shape);
@@ -184,12 +258,23 @@ namespace Gridlike {
 						}
 					}
 				} else {
-					tile.idSpriteInfo.importedSprite = (Sprite) EditorGUILayout.ObjectField("Main sprite", tile.idSpriteInfo.importedSprite, typeof(Sprite), false);
+					Sprite sprite = (Sprite) EditorGUILayout.ObjectField("Main sprite", tile.idSpriteInfo.importedSprite, typeof(Sprite), false);
+					if(tile.idSpriteInfo.importedSprite != sprite) {
+						tile.idSpriteInfo.importedSprite = sprite;
+
+						atlas.BumpMinor ();
+					}
 
 					if (tile.subIdSpriteInfo != null) {
 						for (int i = 0; i < tile.subIdSpriteInfo.Length; i++) {
 							if (tile.subIdSpriteInfo [i] != null) {
-								tile.subIdSpriteInfo [i].importedSprite = (Sprite)EditorGUILayout.ObjectField ("Sub id sprite " + i, tile.subIdSpriteInfo [i].importedSprite, typeof(Sprite), false);
+								sprite = (Sprite)EditorGUILayout.ObjectField ("Sub id sprite " + i, tile.subIdSpriteInfo [i].importedSprite, typeof(Sprite), false);
+
+								if(sprite != tile.subIdSpriteInfo[i].importedSprite) {
+									tile.subIdSpriteInfo [i].importedSprite = sprite;
+
+									atlas.BumpMinor ();
+								}
 							}
 						}
 					}
@@ -197,9 +282,13 @@ namespace Gridlike {
 
 				if (GUILayout.Button ("Add sub id sprite")) {
 					tile.AddSubId ();
+
+					atlas.BumpMinor ();
 				}
 				if (GUILayout.Button ("Remove sub id sprite")) {
 					tile.RemoveSubId ();
+
+					atlas.BumpMajor ();
 				}
 
 				EditorGUILayout.BeginHorizontal ();
@@ -211,26 +300,49 @@ namespace Gridlike {
 
 			GUILayout.EndVertical ();
 
-			if (GUI.changed)
+			if (GUI.changed) {
 				EditorUtility.SetDirty (target);
+			}
 		}
 
 		void TriangleSpriteChooser(TileInfo tile, TileSpriteInfo spriteInfo, int subId) {
+			TileAtlas atlas = target as TileAtlas;
+
 			GUILayout.BeginVertical("HelpBox");
 
-			spriteInfo.importedSprite = (Sprite) EditorGUILayout.ObjectField("Main sprite size=1", spriteInfo.importedSprite, typeof(Sprite), false);
+			Sprite sprite = (Sprite) EditorGUILayout.ObjectField("Main sprite size=1", spriteInfo.importedSprite, typeof(Sprite), false);
+			if (spriteInfo.importedSprite != sprite) {
+				spriteInfo.importedSprite = sprite;
+
+				atlas.BumpMinor ();
+			}
 
 			if (spriteInfo.importedSprites != null) {
 				for (int i = 0; i < spriteInfo.importedSprites.Length; i++) {
-					spriteInfo.importedSprites [i] = (Sprite)EditorGUILayout.ObjectField ("Main sprite size=" + (i + 2), spriteInfo.importedSprites [i], typeof(Sprite), false);
+					sprite = (Sprite) EditorGUILayout.ObjectField (
+						"Main sprite size=" + (i + 2), 
+						spriteInfo.importedSprites [i], 
+						typeof(Sprite), 
+						false
+					);
+
+					if (spriteInfo.importedSprites [i] != sprite) {
+						spriteInfo.importedSprites [i] = sprite;
+
+						atlas.BumpMinor ();
+					}
 				}
 			}
 
 			if (GUILayout.Button ("Add sprite size")) {
 				tile.AddSpriteSize (subId);
+
+				atlas.BumpMinor ();
 			}
 			if (GUILayout.Button ("Remove sprite size")) {
 				tile.RemoveSpriteSize (subId);
+
+				atlas.BumpMinor ();
 			}
 
 			GUILayout.EndVertical ();
@@ -392,6 +504,9 @@ namespace Gridlike {
 			}
 
 			EditorUtility.ClearProgressBar();
+
+			atlas.spriteSheetMajorVersion = atlas.majorVersion;
+			atlas.spriteSheetMinorVersion = atlas.minorVersion;
 		}
 
 		void PackHorizontalSpriteInfo(int tilePerRow, int tileSize, TileSpriteInfo tileSpriteInfo, bool isVertical, int id, int subId, ref int tileX, ref int tileY, ref int spriteInd, ref SpriteMetaData[] sprites, ref Texture2D texture) {
@@ -497,6 +612,8 @@ namespace Gridlike {
 
 			string copyPath = "Assets/" + scriptProjectPath;
 			using (StreamWriter outfile = new StreamWriter(copyPath)) {
+				outfile.WriteLine("// AUTOMATICALLY GENERATED. DO NOT EDIT MANUALLY.");
+				outfile.WriteLine("");
 				outfile.WriteLine("using UnityEngine;");
 				outfile.WriteLine("using System;");
 				outfile.WriteLine("using System.Collections;");
@@ -521,6 +638,9 @@ namespace Gridlike {
 				outfile.WriteLine("}");
 			}
 			AssetDatabase.Refresh();
+
+			atlas.helperMajorVersion = atlas.majorVersion;
+			atlas.helperMinorVersion = atlas.minorVersion;
 		}
 	}
 }

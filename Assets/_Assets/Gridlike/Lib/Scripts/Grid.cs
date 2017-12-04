@@ -9,11 +9,14 @@ using UnityEngine;
 
 // Scriptable objects storage of grid tiles
 
+// GRAPHICS IMPROVEMENT
 // Sub id calculation algorithm definition
-
+// Sprite based on calculated subId
 // Depth based lighting
+// Background display (different from foreground (both can exist at the same time))
+// extra pixels outside of tile area
 
-
+// Display tile info in the placer tool and inspector tool
 
 // # TICKET 3 - Improve atlas (1day)
 // Add the drag and drop if possible to the tile atlas (maybe into a window dedicated to it)
@@ -26,13 +29,10 @@ using UnityEngine;
 // - does subId exist
 // - triangles are coherent
 // - tileGO do not overlap
+// - dictionnary fits the underlying id
+// On two dimensional array (not grid)
 
 // Automatic fix (with options?)
-
-// # TICKET 6 - Atlas is up to date (2hour)
-// Concept of version id to signal a need for updating a grid (because the atlas changed since last version update)
-// Push for update on the 
-// The spritesheet doesn't update every time a sprite is added
 
 // # TICKET 9 - Comment EVERYTHING + correct namespace (1day)
 // comments on gridlike
@@ -43,12 +43,21 @@ using UnityEngine;
 // Make sure if an id is said to be placeable at a given place, it is actually placeable there
 
 // COMMENTS
+// Clean comments on threading
 
 // SAMPLES
+// Generic character prefab
+// Generic grid prefab (loader/procedural generation/plain)
 
 // TUTORIALS
 
 // MANUAL
+
+// TEST ON PHONE
+
+// CHANGE NAME
+
+// TEST 2017 TILEMAP SYSTEM
 
 // CLEAN UP
 // Remove as many public field as possible (once tests are defined)
@@ -833,6 +842,26 @@ namespace Gridlike {
 				return list [0];
 			} else {
 				return null;
+			}
+		}
+
+		#endregion
+
+		#region VALIDATION
+
+		public void Validation() {
+			foreach (FiniteGrid region in GetRegions()) {
+				for (int i = 0; i < REGION_SIZE; i++) {
+					for (int j = 0; j < REGION_SIZE; j++) {
+						Tile tile = region.Get (i, j);
+
+						if (tile == null || tile.id == 0) return;
+
+						if (!atlas.ContainsTile (tile.id)) {
+							Debug.LogError ("Missing id");
+						}
+					}
+				}
 			}
 		}
 

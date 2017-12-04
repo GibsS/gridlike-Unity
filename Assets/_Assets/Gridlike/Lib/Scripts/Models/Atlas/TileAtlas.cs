@@ -17,12 +17,19 @@ namespace Gridlike {
 
 		public Texture2D spriteSheet;
 		public Sprite emptySprite;
+		public int spriteSheetMajorVersion;
+		public int spriteSheetMinorVersion;
 
 		public TileInfo[] atlas;
+
+		public int majorVersion;
+		public int minorVersion;
 
 		public Material material;
 
 		public TileAtlasHelper helper;
+		public int helperMajorVersion;
+		public int helperMinorVersion;
 
 		public int Count { 
 			get {
@@ -138,6 +145,9 @@ namespace Gridlike {
 			set { atlas[i] = value; }
 		}
 
+		public bool ContainsTile(int id) {
+			return id >= 0 && id < atlas.Length && atlas [id] != null && atlas [id].id != 0;
+		}
 		public int AddTile() {
 			for (int i = 0; i < atlas.Length; i++) {
 				if (atlas [i] == null) {
@@ -194,6 +204,13 @@ namespace Gridlike {
 				material = new Material (Shader.Find ("Sprites/Default"));
 				material.mainTexture = spriteSheet;
 			}
+		}
+
+		public void BumpMajor() {
+			majorVersion++;
+		}
+		public void BumpMinor() {
+			minorVersion++;
 		}
 	}
 }
