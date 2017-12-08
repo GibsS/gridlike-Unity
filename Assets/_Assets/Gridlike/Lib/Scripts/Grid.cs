@@ -30,6 +30,7 @@ using UnityEngine;
 // - triangles are coherent
 // - tileGO do not overlap
 // - dictionnary fits the underlying id
+// - name only on tileGO center
 // On two dimensional array (not grid)
 
 // Automatic fix (with options?)

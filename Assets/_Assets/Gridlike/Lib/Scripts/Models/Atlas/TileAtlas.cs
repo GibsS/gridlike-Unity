@@ -120,11 +120,15 @@ namespace Gridlike {
 
 			}
 
-			Type type = Type.GetType (Path.GetFileNameWithoutExtension (scriptPath));
+			string path = Path.GetFileNameWithoutExtension (scriptPath);
 
-			if (type != null) {
-				helper = Activator.CreateInstance (type) as TileAtlasHelper;
-				helper._Inject (this);
+			if (!string.IsNullOrEmpty (path)) {
+				Type type = Type.GetType (path);
+
+				if (type != null) {
+					helper = Activator.CreateInstance (type) as TileAtlasHelper;
+					helper._Inject (this);
+				}
 			}
 		}
 
