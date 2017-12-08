@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace PC2D
+namespace Gridlike
 {
     /// <summary>
     /// This is a very very very simple example of how an animation system could query information from the motor to set state.

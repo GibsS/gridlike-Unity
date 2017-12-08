@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections.Generic;
 
 namespace Gridlike {
@@ -53,7 +54,7 @@ namespace Gridlike {
 			gridSerializer = new GridSerializer (usePersistentPath, path);
 		}
 
-		public override void LoadTiles (int regionX, int regionY, FiniteGridCallback callback) {
+		public override void LoadTiles (int regionX, int regionY, Action<FiniteGrid> callback) {
 			if (gridSerializer.IsRegionSaved(regionX, regionY)) {
 				gridSerializer.LoadGrid (regionX, regionY, callback);
 				return;

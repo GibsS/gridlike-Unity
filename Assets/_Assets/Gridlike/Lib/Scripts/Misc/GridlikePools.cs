@@ -3,12 +3,18 @@ using System.Collections;
 
 namespace Gridlike {
 
+	/// <summary>
+	/// A singleton for storing Gridlike's pool.
+	/// </summary>
 	public class GridlikePools : MonoBehaviour {
 
 		ComponentPool<RegionMeshRenderer> _renderers;
 
 		static GridlikePools _instance;
 
+		/// <summary>
+		/// Get region renderer pool.
+		/// </summary>
 		public static ComponentPool<RegionMeshRenderer> renderers {
 			get { return _instance._renderers; }
 		}
@@ -21,6 +27,9 @@ namespace Gridlike {
 			}
 		}
 
+		/// <summary>
+		/// Initialize the singleton. If necessary creates a GO to place the singleton on it.
+		/// </summary>
 		public static void Initialize() {
 			if (_instance == null) {
 				GameObject go = GameObject.Find ("Gridlike");

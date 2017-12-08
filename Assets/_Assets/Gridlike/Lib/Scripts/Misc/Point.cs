@@ -2,7 +2,10 @@
 using System;
 
 namespace Gridlike {
-	
+
+	/// <summary>
+	/// Implementation of a immutable Point (pair of integer coordinates)
+	/// </summary>
 	[Serializable]
 	public class Point : IEquatable<Point> {
 

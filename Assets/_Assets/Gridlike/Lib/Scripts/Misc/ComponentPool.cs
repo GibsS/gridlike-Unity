@@ -4,6 +4,9 @@ using System;
 
 namespace Gridlike {
 
+	/// <summary>
+	/// System to pool GOs.
+	/// </summary>
 	public class ComponentPool<X> where X : Component {
 
 		List<X> components;
@@ -28,6 +31,9 @@ namespace Gridlike {
 			}
 		}
 
+		/// <summary>
+		/// Gets an instance of X. Creates it if none are left in the pool.
+		/// </summary>
 		public X Get() {
 			if (components.Count > 0) {
 				X x = components [0];
@@ -38,12 +44,19 @@ namespace Gridlike {
 				return factory ();
 			}
 		}
+		/// <summary>
+		/// Removes the GO x is attached by disabling it and adding it to the pool of available GOs.
+		/// </summary>
+		/// <param name="x">The x coordinate.</param>
 		public void Free(X x) {
 			x.gameObject.SetActive (false);
 			x.gameObject.transform.SetParent (container.transform);
 			components.Add (x);
 		}
 
+		/// <summary>
+		/// Clears the pool.
+		/// </summary>
 		public void Clear() {
 			foreach (X x in components) {
 				if (x != null && x.gameObject != null) {

@@ -18,6 +18,8 @@ using UnityEngine;
 
 // Display tile info in the placer tool and inspector tool
 
+// TODO add better indication to know what this means (regarding loading variable on the grid)
+
 // # TICKET 3 - Improve atlas (1day)
 // Add the drag and drop if possible to the tile atlas (maybe into a window dedicated to it)
 // Have sprite size verification with error boxes in tile atlas
@@ -44,7 +46,6 @@ using UnityEngine;
 // Make sure if an id is said to be placeable at a given place, it is actually placeable there
 
 // COMMENTS
-// Clean comments on threading
 
 // SAMPLES
 // Generic character prefab
@@ -71,34 +72,74 @@ using UnityEngine;
 
 namespace Gridlike {
 
+	/// <summary>
+	/// Core component of Gridlike. Stores tile information for a grid and serves as a facade to the rest of the library.
+	/// </summary>
 	[ExecuteInEditMode]
 	[AddComponentMenu("Gridlike/Grid")]
 	[DisallowMultipleComponent]
 	public class Grid : MovingPlatformMotor2D {
 
+		/// <summary>
+		/// The width and height in tiles of a region. Grids are a collection of regions
+		/// </summary>
 		public const int REGION_SIZE = 50;
 
+		/// <summary>
+		/// The list of every Grid instance
+		/// </summary>
 		static List<Grid> grids;
 
+		/// <summary>
+		/// The grid data delegate associated to the grid. Fetched from the GO the Grid is on.
+		/// </summary>
 		[SerializeField] GridDataDelegate gridDelegate;
+		/// <summary>
+		/// The grid listeners associated to the grid. Fetched from the GO the Grid is on. 
+		/// </summary>
 		[SerializeField] List<GridListener> gridListeners;
 
+		/// <summary>
+		/// The data of the tiles of the grid.
+		/// </summary>
 		[SerializeField] InfiniteGrid tiles;
+		/// <summary>
+		/// The references to the TileGO (Special tiles represented by an instance of a game developer defined Prefab).
+		/// </summary>
 		[SerializeField] InfiniteTileGOGrid tileGOs;
 
+		/// <summary>
+		/// The atlas for this grid.
+		/// </summary>
 		[HideInInspector] public TileAtlas atlas;
 
-		// TODO add better indication to know what this means
-		public bool useLoading;
+		/// <summary>
+		/// Determines whether the Grid uses the position of agents (GOs with an Agent component on them).
+		/// </summary>
 		public bool useAgentBasedLoading;
+		/// <summary>
+		/// The strategy for loading (for now, the only that exists is agent based)
+		/// </summary>
 		GridAgentLoadPolicy loadPolicy;
 
+		/// <summary>
+		/// if true, setting the value of a tile will present the region containing the tile.
+		/// </summary>
 		public bool showOnSet;
 
+		/// <summary>
+		/// Map from name to tileGO.
+		/// </summary>
 		Dictionary<string, List<TileBehaviour>> nameToTileGO;
+		/// <summary>
+		/// The region position of every region being loaded.
+		/// </summary>
 		List<Point> loadingTiles;
 
-		void Init() {
+		/// <summary>
+		/// Initializes the Grid
+		/// </summary>
+		void Initialize() {
 			if (tiles == null) {
 				gridDelegate = GetComponent<GridDataDelegate> ();
 				gridListeners = new List<GridListener> ();
@@ -119,15 +160,15 @@ namespace Gridlike {
 
 			tiles = null;
 
-			Init ();
+			Initialize ();
 		}
 		void Awake() {
 			if (grids == null) grids = new List<Grid> ();
 			grids.Add (this);
 
-			Init ();
+			Initialize ();
 
-			LoadExtra ();
+			_LoadExtra ();
 
 			nameToTileGO = new Dictionary<string, List<TileBehaviour>> ();
 			loadingTiles = new List<Point> ();
@@ -165,7 +206,7 @@ namespace Gridlike {
 		}
 
 		void Update() {
-			if (useLoading && useAgentBasedLoading) {
+			if (useAgentBasedLoading) {
 				if (loadPolicy == null) loadPolicy = new GridAgentLoadPolicy (this);
 
 				loadPolicy.Update();
@@ -176,7 +217,11 @@ namespace Gridlike {
 
 		#region GRID DATA DELEGATE
 
-		public void SetDelegate(GridDataDelegate gridDelegate) {
+		/// <summary>
+		/// Sets the grid data delegate. Should only be called by the GridDataDelegate.
+		/// </summary>
+		/// <param name="gridDelegate">The grid delegate.</param>
+		public void _SetDelegate(GridDataDelegate gridDelegate) {
 			this.gridDelegate = gridDelegate;
 		}
 
@@ -184,7 +229,11 @@ namespace Gridlike {
 
 		#region GRID LISTENERS
 
-		public void AddListener(GridListener listener) {
+		/// <summary>
+		/// Adds a grid listener to the Grid. Should only be called by a GridListener.
+		/// </summary>
+		/// <param name="listener">The listener.</param>
+		public void _AddListener(GridListener listener) {
 			if (!gridListeners.Contains (listener)) {
 				gridListeners.Add (listener);
 
@@ -195,6 +244,10 @@ namespace Gridlike {
 				}
 			}
 		}
+		/// <summary>
+		/// Removes a grid listener from the Grid. Should only be called by a GridListener.
+		/// </summary>
+		/// <param name="listener">The listener.</param>
 		public void RemoveListener(GridListener listener) {
 			if (gridListeners.Contains (listener)) {
 				gridListeners.Remove (listener);
@@ -205,6 +258,9 @@ namespace Gridlike {
 
 		#region REGION PRESENTING/LOADING
 
+		/// <summary>
+		/// Hides and presents every region. This can be used to update any out dated grid listener.
+		/// </summary>
 		public void PresentAllAgain() {
 			List<FiniteGrid> regions = tiles.GetRegions ().FindAll(r => r.presented);
 			foreach (FiniteGrid regionPosition in regions) {
@@ -216,24 +272,46 @@ namespace Gridlike {
 			}
 		}
 
+		/// <summary>
+		/// Present every currently hidden regions.
+		/// </summary>
 		public void PresentAll() {
 			foreach (FiniteGrid region in tiles.GetRegions()) {
 				PresentRegion (region.regionX, region.regionY);
 			}
 		}
+		/// <summary>
+		/// Hides every currently shown regions.
+		/// </summary>
 		public void HideAll() {
 			foreach (FiniteGrid region in tiles.GetRegions().FindAll(r => r.presented)) {
 				HideRegion (region.regionX, region.regionY);
 			}
 		}
 
+		/// <summary>
+		/// Presents the region that contains the given tile position
+		/// </summary>
+		/// <param name="x">The x coordinate of the tile.</param>
+		/// <param name="y">The y coordinate of the tile.</param>
 		public void PresentContainingRegion(int x, int y) {
 			PresentRegion(Mathf.FloorToInt(x / (float) Grid.REGION_SIZE), Mathf.FloorToInt(y / (float) Grid.REGION_SIZE));
 		}
+		/// <summary>
+		/// Hides the region that contains the given tile position
+		/// </summary>
+		/// <param name="x">The x coordinate of the tile.</param>
+		/// <param name="y">The y coordinate of the tile.</param>
 		public void HideContainingRegion(int x, int y) {
 			HideRegion(Mathf.FloorToInt(x / (float) Grid.REGION_SIZE), Mathf.FloorToInt(y / (float) Grid.REGION_SIZE));
 		}
 
+		/// <summary>
+		/// Presents a region at the given region coordinates. Presenting a region consists in loading the region from the data delegate if possible
+		/// and signalling to the listener that the region is presented. 
+		/// </summary>
+		/// <param name="X">The X coordinate in "region space" within the Grid.</param>
+		/// <param name="Y">The Y coordinate in "region space" within the Grid.</param>
 		public void PresentRegion(int X, int Y) {
 			FiniteGrid oldRegion = tiles.GetRegion (X, Y);
 
@@ -250,6 +328,11 @@ namespace Gridlike {
 				}
 			}
 		}
+		/// <summary>
+		/// Hides a region at the given region coordinates. The reverse of PresentRegion
+		/// </summary>
+		/// <param name="X">The X coordinate in "region space" within the Grid.</param>
+		/// <param name="Y">The Y coordinate in "region space" within the Grid.</param>
 		public void HideRegion(int X, int Y) {
 			FiniteGrid grid = tiles.GetRegion (X, Y);
 
@@ -258,9 +341,64 @@ namespace Gridlike {
 			}
 		}
 
+		/// <summary>
+		/// Loads the region. This consists in requesting the region information from the GridDataDelegate. 
+		/// The loading can be asynchronous (depending on the GridDataDelegate). The function is resilient to redondant loading calls.
+		/// </summary>
+		/// <param name="X">The X coordinate in "region space" within the Grid.</param>
+		/// <param name="Y">The Y coordinate in "region space" within the Grid.</param>
 		public void LoadRegion(int X, int Y) {
 			_LoadRegion (X, Y, null);
 		}
+		/// <summary>
+		/// Saves every regions into the GridDataDelegate.
+		/// </summary>
+		public void SaveAllRegion() {
+			foreach (FiniteGrid region in GetRegions()) {
+				SaveRegion (region.regionX, region.regionY);
+			}
+		}
+		/// <summary>
+		/// Saves the specified region
+		/// </summary>
+		/// <param name="X">The X coordinate in "region space" within the Grid.</param>
+		/// <param name="Y">The Y coordinate in "region space" within the Grid.</param>
+		/// <param name="unload">If set to <c>true</c>, unload the region.</param>
+		public void SaveRegion(int X, int Y, bool unload = false) {
+			if (gridDelegate != null) {
+				FiniteGrid region = tiles.GetRegion (X, Y);
+
+				if (region != null) {
+					region.SaveExtra ();
+
+					gridDelegate.SaveTiles (X, Y, region);
+				}
+			}
+
+			if (unload) {
+				UnloadRegion (X, Y);
+			}
+		}
+		/// <summary>
+		/// Unloads the region containing the specified tile position.
+		/// </summary>
+		/// <param name="x">The x coordinate of the tile.</param>
+		/// <param name="y">The y coordinate of the tile.</param>
+		public void UnloadContainingRegion(int x, int y) {
+			UnloadRegion(Mathf.FloorToInt(x / (float) Grid.REGION_SIZE), Mathf.FloorToInt(y / (float) Grid.REGION_SIZE));
+		}
+		public void UnloadRegion(int X, int Y) {
+			FiniteGrid grid = GetRegion (X, Y);
+
+			if(grid != null) {
+				if (grid.presented) {
+					_HideRegion (X, Y, grid);
+				}
+
+				tiles.ClearRegion (X, Y);
+			}
+		}
+
 		void _LoadRegion(int X, int Y, Action<FiniteGrid> callback) {
 			Point p = new Point (X, Y);
 			if (gridDelegate != null && !loadingTiles.Contains(p)) {
@@ -287,40 +425,6 @@ namespace Gridlike {
 						if(callback != null) callback(newRegion);
 					});
 				}
-			}
-		}
-		public void SaveAllRegion() {
-			foreach (FiniteGrid region in GetRegions()) {
-				SaveRegion (region.regionX, region.regionY);
-			}
-		}
-		public void SaveRegion(int X, int Y, bool unload = false) {
-			if (gridDelegate != null) {
-				FiniteGrid region = tiles.GetRegion (X, Y);
-
-				if (region != null) {
-					region.SaveExtra ();
-
-					gridDelegate.SaveTiles (X, Y, region);
-				}
-			}
-
-			if (unload) {
-				UnloadRegion (X, Y);
-			}
-		}
-		public void UnloadContainingRegion(int x, int y) {
-			UnloadRegion(Mathf.FloorToInt(x / (float) Grid.REGION_SIZE), Mathf.FloorToInt(y / (float) Grid.REGION_SIZE));
-		}
-		public void UnloadRegion(int X, int Y) {
-			FiniteGrid grid = GetRegion (X, Y);
-
-			if(grid != null) {
-				if (grid.presented) {
-					_HideRegion (X, Y, grid);
-				}
-
-				tiles.ClearRegion (X, Y);
 			}
 		}
 
@@ -378,18 +482,39 @@ namespace Gridlike {
 
 		#region REGION GET/SET
 
+		/// <summary>
+		/// Gets the region at the specified location.
+		/// </summary>
+		/// <returns>The region.</returns>
+		/// <param name="X">The X coordinate in "region space" within the Grid.</param>
+		/// <param name="Y">The Y coordinate in "region space" within the Grid.</param>
 		public FiniteGrid GetRegion(int X, int Y) {
 			return tiles.GetRegion (X, Y);
 		}
 
+		/// <summary>
+		/// Gets the region that contains the specified tile position.
+		/// </summary>
+		/// <param name="x">The x coordinate of the tile.</param>
+		/// <param name="y">The y coordinate of the tile.</param>
 		public FiniteGrid GetContainingRegion(int x, int y) {
 			return tiles.GetContainingRegion (x, y);
 		}
 
+		/// <summary>
+		/// Gets every regions.
+		/// </summary>
 		public IEnumerable<FiniteGrid> GetRegions() {
 			return tiles.GetRegions ();
 		}
 
+		/// <summary>
+		/// Specifies the tiles in a specific region. Will overwrite any existent data.
+		/// </summary>
+		/// <param name="X">The X coordinate in "region space" within the Grid.</param>
+		/// <param name="Y">The Y coordinate in "region space" within the Grid.</param>
+		/// <param name="region">The region data.</param>
+		/// <param name="present">If set to <c>true</c> will present the newly set information.</param>
 		public void SetRegion(int X, int Y, FiniteGrid region, bool present = true) {
 			FiniteGrid oldRegion = tiles.GetRegion(X, Y);
 
@@ -410,11 +535,23 @@ namespace Gridlike {
 
 		#region TILE GET/SET
 
+		/// <summary>
+		/// Get the tile data at the specified position.
+		/// </summary>
+		/// <param name="x">The x coordinate of the tile.</param>
+		/// <param name="y">The y coordinate of the tile.</param>
 		public Tile Get(int x, int y) {
-			Tile tile =  tiles.Get (x, y) as Tile;
+			Component component;
+			Tile tile =  Get (x, y, out component) as Tile;
 
 			return tile;
 		}
+		/// <summary>
+		/// Get the tile data and the tileGO at the specified position.
+		/// </summary>
+		/// <param name="x">The x coordinate of the tile.</param>
+		/// <param name="y">The y coordinate of the tile.</param>
+		/// <param name="tileComponent">The component of the tileGO of the tile, if it exists.</param>
 		public Tile Get(int x, int y, out Component tileComponent) {
 			Tile tile = tiles.Get(x, y) as Tile;
 
@@ -426,16 +563,34 @@ namespace Gridlike {
 				return tile;
 			}
 		}
+		/// <summary>
+		/// Get the tile data and the tileGO at the specified position.
+		/// </summary>
+		/// <param name="x">The x coordinate of the tile.</param>
+		/// <param name="y">The y coordinate of the tile.</param>
+		/// <param name="tileComponent">The TileBehaviour of the tileGO of the tile, if it exists.</param>
 		public Tile Get(int x, int y, out TileBehaviour tileBehaviour) {
 			return Get (x, y, out tileBehaviour);
 		}
+
+		/// <summary>
+		/// Get the shape of the tile at the specified position.
+		/// </summary>
+		/// <param name="x">The x coordinate of the tile.</param>
+		/// <param name="y">The y coordinate of the tile.</param>
 		public TileShape GetShape(int x, int y) {
 			Tile tile = tiles.Get (x, y) as Tile;
 
 			return tile == null ? TileShape.EMPTY : atlas[tile.id].shape;
 		}
+		/// <summary>
+		/// Get the if of the tile at the specified position.
+		/// </summary>
+		/// <param name="x">The x coordinate of the tile.</param>
+		/// <param name="y">The y coordinate of the tile.</param>
 		public int GetId(int x, int y) {
-			Tile tile = tiles.Get (x, y) as Tile;
+			Component tileGO;
+			Tile tile = Get (x, y, out tileGO) as Tile;
 
 			return tile == null ? 0 : tile.id;
 		}
@@ -789,12 +944,12 @@ namespace Gridlike {
 
 		#endregion
 
-		public void SaveExtra() {
+		public void _SaveExtra() {
 			foreach (FiniteGrid region in tiles.GetRegions()) {
 				region.SaveExtra ();
 			}
 		}
-		public void LoadExtra() {
+		public void _LoadExtra() {
 			foreach (FiniteGrid region in tiles.GetRegions()) {
 				region.LoadExtra ();
 			}
@@ -802,6 +957,12 @@ namespace Gridlike {
 
 		#region TILE GO DATA
 
+		/// <summary>
+		/// Registers a tileGO's behaviour. This ensures that the tileGO is accessible through the name to tileGO map and that
+		/// the TileBehaviour's initialization function is called.
+		/// </summary>
+		/// <param name="tile">The tile at the center of the tileGO.</param>
+		/// <param name="behaviour">The behaviour of the tileGO.</param>
 		void RegisterTileGO(Tile tile, TileBehaviour behaviour) {
 			behaviour._grid = this;
 
@@ -817,6 +978,11 @@ namespace Gridlike {
 				list.Add (behaviour);
 			}
 		}
+		/// <summary>
+		/// Unregisters a tileGO's behaviour
+		/// </summary>
+		/// <param name="tile">The tile at the center of the tileGO.</param>
+		/// <param name="behaviour">The behaviour of the tileGO.</param>
 		void UnregisterTileGO(Tile tile, TileBehaviour behaviour) {
 			if (!string.IsNullOrEmpty (tile.name)) {
 				List<TileBehaviour> list = nameToTileGO [tile.name];
@@ -827,6 +993,10 @@ namespace Gridlike {
 			behaviour.OnHide ();
 		}
 
+		/// <summary>
+		/// Gets the tile behaviours with the given name
+		/// </summary>
+		/// <param name="name">The expected name.</param>
 		public List<TileBehaviour> GetTileBehaviours(string name) {
 			List<TileBehaviour> list = null;
 
@@ -834,6 +1004,11 @@ namespace Gridlike {
 
 			return list;
 		}
+
+		/// <summary>
+		/// Gets the tile behaviour with the given name
+		/// </summary>
+		/// <param name="name">The expected name.</param>
 		public TileBehaviour GetTileBehaviour(string name) {
 			List<TileBehaviour> list = null;
 
@@ -850,6 +1025,16 @@ namespace Gridlike {
 
 		#region VALIDATION
 
+		/// <summary>
+		/// <para>The grid's data needs to maintain certain invariant for the library to be able to function correctly:</para>
+		/// <para>- Every ID exists in the atlas</para>
+		/// <para>- Every subId exists in the atlas</para>
+		/// <para>- Triangles do not exceed the size allowed for the given ID</para>
+		/// <para>- tileGOs with tilebehaviour don't overlap</para>
+		/// <para>- tileGOs are the only tiles with a name</para>
+		/// <para>- tileGOs are the only tiles with TileDictionnary</para>
+		/// <para>The validation function signals any failure to meet this invariant list.</para>
+		/// </summary>
 		public void Validation() {
 			foreach (FiniteGrid region in GetRegions()) {
 				for (int i = 0; i < REGION_SIZE; i++) {
@@ -870,22 +1055,49 @@ namespace Gridlike {
 
 		#region REFERENTIAL
 
+		/// <summary>
+		/// Calculates the center of the given tile in world space.
+		/// </summary>
+		/// <param name="x">The x coordinate of the tile.</param>
+		/// <param name="y">The y coordinate of the tile.</param>
 		public Vector2 TileCenterInWorld(int x, int y) {
 			return transform.TransformPoint (TileCenterInTransform (x, y));
 		}
+		/// <summary>
+		/// Calculates the center of the given tile in local space.
+		/// </summary>
+		/// <param name="x">The x coordinate of the tile.</param>
+		/// <param name="y">The y coordinate of the tile.</param>
 		public Vector2 TileCenterInTransform(int x, int y) {
 			return new Vector2 (x + 0.5f, y + 0.5f); 
 		}
+		/// <summary>
+		/// Converts a tile space position Vector to a transform space position
+		/// </summary>
+		/// <param name="x">The x coordinate of the tile.</param>
+		/// <param name="y">The y coordinate of the tile.</param>
 		public Vector2 TileSpaceToTransform(float x, float y) {
 			return new Vector2 (x, y);
 		}
 
+		/// <summary>
+		/// Converts a world position to a tile position.
+		/// </summary>
+		/// <param name="position">The queried position.</param>
+		/// <param name="x">The x coordinate of the tile.</param>
+		/// <param name="y">The y coordinate of the tile.</param>
 		public void WorldToGrid(Vector2 position, out int x, out int y) {
 			position = transform.InverseTransformPoint (position);
 
 			TransformToGrid (position, out x, out y);
 		}
 
+		/// <summary>
+		/// Converts a transform position to a tile position.
+		/// </summary>
+		/// <param name="position">The queried position.</param>
+		/// <param name="x">The x coordinate of the tile.</param>
+		/// <param name="y">The y coordinate of the tile.</param>
 		public void TransformToGrid(Vector2 position, out int x, out int y) {
 			x = Mathf.FloorToInt((float)position.x);
 			y = Mathf.FloorToInt((float)position.y);
@@ -895,11 +1107,28 @@ namespace Gridlike {
 
 		#region GRID FACTORIES
 
+		/// <summary>
+		/// Creates a plain grid (no loading components)
+		/// </summary>
+		/// <returns>The created grid.</returns>
+		/// <param name="position">Start position.</param>
+		/// <param name="atlas">The grid's atlas.</param>
+		/// <param name="useRenderer">If set to <c>true</c> create a GridRenderer.</param>
+		/// <param name="useCollider">If set to <c>true</c> create a GridCollider.</param>
 		public static Grid CreateGrid(Vector2 position, TileAtlas atlas, bool useRenderer = true, bool useCollider = true) {
 			Grid grid = _CreateGrid (position, atlas, useRenderer, useCollider);
 
 			return grid;
 		}
+		/// <summary>
+		/// Creates a plain grid with predefined tiles (no loading components)
+		/// </summary>
+		/// <returns>The grid.</returns>
+		/// <param name="position">Start position.</param>
+		/// <param name="atlas">The grid's atlas.</param>
+		/// <param name="tiles">The tile data of the grid.</param>
+		/// <param name="useRenderer">If set to <c>true</c> create a GridRenderer.</param>
+		/// <param name="useCollider">If set to <c>true</c> create a GridCollider.</param>
 		public static Grid CreateGrid(Vector2 position, TileAtlas atlas, Tile[,] tiles, bool useRenderer = true, bool useCollider = true) {		
 			Grid grid = _CreateGrid (position, atlas, useRenderer, useCollider);
 
@@ -908,6 +1137,16 @@ namespace Gridlike {
 			return grid;
 		}
 
+		/// <summary>
+		/// Creates a grid with a GridSaver.
+		/// </summary>
+		/// <returns>The grid.</returns>
+		/// <param name="position">Start position.</param>
+		/// <param name="atlas">The grid's atlas.</param>
+		/// <param name="path">The save path for the grid.</param>
+		/// <param name="usePersistentPath">If set to <c>true</c> the provided path is relative to Unity3D's persistentDataPath.</param>
+		/// <param name="useRenderer">If set to <c>true</c> create a GridRenderer.</param>
+		/// <param name="useCollider">If set to <c>true</c> create a GridCollider.</param>
 		public static Grid CreateSaveGrid(Vector2 position, TileAtlas atlas, string path, bool usePersistentPath = true, bool useRenderer = true, bool useCollider = true) {
 			Grid grid = _CreateGrid (position, atlas, useRenderer, useCollider);
 
@@ -917,6 +1156,17 @@ namespace Gridlike {
 
 			return grid;
 		}
+		/// <summary>
+		/// Creates a grid with a GridSaver.
+		/// </summary>
+		/// <returns>The grid.</returns>
+		/// <param name="position">Start position.</param>
+		/// <param name="atlas">The grid's atlas.</param>
+		/// <param name="tiles">The tile data of the grid.</param>
+		/// <param name="path">The save path for the grid.</param>
+		/// <param name="usePersistentPath">If set to <c>true</c> the provided path is relative to Unity3D's persistentDataPath.</param>
+		/// <param name="useRenderer">If set to <c>true</c> create a GridRenderer.</param>
+		/// <param name="useCollider">If set to <c>true</c> create a GridCollider.</param>
 		public static Grid CreateSaveGrid(Vector2 position, TileAtlas atlas, Tile[,] tiles, string path, bool usePersistentPath = true, bool useRenderer = true, bool useCollider = true) {
 			Grid grid = _CreateGrid (position, atlas, useRenderer, useCollider);
 
@@ -929,6 +1179,16 @@ namespace Gridlike {
 			return grid;
 		}
 
+		/// <summary>
+		/// Creates a grid with a GridGenerator.
+		/// </summary>
+		/// <returns>The grid.</returns>
+		/// <param name="position">Start position.</param>
+		/// <param name="atlas">The grid's atlas.</param>
+		/// <param name="path">The save path for the grid.</param>
+		/// <param name="usePersistentPath">If set to <c>true</c> the provided path is relative to Unity3D's persistentDataPath.</param>
+		/// <param name="useRenderer">If set to <c>true</c> create a GridRenderer.</param>
+		/// <param name="useCollider">If set to <c>true</c> create a GridCollider.</param>
 		public static Grid CreateProceduralGrid<A>(Vector2 position, TileAtlas atlas, string path, bool usePersistentPath = true, bool useRenderer = true, bool useCollider = true) where A : GridGeneratorAlgorithm {
 			Grid grid = _CreateGrid (position, atlas, useRenderer, useCollider);
 
@@ -940,6 +1200,17 @@ namespace Gridlike {
 
 			return grid;
 		}
+		/// <summary>
+		/// Creates a grid with a GridGenerator.
+		/// </summary>
+		/// <returns>The grid.</returns>
+		/// <param name="position">Start position.</param>
+		/// <param name="atlas">The grid's atlas.</param>
+		/// <param name="tiles">The tile data of the grid.</param>
+		/// <param name="path">The save path for the grid.</param>
+		/// <param name="usePersistentPath">If set to <c>true</c> the provided path is relative to Unity3D's persistentDataPath.</param>
+		/// <param name="useRenderer">If set to <c>true</c> create a GridRenderer.</param>
+		/// <param name="useCollider">If set to <c>true</c> create a GridCollider.</param>
 		public static Grid CreateProceduralGrid<A>(Vector2 position, TileAtlas atlas, Tile[,] tiles, string path, bool usePersistentPath = true, bool useRenderer = true, bool useCollider = true) where A : GridGeneratorAlgorithm {
 			Grid grid = _CreateGrid (position, atlas, useRenderer, useCollider);
 
@@ -984,9 +1255,15 @@ namespace Gridlike {
 
 		#region GRID QUERY
 
+		/// <summary>
+		/// Gets every loaded Grids.
+		/// </summary>
 		public static List<Grid> GetAllGrids() {
 			return grids;
 		}
+		/// <summary>
+		/// Gets an arbitrary Grid among every loaded Grids.
+		/// </summary>
 		public static Grid GetFirstGrid() {
 			if (grids != null && grids.Count > 0) {
 				return grids [0];

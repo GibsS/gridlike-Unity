@@ -18,9 +18,9 @@ namespace Gridlike {
 			Grid grid = target as Grid;
 
 			if (!Application.isPlaying && EditorApplication.isPlayingOrWillChangePlaymode) {
-				grid.SaveExtra ();
+				grid._SaveExtra ();
 
-				if (grid.useLoading && grid.useAgentBasedLoading) {
+				if (grid.useAgentBasedLoading) {
 					grid.HideAll ();
 				}
 			}
@@ -46,7 +46,7 @@ namespace Gridlike {
 
 			Grid grid = target as Grid;
 
-			grid.LoadExtra ();
+			grid._LoadExtra ();
 		}
 		void OnDisable() {
 			PlayerPrefs.SetInt ("grid.currentTool", currentTool);
@@ -66,15 +66,12 @@ namespace Gridlike {
 			GUI.enabled = true;
 
 			EditorGUILayout.LabelField ("Grid data", EditorStyles.boldLabel);
-			grid.useLoading = EditorGUILayout.ToggleLeft ("Use loading", grid.useLoading);
 
-			if (grid.useLoading) {
-				grid.useAgentBasedLoading = EditorGUILayout.ToggleLeft ("Use agent based loading", grid.useAgentBasedLoading);
+			grid.useAgentBasedLoading = EditorGUILayout.ToggleLeft ("Use agent based loading", grid.useAgentBasedLoading);
 
-				if (Application.isPlaying) {
-					if (GUILayout.Button ("Save grid")) {
-						grid.SaveAllRegion ();
-					}
+			if (Application.isPlaying) {
+				if (GUILayout.Button ("Save grid")) {
+					grid.SaveAllRegion ();
 				}
 			}
 

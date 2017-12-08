@@ -2,6 +2,8 @@ using System;
 using PC2D;
 using UnityEngine;
 
+namespace Gridlike {
+
 [RequireComponent(typeof(BoxCollider2D))]
 [DisallowMultipleComponent]
 public class PlatformerMotor2D : MonoBehaviour
@@ -3542,4 +3544,5 @@ public class PlatformerMotor2D : MonoBehaviour
 
 		return t.gameObject;
 	}
+}
 }

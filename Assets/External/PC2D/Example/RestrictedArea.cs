@@ -1,5 +1,7 @@
 using UnityEngine;
 
+using Gridlike;
+
 namespace PC2D
 {
     public class RestrictedArea : SpriteDebug

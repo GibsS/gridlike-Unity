@@ -2,40 +2,42 @@
 using System.Collections.Generic;
 using System.Threading;
 
+// Taken and lightly altered version of UnityToolbag's Future system. 
+
 /// <summary>
-/// Describes the state of a future.
+/// Describes the state of a job.
 /// </summary>
 public enum JobState
 {
 	/// <summary>
-	/// The future hasn't begun to resolve a value.
+	/// The job hasn't begun.
 	/// </summary>
 	Pending,
 
 	/// <summary>
-	/// The future is working on resolving a value.
+	/// The job is working.
 	/// </summary>
 	Processing,
 
 	/// <summary>
-	/// The future has a value ready.
+	/// The job is completed
 	/// </summary>
 	Success,
 
 	/// <summary>
-	/// The future failed to resolve a value.
+	/// The job failed.
 	/// </summary>
 	Error
 }
 
 /// <summary>
-/// Defines the interface of an object that can be used to track a future value.
+/// Defines the interface of an object that can be used to track a job value.
 /// </summary>
 /// <typeparam name="T">The type of object being retrieved.</typeparam>
 public interface IJob<T>
 {
 	/// <summary>
-	/// Gets the state of the future.
+	/// Gets the state of the job.
 	/// </summary>
 	JobState state { get; }
 
@@ -54,16 +56,15 @@ public interface IJob<T>
 }
 
 /// <summary>
-/// Defines the signature for callbacks used by the future.
+/// Defines the signature for callbacks used by the job.
 /// </summary>
-/// <param name="future">The future.</param>
 public delegate void JobCallback<T>(bool failed, T result);
 
 /// <summary>
-/// An implementation of <see cref="IJob{T}"/> that can be used internally by methods that return futures.
+/// An implementation of <see cref="IJob{T}"/> that can be used internally by methods that return jobs.
 /// </summary>
 /// <remarks>
-/// Methods should always return the <see cref="IJob{T}"/> interface when calling code requests a future.
+/// Methods should always return the <see cref="IJob{T}"/> interface when calling code requests a job.
 /// This class is intended to be constructed internally in the method to provide a simple implementation of
 /// the interface. By returning the interface instead of the class it ensures the implementation can change
 /// later on if requirements change, without affecting the calling code.
@@ -78,7 +79,7 @@ public sealed class Job<T> : IJob<T>
 	private JobCallback<T> callback;
 
 	/// <summary>
-	/// Gets the state of the future.
+	/// Gets the state of the job.
 	/// </summary>
 	public JobState state { get { return _state; } }
 
@@ -122,10 +123,10 @@ public sealed class Job<T> : IJob<T>
 
 
 	/// <summary>
-	/// Adds a new callback to invoke if the future value is retrieved successfully or has an error.
+	/// Adds a new callback to invoke if the job is completed successfully or has an error.
 	/// </summary>
 	/// <param name="callback">The callback to invoke.</param>
-	/// <returns>The future so additional calls can be chained together.</returns>
+	/// <returns>The job so additional calls can be chained together.</returns>
 	public IJob<T> OnComplete(JobCallback<T> callback)
 	{
 		if (_state == JobState.Success) {
@@ -149,7 +150,7 @@ public sealed class Job<T> : IJob<T>
 	}
 
 	/// <summary>
-	/// Begins running a given function on a background thread to resolve the future's value, as long
+	/// Begins running a given function on a background thread to resolve the job, as long
 	/// as it is still in the Pending state.
 	/// </summary>
 	/// <param name="func">The function that will retrieve the desired value.</param>
@@ -177,35 +178,17 @@ public sealed class Job<T> : IJob<T>
 	}
 
 	/// <summary>
-	/// Allows manually assigning a value to a future, as long as it is still in the pending state.
+	/// Allows manually failing a job, as long as it is still in the pending state.
 	/// </summary>
 	/// <remarks>
-	/// There are times where you may not need to do background processing for a value. For example,
-	/// you may have a cache of values and can just hand one out. In those cases you still want to
-	/// return a future for the method signature, but can just call this method to fill in the future.
+	/// As with the Assign method, there are times where you may know a job value is a failure without
+	/// doing any background work. In those cases you can simply fail the job manually and return it.
 	/// </remarks>
-	/// <param name="value">The value to assign the future.</param>
-	public void Assign(T value)
-	{
-		if (_state != JobState.Pending) {
-			throw new InvalidOperationException("Cannot assign a value to a future that isn't in the Pending state.");
-		}
-
-		AssignImpl(value);
-	}
-
-	/// <summary>
-	/// Allows manually failing a future, as long as it is still in the pending state.
-	/// </summary>
-	/// <remarks>
-	/// As with the Assign method, there are times where you may know a future value is a failure without
-	/// doing any background work. In those cases you can simply fail the future manually and return it.
-	/// </remarks>
-	/// <param name="error">The exception to use to fail the future.</param>
+	/// <param name="error">The exception to use to fail the job.</param>
 	public void Fail(Exception error)
 	{
 		if (_state != JobState.Pending) {
-			throw new InvalidOperationException("Cannot fail future that isn't in the Pending state.");
+			throw new InvalidOperationException("Cannot fail job that isn't in the Pending state.");
 		}
 
 		FailImpl(error);

@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+using Gridlike;
+
 public class IncreaseJumpHeight : Upgrade {
 
 	float heightIncrease;

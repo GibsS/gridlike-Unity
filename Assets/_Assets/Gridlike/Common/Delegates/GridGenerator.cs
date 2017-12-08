@@ -86,7 +86,7 @@ namespace Gridlike {
 			this.algorithm = algorithm;
 		}
 
-		public override void LoadTiles (int regionX, int regionY, FiniteGridCallback callback) {
+		public override void LoadTiles (int regionX, int regionY, Action<FiniteGrid> callback) {
 			if (useSave && gridSerializer.IsRegionSaved(regionX, regionY)) {
 				gridSerializer.LoadGrid (regionX, regionY, callback);
 				return;

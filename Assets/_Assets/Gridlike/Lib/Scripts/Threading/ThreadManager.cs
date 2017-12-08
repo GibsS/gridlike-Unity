@@ -3,8 +3,10 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 
+// Taken and lightly altered version of UnityToolbag's Dispatcher system. 
+
 /// <summary>
-/// A system for dispatching code to execute on the main thread.
+/// A system for launching simple worker task on background thread.
 /// </summary>
 public class ThreadManager : MonoBehaviour
 {
@@ -107,7 +109,12 @@ public class ThreadManager : MonoBehaviour
 		}
 	}
 
-	// TO CALL IN MAIN THREAD ONLY
+	/// <summary>
+	/// Creates a job. Only to be called on the main thread.
+	/// </summary>
+	/// <param name="action">The function to be run in the background thread.</param>
+	/// <param name="callback">The callback to be called once the job is completed.</param>
+	/// <typeparam name="T">The type of the data returned by the job.</typeparam>
 	public static void CreateJob<T>(Func<T> action, JobCallback<T> callback) {
 
 #if UNITY_WEBGL && !UNITY_EDITOR

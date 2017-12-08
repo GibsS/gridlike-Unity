@@ -1,6 +1,8 @@
 using UnityEngine;
 
-namespace PC2D
+using PC2D;
+
+namespace Gridlike
 {
     public class LadderZone : SpriteDebug
     {

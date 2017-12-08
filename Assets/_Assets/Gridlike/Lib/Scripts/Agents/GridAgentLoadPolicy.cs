@@ -2,8 +2,11 @@
 using System.Collections;
 
 namespace Gridlike {
-	
-	// only uses the first agent added 
+
+	/// <summary>
+	/// The logic that takes care of loading a Grid's region based on agents. Currently only consideres a single agent, others are ignored.
+	/// Very simple algorithm : loads every region in a 2 region radius aroung the agent's current region + presents every region in a 1 region radius of the agent.
+	/// </summary>
 	public class GridAgentLoadPolicy {
 
 		Grid grid;

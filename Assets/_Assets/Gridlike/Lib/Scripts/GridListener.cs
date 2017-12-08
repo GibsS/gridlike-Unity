@@ -3,11 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 
 namespace Gridlike {
-	
+
+	/// <summary>
+	/// I really wish I could find a better name for this type of component. A GridListener gets signaled of changes in what information
+	/// is to be "shown" about the Grid it is attached to. When signaled, the listener creates the appropriate GOs. Can for example be used
+	/// to display the tiles by creating render GOs for every tiles.
+	/// </summary>
 	[ExecuteInEditMode]
 	[RequireComponent(typeof(Grid))]
 	public abstract class GridListener : MonoBehaviour {
-		
+
+		/// <summary>
+		/// The grid the GridListener is attached to
+		/// </summary>
+		/// <value>The grid.</value>
 		[SerializeField] public Grid grid { get; private set; }
 
 		void Reset() {
@@ -32,19 +41,39 @@ namespace Gridlike {
 				} else {
 					this.grid = grid;
 
-					grid.AddListener (this);
+					grid._AddListener (this);
 				}
 			}
 		}
 			
+		/// <summary>
+		/// Called when a tile's information is set.
+		/// </summary>
+		/// <param name="x">The x coordinate of the tile.</param>
+		/// <param name="y">The y coordinate of the tile.</param>
+		/// <param name="tile">The tile.</param>
 		public abstract void OnSet(int x, int y, Tile tile);
 		public virtual void OnSetState (int x, int y, Tile tile, float oldState1, float oldState2, float oldState3) {
 			OnSet (x, y, tile);
 		}
+		/// <summary>
+		/// Called when a SubId is changed.
+		/// </summary>
+		/// <param name="x">The x coordinate of the tile.</param>
+		/// <param name="y">The y coordinate of the tile.</param>
+		/// <param name="tile">The tile.</param>
+		/// <param name="oldSubId">Old subId.</param>
 		public virtual void OnSetSubId (int x, int y, Tile tile, int oldSubId) {
 			OnSet (x, y, tile);
 		}
 
+		/// <summary>
+		/// Called when a square of tile's information is set.
+		/// </summary>
+		/// <param name="x">The bottom left x coordinate of the square.</param>
+		/// <param name="y">The bottom left y coordinate of the square.</param>
+		/// <param name="width">The width of the square.</param>
+		/// <param name="height">The height of the square.</param>
 		public virtual void OnSet(int x, int y, int width, int height) {
 			int minRegionX = Mathf.FloorToInt (x / (float) Grid.REGION_SIZE);
 			int minRegionY = Mathf.FloorToInt (y / (float) Grid.REGION_SIZE);
@@ -78,6 +107,11 @@ namespace Gridlike {
 			}
 		}
 
+		/// <summary>
+		/// Called when a region is presented.
+		/// </summary>
+		/// <param name="regionX">The X coordinate of the region.</param>
+		/// <param name="regionY">The Y coordinate of the region.</param>
 		public virtual void OnShowRegion(int regionX, int regionY) {
 			FiniteGrid region = grid.GetRegion (regionX, regionY);
 
@@ -94,7 +128,11 @@ namespace Gridlike {
 				}
 			}
 		}
-
+		/// <summary>
+		/// Called when a region is hidden.
+		/// </summary>
+		/// <param name="regionX">The X coordinate of the region.</param>
+		/// <param name="regionY">The Y coordinate of the region.</param>
 		public abstract void OnHideRegion(int X, int Y);
 	}
 }

@@ -4,6 +4,9 @@ using System.Collections;
 
 namespace Gridlike {
 
+	/// <summary>
+	/// Base class for generated helper class.
+	/// </summary>
 	[Serializable]
 	public class TileAtlasHelper {
 

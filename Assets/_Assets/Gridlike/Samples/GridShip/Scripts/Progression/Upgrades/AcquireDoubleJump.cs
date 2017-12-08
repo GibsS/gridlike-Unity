@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+using Gridlike;
+
 public class AcquireDoubleJump : Upgrade {
 
 	public override string Name () {

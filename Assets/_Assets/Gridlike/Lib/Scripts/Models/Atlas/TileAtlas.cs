@@ -5,32 +5,86 @@ using UnityEngine;
 
 namespace Gridlike {
 
+	/// <summary>
+	/// Custom asset that stores a collection of tile types. Every grid needs to have a reference to such an atlas.
+	/// </summary>
 	[CreateAssetMenu(fileName="GridTileAtlas", menuName="Gridlike/Grid tile atlas", order=1)]
 	public class TileAtlas : ScriptableObject {
 
+		/// <summary>
+		/// The max pixel size (width and height) of a sprite.
+		/// </summary>
 		public const int MAX_SPRITE_SHEET_SIZE = 2048;
 
+		/// <summary>
+		/// Pixel size of a tile
+		/// </summary>
 		public int tilePixelSize;
+		/// <summary>
+		/// Are generated files placed in a path relative to the tileAtlas (true) or in a path relative to the project root (false) ?
+		/// </summary>
 		public bool useRelativePath = false;
+		/// <summary>
+		/// The path to the generated sprite sheet.
+		/// </summary>
 		public string spriteSheetPath;
+		/// <summary>
+		/// The path to the generated helper script.
+		/// </summary>
 		public string scriptPath;
 
+		/// <summary>
+		/// The generated sprite sheet.
+		/// </summary>
 		public Texture2D spriteSheet;
+		/// <summary>
+		/// The empty sprite in the sprite sheet.
+		/// </summary>
 		public Sprite emptySprite;
+		/// <summary>
+		/// Major version of the atlas when the sprite sheet was last updated.
+		/// </summary>
 		public int spriteSheetMajorVersion;
+		/// <summary>
+		/// Minor version of the atlas when the sprite sheet was last updated.
+		/// </summary>
 		public int spriteSheetMinorVersion;
 
+		/// <summary>
+		/// Tile types.
+		/// </summary>
 		public TileInfo[] atlas;
 
+		/// <summary>
+		/// Major version of the atlas. Entities that depend on this atlas also have a "version at last update" they can use to know if their data is outdated or not.
+		/// </summary>
 		public int majorVersion;
+		/// <summary>
+		/// Minor version of the atlas.
+		/// </summary>
 		public int minorVersion;
 
+		/// <summary>
+		/// The material used by GridRenderers
+		/// </summary>
 		public Material material;
 
+		/// <summary>
+		/// The generated helper.
+		/// </summary>
 		public TileAtlasHelper helper;
+		/// <summary>
+		/// Major version of the atlas when the helper was last generated.
+		/// </summary>
 		public int helperMajorVersion;
+		/// <summary>
+		/// Minor version of the atlas when the helper was last generated.
+		/// </summary>
 		public int helperMinorVersion;
 
+		/// <summary>
+		/// Number of tile types.
+		/// </summary>
 		public int Count { 
 			get {
 				int count = 0;
@@ -43,6 +97,10 @@ namespace Gridlike {
 			}
 		}
 
+		/// <summary>
+		/// The number of sprite sheet "tile" every sprite in the atlas would occupy
+		/// </summary>
+		/// <value>The total sprite tile count.</value>
 		public int TotalSpriteTileCount {
 			get {
 				int count = 0;
@@ -77,6 +135,9 @@ namespace Gridlike {
 
 			return count;
 		}
+		/// <summary>
+		/// Number of sprite in the entire atlas.
+		/// </summary>
 		public int SpriteCount {
 			get {
 				int count = 0;
@@ -140,15 +201,27 @@ namespace Gridlike {
 			}
 		}
 
+		/// <summary>
+		/// Gets tile for the given id.
+		/// </summary>
+		/// <param name="id">id.</param>
 		public TileInfo GetTile(int id) {
 			return atlas [id];
 		}
 
+		/// <summary>
+		/// Get tile with the id equal to i
+		/// </summary>
+		/// <param name="i">The index.</param>
 		public TileInfo this[int i] {
 			get { return atlas[i]; }
 			set { atlas[i] = value; }
 		}
 
+		/// <summary>
+		/// Checks whether or not the atlas contains the given id.
+		/// </summary>
+		/// <param name="id">id.</param>
 		public bool ContainsTile(int id) {
 			return id >= 0 && id < atlas.Length && atlas [id] != null && atlas [id].id != 0;
 		}
@@ -179,9 +252,13 @@ namespace Gridlike {
 
 			return newPosition;
 		}
-		public void RemoveTile(int tile) {
-			if (tile < atlas.Length && tile >= 0) {
-				atlas [tile] = null;
+		/// <summary>
+		/// Removes a tile type
+		/// </summary>
+		/// <param name="id">id.</param>
+		public void RemoveTile(int id) {
+			if (id < atlas.Length && id >= 0) {
+				atlas [id] = null;
 			}
 		}
 

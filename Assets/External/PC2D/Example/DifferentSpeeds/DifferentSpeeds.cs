@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+using Gridlike;
+
 public class DifferentSpeeds : MonoBehaviour
 {
     public KeyCode keyCodeToStart;
