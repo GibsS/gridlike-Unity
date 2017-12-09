@@ -22418,7 +22418,7 @@ MonoBehaviour:
     generate them using a very simple generation algorithm that uses perlin noise.
 
 
-    Move character: ZQSD
+    Move character: WASD
 
     Use current item: Left click'
 --- !u!222 &1916941092

@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Gridlike {
 
+	[DisallowMultipleComponent]
 	public abstract class TileBehaviour : MonoBehaviour {
 
 		[HideInInspector] public Grid _grid;

@@ -2,6 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// IMPROVEMENT IDEAS
+
+// - Damaging a block creates a small animation
+// - Monster AI
+// - Add verification that the character is not under the tile being placed
+
 namespace Gridship {
 
 	public interface INotifier {
@@ -29,11 +35,6 @@ namespace Gridship {
 		Queue<bool> upgradeQueue;
 
 		void Awake() {
-
-			if (instance != null) {
-				Destroy (this);
-				return;
-			}
 
 			instance = this;
 
