@@ -1,25 +1,28 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AcquireGridItem : Upgrade {
+namespace Gridship {
 
-	int itemID;
+	public class AcquireGridItem : Upgrade {
 
-	public AcquireGridItem(int itemId) {
-		this.itemID = itemID;
-	}
+		int itemID;
 
-	public override string Name () {
-		return "acquire item " + itemID;
-	}
+		public AcquireGridItem(int itemId) {
+			this.itemID = itemID;
+		}
 
-	public override string Description () {
-		return "you've acquired the item " + itemID;
-	}
+		public override string Name () {
+			return "acquire item " + itemID;
+		}
 
-	public override void Execute () {
-		if (!character.availableGridItems.Contains (itemID)) {
-			character.availableGridItems.Add (itemID);
+		public override string Description () {
+			return "you've acquired the item " + itemID;
+		}
+
+		public override void Execute () {
+			if (!character.availableGridItems.Contains (itemID)) {
+				character.availableGridItems.Add (itemID);
+			}
 		}
 	}
 }

@@ -3,22 +3,25 @@ using System.Collections;
 
 using Gridlike;
 
-public class IncreaseJumpHeight : Upgrade {
+namespace Gridship {
 
-	float heightIncrease;
+	public class IncreaseJumpHeight : Upgrade {
 
-	public IncreaseJumpHeight(int heightIncrease) {
-		this.heightIncrease = heightIncrease;
-	}
+		float heightIncrease;
 
-	public override string Name() {
-		return "Jump height++";
-	}
-	public override string Description () {
-		return "You can jump higher!";
-	}
+		public IncreaseJumpHeight(int heightIncrease) {
+			this.heightIncrease = heightIncrease;
+		}
 
-	public override void Execute () {
-		character.GetComponent<PlatformerMotor2D>().jumpHeight += heightIncrease;
+		public override string Name() {
+			return "Jump height++";
+		}
+		public override string Description () {
+			return "You can jump higher!";
+		}
+
+		public override void Execute () {
+			character.GetComponent<PlatformerMotor2D>().jumpHeight += heightIncrease;
+		}
 	}
 }

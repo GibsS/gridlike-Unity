@@ -1,16 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class TransformUtility {
+namespace Gridship {
 
-	public static GameObject GetTopParent(GameObject go) {
-		Transform transform = go.transform;
+	public class TransformUtility {
 
-		while (transform.parent != null) {
-			transform = transform.parent;
+		public static GameObject GetTopParent(GameObject go) {
+			Transform transform = go.transform;
+
+			while (transform.parent != null) {
+				transform = transform.parent;
+			}
+
+			return transform.gameObject;
 		}
-
-		return transform.gameObject;
 	}
-}
 
+}

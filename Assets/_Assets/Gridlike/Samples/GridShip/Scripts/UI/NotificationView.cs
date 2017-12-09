@@ -3,40 +3,43 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine;
 
-public class NotificationView : MonoBehaviour {
+namespace Gridship {
 
-	const float NOTIFICATION_DURATION = 2;
+	public class NotificationView : MonoBehaviour {
 
-	public Text text;
-	public GameObject container;
+		const float NOTIFICATION_DURATION = 2;
 
-	Queue<string> notifications;
-	float lastNotificationDate = -NOTIFICATION_DURATION;
+		public Text text;
+		public GameObject container;
 
-	public void Initialize() {
-		notifications = new Queue<string> ();
-	}
+		Queue<string> notifications;
+		float lastNotificationDate = -NOTIFICATION_DURATION;
 
-	void Update() {
-		if (Time.time - lastNotificationDate > NOTIFICATION_DURATION) {
-			if (notifications.Count > 0) {
-				lastNotificationDate = Time.time;
-				container.SetActive (true);
-				text.text = notifications.Dequeue ();
-			} else {
-				container.SetActive (false);
+		public void Initialize() {
+			notifications = new Queue<string> ();
+		}
+
+		void Update() {
+			if (Time.time - lastNotificationDate > NOTIFICATION_DURATION) {
+				if (notifications.Count > 0) {
+					lastNotificationDate = Time.time;
+					container.SetActive (true);
+					text.text = notifications.Dequeue ();
+				} else {
+					container.SetActive (false);
+				}
 			}
 		}
-	}
 
-	public void ShowNotification(string notification) {
-		notifications.Enqueue(notification);
-	}
+		public void ShowNotification(string notification) {
+			notifications.Enqueue(notification);
+		}
 
-	public void Show() {
-		container.SetActive (true);
-	}
-	public void Hide() {
-		container.SetActive (false);
+		public void Show() {
+			container.SetActive (true);
+		}
+		public void Hide() {
+			container.SetActive (false);
+		}
 	}
 }

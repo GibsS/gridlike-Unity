@@ -1,19 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PrefabStore : MonoBehaviour {
+namespace Gridship {
 
-	public static PrefabStore store;
+	public class PrefabStore : MonoBehaviour {
 
-	void Awake() {
-		if (store != null) {
-			Destroy (this);
-			return;
+		public static PrefabStore store;
+
+		void Awake() {
+			if (store != null) {
+				Destroy (this);
+				return;
+			}
+
+			store = this;
 		}
 
-		store = this;
+		public GameObject arrow;
+		public GameObject cubeParticle;
 	}
-
-	public GameObject arrow;
-	public GameObject cubeParticle;
 }

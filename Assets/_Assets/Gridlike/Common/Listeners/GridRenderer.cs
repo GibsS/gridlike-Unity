@@ -73,7 +73,7 @@ namespace Gridlike {
 			if (grid.atlas.material == null) {
 				grid.atlas.RegenerateMaterial ();
 			}
-			rend.Initialize (grid.atlas.material, grid.atlas.tilePixelSize, grid.atlas.emptySprite);
+			rend.SetupRendering (grid.atlas.material, grid.atlas.tilePixelSize, grid.atlas.emptySprite);
 
 			return rend;
 		}

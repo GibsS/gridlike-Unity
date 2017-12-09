@@ -1,23 +1,26 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ArrowsAreBombs : Upgrade {
+namespace Gridship {
 
-	int radius;
+	public class ArrowsAreBombs : Upgrade {
 
-	public ArrowsAreBombs(int radius) {
-		this.radius = radius;
-	}
+		int radius;
 
-	public override string Name () {
-		return "arrows are bombs";
-	}
+		public ArrowsAreBombs(int radius) {
+			this.radius = radius;
+		}
 
-	public override string Description () {
-		return "you're arrows will now explode";
-	}
+		public override string Name () {
+			return "arrows are bombs";
+		}
 
-	public override void Execute () {
-		character.bow.radius = radius;
+		public override string Description () {
+			return "you're arrows will now explode";
+		}
+
+		public override void Execute () {
+			character.bow.radius = radius;
+		}
 	}
 }

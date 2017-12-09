@@ -1,17 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AcquirePlacer : Upgrade {
-	
-	public override string Name () {
-		return "materializer";
-	}
+namespace Gridship {
 
-	public override string Description () {
-		return "you've acquired the materializer";
-	}
+	public class AcquirePlacer : Upgrade {
+		
+		public override string Name () {
+			return "materializer";
+		}
 
-	public override void Execute () {
-		character.AcquirePlacer ();
+		public override string Description () {
+			return "you've acquired the materializer";
+		}
+
+		public override void Execute () {
+			character.AcquirePlacer ();
+		}
 	}
 }

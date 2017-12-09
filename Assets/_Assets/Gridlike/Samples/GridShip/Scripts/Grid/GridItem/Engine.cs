@@ -1,19 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Engine : GSTileBehaviour {
+namespace Gridship {
 
-	public int extraPropulsion;
+	public class Engine : GSTileBehaviour {
 
-	public override void OnShow () {
-		GSShip ship = grid.GetComponent<GSShip> ();
+		public int extraPropulsion;
 
-		if(ship != null) ship.propulsionForce += extraPropulsion;
-	}
+		public override void OnShow () {
+			GSShip ship = grid.GetComponent<GSShip> ();
 
-	public override void OnHide() {
-		GSShip ship = grid.GetComponent<GSShip> ();
+			if(ship != null) ship.propulsionForce += extraPropulsion;
+		}
 
-		if(ship != null) ship.propulsionForce -= extraPropulsion;
+		public override void OnHide() {
+			GSShip ship = grid.GetComponent<GSShip> ();
+
+			if(ship != null) ship.propulsionForce -= extraPropulsion;
+		}
 	}
 }

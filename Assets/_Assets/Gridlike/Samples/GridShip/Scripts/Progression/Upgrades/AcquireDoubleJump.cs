@@ -3,17 +3,20 @@ using System.Collections;
 
 using Gridlike;
 
-public class AcquireDoubleJump : Upgrade {
+namespace Gridship {
 
-	public override string Name () {
-		return "double jump";
-	}
+	public class AcquireDoubleJump : Upgrade {
 
-	public override string Description () {
-		return "you've acquired the legendary double jump";
-	}
+		public override string Name () {
+			return "double jump";
+		}
 
-	public override void Execute () {
-		character.GetComponent<PlatformerMotor2D> ().numOfAirJumps = 1;
+		public override string Description () {
+			return "you've acquired the legendary double jump";
+		}
+
+		public override void Execute () {
+			character.GetComponent<PlatformerMotor2D> ().numOfAirJumps = 1;
+		}
 	}
 }

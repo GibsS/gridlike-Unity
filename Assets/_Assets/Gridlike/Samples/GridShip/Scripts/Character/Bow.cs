@@ -2,45 +2,48 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Bow : Tool {
+namespace Gridship {
 
-	public GameObject arrowPrefab;
+	public class Bow : Tool {
 
-	public int cubeArrowCost;
-	public float cooldown;
-	public float speed;
-	public int damage;
-	public int radius;
+		public GameObject arrowPrefab;
 
-	float lastShot = -100000;
+		public int cubeArrowCost;
+		public float cooldown;
+		public float speed;
+		public int damage;
+		public int radius;
 
-	public override void OnMouseDown (Vector2 position) {
-		TryShoot (position);
-	}
-	public override void OnMouse (Vector2 position) {
-		TryShoot (position);
-	}
-	public override void OnMouseUp (Vector2 position) {
-		TryShoot (position);
-	}
+		float lastShot = -100000;
 
-	void TryShoot(Vector2 position) {
-		if (Time.time - lastShot > cooldown && character.GetCubeCount() >= cubeArrowCost) {
-			lastShot = Time.time;
-			character.ConsumeCubes (cubeArrowCost);
-			Shoot (position);
+		public override void OnMouseDown (Vector2 position) {
+			TryShoot (position);
 		}
-	}
+		public override void OnMouse (Vector2 position) {
+			TryShoot (position);
+		}
+		public override void OnMouseUp (Vector2 position) {
+			TryShoot (position);
+		}
 
-	void Shoot(Vector2 position) {
-		// TODO - factorize into factory
-		GameObject arrow = Instantiate (arrowPrefab);
-		arrow.GetComponent<Arrow> ().Initialize (
-			character,
-			damage,
-			transform.position, 
-			speed * (position - (Vector2) transform.position).normalized,
-			radius
-		);
+		void TryShoot(Vector2 position) {
+			if (Time.time - lastShot > cooldown && character.GetCubeCount() >= cubeArrowCost) {
+				lastShot = Time.time;
+				character.ConsumeCubes (cubeArrowCost);
+				Shoot (position);
+			}
+		}
+
+		void Shoot(Vector2 position) {
+			// TODO - factorize into factory
+			GameObject arrow = Instantiate (arrowPrefab);
+			arrow.GetComponent<Arrow> ().Initialize (
+				character,
+				damage,
+				transform.position, 
+				speed * (position - (Vector2) transform.position).normalized,
+				radius
+			);
+		}
 	}
 }

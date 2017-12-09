@@ -4,40 +4,43 @@ using UnityEngine;
 
 using Gridlike;
 
-public class Placer : Tool {
+namespace Gridship {
 
-	// TODO factor
-	public TileAtlas atlas;
+	public class Placer : Tool {
 
-	public int placeId;
+		// TODO factor
+		public TileAtlas atlas;
 
-	public float radius;
+		public int placeId;
 
-	public override void OnMouseAny (Vector2 position) {
-		TryPlace (position, placeId);
-	}
+		public float radius;
 
-	void TryPlace(Vector2 position, int id) {
-		if (Vector2.Distance (transform.position, position) < radius 
-			&& GSConsts.TileExists(id) 
-			&& character.GetCubeCount() >= GSConsts.tiles[id].cubeCost) {
+		public override void OnMouseAny (Vector2 position) {
+			TryPlace (position, placeId);
+		}
 
-			Grid grid;
-			int x;
-			int y;
+		void TryPlace(Vector2 position, int id) {
+			if (Vector2.Distance (transform.position, position) < radius 
+				&& GSConsts.TileExists(id) 
+				&& character.GetCubeCount() >= GSConsts.tiles[id].cubeCost) {
 
-			if (atlas [id].tileGO != null) {
-				GSTileBehaviour behaviour = atlas [id].tileGO.GetComponent<GSTileBehaviour> ();
+				Grid grid;
+				int x;
+				int y;
 
-				GridUtility.GetEmptyInAreaOverBlock (position, behaviour.width, behaviour.height, out grid, out x, out y);
-			} else {
-				GridUtility.GetEmptyNextToBlock (position, out grid, out x, out y);
-			}
+				if (atlas [id].tileGO != null) {
+					GSTileBehaviour behaviour = atlas [id].tileGO.GetComponent<GSTileBehaviour> ();
 
-			if (grid != null) {
-				character.ConsumeCubes(GSConsts.tiles[id].cubeCost);
-				GSGrid gsGrid = grid.GetComponent<GSGrid> ();
-				gsGrid.Place (x, y, id);
+					Gridlike.GridUtility.GetEmptyInAreaOverBlock (position, behaviour.width, behaviour.height, out grid, out x, out y);
+				} else {
+					Gridlike.GridUtility.GetEmptyNextToBlock (position, out grid, out x, out y);
+				}
+
+				if (grid != null) {
+					character.ConsumeCubes(GSConsts.tiles[id].cubeCost);
+					GSGrid gsGrid = grid.GetComponent<GSGrid> ();
+					gsGrid.Place (x, y, id);
+				}
 			}
 		}
 	}

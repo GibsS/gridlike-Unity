@@ -1,19 +1,22 @@
-﻿public class IncreaseBowDamage : Upgrade {
+﻿namespace Gridship {
+	
+	public class IncreaseBowDamage : Upgrade {
 
-	int damage;
+		int damage;
 
-	public IncreaseBowDamage(int damage) {
-		this.damage = damage;
-	}
+		public IncreaseBowDamage(int damage) {
+			this.damage = damage;
+		}
 
-	public override string Name() {
-		return "Bow damage++";
-	}
-	public override string Description () {
-		return "Bow damage increased to " + character.bow.damage;
-	}
+		public override string Name() {
+			return "Bow damage++";
+		}
+		public override string Description () {
+			return "Bow damage increased to " + character.bow.damage;
+		}
 
-	public override void Execute () {
-		character.bow.damage += damage;
+		public override void Execute () {
+			character.bow.damage += damage;
+		}
 	}
 }

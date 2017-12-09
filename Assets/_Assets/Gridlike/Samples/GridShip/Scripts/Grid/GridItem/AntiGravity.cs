@@ -1,19 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class AntiGravity : GSTileBehaviour {
+namespace Gridship {
 
-	public int extraMass;
+	public class AntiGravity : GSTileBehaviour {
 
-	public override void OnShow () {
-		GSShip ship = grid.GetComponent<GSShip> ();
+		public int extraMass;
 
-		if(ship != null) ship.maxMass += extraMass;
-	}
+		public override void OnShow () {
+			GSShip ship = grid.GetComponent<GSShip> ();
 
-	public override void OnHide() {
-		GSShip ship = grid.GetComponent<GSShip> ();
+			if(ship != null) ship.maxMass += extraMass;
+		}
 
-		if(ship != null) ship.maxMass -= extraMass;
+		public override void OnHide() {
+			GSShip ship = grid.GetComponent<GSShip> ();
+
+			if(ship != null) ship.maxMass -= extraMass;
+		}
 	}
 }

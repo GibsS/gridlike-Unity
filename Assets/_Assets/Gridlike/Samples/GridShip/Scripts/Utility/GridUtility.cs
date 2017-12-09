@@ -3,129 +3,19 @@ using System.Collections;
 
 using Gridlike;
 
-public class GridUtility {
+namespace Gridship {
 
-	public static void GetClosestNonEmptyTile(Grid grid, Vector2 position, out int x, out int y) {
-		grid.WorldToGrid (position, out x, out y);
+	public class GridUtility {
 
-		if (grid.GetId (x, y) != 0 || grid.GetTileComponent(x, y) != null) return;
-		if (grid.GetId (x + 1, y) != 0 || grid.GetTileComponent(x + 1, y) != null) {
-			x++;
-			return;
-		}
-		if (grid.GetId (x, y + 1) != 0 || grid.GetTileComponent(x, y + 1) != null) {
-			y++;
-			return;
-		}
-		if (grid.GetId (x - 1, y) != 0 || grid.GetTileComponent(x - 1, y) != null) {
-			x--;
-			return;
-		}
-		if (grid.GetId (x, y - 1) != 0 || grid.GetTileComponent(x, y - 1) != null) {
-			y--;
-			return;
-		}
-		if (grid.GetId (x + 1, y + 1) != 0 || grid.GetTileComponent(x + 1, y + 1) != null) {
-			x++;
-			y++;
-			return;
-		}
-		if (grid.GetId (x + 1, y - 1) != 0 || grid.GetTileComponent(x + 1, y - 1) != null) {
-			x++;
-			y--;
-			return;
-		}
-		if (grid.GetId (x - 1, y - 1) != 0 || grid.GetTileComponent(x - 1, y - 1) != null) {
-			x--;
-			y--;
-			return;
-		}
-		if (grid.GetId (x - 1, y + 1) != 0 || grid.GetTileComponent(x - 1, y + 1) != null) {
-			x--;
-			y++;
-			return;
-		}
-	}
+		public static void ExplodeInAllGrid(GSCharacter character, Vector2 position, int radius, int damage) {
+			foreach (Grid grid in Grid.GetAllGrids()) {
+				GSGrid wrapper = grid.GetComponent<GSGrid> ();
 
-	public static void GetAnyNonEmptyTile(Vector2 position, out Grid grid, out int x, out int y) {
-		grid = null;
-		x = 0;
-		y = 0;
-
-		foreach(Grid candidate in Grid.GetAllGrids()) {
-			candidate.WorldToGrid (position, out x, out y);
-
-			if (candidate.GetId (x, y) != 0 || candidate.GetTileComponent(x, y) != null) {
-				grid = candidate;
-				return;
-			}
-		}
-	}
-	public static void GetEmptyNextToBlock(Vector2 position, out Grid grid, out int x, out int y) {
-		grid = null;
-		x = 0;
-		y = 0;
-
-		foreach(Grid candidate in Grid.GetAllGrids()) {
-			candidate.WorldToGrid (position, out x, out y);
-
-			if (candidate.GetId (x, y) == 0 
-				&& candidate.GetTileComponent(x, y) == null
-				&& (candidate.GetId(x - 1, y) != 0 
-				|| candidate.GetId(x + 1, y) != 0
-				|| candidate.GetId(x, y - 1) != 0
-				|| candidate.GetId(x, y + 1) != 0)) {
-				
-				grid = candidate;
-				return;
-			}
-		}
-	}
-	public static void GetEmptyInAreaOverBlock(Vector2 position, int width, int height, out Grid grid, out int x, out int y) {
-		grid = null;
-		x = 0;
-		y = 0;
-
-		foreach (Grid candidate in Grid.GetAllGrids()) {
-			candidate.WorldToGrid (position, out x, out y);
-
-			bool fail = false;
-
-			for (int i = x; i < x + width && !fail; i++) {
-				for (int j = y; j < y + height; j++) {
-					Tile tile = candidate.Get (i, j);
-
-					if ((tile != null && tile.id != 0) || candidate.GetTileComponent (i, j) != null) {
-						fail = true;
-						break;
-					}
+				if (wrapper != null) {
+					wrapper.Explosion (character, position, radius, damage);
+				} else {
+					Debug.LogWarning ("Grid has no GSGrid");
 				}
-			}
-
-			for (int i = x; i < x + width; i++) {
-				Tile tile = candidate.Get (i, y - 1);
-
-				if (tile == null || tile.id == 0) {
-					fail = true;
-					break;
-				}
-			}
-
-			if (!fail) {
-				grid = candidate;
-				break;
-			}
-		}
-	}
-
-	public static void ExplodeInAllGrid(GSCharacter character, Vector2 position, int radius, int damage) {
-		foreach (Grid grid in Grid.GetAllGrids()) {
-			GSGrid wrapper = grid.GetComponent<GSGrid> ();
-
-			if (wrapper != null) {
-				wrapper.Explosion (character, position, radius, damage);
-			} else {
-				Debug.LogWarning ("Grid has no GSGrid");
 			}
 		}
 	}

@@ -4,56 +4,59 @@ using UnityEngine;
 
 using Gridlike;
 
-public class Arrow : MonoBehaviour {
+namespace Gridship {
 
-	GSCharacter character;
-	int damage;
-	int radius;
+	public class Arrow : MonoBehaviour {
 
-	public void Initialize(GSCharacter character, int damage, Vector2 position, Vector2 velocity, int radius = 0) {
-		this.character = character;
-		this.damage = damage;
-		this.radius = radius;
+		GSCharacter character;
+		int damage;
+		int radius;
 
-		transform.position = position;
+		public void Initialize(GSCharacter character, int damage, Vector2 position, Vector2 velocity, int radius = 0) {
+			this.character = character;
+			this.damage = damage;
+			this.radius = radius;
 
-		GetComponent<Rigidbody2D> ().velocity = velocity;
+			transform.position = position;
 
-		StartCoroutine (DestroyAfterTime (10));
-	}
+			GetComponent<Rigidbody2D> ().velocity = velocity;
 
-	void OnCollisionEnter2D(Collision2D collision) {
-		if (radius == 0) {
-			GameObject go = TransformUtility.GetTopParent (collision.gameObject);
-
-			Grid grid = go.GetComponent<Grid> ();
-			if (grid != null) {
-				int x;
-				int y;
-
-				GridUtility.GetClosestNonEmptyTile (grid, transform.position, out x, out y);
-				if (grid != null) {
-					GSGrid gsGrid = grid.GetComponent<GSGrid> ();
-
-					gsGrid.Damage (character, x, y, damage, transform.position);
-				}
-			}
-		} else {
-			GridUtility.ExplodeInAllGrid (character, transform.position, radius, damage);
+			StartCoroutine (DestroyAfterTime (10));
 		}
 
-		StartCoroutine (DestroyAnimation ());
-	}
+		void OnCollisionEnter2D(Collision2D collision) {
+			if (radius == 0) {
+				GameObject go = TransformUtility.GetTopParent (collision.gameObject);
 
-	IEnumerator DestroyAnimation() {
+				Grid grid = go.GetComponent<Grid> ();
+				if (grid != null) {
+					int x;
+					int y;
 
-		yield return null;
-		Destroy (gameObject);
-	}
+					Gridlike.GridUtility.GetClosestNonEmptyTile (grid, transform.position, out x, out y);
+					if (grid != null) {
+						GSGrid gsGrid = grid.GetComponent<GSGrid> ();
 
-	IEnumerator DestroyAfterTime(int time) {
-		yield return new WaitForSeconds (time);
+						gsGrid.Damage (character, x, y, damage, transform.position);
+					}
+				}
+			} else {
+				GridUtility.ExplodeInAllGrid (character, transform.position, radius, damage);
+			}
 
-		Destroy (gameObject);
+			StartCoroutine (DestroyAnimation ());
+		}
+
+		IEnumerator DestroyAnimation() {
+
+			yield return null;
+			Destroy (gameObject);
+		}
+
+		IEnumerator DestroyAfterTime(int time) {
+			yield return new WaitForSeconds (time);
+
+			Destroy (gameObject);
+		}
 	}
 }

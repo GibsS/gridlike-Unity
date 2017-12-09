@@ -4,32 +4,35 @@ using UnityEngine;
 
 using Gridlike;
 
-public class Pickaxe : Tool {
+namespace Gridship {
 
-	public float cooldown;
-	public float radius;
-	public int damage;
+	public class Pickaxe : Tool {
 
-	float lastPickaxe = -10000;
+		public float cooldown;
+		public float radius;
+		public int damage;
 
-	public override void OnMouseAny (Vector2 position) {
-		TryPickaxe (position);
-	}
+		float lastPickaxe = -10000;
 
-	void TryPickaxe(Vector2 position) {
-		if(Time.time - lastPickaxe > cooldown && Vector2.Distance((Vector2)transform.position, position) < radius) {
-			Grid grid;
-			int x;
-			int y;
+		public override void OnMouseAny (Vector2 position) {
+			TryPickaxe (position);
+		}
 
-			GridUtility.GetAnyNonEmptyTile (position, out grid, out x, out y);
+		void TryPickaxe(Vector2 position) {
+			if(Time.time - lastPickaxe > cooldown && Vector2.Distance((Vector2)transform.position, position) < radius) {
+				Grid grid;
+				int x;
+				int y;
 
-			if (grid != null) {
-				lastPickaxe = Time.time;
+				Gridlike.GridUtility.GetAnyNonEmptyTile (position, out grid, out x, out y);
 
-				GSGrid gsGrid = grid.GetComponent<GSGrid> ();
+				if (grid != null) {
+					lastPickaxe = Time.time;
 
- 				gsGrid.Damage (character, x, y, damage, position);
+					GSGrid gsGrid = grid.GetComponent<GSGrid> ();
+
+	 				gsGrid.Damage (character, x, y, damage, position);
+				}
 			}
 		}
 	}

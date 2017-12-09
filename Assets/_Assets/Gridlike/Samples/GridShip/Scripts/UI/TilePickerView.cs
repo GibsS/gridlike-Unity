@@ -3,23 +3,26 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TilePickerView : MonoBehaviour {
+namespace Gridship {
 
-	public GameObject choiceContainerGO;
-	public GameObject tilePickerChoicePrefab;
+	public class TilePickerView : MonoBehaviour {
 
-	public void AddChoice(string name, Action action) {
-		GameObject obj = Instantiate (tilePickerChoicePrefab);
-		obj.transform.SetParent (tilePickerChoicePrefab.transform, false);
+		public GameObject choiceContainerGO;
+		public GameObject tilePickerChoicePrefab;
 
-		obj.GetComponentInChildren<Text> ().text = name;
-		obj.GetComponent<Button> ().onClick.AddListener (() => action ());
-	}
+		public void AddChoice(string name, Action action) {
+			GameObject obj = Instantiate (tilePickerChoicePrefab);
+			obj.transform.SetParent (tilePickerChoicePrefab.transform, false);
 
-	public void Show() {
-		gameObject.SetActive (true);
-	}
-	public void Hide() {
-		gameObject.SetActive (false);
+			obj.GetComponentInChildren<Text> ().text = name;
+			obj.GetComponent<Button> ().onClick.AddListener (() => action ());
+		}
+
+		public void Show() {
+			gameObject.SetActive (true);
+		}
+		public void Hide() {
+			gameObject.SetActive (false);
+		}
 	}
 }
