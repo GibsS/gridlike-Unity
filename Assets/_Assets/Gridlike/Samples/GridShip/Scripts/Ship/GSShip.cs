@@ -8,9 +8,7 @@ namespace Gridship {
 
 	public class GSShip : MonoBehaviour {
 
-		Rigidbody2D rigidbody;
-		MovingPlatformMotor2D platformer;
-		Grid grid;
+		new Rigidbody2D rigidbody;
 
 		public float maxMass;
 		public float propulsionForce;
@@ -24,8 +22,6 @@ namespace Gridship {
 
 		void Start() {
 			rigidbody = GetComponent<Rigidbody2D> ();
-			platformer = GetComponent<MovingPlatformMotor2D> ();
-			grid = GetComponent<Grid> ();
 
 			GSSingleton.instance.RegisterShip (this);
 		}

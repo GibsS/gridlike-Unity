@@ -35,7 +35,7 @@ public class CharacterMotor1 : MonoBehaviour {
 
 	Vector2 velocity;
 
-	Vector2 groundNormal;
+	//Vector2 groundNormal;
 	public Collider2D groundCollider;
 	bool isGrounded { get { return groundCollider != null; } }
 
@@ -129,7 +129,7 @@ public class CharacterMotor1 : MonoBehaviour {
 		if (hit) {
 			if (!isGrounded) Debug.Log ("Is grounded!");
 
-			groundNormal = hit.normal;
+			//groundNormal = hit.normal;
 			groundCollider = hit.collider;
 		} else {
 			if (isGrounded) Debug.Log ("Is no longer grounded!");

@@ -8,7 +8,7 @@ namespace Gridship {
 		int itemID;
 
 		public AcquireGridItem(int itemId) {
-			this.itemID = itemID;
+			this.itemID = itemId;
 		}
 
 		public override string Name () {
