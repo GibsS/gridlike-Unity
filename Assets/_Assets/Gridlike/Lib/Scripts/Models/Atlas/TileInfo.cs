@@ -2,26 +2,68 @@
 using UnityEngine;
 
 namespace Gridlike {
-	
+
+	/// <summary>
+	/// Stores information on a tile type.
+	/// </summary>
 	[Serializable]
 	public class TileInfo {
 
+		/// <summary>
+		/// Atlas wide unique id of the tile type.
+		/// </summary>
 		public int id;
+		/// <summary>
+		/// Displayed name of the tile.
+		/// </summary>
 		public string name;
 
+		/// <summary>
+		/// The physical shape of the tile.
+		/// </summary>
 		public TileShape shape;
+		/// <summary>
+		/// Addendum to the shape field, used for knowing in what direction triangle tiles stretch.
+		/// </summary>
 		public bool isVertical;
 
+		/// <summary>
+		/// Is the collider for that tile is a trigger?
+		/// </summary>
 		public bool isTrigger;
+		/// <summary>
+		/// The Unity layer of the collider of the tile.
+		/// </summary>
 		public int layer;
+		/// <summary>
+		/// The Unity tag of the collider of the tile.
+		/// </summary>
 		public string tag;
 
+		/// <summary>
+		/// [Not used] Determines whether the tileGO needs to get removed from the grid on initialization
+		/// (can be used for creating creature that spawn on specific tiles)
+		/// </summary>
+		// TODO use as a spawning mechanism
 		public bool isGODetached;
+		/// <summary>
+		/// The prefab of the tileGO. If null, the tile is a regular tile. If not null, overwrite shape and display fields.
+		/// </summary>
 		public GameObject tileGO;
 
+		/// <summary>
+		/// Sprites for the main subId (0)
+		/// </summary>
 		public TileSpriteInfo idSpriteInfo;
+		/// <summary>
+		/// Sprites for the all non main subId (1 -> subIdSriteInfo.Length). It's size determines the number of subId.
+		/// </summary>
 		public TileSpriteInfo[] subIdSpriteInfo;
 
+		/// <summary>
+		/// Gets the sprite for this tile for a given subId and size (size is used for stretched triangles). Nonsensical if the tile is
+		/// a tileGO.
+		/// </summary>
 		public Sprite GetSprite(int subId = 0, int size = 1) {
 			TileSpriteInfo info;
 
@@ -41,6 +83,11 @@ namespace Gridlike {
 				return info.sprites [size - 2];
 			}
 		}
+
+		/// <summary>
+		/// Gets the sprite for this tile for a given subId and size (size is used for stretched triangles). Nonsensical if the tile is
+		/// a tileGO. If the specified size doesn't exist, it gets the first non null sprite and returns the size.
+		/// </summary>
 		public Sprite GetSprite(out int actualSize, int subId = 0, int size = 1) {
 			TileSpriteInfo info;
 
@@ -66,6 +113,9 @@ namespace Gridlike {
 			}
 		}
 
+		/// <summary>
+		/// Adds a subId to the tile.
+		/// </summary>
 		public void AddSubId() {
 			if (subIdSpriteInfo == null) {
 				subIdSpriteInfo = new TileSpriteInfo[1];
@@ -77,6 +127,9 @@ namespace Gridlike {
 				subIdSpriteInfo = newSprites;
 			}
 		}
+		/// <summary>
+		/// Removes the last subId of the tile.
+		/// </summary>
 		public void RemoveSubId() {
 			if (subIdSpriteInfo != null) {
 				if (subIdSpriteInfo.Length == 1) {
@@ -91,6 +144,9 @@ namespace Gridlike {
 			}
 		}
 
+		/// <summary>
+		/// For a given subId, adds a sprite slot for another size.
+		/// </summary>
 		public void AddSpriteSize(int subId) {
 			TileSpriteInfo spriteInfo;
 
@@ -120,6 +176,10 @@ namespace Gridlike {
 				}
 			}
 		}
+
+		/// <summary>
+		/// For a given subId, removes a the sprite slot with the greatest size.
+		/// </summary>
 		public void RemoveSpriteSize(int subId) {
 			TileSpriteInfo spriteInfo = null;
 

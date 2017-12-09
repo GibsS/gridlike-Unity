@@ -1,5 +1,8 @@
 ﻿namespace Gridlike {
 
+	/// <summary>
+	/// The physical shape of a tile type.
+	/// </summary>
 	public enum TileShape {
 		EMPTY, 
 		FULL, 

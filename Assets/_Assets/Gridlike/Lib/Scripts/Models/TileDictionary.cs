@@ -3,7 +3,10 @@ using System;
 using System.Collections.Generic;
 
 namespace Gridlike {
-	
+
+	/// <summary>
+	/// A very (very) simple serializable dictionary implementation.
+	/// </summary>
 	[Serializable]
 	public class TileDictionary {
 

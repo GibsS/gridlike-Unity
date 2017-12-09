@@ -37,15 +37,12 @@ using UnityEngine;
 
 // Automatic fix (with options?)
 
-// # TICKET 9 - Comment EVERYTHING + correct namespace (1day)
-// comments on gridlike
+// # TICKET 9 
 // namespace on gridship
 
 // TEST SCENARIOS
 // Handle subids, see their limit, define contract and preconditions..
 // Make sure if an id is said to be placeable at a given place, it is actually placeable there
-
-// COMMENTS
 
 // SAMPLES
 // Generic character prefab
@@ -564,7 +561,7 @@ namespace Gridlike {
 			}
 		}
 		/// <summary>
-		/// Get the tile data and the tileGO at the specified position.
+		/// Get the tile data and the tileGO TileBehaviour at the specified position.
 		/// </summary>
 		/// <param name="x">The x coordinate of the tile.</param>
 		/// <param name="y">The y coordinate of the tile.</param>
@@ -584,7 +581,7 @@ namespace Gridlike {
 			return tile == null ? TileShape.EMPTY : atlas[tile.id].shape;
 		}
 		/// <summary>
-		/// Get the if of the tile at the specified position.
+		/// Get the id of the tile at the specified position.
 		/// </summary>
 		/// <param name="x">The x coordinate of the tile.</param>
 		/// <param name="y">The y coordinate of the tile.</param>
@@ -594,6 +591,11 @@ namespace Gridlike {
 
 			return tile == null ? 0 : tile.id;
 		}
+		/// <summary>
+		/// Get the tile id of the tile at the specified position and tileGO component.
+		/// </summary>
+		/// <param name="x">The x tile coordinate.</param>
+		/// <param name="y">The y tile coordinate.</param>
 		public int GetId(int x, int y, out Component tileComponent) {
 			Tile tile = tiles.Get(x, y) as Tile;
 
@@ -605,6 +607,13 @@ namespace Gridlike {
 				return tile != null ? tile.id : 0;
 			}
 		}
+		/// <summary>
+		/// Gets the tile id and tileGO TileBehaviour.
+		/// </summary>
+		/// <returns>The identifier.</returns>
+		/// <param name="x">The x tile coordinate.</param>
+		/// <param name="y">The y tile coordinate.</param>
+		/// <param name="tileBehaviour">The TileBehaviour.</param>
 		public int GetId(int x, int y, out TileBehaviour tileBehaviour) {
 			return GetId (x, y, out tileBehaviour);
 		}
