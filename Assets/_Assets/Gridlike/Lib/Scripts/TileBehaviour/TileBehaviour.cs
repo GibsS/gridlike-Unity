@@ -18,7 +18,7 @@ namespace Gridlike {
 		public Grid grid { get { return _grid; } }
 		public Tile tile { 
 			get { 
-				if (_tile == null) _tile = _grid.Get (_x, _y);
+				if (_tile == null) _tile = _grid._Get (_x, _y);
 				
 				return _tile; 
 			} 

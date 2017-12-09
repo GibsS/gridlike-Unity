@@ -18,8 +18,6 @@ using UnityEngine;
 
 // Display tile info in the placer tool and inspector tool
 
-// TODO add better indication to know what this means (regarding loading variable on the grid)
-
 // # TICKET 3 - Improve atlas (1day)
 // Add the drag and drop if possible to the tile atlas (maybe into a window dedicated to it)
 // Have sprite size verification with error boxes in tile atlas
@@ -34,15 +32,7 @@ using UnityEngine;
 // - dictionnary fits the underlying id
 // - name only on tileGO center
 // On two dimensional array (not grid)
-
 // Automatic fix (with options?)
-
-// # TICKET 9 
-// namespace on gridship
-
-// TEST SCENARIOS
-// Handle subids, see their limit, define contract and preconditions..
-// Make sure if an id is said to be placeable at a given place, it is actually placeable there
 
 // SAMPLES
 // Generic character prefab
@@ -529,6 +519,11 @@ namespace Gridlike {
 		#endregion
 
 		#region TILE GET/SET
+
+		// FIX to allow TileBehaviour to access its actual tile.
+		public Tile _Get(int x, int y) {
+			return tiles.Get (x, y);
+		}
 
 		/// <summary>
 		/// Get the tile data at the specified position.
