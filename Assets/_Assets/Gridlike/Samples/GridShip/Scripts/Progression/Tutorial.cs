@@ -21,7 +21,7 @@ namespace Gridship {
 		}
 
 		public void Upgrade() {
-			if (!onShipFlag && GSSingleton.instance.ship.hasCharacter) {
+			if (!onShipFlag && GSSingleton.instance.ship != null && GSSingleton.instance.ship.hasCharacter) {
 				onShipFlag = true;
 
 				Notify ("Hold F, G, H and T to move the ship");

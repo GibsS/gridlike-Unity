@@ -33,16 +33,16 @@ namespace Gridlike {
 		public int generationRegionHeight;
 
 		/// <summary>
-		/// Is the save path specified relative to Unity's persistentDataPath?
+		/// Is the save path specified relative to Unity's persistentDataPath? Not to be modified in play mode.
 		/// </summary>
 		[SerializeField] bool _usePersistentPath;
 		/// <summary>
-		/// The save path. Ignored if useSave is false.
+		/// The save path. Ignored if useSave is false. Not to be modified in play mode.
 		/// </summary>
 		[SerializeField] string _path;
 
 		/// <summary>
-		/// Use serialization.
+		/// Use serialization. Not to be modified in play mode.
 		/// </summary>
 		public bool useSave;
 
@@ -112,6 +112,13 @@ namespace Gridlike {
 		}
 
 		void Initialize() {
+
+			#if UNITY_WEBGL && !UNITY_EDITOR
+
+			useSave = false;
+
+			#endif
+
 			largeRegions = new List<LargeRegion> ();
 
 			if(useSave) gridSerializer = new GridSerializer (usePersistentPath, path);

@@ -68,6 +68,15 @@ namespace Gridlike {
 		}
 
 		void Start() {
+			#if UNITY_WEBGL && !UNITY_EDITOR
+
+			Debug.LogError("[Gridlike] WebGL build does not support serialization");
+			Destroy(this);
+
+			return;
+
+			#endif
+
 			Initialize ();
 		}
 

@@ -19,5 +19,9 @@ namespace Gridlike {
 
 			agents.Add (this);
 		}
+
+		void OnDestroy() {
+			agents.Remove (this);
+		}
 	}
 }
