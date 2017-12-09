@@ -12,6 +12,9 @@ namespace Gridlike {
 		public RegionMeshRenderer mesh;
 	}
 
+	/// <summary>
+	/// A GridListener that generates meshes for rendering the different tiles.
+	/// </summary>
 	[AddComponentMenu("Gridlike/Grid renderer")]
 	public class GridRenderer : GridListener {
 

@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System;
 
 namespace Gridlike {
-	
+
+	/// <summary>
+	/// A simple positionned two dimensional array. (positionned in region space).
+	/// </summary>
 	public class LargeRegion {
 
 		public int regionX;
@@ -14,23 +17,53 @@ namespace Gridlike {
 		public Tile[,] tiles;
 	}
 
+	/// <summary>
+	/// GridDataDelegate that handles procedural generation using an algorithm attached to the Grid.
+	/// </summary>
 	[AddComponentMenu("Gridlike/Grid generator")]
 	public class GridGenerator : GridDataDelegate {
 
+		/// <summary>
+		/// The width in regions of a generated area.
+		/// </summary>
 		public int generationRegionWidth;
+		/// <summary>
+		/// The width in regions of a generated area.
+		/// </summary>
 		public int generationRegionHeight;
 
+		/// <summary>
+		/// Is the save path specified relative to Unity's persistentDataPath?
+		/// </summary>
 		[SerializeField] bool _usePersistentPath;
+		/// <summary>
+		/// The save path. Ignored if useSave is false.
+		/// </summary>
 		[SerializeField] string _path;
 
+		/// <summary>
+		/// Use serialization.
+		/// </summary>
 		public bool useSave;
 
+		/// <summary>
+		/// The grid serializer.
+		/// </summary>
 		GridSerializer gridSerializer;
 
+		/// <summary>
+		/// The large regions.
+		/// </summary>
 		List<LargeRegion> largeRegions;
 
+		/// <summary>
+		/// The associated generation algorithm.
+		/// </summary>
 		public GridGeneratorAlgorithm algorithm;
 
+		/// <summary>
+		/// Is the path specified relative to Unity's persistentDataPath?
+		/// </summary>
 		public bool usePersistentPath {
 			get { return _usePersistentPath; }
 			set {
@@ -40,6 +73,9 @@ namespace Gridlike {
 				if (old != value) Initialize ();
 			}
 		}
+		/// <summary>
+		/// The save path. Ignored if useSave is false.
+		/// </summary>
 		public string path {
 			get { return _path; }
 			set {
@@ -49,6 +85,9 @@ namespace Gridlike {
 				if (old != value) Initialize ();
 			}
 		}
+		/// <summary>
+		/// The absolute path to the save folder.
+		/// </summary>
 		public string rootPath { 
 			get { 
 				if (gridSerializer == null) Initialize ();
@@ -57,6 +96,9 @@ namespace Gridlike {
 			} 
 		}
 
+		/// <summary>
+		/// The save manifest.
+		/// </summary>
 		public GridSaveManifest gridSaveManifest { 
 			get { 
 				if (gridSerializer == null) Initialize ();
@@ -75,6 +117,9 @@ namespace Gridlike {
 			if(useSave) gridSerializer = new GridSerializer (usePersistentPath, path);
 		}
 
+		/// <summary>
+		/// Reset by fetching the algorithm again.
+		/// </summary>
 		public override void ResetDelegate() {
 			base.ResetDelegate ();
 
@@ -82,10 +127,20 @@ namespace Gridlike {
 				algorithm = GetComponent<GridGeneratorAlgorithm> ();
 			}
 		}
-		public void SetAlgorithm(GridGeneratorAlgorithm algorithm) {
+		/// <summary>
+		/// Sets the algorithm, to be called by the GridGeneratorAlgorithm.
+		/// </summary>
+		public void _SetAlgorithm(GridGeneratorAlgorithm algorithm) {
 			this.algorithm = algorithm;
 		}
 
+		/// <summary>
+		/// Asynchronously returns the data for a region through the callback. The tiles are either loaded if loading is enabled or generated if loading
+		/// is not used or that region has not yet been loaded.
+		/// </summary>
+		/// <param name="regionX">The X coordinate of the region.</param>
+		/// <param name="regionY">The Y coordinate of the region.</param>
+		/// <param name="callback">The callback to call once the region is loaded.</param>
 		public override void LoadTiles (int regionX, int regionY, Action<FiniteGrid> callback) {
 			if (useSave && gridSerializer.IsRegionSaved(regionX, regionY)) {
 				gridSerializer.LoadGrid (regionX, regionY, callback);
@@ -140,6 +195,12 @@ namespace Gridlike {
 				callback (region2);
 			}
 		}
+		/// <summary>
+		/// Saves the region data if saving is enabled. Ignores otherwise.
+		/// </summary>
+		/// <param name="regionX">The X coordinate of the region.</param>
+		/// <param name="regionY">The Y coordinate of the region.</param>
+		/// <param name="tiles">The data for the region.</param>
 		public override void SaveTiles (int regionX, int regionY, FiniteGrid tiles) {
 			if (useSave) {
 				gridSerializer.SaveGrid (tiles);
@@ -159,6 +220,9 @@ namespace Gridlike {
 			return null;
 		}
 
+		/// <summary>
+		/// Clears the save.
+		/// </summary>
 		public void ClearSave() {
 			if (gridSerializer == null) Initialize ();
 

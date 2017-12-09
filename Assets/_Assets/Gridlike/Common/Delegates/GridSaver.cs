@@ -3,15 +3,30 @@ using System;
 using System.Collections.Generic;
 
 namespace Gridlike {
-	
+
+	/// <summary>
+	/// A simple grid loading/saving GridDataDelegate.
+	/// </summary>
 	[AddComponentMenu("Gridlike/Grid saver")]
 	public class GridSaver : GridDataDelegate {
 
+		/// <summary>
+		/// Is the save path specified relative to Unity's persistentDataPath?
+		/// </summary>
 		[SerializeField] bool _usePersistentPath;
+		/// <summary>
+		/// The save path.
+		/// </summary>
 		[SerializeField] string _path;
 
+		/// <summary>
+		/// The grid serializer.
+		/// </summary>
 		GridSerializer gridSerializer;
 
+		/// <summary>
+		/// Is the save path specified relative to Unity's persistentDataPath?
+		/// </summary>
 		public bool usePersistentPath {
 			get { return _usePersistentPath; }
 			set {
@@ -21,6 +36,9 @@ namespace Gridlike {
 				if (old != value) Initialize ();
 			}
 		}
+		/// <summary>
+		/// The save path.
+		/// </summary>
 		public string path {
 			get { return _path; }
 			set {
@@ -30,6 +48,9 @@ namespace Gridlike {
 				if (old != value) Initialize ();
 			}
 		}
+		/// <summary>
+		/// The absolute save path.
+		/// </summary>
 		public string rootPath { 
 			get { 
 				if (gridSerializer == null) Initialize ();
@@ -54,6 +75,12 @@ namespace Gridlike {
 			gridSerializer = new GridSerializer (usePersistentPath, path);
 		}
 
+		/// <summary>
+		/// Asynchronously loads the specified region.
+		/// </summary>
+		/// <param name="regionX">The X coordinate of the region.</param>
+		/// <param name="regionY">The Y coordinate of the region.</param>
+		/// <param name="callback">The callback to call once the region is loaded.</param>
 		public override void LoadTiles (int regionX, int regionY, Action<FiniteGrid> callback) {
 			if (gridSerializer.IsRegionSaved(regionX, regionY)) {
 				gridSerializer.LoadGrid (regionX, regionY, callback);
@@ -62,10 +89,19 @@ namespace Gridlike {
 
 			callback (null);
 		}
+		/// <summary>
+		/// Asynchronously saves the specified region.
+		/// </summary>
+		/// <param name="regionX">The X coordinate of the region.</param>
+		/// <param name="regionY">The Y coordinate of the region.</param>
+		/// <param name="tiles">The data for the region.</param>
 		public override void SaveTiles (int regionX, int regionY, FiniteGrid tiles) {
 			gridSerializer.SaveGrid (tiles);
 		}
 
+		/// <summary>
+		/// Clears the save.
+		/// </summary>
 		public void ClearSave() {
 			if (gridSerializer == null) Initialize ();
 

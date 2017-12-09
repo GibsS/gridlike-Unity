@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Gridlike {
 
+	/// <summary>
+	/// A GridListener that generates colliders.
+	/// </summary>
 	[AddComponentMenu("Gridlike/Grid collider")]
 	public class GridCollider : GridListener {
 

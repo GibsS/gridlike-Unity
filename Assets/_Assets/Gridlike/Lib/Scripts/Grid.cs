@@ -54,8 +54,6 @@ using UnityEngine;
 
 // TEST ON PHONE
 
-// CHANGE NAME
-
 // TEST 2017 TILEMAP SYSTEM
 
 // CLEAN UP
