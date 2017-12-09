@@ -35,8 +35,6 @@ using UnityEngine;
 // Automatic fix (with options?)
 
 // SAMPLES
-// Generic character prefab
-// Generic grid prefab (loader/procedural generation/plain)
 
 // TUTORIALS
 
