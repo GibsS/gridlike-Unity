@@ -18,13 +18,10 @@ using UnityEngine;
 
 // Display tile info in the placer tool and inspector tool
 
-// # TICKET 3 - Improve atlas (1day)
-// Add the drag and drop if possible to the tile atlas (maybe into a window dedicated to it)
-// Have sprite size verification with error boxes in tile atlas
-// Tighter encapsulation with tile info and sprites
+// Spawning in tile
 
-// # TICKET 4 - Grid data validation (1hour)
-// Add some form of model validation including on a grid (runnable whenever):
+// Validation
+// Add some form of model validation on a grid (runnable whenever):
 // - does id exist
 // - does subId exist
 // - triangles are coherent
@@ -33,25 +30,6 @@ using UnityEngine;
 // - name only on tileGO center
 // On two dimensional array (not grid)
 // Automatic fix (with options?)
-
-// SAMPLES
-
-// TUTORIALS
-
-// MANUAL
-
-// TEST ON PHONE
-
-// TEST 2017 TILEMAP SYSTEM
-
-// CLEAN UP
-// Remove as many public field as possible (once tests are defined)
-
-// FEATURE TO SHOWCASE
-// 1. Atlas editing
-// 2. Grid editing
-// 3. Procedural generation
-// 4. Simple ship + miner (place blocks wherever, mine whatever) example
 
 namespace Gridlike {
 
