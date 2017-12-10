@@ -81,10 +81,10 @@ public class RegionMeshRenderer : MonoBehaviour {
 
 		Rect rect = emptySprite.textureRect;
 
-		bottomLeftEmpty = new Vector2 (rect.xMin / textureWidth, rect.yMin / textureHeight);
-		bottomRightEmpty = new Vector2 (rect.xMax / textureWidth, rect.yMin / textureHeight);
-		topLeftEmpty = new Vector2 (rect.xMin / textureWidth, rect.yMax / textureHeight);
-		topRightEmpty = new Vector2 (rect.xMax / textureWidth, rect.yMax / textureHeight);
+		bottomLeftEmpty = new Vector2 ((rect.xMin + 0.6f) / textureWidth, (rect.yMin + 0.6f) / textureHeight);
+		bottomRightEmpty = new Vector2 ((rect.xMax - 0.6f) / textureWidth, (rect.yMin + 0.6f) / textureHeight);
+		topLeftEmpty = new Vector2 ((rect.xMin + 0.6f) / textureWidth, (rect.yMax - 0.6f) / textureHeight);
+		topRightEmpty = new Vector2 ((rect.xMax - 0.6f) / textureWidth, (rect.yMax - 0.6f) / textureHeight);
 	}
 
 	public void Destroy() {
@@ -185,31 +185,31 @@ public class RegionMeshRenderer : MonoBehaviour {
 
 		Rect rect = sprite.textureRect;
 
-		uv [quadIndex] = new Vector2 ((rect.xMin + 0.1f) / textureWidth, (rect.yMin + 0.1f) / textureHeight);
-		uv [quadIndex + 1] = new Vector2 ((rect.xMax - 0.1f) / textureWidth, (rect.yMin + 0.1f) / textureHeight);
-		uv [quadIndex + 2] = new Vector2 ((rect.xMin + 0.1f) / textureWidth, (rect.yMax - 0.1f) / textureHeight);
-		uv [quadIndex + 3] = new Vector2 ((rect.xMax - 0.1f) / textureWidth, (rect.yMax - 0.1f) / textureHeight);
+		uv [quadIndex] = new Vector2 ((rect.xMin + 0.6f) / textureWidth, (rect.yMin + 0.6f) / textureHeight);
+		uv [quadIndex + 1] = new Vector2 ((rect.xMax - 0.6f) / textureWidth, (rect.yMin + 0.6f) / textureHeight);
+		uv [quadIndex + 2] = new Vector2 ((rect.xMin + 0.6f) / textureWidth, (rect.yMax - 0.6f) / textureHeight);
+		uv [quadIndex + 3] = new Vector2 ((rect.xMax - 0.6f) / textureWidth, (rect.yMax - 0.6f) / textureHeight);
 	}
 	public void SetPartialVerticalTile(int x, int y, Sprite sprite, int yTileOffset) {
 		int quadIndex = ((y * tilePerSide) + x) * 4;
 
 		Rect rect = sprite.textureRect;
 
-		float minY = (rect.yMin + yTileOffset * tilePixelSize) + 0.1f;
-		float maxY = (rect.yMin + (yTileOffset + 1) * tilePixelSize) - 0.1f;
+		float minY = (rect.yMin + yTileOffset * tilePixelSize) + 0.4f;
+		float maxY = (rect.yMin + (yTileOffset + 1) * tilePixelSize) - 0.4f;
 
-		uv [quadIndex] = new Vector2 ((rect.xMin + 0.1f) / textureWidth, minY / textureHeight);
-		uv [quadIndex + 1] = new Vector2 ((rect.xMax - 0.1f) / textureWidth, minY / textureHeight);
-		uv [quadIndex + 2] = new Vector2 ((rect.xMin + 0.1f) / textureWidth, maxY / textureHeight);
-		uv [quadIndex + 3] = new Vector2 ((rect.xMax - 0.1f) / textureWidth, maxY / textureHeight);
+		uv [quadIndex] = new Vector2 ((rect.xMin + 0.6f) / textureWidth, minY / textureHeight);
+		uv [quadIndex + 1] = new Vector2 ((rect.xMax - 0.6f) / textureWidth, minY / textureHeight);
+		uv [quadIndex + 2] = new Vector2 ((rect.xMin + 0.6f) / textureWidth, maxY / textureHeight);
+		uv [quadIndex + 3] = new Vector2 ((rect.xMax - 0.6f) / textureWidth, maxY / textureHeight);
 	}
 	public void SetPartialHorizontalTile(int x, int y, Sprite sprite, int xTileOffset) {
 		int quadIndex = ((y * tilePerSide) + x) * 4;
 
 		Rect rect = sprite.textureRect;
 
-		float minX = (rect.xMin + xTileOffset * tilePixelSize) + 0.1f;
-		float maxX = (rect.xMin + (xTileOffset + 1) * tilePixelSize) - 0.1f;
+		float minX = (rect.xMin + xTileOffset * tilePixelSize) + 0.4f;
+		float maxX = (rect.xMin + (xTileOffset + 1) * tilePixelSize) - 0.4f;
 
 		uv [quadIndex] = new Vector2 (minX / textureWidth, rect.yMin / textureHeight);
 		uv [quadIndex + 1] = new Vector2 (maxX / textureWidth, rect.yMin / textureHeight);
