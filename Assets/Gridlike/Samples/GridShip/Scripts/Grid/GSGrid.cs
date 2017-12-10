@@ -7,10 +7,10 @@ namespace Gridship {
 	
 	public class GSGrid : MonoBehaviour {
 
-		Grid grid;
+		Gridlike.Grid grid;
 
 		void Start() {
-			grid = GetComponent<Grid>();
+			grid = GetComponent<Gridlike.Grid>();
 		}
 
 		public void Explosion(GSCharacter character, Vector2 position, int radius, int damage) {

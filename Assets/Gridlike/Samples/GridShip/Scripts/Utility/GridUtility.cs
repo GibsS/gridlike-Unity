@@ -8,7 +8,7 @@ namespace Gridship {
 	public class GridUtility {
 
 		public static void ExplodeInAllGrid(GSCharacter character, Vector2 position, int radius, int damage) {
-			foreach (Grid grid in Grid.GetAllGrids()) {
+			foreach (Gridlike.Grid grid in Gridlike.Grid.GetAllGrids()) {
 				GSGrid wrapper = grid.GetComponent<GSGrid> ();
 
 				if (wrapper != null) {

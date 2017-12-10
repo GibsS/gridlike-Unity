@@ -24,7 +24,7 @@ namespace Gridship {
 				&& GSConsts.TileExists(id) 
 				&& character.GetCubeCount() >= GSConsts.tiles[id].cubeCost) {
 
-				Grid grid;
+				Gridlike.Grid grid;
 				int x;
 				int y;
 

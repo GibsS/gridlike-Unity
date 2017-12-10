@@ -45,7 +45,7 @@ public class PlayerControl : MonoBehaviour
 		if(Input.GetButtonDown("Jump") && grounded) 
 			jump = true;
 
-		Grid grid = Grid.GetFirstGrid ();
+		Gridlike.Grid grid = Gridlike.Grid.GetFirstGrid ();
 
 		if (grid != null) {
 			int x;

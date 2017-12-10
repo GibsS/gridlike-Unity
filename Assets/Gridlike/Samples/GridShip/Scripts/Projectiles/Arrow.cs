@@ -28,7 +28,7 @@ namespace Gridship {
 			if (radius == 0) {
 				GameObject go = TransformUtility.GetTopParent (collision.gameObject);
 
-				Grid grid = go.GetComponent<Grid> ();
+				Gridlike.Grid grid = go.GetComponent<Gridlike.Grid> ();
 				if (grid != null) {
 					int x;
 					int y;
