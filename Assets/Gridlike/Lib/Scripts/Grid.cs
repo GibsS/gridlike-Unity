@@ -5,7 +5,7 @@ using UnityEngine;
 // ## IMPROVEMENTS (for later)
 // Grid updater component: iterates through tiles and updates there information
 
-// Serialization: Allow the creation of the world ahead of time, saving to be loaded later on
+// Serialization - Allow the creation of the world ahead of time, saving to be loaded later on
 
 // Scriptable objects storage of grid tiles
 
@@ -30,6 +30,8 @@ using UnityEngine;
 // - name only on tileGO center
 // On two dimensional array (not grid)
 // Automatic fix (with options?)
+
+// 2017 compatibility - rename Grid to something else (GGrid?)
 
 namespace Gridlike {
 
