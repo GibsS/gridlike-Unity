@@ -15,14 +15,14 @@ EditorBuildSettings:
     path: Assets/Scenes/Level.unity
     guid: 00000000000000000000000000000000
   - enabled: 1
-    path: Assets/_Assets/Gridlike/Samples/GridShip/Scenes/GSScene2.unity
+    path: Assets/Gridlike/Samples/GridShip/Scenes/GSScene2.unity
     guid: 7475dfed4cd07984792f90eb901f9385
   - enabled: 1
-    path: Assets/_Assets/Gridlike/Samples/GridShip/Scenes/GSScene3.unity
+    path: Assets/Gridlike/Samples/GridShip/Scenes/GSScene3.unity
     guid: 4ef78c44e56bb1644a802cd6be82ea47
   - enabled: 1
-    path: Assets/_Assets/Gridlike/Samples/GridShip/Scenes/GSScene1.unity
+    path: Assets/Gridlike/Samples/GridShip/Scenes/GSScene1.unity
     guid: 27fd42e625d995746a480becdb4dbf95
   - enabled: 0
-    path: Assets/_Assets/Gridlike/Samples/Procedural/Procedural1/Procedural1.unity
+    path: Assets/Gridlike/Samples/Procedural/Procedural1/Procedural1.unity
     guid: 90447e54edace3c40bb23d6ee2dab857
