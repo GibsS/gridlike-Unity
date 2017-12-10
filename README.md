@@ -1,6 +1,8 @@
 # Gridlike - A Unity3D library 
 
-Gridlike is a library for creating grid based games similar to Terraria and King Arthur's Gold.
+A library for creating grid based games similar to Terraria and King Arthur's Gold.
+
+![editor](Screenshot/Screenshot2.png)
 
 The library allows you to define your blocks information in a "tile atlas" and create grids in the scene editor or programmatically.
 
@@ -15,7 +17,7 @@ and well worth checking out. You are free to use any other 2D collider based cha
 
 I made a small (see very very small and unpolished) game using Gridlike called Gridship. You can test it out by following the link below.
 It is not much to look at but it will give you a sense of what you can accomplish with the library. It is important to note
-that despite the tiles (or blocks if you prefer) being a single color, they are actually sprite and could be replaced by actual 
+that despite the tiles (or blocks if you prefer) being a single color, they are actually sprites and could be replaced by actual 
 non monochromatic sprites.
 
 You might need to wait for a few seconds before the game starts:
@@ -30,8 +32,10 @@ Download link: [gridlike.unitypackage](https://github.com/GibsS/gridlike-Unity/r
 ## How to get started
 
 The code is commented and the package is organized well enough (I hope) but there is no manual yet. To wrap your head around the library
-your best hope is to check out the scenes associated to Gridship at Gridlike/Samples/Gridship/Scenes. Does few scenes pretty much cover 
+your best hope is to check out the scenes associated to Gridship at Gridlike/Samples/Gridship/Scenes. Those few scenes pretty much cover 
 everything you can do with the library.
 
 Note: Gridlike was created and tested with a project gravity of -30 instead of the default -9.8. Might be worse changing for less floaty
 movement.
+
+If you need any help or encountered a problem, contact me: emerick.gibson@hotmail.fr
